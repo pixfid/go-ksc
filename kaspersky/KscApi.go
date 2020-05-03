@@ -1,0 +1,179 @@
+/*
+ *
+ * 	Copyright (C) 2020  <Semchenko Aleksandr>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.If not, see <http://www.gnu.org/licenses/>.
+ * /
+ */
+
+package kaspersky
+
+import (
+	"compress/gzip"
+	"context"
+	"crypto/tls"
+	"encoding/base64"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"io/ioutil"
+	"log"
+	"net/http"
+)
+
+type Config struct {
+	Server   string
+	Username string
+	Password string
+}
+
+//-------------Client------------------
+type Client struct {
+	AdHosts                    *AdHosts
+	AdmServerSettings          *AdmServerSettings
+	AsyncActionStateChecker    *AsyncActionStateChecker
+	ChunkAccessor              *ChunkAccessor
+	DatabaseInfo               *DatabaseInfo
+	HostGroup                  *HostGroup
+	HostMoveRules              *HostMoveRules
+	HostTagsRulesApi           *HostTagsRulesApi
+	HostTasks                  *HostTasks
+	HWInvStorage               *HWInvStorage
+	GroupSyncIterator          *GroupSyncIterator
+	InventoryApi               *InventoryApi
+	LicenseKeys                *LicenseKeys
+	ListTags                   *ListTags
+	PackagesApi                *PackagesApi
+	ServerHierarchy            *ServerHierarchy
+	Session                    *Session
+	Tasks                      *Tasks
+	UserName, Password, Server string
+	VServers                   *VServers
+	VServers2                  *VServers2
+	WolSender                  *WolSender
+	client                     *http.Client
+}
+
+func New(cfg Config) *Client {
+
+	httpClient := &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		},
+	}
+
+	client := &Client{
+		client:   httpClient,
+		Server:   cfg.Server,
+		UserName: cfg.Username,
+		Password: cfg.Password,
+	}
+
+	client.AdHosts = &AdHosts{client: client}
+	client.AdmServerSettings = &AdmServerSettings{client: client}
+	client.AsyncActionStateChecker = &AsyncActionStateChecker{client: client}
+	client.ChunkAccessor = &ChunkAccessor{client: client}
+	client.DatabaseInfo = &DatabaseInfo{client: client}
+	client.HostGroup = &HostGroup{client: client}
+	client.HostMoveRules = &HostMoveRules{client: client}
+	client.HostTagsRulesApi = &HostTagsRulesApi{client: client}
+	client.HostTasks = &HostTasks{client: client}
+	client.HWInvStorage = &HWInvStorage{client: client}
+	client.GroupSyncIterator = &GroupSyncIterator{client: client}
+	client.InventoryApi = &InventoryApi{client: client}
+	client.LicenseKeys = &LicenseKeys{client: client}
+	client.ListTags = &ListTags{client: client}
+	client.PackagesApi = &PackagesApi{client: client}
+	client.ServerHierarchy = &ServerHierarchy{client: client}
+	client.Session = &Session{client: client}
+	client.Tasks = &Tasks{client: client}
+	client.VServers = &VServers{client: client}
+	client.VServers2 = &VServers2{client: client}
+	client.WolSender = &WolSender{client: client}
+
+	return client
+}
+
+func (c *Client) KSCAuth(ctx context.Context) {
+	c.UserName = base64.StdEncoding.EncodeToString([]byte(c.UserName))
+	c.Password = base64.StdEncoding.EncodeToString([]byte(c.Password))
+
+	request, err := http.NewRequest("POST", c.Server+"/api/v1.0/login", nil)
+
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	request.Header.Set("Authorization", "KSCBasic user=\""+c.UserName+"\", pass=\""+c.Password+"\"")
+	request.Header.Set("X-KSC-VServer", "x")
+	request.Header.Set("Content-Length", "2")
+
+	_, err = c.Do(ctx, request, nil, false)
+
+}
+
+func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}, debug bool) (dt []byte, err error) {
+	if ctx == nil {
+		return nil, errors.New("context must be non-nil")
+	}
+
+	req = withContext(ctx, req)
+
+	var resp *http.Response
+
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept-Encoding", "gzip")
+
+	resp, err = c.client.Do(req)
+
+	if err != nil {
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		default:
+		}
+
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	var reader io.ReadCloser
+
+	switch resp.Header.Get("Content-Encoding") {
+	case "gzip":
+		reader, err = gzip.NewReader(resp.Body)
+	default:
+		reader = resp.Body
+	}
+
+	body, _ := ioutil.ReadAll(reader)
+
+	if v != nil {
+		decErr := json.Unmarshal(body, v)
+		if decErr == io.EOF {
+			decErr = nil // ignore EOF errors caused by empty response body
+		}
+		if decErr != nil {
+			err = decErr
+		}
+	}
+
+	if debug {
+		fmt.Println("resp Body:", string(body))
+	}
+
+	return body, err
+}
