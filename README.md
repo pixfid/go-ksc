@@ -28,23 +28,36 @@ access different parts of the KSC (Kaspersky) Open API. For example:
         groups_domains, err := client.HostGroup.GetDomains(context.Background())
 ```
 
-As example find hosts by params:
+As example find online hosts:
 ```go
-	hosts := data.FullHostsInfo{}
-
-	accessor, _ := client.HostGroup.FindHosts(ctx, data.HSPParam{
-		WstrFilter:        `(&(KLHST_WKS_GROUPID <> 4)(KLHST_WKS_FQDN = "*t457-zt*"))`,
-		VecFieldsToReturn: []string{"KLHST_WKS_DN", "KLHST_WKS_GROUPID", "KLHST_WKS_OS_NAME"},
-		PParams:           data.PParams{
+func Online(ctx context.Context, client *kaspersky.Client) *FullHostsInfo {
+	hField := config.Config.HParams
+	chunks := &FullHostsInfo{}
+	hostsParam := kaspersky.HGParams{
+		WstrFilter: `
+		(&
+			(KLHST_WKS_GROUPID_GP <> 4)
+			(KLHST_WKS_STATUS&1<>0)
+		)`,
+		VecFieldsToReturn: hField,
+		PParams: kaspersky.PParams{
+			KlsrvhSlaveRecDepth:    0,
 			KlgrpFindFromCurVsOnly: true,
-			KlsrvhSlaveRecDepth: 0,
 		},
-		LMaxLifeTime:      100,
-	})
+		LMaxLifeTime: 100,
+	}
 
-	count, _ := client.ChunkAccessor.GetItemsCount(ctx, accessor.StrAccessor)
-	_ = client.ChunkAccessor.GetItemsChunk(ctx, accessor.StrAccessor, 0, count.Int, &hosts)
+	accessor, _, _ := client.HostGroup.FindHosts(ctx, hostsParam)
+	count, _, _ := client.ChunkAccessor.GetItemsCount(ctx, accessor.StrAccessor)
+	_, _ = client.ChunkAccessor.GetItemsChunk(ctx, kaspersky.ItemsChunkParams{
+		StrAccessor: accessor.StrAccessor,
+		NStart:      0,
+		NCount:      count.Int,
+	}, chunks)
+
 	client.ChunkAccessor.Release(ctx, accessor.StrAccessor)
+	return chunks
+}
 ```
 
 
