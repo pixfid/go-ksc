@@ -45,7 +45,10 @@ type Client struct {
 	AppCtrlApi                 *AppCtrlApi
 	AsyncActionStateChecker    *AsyncActionStateChecker
 	CertPoolCtrl               *CertPoolCtrl
+	CertPoolCtrl2              *CertPoolCtrl2
+	CgwHelper                  *CgwHelper
 	ChunkAccessor              *ChunkAccessor
+	ConEvents                  *ConEvents
 	DatabaseInfo               *DatabaseInfo
 	HostGroup                  *HostGroup
 	HostMoveRules              *HostMoveRules
@@ -88,7 +91,10 @@ func New(cfg Config) *Client {
 	client.AppCtrlApi = &AppCtrlApi{client: client}
 	client.AsyncActionStateChecker = &AsyncActionStateChecker{client: client}
 	client.CertPoolCtrl = &CertPoolCtrl{client: client}
+	client.CertPoolCtrl2 = &CertPoolCtrl2{client: client}
+	client.CgwHelper = &CgwHelper{client: client}
 	client.ChunkAccessor = &ChunkAccessor{client: client}
+	client.ConEvents = &ConEvents{client: client}
 	client.DatabaseInfo = &DatabaseInfo{client: client}
 	client.HostGroup = &HostGroup{client: client}
 	client.HostMoveRules = &HostMoveRules{client: client}
