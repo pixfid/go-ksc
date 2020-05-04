@@ -39,7 +39,7 @@ type AppCtrlApi struct {
 //	Get data about instances of the execution file on the host.
 //
 //	Parameters:
-//	- szwHostId	(wstring) host name, a unique server-generated string (see KLHST_WKS_HOSTNAME attribute).
+//	- szwHostId	(string) host name, a unique server-generated string (see KLHST_WKS_HOSTNAME attribute).
 //	It is NOT the same as computer network name (DNS-, FQDN-, NetBIOS-name) . If empty then will be returned only attributes from List of common attributes of execution file from AppControl
 //	- lFileId	(long) The file identifier ( see FILE_ID attribute ). It is id from database,
 //	so it is internal id and it is valid only for this SC-server )

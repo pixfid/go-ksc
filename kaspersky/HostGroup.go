@@ -1111,7 +1111,7 @@ func (hg *HostGroup) RemoveHosts(ctx context.Context, pHostNames []string, bForc
 //Add a new domain to the database.
 //
 //Parameters:
-//	- strDomain	(wstring) domain name
+//	- strDomain	(string) domain name
 //	- nType	(int64) domain type:
 //	- 0 - Windows NT domain
 //	- 1 - Windows work group
@@ -1478,7 +1478,7 @@ type ZeroVirusCountForHostsParams struct {
 //
 //Parameters:
 //pHostNames	(array) array of host names
-//[out]	strActionGuid	(wstring) id of asynchronous operation,
+//[out]	strActionGuid	(string) id of asynchronous operation,
 //to get status use AsyncActionStateChecker.CheckActionState, lStateCode "1" means OK and "0" means fail
 func (hg *HostGroup) ZeroVirusCountForHosts(ctx context.Context, zvcfhp ZeroVirusCountForHostsParams) (*RequestID,
 	[]byte, error) {

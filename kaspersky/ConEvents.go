@@ -78,7 +78,7 @@ func (ce *ConEvents) Retrieve(ctx context.Context) ([]byte, error) {
 //	Use this method to subscribe on events. Method returns period of polling. You should use it between retrieve calls. Also attribute pFilter allow you to cut off unnecessary events.
 //
 //	Parameters:
-//	- wstrEvent	[in] (wstring) event type
+//	- wstrEvent	[in] (string) event type
 //	- pFilter	[in] (params) event filter
 //	- nPeriod	[out] (int64) new value of polling period, milliseconds
 //

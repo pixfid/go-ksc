@@ -141,7 +141,7 @@ type HostsKeyIterator struct {
 //
 //	Return:
 //	- lKeyCount	(int64) count of keys returned via enumerator.
-//	- wstrIterator	(wstring) forward-iterator name for accesing key attributes through GroupSyncIterator.
+//	- wstrIterator	(string) forward-iterator name for accesing key attributes through GroupSyncIterator.
 //
 //	Note:
 //	Call GroupSyncIterator::GetNextItems to iterate. Call GroupSyncIterator::ReleaseIterator when you are done.
@@ -181,7 +181,7 @@ type EnumKeysParams struct {
 //
 //	Return: Output iterator will be available for this time long. Default is zero which means 15 minutes long.
 //	- lKeyCount	(int64) count of keys returned via enumerator.
-//	- wstrIterator	(wstring) forward-iterator name for accesing key attributes through GroupSyncIterator.
+//	- wstrIterator	(string) forward-iterator name for accesing key attributes through GroupSyncIterator.
 //
 //	Call GroupSyncIterator::GetNextItems to iterate. Call GroupSyncIterator::ReleaseIterator when you are done.
 //

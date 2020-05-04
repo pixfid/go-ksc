@@ -62,7 +62,7 @@ func (ca *GroupSyncIterator) ReleaseIterator(ctx context.Context, szwIterator st
 //	Returns nCount elements contained in the specified result-set beginning from the current position and moves internal pointer to the new position.
 //
 //	Parameters:
-//	- szwIterator	(wstring) forward iterator id
+//	- szwIterator	(string) forward iterator id
 //	- nCount	(int64) number of elements to return
 //
 //Returns:

@@ -35,8 +35,8 @@ type Tasks struct {
 //
 //	Parameters:
 //	- ctx	(context.Context) context.
-//	- strDomainName	(wstring) domain name.
-//	- strHostName	(wstring) host name.
+//	- strDomainName	(string) domain name.
+//	- strHostName	(string) host name.
 //
 //	Returns:
 //	- (array) array of string with task ids
