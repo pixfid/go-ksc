@@ -966,7 +966,7 @@ func (hg *HostGroup) GetGroupInfo(ctx context.Context, nGroupId int64, result in
 //	- (params) group attributes (List of group attributes for attribute names)
 //
 //	- Remark: not working on KSC 10
-func (hg *HostGroup) GetGroupInfoEx(ctx context.Context, nGroupId int64, pArrAttributes []string) (*PDResult, []byte, error) {
+func (hg *HostGroup) GetGroupInfoEx(ctx context.Context, nGroupId int64, pArrAttributes []string) ([]byte, error) {
 	vFtr, _ := json.Marshal(pArrAttributes)
 
 	postData := []byte(fmt.Sprintf(`{
@@ -979,10 +979,8 @@ func (hg *HostGroup) GetGroupInfoEx(ctx context.Context, nGroupId int64, pArrAtt
 		log.Fatal(err.Error())
 	}
 
-	pDResult := new(PDResult)
-	raw, err := hg.client.Do(ctx, request, &pDResult)
-
-	return pDResult, raw, err
+	raw, err := hg.client.Do(ctx, request, nil)
+	return raw, err
 }
 
 //Move hosts from group to group.
@@ -1109,12 +1107,6 @@ func (hg *HostGroup) RemoveHosts(ctx context.Context, pHostNames []string, bForc
 	return pxgValStr, raw, err
 }
 
-//	PDResult struct
-type PDResult struct {
-	BResult *bool       `json:"bResult,omitempty"`
-	PTasks  interface{} `json:"pTasks"`
-}
-
 //Add a new domain to the database.
 //
 //Parameters:
@@ -1125,7 +1117,7 @@ type PDResult struct {
 //
 //Exceptions:
 //	- STDE_EXIST	domain with the specified name already exists.
-func (hg *HostGroup) AddDomain(ctx context.Context, strDomain string, nType int64) (*PDResult, []byte, error) {
+func (hg *HostGroup) AddDomain(ctx context.Context, strDomain string, nType int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`
 	{
 	"strDomain": "%s", "nType" : %d
@@ -1136,17 +1128,15 @@ func (hg *HostGroup) AddDomain(ctx context.Context, strDomain string, nType int6
 		log.Fatal(err.Error())
 	}
 
-	pDResult := new(PDResult)
-	raw, err := hg.client.Do(ctx, request, &pDResult)
-
-	return pDResult, raw, err
+	raw, err := hg.client.Do(ctx, request, nil)
+	return raw, err
 }
 
 //Removes a domain from the database.
 //
 //Parameters:
 //	- strDomain	(string) domain name
-func (hg *HostGroup) DelDomain(ctx context.Context, strDomain string) (*PDResult, []byte, error) {
+func (hg *HostGroup) DelDomain(ctx context.Context, strDomain string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`
 	{
 	"strDomain": "%s"
@@ -1157,17 +1147,15 @@ func (hg *HostGroup) DelDomain(ctx context.Context, strDomain string) (*PDResult
 		log.Fatal(err.Error())
 	}
 
-	pDResult := new(PDResult)
-	raw, err := hg.client.Do(ctx, request, &pDResult)
-
-	return pDResult, raw, err
+	raw, err := hg.client.Do(ctx, request, nil)
+	return raw, err
 }
 
 //Delete incident.
 //
 //Parameters:
 //	- nId (int64)	incident id
-func (hg *HostGroup) DeleteIncident(ctx context.Context, nId int64) (*PDResult, []byte, error) {
+func (hg *HostGroup) DeleteIncident(ctx context.Context, nId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`
 	{
 		"nId": %d
@@ -1178,10 +1166,8 @@ func (hg *HostGroup) DeleteIncident(ctx context.Context, nId int64) (*PDResult, 
 		log.Fatal(err.Error())
 	}
 
-	pDResult := new(PDResult)
-	raw, err := hg.client.Do(ctx, request, &pDResult)
-
-	return pDResult, raw, err
+	raw, err := hg.client.Do(ctx, request, nil)
+	return raw, err
 }
 
 //Return a list of workstation names in the domain.
@@ -1205,7 +1191,7 @@ func (hg *HostGroup) DeleteIncident(ctx context.Context, nId int64) (*PDResult, 
 //	- 0x00000020 - The computer has been temporarily switched into this server as a result of NLA profile switching
 //	- 0x00000040 - The computer is a part of the cluster or a cluster array
 //	- 0x00000080 - appliance
-func (hg *HostGroup) GetDomainHosts(ctx context.Context, domain string) (*PDResult, []byte, error) {
+func (hg *HostGroup) GetDomainHosts(ctx context.Context, domain string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`
 	{
 	"domain": "%s"
@@ -1216,10 +1202,8 @@ func (hg *HostGroup) GetDomainHosts(ctx context.Context, domain string) (*PDResu
 		log.Fatal(err.Error())
 	}
 
-	pDResult := new(PDResult)
-	raw, err := hg.client.Do(ctx, request, &pDResult)
-
-	return pDResult, raw, err
+	raw, err := hg.client.Do(ctx, request, nil)
+	return raw, err
 }
 
 //Find incident by filter string.
@@ -1510,8 +1494,7 @@ func (hg *HostGroup) ZeroVirusCountForHosts(ctx context.Context, zvcfhp ZeroViru
 	return requestID, raw, err
 }
 
-/*
-func (hg *HostGroup) SS_GetNames(ctx context.Context) (PxgValStr, error) {
+func (hg *HostGroup) SS_Read(ctx context.Context) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`
 	{
    		"strHostName":"879e5ad6-2e6b-4e68-8ba5-146fc45c4f82",
@@ -1526,8 +1509,6 @@ func (hg *HostGroup) SS_GetNames(ctx context.Context) (PxgValStr, error) {
 		log.Fatal(err.Error())
 	}
 
-	jsonData, err := hg.client.Do(ctx, request)
-	pxgRetVal, err := UnmarshalPxgValStr(jsonData)
-	return pxgRetVal, err
+	raw, err := hg.client.Do(ctx, request, nil)
+	return raw, err
 }
-*/
