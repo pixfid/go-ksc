@@ -40,8 +40,8 @@ type CertPoolCtrl2 struct {
 //	Returns information about certificate from server's certificates pool.
 //
 //	Parameters:
-//	- nVServerId	[in] (int) Virtual server id (-1 for current, 0 for main server)
-//	- nFunction	[in] (int) Certificate function (see "KLCERTP::CertificateFunction enum values")
+//	- nVServerId	[in] (int64) Virtual server id (-1 for current, 0 for main server)
+//	- nFunction	[in] (int64) Certificate function (see "KLCERTP::CertificateFunction enum values")
 //
 //	Returns:
 //

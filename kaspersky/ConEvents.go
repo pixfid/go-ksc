@@ -80,10 +80,10 @@ func (ce *ConEvents) Retrieve(ctx context.Context) ([]byte, error) {
 //	Parameters:
 //	- wstrEvent	[in] (wstring) event type
 //	- pFilter	[in] (params) event filter
-//	- nPeriod	[out] (int) new value of polling period, milliseconds
+//	- nPeriod	[out] (int64) new value of polling period, milliseconds
 //
 //	Returns:
-//	- (int) subscription id
+//	- (int64) subscription id
 //
 //	Exceptions:
 //	- STDE_TOOBIG	too many subscriptions for one session.
@@ -127,7 +127,7 @@ func (ce *ConEvents) Subscribe(ctx context.Context, v interface{}) ([]byte, erro
 //	Use this method to unsubscribe from an event.
 //
 //	- Parameters:
-//	nSubsId	[in] (int) subscription id (see method ConEvents::Subscribe)
+//	nSubsId	[in] (int64) subscription id (see method ConEvents::Subscribe)
 //
 //	Exceptions:
 //	- STDE_NOTFOUND	subscription was not found

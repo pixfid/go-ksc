@@ -44,7 +44,7 @@ type VServers struct {
 //Returns array of virtual servers for the specified group
 //
 //Parameters:
-//	- lParentGroup	(int) id of parent group, -1 means 'from all groups'
+//	- lParentGroup	(int64) id of parent group, -1 means 'from all groups'
 //Returns:
 //	- (array) array, each element is a container KLPAR::ParamsPtr containing attributes "KLVSRV_*"
 //(see List of virtual server attributes).
@@ -63,7 +63,7 @@ func (vs *VServers) GetVServers(ctx context.Context, lParentGroup int) ([]byte, 
 // Parameters:
 //	- strDisplayName	(string) virtual server display name, if display name is non-unique,
 //	it will be modified to become unique
-//	- lParentGroup	(int) virtual server parent group
+//	- lParentGroup	(int64) virtual server parent group
 //
 //	Returns:
 //	(params) a container KLPAR::ParamsPtr containing attributes "KLVSRV_ID" and "KLVSRV_DN" (
@@ -100,7 +100,7 @@ func (vs *VServers) AddVServerInfo(ctx context.Context, strDisplayName string, l
 //Unregisters specified Virtual Server
 //
 // Parameters:
-//	- lVServer	(int) Virtual Server id
+//	- lVServer	(int64) Virtual Server id
 //	- [out]	strActionGuid	(string) id of asynchronous operation,
 //	to get status use AsyncActionStateChecker.CheckActionState
 func (vs *VServers) DelVServer(ctx context.Context, lVServer int) ([]byte, error) {
@@ -130,7 +130,7 @@ type VServerParams struct {
 //Returns info about the specified virtual server
 //
 //	Parameters:
-//	- lVServer	(int) virtual server id
+//	- lVServer	(int64) virtual server id
 //	- pFields2Return	(array) attributes "KLVSRV_*" to acquire (see List of virtual server attributes).
 //
 //	Returns:

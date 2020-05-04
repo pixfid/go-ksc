@@ -34,10 +34,10 @@ type Limits struct {
 //  Returns a limit of specified parameter.
 //
 //  Parameters:
-//  - param	[in] (int) See Limited parameters.
+//  - param	[in] (int64) See Limited parameters.
 //
 //  Returns:
-//  - (int) Parameter limit. For boolean types 1 - true, 0 - false.
+//  - (int64) Parameter limit. For boolean types 1 - true, 0 - false.
 //
 // Exceptions:
 //  - KLSTD::STDE_NOACCESS	- Access to object is denied

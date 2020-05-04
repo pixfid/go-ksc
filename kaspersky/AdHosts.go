@@ -96,7 +96,7 @@ type ADHostIterator struct {
 //	- pOptions	(params) options, possible attributes:
 //	"adhst_id" - return groups for given ad host
 //
-//	- lMaxLifeTime	(int) max result-set lifetime in seconds, not more than 7200
+//	- lMaxLifeTime	(int64) max result-set lifetime in seconds, not more than 7200
 //	- [out]	wstrIterator(string) result-set ID, identifier of the server-side ordered collection.
 //The result-set is destroyed and associated memory is freed in following cases:
 //
@@ -138,7 +138,7 @@ type AdHstIDParentPxgRetVal struct {
 //	Retrieves AD host attributes.
 //
 //	Parameters:
-//	- idAdhst	(int) host identifier (same as GetChildComputers attribute adhst_id)
+//	- idAdhst	(int64) host identifier (same as GetChildComputers attribute adhst_id)
 //	- vecFieldsToReturn	(array) Array of propery names.
 //	See List of host attributes and List of attributes of organization units for attribute names.
 func (ah *AdHosts) GetChildComputer(ctx context.Context, params ChildComputerParams) (*AdHstIDParent,
@@ -196,7 +196,7 @@ func (ah *AdHosts) GetChildComputer(ctx context.Context, params ChildComputerPar
 //	- Where:
 //	idOU	(int64) id of organization unit
 //	vecFieldsToReturn	(array) fields names to acquire, following names may be specified:
-//	lMaxLifeTime	(int) max result-set lifetime in seconds, not more than 7200
+//	lMaxLifeTime	(int64) max result-set lifetime in seconds, not more than 7200
 //
 //Returns:
 //	- (string) result-set ID, identifier of the server-side ordered collection.
@@ -321,7 +321,7 @@ func (ah *AdHosts) GetOU(ctx context.Context, params OUAttributesParams) (*OUAtt
 //	Updates OU properties.
 //
 //	Parameters:
-//	- idOU	(int) id of organization unit
+//	- idOU	(int64) id of organization unit
 //	- pData	(params) may contain following values:
 //
 //	"adhst_enable_ad_scan" (see Active Directory-specific attributes for organization units and computers.)

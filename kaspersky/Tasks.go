@@ -136,7 +136,7 @@ func (ts *Tasks) GetTaskData(ctx context.Context, strTask string, tsk interface{
 //	- strTaskId	(string) task id
 //
 //	Returns:
-//	- (int) group id
+//	- (int64) group id
 func (ts *Tasks) GetTaskGroup(ctx context.Context, strTaskId string, v interface{}) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`
 	{

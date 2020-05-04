@@ -57,7 +57,7 @@ type PParams struct {
 //ChunkAccessor.Release has been called.
 //
 //Returns:
-//	- (int) number of found groups
+//	- (int64) number of found groups
 func (hg *HostGroup) FindGroups(ctx context.Context, pParams HGParams) (*Accessor, []byte, error) {
 	postData, _ := json.Marshal(pParams)
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.FindGroups", bytes.NewBuffer(postData))
@@ -87,7 +87,7 @@ func (hg *HostGroup) FindGroups(ctx context.Context, pParams HGParams) (*Accesso
 //ChunkAccessor.Release has been called.
 //
 //Returns:
-//(int) number of found hosts
+//(int64) number of found hosts
 func (hg *HostGroup) FindHosts(ctx context.Context, hgParams HGParams) (*Accessor, []byte, error) {
 
 	postData, _ := json.Marshal(hgParams)
@@ -135,7 +135,7 @@ type UHGParams struct {
 //	Session to the Administration Server has been closed.
 //	ChunkAccessor.Release has been called.
 //Returns:
-//	- (int) number of records found
+//	- (int64) number of records found
 func (hg *HostGroup) FindUsers(ctx context.Context, param UHGParams) (*Accessor, []byte, error) {
 	postData, _ := json.Marshal(param)
 
@@ -160,7 +160,7 @@ func (hg *HostGroup) FindUsers(ctx context.Context, param UHGParams) (*Accessor,
 //	- KLSRVH_SRV_ID - Slave server id (paramInt)
 //	- KLSRVH_SRV_DN - Slave server display name (paramString)
 //Returns:
-//	- (int) number of found hosts
+//	- (int64) number of found hosts
 func (hg *HostGroup) FindHostsAsyncGetAccessor(ctx context.Context, strRequestId string) (*AsyncAccessor,
 	[]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strRequestId" : "%s" }`, strRequestId))
@@ -740,7 +740,7 @@ func (hg *HostGroup) GroupIdUnassigned(ctx context.Context) (*PxgValInt, []byte,
 //	- "parentId"
 //
 //Returns:
-//	- (int) id of created group (or of existing one)
+//	- (int64) id of created group (or of existing one)
 func (hg *HostGroup) AddGroup(ctx context.Context, name string, parentId int) (*PxgValInt, []byte, error) {
 	postData := []byte(fmt.Sprintf(`
 	{
@@ -929,7 +929,7 @@ func (hg *HostGroup) GetAllHostfixes(ctx context.Context) (*PxgHostFixes, []byte
 //Returns attributes of the specified administration group.
 //
 //Parameters:
-//	- nGroupId	(int) Id of existing group
+//	- nGroupId	(int64) Id of existing group
 //
 //Returns:
 //	- (params) group attributes (List of group attributes for attribute names)
@@ -1112,7 +1112,7 @@ func (hg *HostGroup) RemoveHosts(ctx context.Context, pHostNames []string, bForc
 //
 //Parameters:
 //	- strDomain	(wstring) domain name
-//	- nType	(int) domain type:
+//	- nType	(int64) domain type:
 //	- 0 - Windows NT domain
 //	- 1 - Windows work group
 //
@@ -1273,7 +1273,7 @@ func (hg *HostGroup) FindIncidents(ctx context.Context, strFilter string, pField
 //Returns administration group id by id of parent and name.
 //
 //Parameters:
-//nParent	(int) Id of parent group
+//nParent	(int64) Id of parent group
 //strName	(string) name of group
 //Returns:
 //(int64) id of group found and -1 if no group was found.
@@ -1384,8 +1384,8 @@ func (hg *HostGroup) MoveHostsToGroup(ctx context.Context, nGroup int64, pHostNa
 //Delete administration group.
 //
 //Parameters:
-//	- nGroup	(int) Id of existing group to delete
-//	- nFlags	(int) flags. May have following value
+//	- nGroup	(int64) Id of existing group to delete
+//	- nFlags	(int64) flags. May have following value
 //
 //	- 1 (default value) group is deleted only if it is empty, "empty" means it doesn't contain subgroups, hosts, policies, tasks, slave servers
 //	- 2 delete group with subgroups, policies and tasks

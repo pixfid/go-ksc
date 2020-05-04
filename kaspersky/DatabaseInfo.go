@@ -72,7 +72,7 @@ func (di *DatabaseInfo) GetDBEventsCount(ctx context.Context) (*PxgValInt, []byt
 //Check is current SQL server in cloud (Amazon RDS or Azure SQL)
 //
 //Parameters:
-//	- nCloudType	(int) Cloud type (KLCLOUD::CloudType)
+//	- nCloudType	(int64) Cloud type (KLCLOUD::CloudType)
 //Returns:
 //	- (data.PxgValBool) true if there is SQL database of this cloud type
 func (di *DatabaseInfo) IsCloudSQL(ctx context.Context, nCloudType int64) (*PxgValBool, []byte, error) {

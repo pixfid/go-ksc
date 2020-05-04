@@ -136,11 +136,11 @@ type HostsKeyIterator struct {
 //	See List of host-specific license attributes for attribute names.
 //	- pFieldsToOrder	(array) of paramString, array of host attributes to be used for ordering
 //	- pOptions	(params) currently ignored.
-//	- lTimeoutSec	(int) iterator timeout in seconds. Output iterator will be available for this time long.
+//	- lTimeoutSec	(int64) iterator timeout in seconds. Output iterator will be available for this time long.
 //		Default is zero which means 15 minutes long.
 //
 //	Return:
-//	- lKeyCount	(int) count of keys returned via enumerator.
+//	- lKeyCount	(int64) count of keys returned via enumerator.
 //	- wstrIterator	(wstring) forward-iterator name for accesing key attributes through GroupSyncIterator.
 //
 //	Note:
@@ -177,10 +177,10 @@ type EnumKeysParams struct {
 //	- pOptions	(params) enumeration options, optional :
 //	"KLLICSRV_ENOPT_INSTALLED_ONLY" - true if you are enumerating only installed keys.
 //	Default is false - method will return all keys including ones not-installed on adm. server (product reported keys).
-//	- lTimeoutSec	(int) iterator timeout in seconds, optional.
+//	- lTimeoutSec	(int64) iterator timeout in seconds, optional.
 //
 //	Return: Output iterator will be available for this time long. Default is zero which means 15 minutes long.
-//	- lKeyCount	(int) count of keys returned via enumerator.
+//	- lKeyCount	(int64) count of keys returned via enumerator.
 //	- wstrIterator	(wstring) forward-iterator name for accesing key attributes through GroupSyncIterator.
 //
 //	Call GroupSyncIterator::GetNextItems to iterate. Call GroupSyncIterator::ReleaseIterator when you are done.

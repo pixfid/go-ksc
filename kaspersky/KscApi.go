@@ -63,6 +63,7 @@ type Client struct {
 	Limits                      *Limits
 	ListTags                    *ListTags
 	PackagesApi                 *PackagesApi
+	SecurityPolicy3             *SecurityPolicy3
 	ServerHierarchy             *ServerHierarchy
 	Session                     *Session
 	Tasks                       *Tasks
@@ -111,6 +112,7 @@ func New(cfg Config) *Client {
 	client.Limits = &Limits{client: client}
 	client.ListTags = &ListTags{client: client}
 	client.PackagesApi = &PackagesApi{client: client}
+	client.SecurityPolicy3 = &SecurityPolicy3{client: client}
 	client.ServerHierarchy = &ServerHierarchy{client: client}
 	client.Session = &Session{client: client}
 	client.Tasks = &Tasks{client: client}

@@ -35,7 +35,7 @@ type VServers2 struct {
 //Returns info about the specified virtual server
 //
 //Parameters:
-//	- lVsId	(int) virtual server id
+//	- lVsId	(int64) virtual server id
 //Returns:
 //	- (params) a container, see Virtual server statistic.
 func (vs *VServers2) GetVServerStatistic(ctx context.Context, lVsId int) ([]byte, error) {

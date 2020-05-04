@@ -63,7 +63,7 @@ func (ca *GroupSyncIterator) ReleaseIterator(ctx context.Context, szwIterator st
 //
 //	Parameters:
 //	- szwIterator	(wstring) forward iterator id
-//	- nCount	(int) number of elements to return
+//	- nCount	(int64) number of elements to return
 //
 //Returns:
 //	- int actual number of returned elements (less or equal to nCount)

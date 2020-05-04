@@ -95,7 +95,7 @@ type ItemsChunkParams struct {
 //	- nCount	(int64) number of elements to return
 //	- [out]	pChunk	(params) container that has needed elements in the array with name "KLCSP_ITERATOR_ARRAY"
 //	Returns:
-//	- (int) actual number of returned elements (less or equal to nCount)
+//	- (int64) actual number of returned elements (less or equal to nCount)
 func (ca *ChunkAccessor) GetItemsChunk(ctx context.Context, icp ItemsChunkParams, result interface{}) ([]byte,
 	error) {
 
