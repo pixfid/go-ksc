@@ -53,6 +53,7 @@ type Client struct {
 	GroupSyncIterator          *GroupSyncIterator
 	InventoryApi               *InventoryApi
 	LicenseKeys                *LicenseKeys
+	Limits                     *Limits
 	ListTags                   *ListTags
 	PackagesApi                *PackagesApi
 	ServerHierarchy            *ServerHierarchy
@@ -93,6 +94,7 @@ func New(cfg Config) *Client {
 	client.GroupSyncIterator = &GroupSyncIterator{client: client}
 	client.InventoryApi = &InventoryApi{client: client}
 	client.LicenseKeys = &LicenseKeys{client: client}
+	client.Limits = &Limits{client: client}
 	client.ListTags = &ListTags{client: client}
 	client.PackagesApi = &PackagesApi{client: client}
 	client.ServerHierarchy = &ServerHierarchy{client: client}

@@ -50,4 +50,3 @@ func TestAdmServerSettings_GetSharedFolder(t *testing.T) {
 		t.Errorf("AdmServerSettings.GetSharedFolder returned %+v, want %+v", artifacts, want)
 	}
 }
-
