@@ -63,15 +63,13 @@ type WstrNetworkPath struct {
 //Otherwise, a call to AsyncActionStateChecker::CheckActionState returns error in pStateData.
 //Exceptions:
 //Throws	exception in case of error.
-func (as *AdmServerSettings) ChangeSharedFolder(ctx context.Context, wNP WstrNetworkPath) (*PxgValStr, []byte, error) {
+func (as *AdmServerSettings) ChangeSharedFolder(ctx context.Context, wNP WstrNetworkPath) ([]byte, error) {
 	postData, _ := json.Marshal(wNP)
 	request, err := http.NewRequest("POST", as.client.Server+"/api/v1.0/AdmServerSettings.ChangeSharedFolder", bytes.NewBuffer(postData))
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 
-	pxgValStr := new(PxgValStr)
-
-	raw, err := as.client.Do(ctx, request, &pxgValStr)
-	return pxgValStr, raw, err
+	raw, err := as.client.Do(ctx, request, nil)
+	return raw, err
 }
