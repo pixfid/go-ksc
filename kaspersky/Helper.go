@@ -131,3 +131,14 @@ func ParseTime(dt string) string {
 	t, _ := time.Parse(RFC3339, dt)
 	return t.Format(RUS)
 }
+
+//VecFieldsToOrder struct
+type VecFieldsToOrder struct {
+	Type  string `json:"type"`
+	Value Value  `json:"value"`
+}
+
+type Value struct {
+	Name string `json:"Name"`
+	Asc  bool   `json:"Asc"`
+}

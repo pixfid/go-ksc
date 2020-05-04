@@ -219,16 +219,6 @@ type POptions struct {
 	Value string `json:"value"`
 }
 
-type VecFieldsToOrder struct {
-	Type  string `json:"type"`
-	Value Value  `json:"value"`
-}
-
-type Value struct {
-	Asc  bool   `json:"Asc"`
-	Name string `json:"Name"`
-}
-
 //ADHostIteratorArray struct
 type ADHostIteratorArray struct {
 	PChunk    PChunk `json:"pChunk"`

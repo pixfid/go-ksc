@@ -49,80 +49,29 @@ func (ca *GroupSyncIterator) ReleaseIterator(ctx context.Context, szwIterator st
 		log.Fatal(err.Error())
 	}
 
-	jsonData, err := ca.client.Do(ctx, request, nil)
+	raw, err := ca.client.Do(ctx, request, nil)
 
-	if jsonData != nil {
+	if raw != nil {
 		return true
 	}
 	return false
 }
 
-type LicenseKeysData struct {
-	BEOF      *bool     `json:"bEOF,omitempty"`
-	PData     *KeysData `json:"pData,omitempty"`
-	PxgRetVal *int64    `json:"PxgRetVal,omitempty"`
-}
-
-type KeysData struct {
-	KeysDataArray []KeysDataArray `json:"KLCSP_ITERATOR_ARRAY"`
-}
-
-type KeysDataArray struct {
-	Type    *string  `json:"type,omitempty"`
-	KeyData *KeyData `json:"value,omitempty"`
-}
-
-type KeyData struct {
-	KllicsrvAutokey            bool      `json:"KLLICSRV_AUTOKEY,omitempty"`
-	KllicsrvKeyInstalled       bool      `json:"KLLICSRV_KEY_INSTALLED,omitempty"`
-	KllicAppID                 int64     `json:"KLLIC_APP_ID,omitempty"`
-	KllicCreationDate          KllicDate `json:"KLLIC_CREATION_DATE,omitempty"`
-	KllicCustomerInfo          string    `json:"KLLIC_CUSTOMER_INFO,omitempty"`
-	KllicKeyType               int64     `json:"KLLIC_KEY_TYPE,omitempty"`
-	KllicLicensePeriod         int64     `json:"KLLIC_LICENSE_PERIOD,omitempty"`
-	KllicLicinfo               string    `json:"KLLIC_LICINFO,omitempty"`
-	KllicLictypeIsSubscription bool      `json:"KLLIC_LICTYPE_IS_SUBSCRIPTION,omitempty"`
-	KllicLicCount              int64     `json:"KLLIC_LIC_COUNT,omitempty"`
-	KllicLimitDate             KllicDate `json:"KLLIC_LIMIT_DATE,omitempty"`
-	KllicMajVer                string    `json:"KLLIC_MAJ_VER,omitempty"`
-	KllicNearestExpirationDate KllicDate `json:"KLLIC_NEAREST_EXPIRATION_DATE,omitempty"`
-	KllicNhostsAscurrent       int64     `json:"KLLIC_NHOSTS_ASCURRENT,omitempty"`
-	KllicNhostsAsnext          int64     `json:"KLLIC_NHOSTS_ASNEXT,omitempty"`
-	KllicProdName              string    `json:"KLLIC_PROD_NAME,omitempty"`
-	KllicProdSuiteID           int64     `json:"KLLIC_PROD_SUITE_ID,omitempty"`
-	KllicSerial                string    `json:"KLLIC_SERIAL,omitempty"`
-	KllicSubscrinfoEnddatetype int64     `json:"KLLIC_SUBSCRINFO_ENDDATETYPE,omitempty"`
-	KllicSubscrinfoGraceterm   int64     `json:"KLLIC_SUBSCRINFO_GRACETERM,omitempty"`
-	KllicSubscrinfoProviderurl string    `json:"KLLIC_SUBSCRINFO_PROVIDERURL,omitempty"`
-	KllicSubscrinfoState       int64     `json:"KLLIC_SUBSCRINFO_STATE,omitempty"`
-	KllicSupportInfo           string    `json:"KLLIC_SUPPORT_INFO,omitempty"`
-}
-
-type KllicDate struct {
-	Type  string `json:"type,omitempty"`
-	Value string `json:"value,omitempty"`
-}
-
-func (u KeyData) KeyType() string {
-	switch u.KllicKeyType {
-	case 1:
-		return "Commercial"
-	case 2:
-		return "Beta"
-	case 3:
-		return "Trial"
-	case 4:
-		return "Test"
-	case 5:
-		return "OEM"
-	case 6:
-		return "Subscription"
-	default:
-		return "Unknown"
-	}
-}
-
-func (ca *GroupSyncIterator) GetNextItems(ctx context.Context, szwIterator string, nCount int64) (*LicenseKeysData,
+//	Acquire subset of elements contained in the result-set
+//
+//	Returns nCount elements contained in the specified result-set beginning from the current position and moves internal pointer to the new position.
+//
+//	Parameters:
+//	- szwIterator	(wstring) forward iterator id
+//	- nCount	(int) number of elements to return
+//
+//Returns:
+//	- int actual number of returned elements (less or equal to nCount)
+//	- bEOF	(boolean) returns false if the returned chunk is the last one,
+//	and there's no need in further calls of this method
+//	- pData	(params) container that has needed elements in the array with name "KLCSP_ITERATOR_ARRAY"
+func (ca *GroupSyncIterator) GetNextItems(ctx context.Context, szwIterator string, nCount int64,
+	v interface{}) (
 	[]byte, error) {
 	postData := []byte(fmt.Sprintf(`
 	{
@@ -136,9 +85,7 @@ func (ca *GroupSyncIterator) GetNextItems(ctx context.Context, szwIterator strin
 		log.Fatal(err.Error())
 	}
 
-	licenseKeysData := new(LicenseKeysData)
+	raw, err := ca.client.Do(ctx, request, &v)
 
-	raw, err := ca.client.Do(ctx, request, licenseKeysData)
-
-	return licenseKeysData, raw, err
+	return raw, err
 }

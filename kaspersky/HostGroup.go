@@ -33,10 +33,11 @@ type HostGroup struct {
 }
 
 type HGParams struct {
-	WstrFilter        string   `json:"wstrFilter"`
-	VecFieldsToReturn []string `json:"vecFieldsToReturn"`
-	PParams           PParams  `json:"pParams"`
-	LMaxLifeTime      int64    `json:"lMaxLifeTime"`
+	WstrFilter        string             `json:"wstrFilter"`
+	VecFieldsToReturn []string           `json:"vecFieldsToReturn"`
+	VecFieldsToOrder  []VecFieldsToOrder `json:"vecFieldsToOrder"`
+	PParams           PParams            `json:"pParams"`
+	LMaxLifeTime      int64              `json:"lMaxLifeTime"`
 }
 
 type PParams struct {
@@ -945,9 +946,9 @@ func (hg *HostGroup) GetGroupInfo(ctx context.Context, nGroupId int64, result in
 		log.Fatal(err.Error())
 	}
 
-	jsonData, err := hg.client.Do(ctx, request, &result)
+	raw, err := hg.client.Do(ctx, request, &result)
 
-	dec := json.NewDecoder(bytes.NewReader(jsonData))
+	dec := json.NewDecoder(bytes.NewReader(raw))
 
 	if err = dec.Decode(result); err != nil {
 		return err

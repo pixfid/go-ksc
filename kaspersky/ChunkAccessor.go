@@ -47,9 +47,9 @@ func (ca *ChunkAccessor) Release(ctx context.Context, accessor string) bool {
 		log.Fatal(err.Error())
 	}
 
-	jsonData, err := ca.client.Do(ctx, request, nil)
+	raw, err := ca.client.Do(ctx, request, nil)
 
-	if jsonData != nil {
+	if raw != nil {
 		return true
 	}
 	return false

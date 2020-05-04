@@ -100,8 +100,8 @@ func (pa *PackagesApi) GetPackageInfo2(ctx context.Context, nPackageId int) (SKl
 		log.Fatal(err.Error())
 	}
 
-	jsonData, err := pa.client.Do(ctx, request)
-	pxgRetVal, err := UnmarshalKlpkg(jsonData)
+	raw, err := pa.client.Do(ctx, request)
+	pxgRetVal, err := UnmarshalKlpkg(raw)
 	return pxgRetVal, err
 }
 
@@ -116,8 +116,8 @@ func (pa *PackagesApi) DeleteExecutablePkg(ctx context.Context, nPackageId int) 
 		log.Fatal(err.Error())
 	}
 
-	jsonData, err := pa.client.Do(ctx, request)
-	pxgRetVal, err := UnmarshalKlpkg(jsonData)
+	raw, err := pa.client.Do(ctx, request)
+	pxgRetVal, err := UnmarshalKlpkg(raw)
 	return pxgRetVal, err
 }
 
@@ -133,8 +133,8 @@ func (pa *PackagesApi) RemovePackage2(ctx context.Context, nPackageId int) (PDRe
 		log.Fatal(err.Error())
 	}
 
-	jsonData, err := pa.client.Do(ctx, request)
-	pxgRetVal, err := UnmarshalPDResult(jsonData)
+	raw, err := pa.client.Do(ctx, request)
+	pxgRetVal, err := UnmarshalPDResult(raw)
 	return pxgRetVal, err
 }
 
@@ -149,8 +149,8 @@ func (pa *PackagesApi) RemovePackage(ctx context.Context, nPackageId int) (SKlpk
 		log.Fatal(err.Error())
 	}
 
-	jsonData, err := pa.client.Do(ctx, request)
-	pxgRetVal, err := UnmarshalKlpkg(jsonData)
+	raw, err := pa.client.Do(ctx, request)
+	pxgRetVal, err := UnmarshalKlpkg(raw)
 	return pxgRetVal, err
 }
 
