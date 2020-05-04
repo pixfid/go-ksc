@@ -50,6 +50,7 @@ type Client struct {
 	ChunkAccessor              *ChunkAccessor
 	ConEvents                  *ConEvents
 	DatabaseInfo               *DatabaseInfo
+	DataProtectionApi          *DataProtectionApi
 	HostGroup                  *HostGroup
 	HostMoveRules              *HostMoveRules
 	HostTagsRulesApi           *HostTagsRulesApi
@@ -96,6 +97,7 @@ func New(cfg Config) *Client {
 	client.ChunkAccessor = &ChunkAccessor{client: client}
 	client.ConEvents = &ConEvents{client: client}
 	client.DatabaseInfo = &DatabaseInfo{client: client}
+	client.DataProtectionApi = &DataProtectionApi{client: client}
 	client.HostGroup = &HostGroup{client: client}
 	client.HostMoveRules = &HostMoveRules{client: client}
 	client.HostTagsRulesApi = &HostTagsRulesApi{client: client}
