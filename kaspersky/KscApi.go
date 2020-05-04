@@ -40,36 +40,37 @@ type Config struct {
 
 //-------------Client------------------
 type Client struct {
-	AdHosts                    *AdHosts
-	AdmServerSettings          *AdmServerSettings
-	AppCtrlApi                 *AppCtrlApi
-	AsyncActionStateChecker    *AsyncActionStateChecker
-	CertPoolCtrl               *CertPoolCtrl
-	CertPoolCtrl2              *CertPoolCtrl2
-	CgwHelper                  *CgwHelper
-	ChunkAccessor              *ChunkAccessor
-	ConEvents                  *ConEvents
-	DatabaseInfo               *DatabaseInfo
-	DataProtectionApi          *DataProtectionApi
-	HostGroup                  *HostGroup
-	HostMoveRules              *HostMoveRules
-	HostTagsRulesApi           *HostTagsRulesApi
-	HostTasks                  *HostTasks
-	HWInvStorage               *HWInvStorage
-	GroupSyncIterator          *GroupSyncIterator
-	InventoryApi               *InventoryApi
-	LicenseKeys                *LicenseKeys
-	Limits                     *Limits
-	ListTags                   *ListTags
-	PackagesApi                *PackagesApi
-	ServerHierarchy            *ServerHierarchy
-	Session                    *Session
-	Tasks                      *Tasks
-	UserName, Password, Server string
-	VServers                   *VServers
-	VServers2                  *VServers2
-	WolSender                  *WolSender
-	client                     *http.Client
+	AdHosts                     *AdHosts
+	AdmServerSettings           *AdmServerSettings
+	AppCtrlApi                  *AppCtrlApi
+	AsyncActionStateChecker     *AsyncActionStateChecker
+	CertPoolCtrl                *CertPoolCtrl
+	CertPoolCtrl2               *CertPoolCtrl2
+	CgwHelper                   *CgwHelper
+	ChunkAccessor               *ChunkAccessor
+	ConEvents                   *ConEvents
+	DatabaseInfo                *DatabaseInfo
+	DataProtectionApi           *DataProtectionApi
+	EventNotificationProperties *EventNotificationProperties
+	HostGroup                   *HostGroup
+	HostMoveRules               *HostMoveRules
+	HostTagsRulesApi            *HostTagsRulesApi
+	HostTasks                   *HostTasks
+	HWInvStorage                *HWInvStorage
+	GroupSyncIterator           *GroupSyncIterator
+	InventoryApi                *InventoryApi
+	LicenseKeys                 *LicenseKeys
+	Limits                      *Limits
+	ListTags                    *ListTags
+	PackagesApi                 *PackagesApi
+	ServerHierarchy             *ServerHierarchy
+	Session                     *Session
+	Tasks                       *Tasks
+	UserName, Password, Server  string
+	VServers                    *VServers
+	VServers2                   *VServers2
+	WolSender                   *WolSender
+	client                      *http.Client
 }
 
 func New(cfg Config) *Client {
@@ -98,6 +99,7 @@ func New(cfg Config) *Client {
 	client.ConEvents = &ConEvents{client: client}
 	client.DatabaseInfo = &DatabaseInfo{client: client}
 	client.DataProtectionApi = &DataProtectionApi{client: client}
+	client.EventNotificationProperties = &EventNotificationProperties{client: client}
 	client.HostGroup = &HostGroup{client: client}
 	client.HostMoveRules = &HostMoveRules{client: client}
 	client.HostTagsRulesApi = &HostTagsRulesApi{client: client}
