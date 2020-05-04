@@ -44,6 +44,7 @@ type Client struct {
 	AdmServerSettings          *AdmServerSettings
 	AppCtrlApi                 *AppCtrlApi
 	AsyncActionStateChecker    *AsyncActionStateChecker
+	CertPoolCtrl               *CertPoolCtrl
 	ChunkAccessor              *ChunkAccessor
 	DatabaseInfo               *DatabaseInfo
 	HostGroup                  *HostGroup
@@ -86,6 +87,7 @@ func New(cfg Config) *Client {
 	client.AdmServerSettings = &AdmServerSettings{client: client}
 	client.AppCtrlApi = &AppCtrlApi{client: client}
 	client.AsyncActionStateChecker = &AsyncActionStateChecker{client: client}
+	client.CertPoolCtrl = &CertPoolCtrl{client: client}
 	client.ChunkAccessor = &ChunkAccessor{client: client}
 	client.DatabaseInfo = &DatabaseInfo{client: client}
 	client.HostGroup = &HostGroup{client: client}
