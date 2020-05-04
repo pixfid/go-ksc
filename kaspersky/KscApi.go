@@ -63,6 +63,9 @@ type Client struct {
 	LicensePolicy               *LicensePolicy
 	Limits                      *Limits
 	ListTags                    *ListTags
+	Multitenancy                *Multitenancy
+	NagCgwHelper                *NagCgwHelper
+	NagHstCtl                   *NagHstCtl
 	PackagesApi                 *PackagesApi
 	SecurityPolicy3             *SecurityPolicy3
 	ServerHierarchy             *ServerHierarchy
@@ -113,6 +116,9 @@ func New(cfg Config) *Client {
 	client.LicensePolicy = &LicensePolicy{client: client}
 	client.Limits = &Limits{client: client}
 	client.ListTags = &ListTags{client: client}
+	client.Multitenancy = &Multitenancy{client: client}
+	client.NagCgwHelper = &NagCgwHelper{client: client}
+	client.NagHstCtl = &NagHstCtl{client: client}
 	client.PackagesApi = &PackagesApi{client: client}
 	client.SecurityPolicy3 = &SecurityPolicy3{client: client}
 	client.ServerHierarchy = &ServerHierarchy{client: client}

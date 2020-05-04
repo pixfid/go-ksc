@@ -27,11 +27,18 @@ import (
 	"net/http"
 )
 
+//	Tasks Class Reference
+//
+//	Group tasks.
+//
+//	Allows to acquire task attributes, enumerate, control and delete tasks.
+//
+//	List of all members.
 type Tasks struct {
 	client *Client
 }
 
-//Get all group and global tasks of specified host.
+//	Get all group and global tasks of specified host.
 //
 //	Parameters:
 //	- ctx	(context.Context) context.
@@ -60,7 +67,7 @@ func (ts *Tasks) GetAllTasksOfHost(ctx context.Context, strDomainName, strHostNa
 	return pxgValArrayOfString, raw, err
 }
 
-//TaskData struct
+//	TaskData struct
 type TaskData struct {
 	PxgRetVal Task `json:"PxgRetVal"`
 }
@@ -79,9 +86,9 @@ type PrtsTaskCreationDate struct {
 	Value string `json:"value"`
 }
 
-//Acquire attributes of specified task.
+//	Acquire attributes of specified task.
 //
-//Returns attributes of specified task.
+//	Returns attributes of specified task.
 //
 //	Parameters:
 //	- ctx	(context.Context) context.
@@ -103,16 +110,16 @@ func (ts *Tasks) GetTask(ctx context.Context, strTask string) (*TaskData, []byte
 	return taskData, raw, err
 }
 
-//Acquire task settings.
+//	Acquire task settings.
 //
-//Returns task settings.
+//	Returns task settings.
 //
 //	Parameters:
 //	- ctx	(context.Context) context.
 //	- strTask	(string) task id.
 //
 //	Returns:
-//(params) task settings, see Task settings format
+//	- (params) task settings, see Task settings format
 func (ts *Tasks) GetTaskData(ctx context.Context, strTask string, tsk interface{}) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`
 	{
@@ -129,7 +136,7 @@ func (ts *Tasks) GetTaskData(ctx context.Context, strTask string, tsk interface{
 	return raw, err
 }
 
-//Return the group id for the group task.
+//	Return the group id for the group task.
 //
 //	Parameters:
 //	- ctx	(context.Context) context.
@@ -169,9 +176,9 @@ type TaskStatistic struct {
 	KltskNeedRbtCnt      int64 `json:"KLTSK_NEED_RBT_CNT"`
 }
 
-//Acquire statistics of the specified task.
+//	Acquire statistics of the specified task.
 //
-//Returns statistics of the specified task.
+//	Returns statistics of the specified task.
 //
 //	Parameters:
 //	- ctx	(context.Context) context.
@@ -196,9 +203,9 @@ func (ts *Tasks) GetTaskStatistics(ctx context.Context, strTask string) (*TaskSt
 	return tsks, raw, err
 }
 
-//Suspend execution of the specified task.
+//	Suspend execution of the specified task.
 //
-//Suspends execution of the specified task.
+//	Suspends execution of the specified task.
 //
 //	Parameters:
 //	- ctx	(context.Context) context.
@@ -219,9 +226,9 @@ func (ts *Tasks) SuspendTask(ctx context.Context, strTask string) ([]byte,
 	return raw, err
 }
 
-//Resume specified task.
+//	Resume specified task.
 //
-//Resumes specified task
+//	Resumes specified task
 //
 //	Parameters:
 //	- ctx	(context.Context) context.
@@ -242,9 +249,9 @@ func (ts *Tasks) ResumeTask(ctx context.Context, strTask string) ([]byte,
 	return raw, err
 }
 
-//Start specified task.
+//	Start specified task.
 //
-//Forces starting specified task.
+//	Forces starting specified task.
 //
 //	Parameters:
 //	- ctx	(context.Context) context.
@@ -265,9 +272,9 @@ func (ts *Tasks) RunTask(ctx context.Context, strTask string) ([]byte,
 	return raw, err
 }
 
-//Delete the specified task.
+//	Delete the specified task.
 //
-//Deletes the specified task.
+//	Deletes the specified task.
 //
 //	Parameters:
 //	- ctx	(context.Context) context.
