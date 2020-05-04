@@ -111,12 +111,6 @@ type Accessor struct {
 	PxgRetVal   int64  `json:"PxgRetVal"`
 }
 
-//	ADHostIterator struct
-type ADHostIterator struct {
-	WstrIterator string `json:"wstrIterator"`
-	PxgRetVal    int64  `json:"PxgRetVal"`
-}
-
 //WActionGUID struct
 type WActionGUID struct {
 	WstrActionGUID string `json:"wstrActionGuid"`
