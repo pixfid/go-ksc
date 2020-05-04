@@ -31,16 +31,22 @@ type HWInvStorage struct {
 	client *Client
 }
 
-//Start export of hardware inventory.
+//	Start export of hardware inventory.
 //
-//Parameters:
+//	Parameters:
 //	- eExportType	[in]
-//Import and export types:
-//	- ID | Description
-//	- 0 |XML
-//	- 1 |Excel (XML)
-//Returns:
-//	- Id of asynchronous operation. To get status use AsyncActionStateChecker.CheckActionState, lStateCode "0" means OK.
+//
+//	Import and export types:
+//	+----+-------------+
+//	| ID | Description |
+//	+----+-------------+
+//	|  0 | XML         |
+//	|  1 | Excel (XML) |
+//	+----+-------------+
+//
+//	Returns:
+//	- Id of asynchronous operation.
+//	To get status use AsyncActionStateChecker.CheckActionState, lStateCode "0" means OK.
 func (hw *HWInvStorage) ExportHWInvStorage2(ctx context.Context, eExportType int) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`
 	{
