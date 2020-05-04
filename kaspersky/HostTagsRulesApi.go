@@ -85,7 +85,7 @@ func (hs *HostTagsRulesApi) GetRules(ctx context.Context, params HostTagsRulesPa
 		log.Fatal(err.Error())
 	}
 
-	raw, err := hs.client.Do(ctx, request, nil, false)
+	raw, err := hs.client.Do(ctx, request, nil)
 
 	return raw, err
 }
@@ -109,7 +109,7 @@ func (hs *HostTagsRulesApi) GetRule(ctx context.Context, szwTagValue string) ([]
 		log.Fatal(err.Error())
 	}
 
-	raw, err := hs.client.Do(ctx, request, nil, false)
+	raw, err := hs.client.Do(ctx, request, nil)
 
 	return raw, err
 }
@@ -138,7 +138,7 @@ func (hs *HostTagsRulesApi) ExecuteRule(ctx context.Context, szwTagValue string)
 	}
 
 	wActionGUID := new(WActionGUID)
-	raw, err := hs.client.Do(ctx, request, &wActionGUID, false)
+	raw, err := hs.client.Do(ctx, request, &wActionGUID)
 
 	return wActionGUID, raw, err
 }
@@ -159,7 +159,7 @@ func (hs *HostTagsRulesApi) CancelAsyncAction(ctx context.Context, wstrActionGui
 		log.Fatal(err.Error())
 	}
 
-	raw, err := hs.client.Do(ctx, request, nil, false)
+	raw, err := hs.client.Do(ctx, request, nil)
 
 	return raw, err
 }
@@ -178,7 +178,7 @@ func (hs *HostTagsRulesApi) DeleteRule(ctx context.Context, szwTagValue string) 
 		log.Fatal(err.Error())
 	}
 
-	raw, err := hs.client.Do(ctx, request, nil, false)
+	raw, err := hs.client.Do(ctx, request, nil)
 
 	return raw, err
 }

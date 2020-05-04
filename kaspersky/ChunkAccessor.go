@@ -47,7 +47,7 @@ func (ca *ChunkAccessor) Release(ctx context.Context, accessor string) bool {
 		log.Fatal(err.Error())
 	}
 
-	jsonData, err := ca.client.Do(ctx, request, nil, false)
+	jsonData, err := ca.client.Do(ctx, request, nil)
 
 	if jsonData != nil {
 		return true
@@ -74,7 +74,7 @@ func (ca *ChunkAccessor) GetItemsCount(ctx context.Context, accessor string) (*P
 
 	pxgValInt := new(PxgValInt)
 
-	raw, err := ca.client.Do(ctx, request, &pxgValInt, false)
+	raw, err := ca.client.Do(ctx, request, &pxgValInt)
 
 	return pxgValInt, raw, err
 }
@@ -107,6 +107,6 @@ func (ca *ChunkAccessor) GetItemsChunk(ctx context.Context, icp ItemsChunkParams
 		log.Fatal(err.Error())
 	}
 
-	raw, err := ca.client.Do(ctx, request, &result, false)
+	raw, err := ca.client.Do(ctx, request, &result)
 	return raw, err
 }

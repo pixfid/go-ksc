@@ -40,6 +40,6 @@ func (s *Session) CreateToken(ctx context.Context) (*PxgValStr, []byte, error) {
 
 	pxgValStr := new(PxgValStr)
 
-	raw, err := s.client.Do(ctx, request, &pxgValStr, false)
+	raw, err := s.client.Do(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }

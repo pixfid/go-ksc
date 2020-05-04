@@ -52,7 +52,7 @@ func (hw *HWInvStorage) ExportHWInvStorage2(ctx context.Context, eExportType int
 		log.Fatal(err.Error())
 	}
 
-	raw, err := hw.client.Do(ctx, request, nil, false)
+	raw, err := hw.client.Do(ctx, request, nil)
 	return raw, err
 }
 
@@ -79,7 +79,7 @@ func (hw *HWInvStorage) ImportHWInvStorage2(ctx context.Context, eImportType int
 		log.Fatal(err.Error())
 	}
 
-	raw, err := hw.client.Do(ctx, request,nil, false)
+	raw, err := hw.client.Do(ctx, request, nil)
 	return raw, err
 }
 
@@ -89,7 +89,7 @@ func (hw *HWInvStorage) EnumDynColumns(ctx context.Context) ([]byte, error) {
 		log.Fatal(err.Error())
 	}
 
-	raw, err := hw.client.Do(ctx, request, nil, false)
+	raw, err := hw.client.Do(ctx, request, nil)
 	return raw, err
 }
 
@@ -99,7 +99,7 @@ func (hw *HWInvStorage) GetProcessingRules(ctx context.Context) ([]byte, error) 
 		log.Fatal(err.Error())
 	}
 
-	raw, err := hw.client.Do(ctx, request, nil,false)
+	raw, err := hw.client.Do(ctx, request, nil)
 	return raw, err
 }
 
@@ -113,7 +113,7 @@ func (hw *HWInvStorage) GetHWInvObject(ctx context.Context, nObjId int64) ([]byt
 		log.Fatal(err.Error())
 	}
 
-	raw, err := hw.client.Do(ctx, request,nil,false)
+	raw, err := hw.client.Do(ctx, request, nil)
 	return raw, err
 }
 
@@ -128,6 +128,6 @@ func (hw *HWInvStorage) ExportHWInvStorageGetData(ctx context.Context, wstrAsync
 		log.Fatal(err.Error())
 	}
 
-	raw, err := hw.client.Do(ctx, request, nil,false)
+	raw, err := hw.client.Do(ctx, request, nil)
 	return raw, err
 }

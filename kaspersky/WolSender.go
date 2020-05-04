@@ -51,5 +51,5 @@ func (ah *WolSender) SendWolSignal(ctx context.Context, wolsp WOLSignalParams) {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	_, _ = ah.client.Do(ctx, request, nil, false)
+	_, _ = ah.client.Do(ctx, request, nil)
 }

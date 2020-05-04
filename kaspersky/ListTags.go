@@ -32,7 +32,7 @@ type ListTags struct {
 func (lt *ListTags) GetAllTags(ctx context.Context) (*PxgRetError, []byte, error) {
 	request, err := http.NewRequest("POST", lt.client.Server+"/api/v1.0/ListTags.GetAllTags", nil)
 	pxgValTODO := new(PxgRetError)
-	raw, err := lt.client.Do(ctx, request, &pxgValTODO, false)
+	raw, err := lt.client.Do(ctx, request, &pxgValTODO)
 	//TODO Found Correct Response format
 	return pxgValTODO, raw, err
 }

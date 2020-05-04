@@ -31,7 +31,6 @@ type InventoryApi struct {
 	client *Client
 }
 
-
 //Acquire all software applications.
 //
 //Returns attributes for all software applications.
@@ -58,7 +57,7 @@ func (ia *InventoryApi) GetHostInvProducts(ctx context.Context, szwHostId string
 		log.Fatal(err.Error())
 	}
 
-	raw, err := ia.client.Do(ctx, request, &v,false)
+	raw, err := ia.client.Do(ctx, request, &v)
 	return raw, err
 }
 
@@ -90,7 +89,7 @@ func (ia *InventoryApi) GetHostInvPatches(ctx context.Context, szwHostId string,
 		log.Fatal(err.Error())
 	}
 
-	raw, err := ia.client.Do(ctx, request, &v,false)
+	raw, err := ia.client.Do(ctx, request, &v)
 	return raw, err
 }
 
@@ -109,7 +108,7 @@ func (ia *InventoryApi) GetInvPatchesList(ctx context.Context, v interface{}) ([
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	raw, err := ia.client.Do(ctx, request, &v, false)
+	raw, err := ia.client.Do(ctx, request, &v)
 	return raw, err
 }
 
@@ -127,7 +126,7 @@ func (ia *InventoryApi) GetInvProductsList(ctx context.Context, v interface{}) (
 		log.Fatal(err.Error())
 	}
 
-	raw, err := ia.client.Do(ctx, request, &v,false)
+	raw, err := ia.client.Do(ctx, request, &v)
 	return raw, err
 }
 
@@ -135,13 +134,13 @@ func (ia *InventoryApi) GetInvProductsList(ctx context.Context, v interface{}) (
 //
 //Parameters:
 //	- pParams	reserved. (params)
-func (ia *InventoryApi) DeleteUninstalledApps(ctx context.Context) ([]byte,error) {
+func (ia *InventoryApi) DeleteUninstalledApps(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", ia.client.Server+"/api/v1.0/InventoryApi.DeleteUninstalledApps", nil)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 
-	raw, err := ia.client.Do(ctx, request, nil,false)
+	raw, err := ia.client.Do(ctx, request, nil)
 	return raw, err
 }
 
@@ -173,9 +172,9 @@ func (ia *InventoryApi) GetSrvCompetitorIniFileInfoList(ctx context.Context, wst
 	}
 
 	pxgValCIFIL := new(PxgValCIFIL)
-	raw, err := ia.client.Do(ctx, request,&pxgValCIFIL, false)
+	raw, err := ia.client.Do(ctx, request, &pxgValCIFIL)
 
-	return pxgValCIFIL,raw, err
+	return pxgValCIFIL, raw, err
 }
 
 /*

@@ -33,7 +33,7 @@ func (pa *PackagesApi) GetUserAgreements(ctx context.Context) (*PxgValStr, []byt
 	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.GetUserAgreements", nil)
 	pxgValStr := new(PxgValStr)
 
-	raw, err := pa.client.Do(ctx, request, &pxgValStr, false)
+	raw, err := pa.client.Do(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -74,7 +74,7 @@ func (pa *PackagesApi) GetPackages(ctx context.Context) (*ListOfPackages, []byte
 	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.GetPackages", nil)
 
 	listOfPackages := new(ListOfPackages)
-	raw, err := pa.client.Do(ctx, request, listOfPackages, false)
+	raw, err := pa.client.Do(ctx, request, listOfPackages)
 
 	return listOfPackages, raw, err
 }
@@ -83,7 +83,7 @@ func (pa *PackagesApi) GetPackages2(ctx context.Context) (*ListOfPackages, []byt
 	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.GetPackages2", nil)
 
 	listOfPackages := new(ListOfPackages)
-	raw, err := pa.client.Do(ctx, request, listOfPackages, false)
+	raw, err := pa.client.Do(ctx, request, listOfPackages)
 
 	return listOfPackages, raw, err
 }
@@ -100,7 +100,7 @@ func (pa *PackagesApi) GetPackageInfo2(ctx context.Context, nPackageId int) (SKl
 		log.Fatal(err.Error())
 	}
 
-	jsonData, err := pa.client.Do(ctx, request, false)
+	jsonData, err := pa.client.Do(ctx, request)
 	pxgRetVal, err := UnmarshalKlpkg(jsonData)
 	return pxgRetVal, err
 }
@@ -116,7 +116,7 @@ func (pa *PackagesApi) DeleteExecutablePkg(ctx context.Context, nPackageId int) 
 		log.Fatal(err.Error())
 	}
 
-	jsonData, err := pa.client.Do(ctx, request, false)
+	jsonData, err := pa.client.Do(ctx, request)
 	pxgRetVal, err := UnmarshalKlpkg(jsonData)
 	return pxgRetVal, err
 }
@@ -133,7 +133,7 @@ func (pa *PackagesApi) RemovePackage2(ctx context.Context, nPackageId int) (PDRe
 		log.Fatal(err.Error())
 	}
 
-	jsonData, err := pa.client.Do(ctx, request, false)
+	jsonData, err := pa.client.Do(ctx, request)
 	pxgRetVal, err := UnmarshalPDResult(jsonData)
 	return pxgRetVal, err
 }
@@ -149,7 +149,7 @@ func (pa *PackagesApi) RemovePackage(ctx context.Context, nPackageId int) (SKlpk
 		log.Fatal(err.Error())
 	}
 
-	jsonData, err := pa.client.Do(ctx, request, false)
+	jsonData, err := pa.client.Do(ctx, request)
 	pxgRetVal, err := UnmarshalKlpkg(jsonData)
 	return pxgRetVal, err
 }

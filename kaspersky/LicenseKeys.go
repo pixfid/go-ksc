@@ -53,7 +53,7 @@ func (lk *LicenseKeys) DownloadKeyFiles(ctx context.Context, wstrActivationCode 
 		log.Fatal(err.Error())
 	}
 
-	jsonData, err := lk.client.Do(ctx, request, nil, false)
+	jsonData, err := lk.client.Do(ctx, request, nil)
 
 	if jsonData != nil {
 		return true
@@ -112,7 +112,7 @@ func (lk *LicenseKeys) EnumKeys(ctx context.Context, ekp EnumKeysParams) (*Licen
 		log.Fatal(err.Error())
 	}
 	licenseKeysIterator := new(LicenseKeysIterator)
-	raw, err := lk.client.Do(ctx, request, &licenseKeysIterator, false)
+	raw, err := lk.client.Do(ctx, request, &licenseKeysIterator)
 
 	return licenseKeysIterator, raw, err
 }
@@ -220,6 +220,6 @@ func (lk *LicenseKeys) GetKeyData(ctx context.Context, kdp KeyDataParams) (*Lice
 		bytes.NewBuffer(postData))
 
 	licenseData := new(LicenseData)
-	raw, err := lk.client.Do(ctx, request, &licenseData, false)
+	raw, err := lk.client.Do(ctx, request, &licenseData)
 	return licenseData, raw, err
 }

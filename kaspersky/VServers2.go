@@ -46,6 +46,6 @@ func (vs *VServers2) GetVServerStatistic(ctx context.Context, lVsId int) ([]byte
 
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers2.GetVServerStatistic", bytes.NewBuffer(postData))
 
-	raw, err := vs.client.Do(ctx, request, nil, false)
+	raw, err := vs.client.Do(ctx, request, nil)
 	return raw, err
 }

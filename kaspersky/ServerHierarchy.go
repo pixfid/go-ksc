@@ -48,7 +48,7 @@ func (sh *ServerHierarchy) GetServerInfo(ctx context.Context, lServer int) (PxgV
 		log.Fatal(err.Error())
 	}
 
-	_, err = sh.client.Do(ctx, request, nil, false)
+	_, err = sh.client.Do(ctx, request, nil)
 	return PxgValStr{}, nil
 }
 
@@ -64,7 +64,7 @@ func (sh *ServerHierarchy) GetChildServers(ctx context.Context, nGroupId int64) 
 		log.Fatal(err.Error())
 	}
 
-	_, _ = sh.client.Do(ctx, request, nil, false)
+	_, _ = sh.client.Do(ctx, request, nil)
 	//TODO FIX THIS SHIT!!!
 	return PxgRetError{}, err
 }

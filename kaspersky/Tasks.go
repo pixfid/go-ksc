@@ -31,7 +31,6 @@ type Tasks struct {
 	client *Client
 }
 
-
 //Get all group and global tasks of specified host.
 //
 //	Parameters:
@@ -56,7 +55,7 @@ func (ts *Tasks) GetAllTasksOfHost(ctx context.Context, strDomainName, strHostNa
 		log.Fatal(err.Error())
 	}
 	pxgValArrayOfString := new(PxgValArrayOfString)
-	raw, err := ts.client.Do(ctx, request, &pxgValArrayOfString,false)
+	raw, err := ts.client.Do(ctx, request, &pxgValArrayOfString)
 
 	return pxgValArrayOfString, raw, err
 }
@@ -100,8 +99,8 @@ func (ts *Tasks) GetTask(ctx context.Context, strTask string) (*TaskData, []byte
 	}
 
 	taskData := new(TaskData)
-	raw, err := ts.client.Do(ctx, request,&taskData, false)
-	return  taskData, raw, err
+	raw, err := ts.client.Do(ctx, request, &taskData)
+	return taskData, raw, err
 }
 
 //Acquire task settings.
@@ -125,7 +124,7 @@ func (ts *Tasks) GetTaskData(ctx context.Context, strTask string, tsk interface{
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	raw, err := ts.client.Do(ctx, request, &tsk, false)
+	raw, err := ts.client.Do(ctx, request, &tsk)
 
 	return raw, err
 }
@@ -150,10 +149,9 @@ func (ts *Tasks) GetTaskGroup(ctx context.Context, strTaskId string, v interface
 		log.Fatal(err.Error())
 	}
 
-	raw, err := ts.client.Do(ctx, request, &v ,false)
+	raw, err := ts.client.Do(ctx, request, &v)
 	return raw, err
 }
-
 
 type TaskStatistics struct {
 	TaskStatistic TaskStatistic `json:"PxgRetVal"`
@@ -170,7 +168,6 @@ type TaskStatistic struct {
 	GnrlCompletedPercent int64 `json:"GNRL_COMPLETED_PERCENT"`
 	KltskNeedRbtCnt      int64 `json:"KLTSK_NEED_RBT_CNT"`
 }
-
 
 //Acquire statistics of the specified task.
 //
@@ -195,7 +192,7 @@ func (ts *Tasks) GetTaskStatistics(ctx context.Context, strTask string) (*TaskSt
 		log.Fatal(err.Error())
 	}
 
-	raw, err := ts.client.Do(ctx, request, &tsks, false)
+	raw, err := ts.client.Do(ctx, request, &tsks)
 	return tsks, raw, err
 }
 
@@ -218,7 +215,7 @@ func (ts *Tasks) SuspendTask(ctx context.Context, strTask string) ([]byte,
 		log.Fatal(err.Error())
 	}
 
-	raw, err := ts.client.Do(ctx, request, nil, false)
+	raw, err := ts.client.Do(ctx, request, nil)
 	return raw, err
 }
 
@@ -241,7 +238,7 @@ func (ts *Tasks) ResumeTask(ctx context.Context, strTask string) ([]byte,
 		log.Fatal(err.Error())
 	}
 
-	raw, err := ts.client.Do(ctx, request, nil, false)
+	raw, err := ts.client.Do(ctx, request, nil)
 	return raw, err
 }
 
@@ -264,7 +261,7 @@ func (ts *Tasks) RunTask(ctx context.Context, strTask string) ([]byte,
 		log.Fatal(err.Error())
 	}
 
-	raw, err := ts.client.Do(ctx, request, nil, false)
+	raw, err := ts.client.Do(ctx, request, nil)
 	return raw, err
 }
 
@@ -287,6 +284,6 @@ func (ts *Tasks) DeleteTask(ctx context.Context, strTask string) ([]byte,
 		log.Fatal(err.Error())
 	}
 
-	raw, err := ts.client.Do(ctx, request, nil, false)
+	raw, err := ts.client.Do(ctx, request, nil)
 	return raw, err
 }

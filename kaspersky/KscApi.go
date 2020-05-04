@@ -26,7 +26,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -120,11 +119,11 @@ func (c *Client) KSCAuth(ctx context.Context) {
 	request.Header.Set("X-KSC-VServer", "x")
 	request.Header.Set("Content-Length", "2")
 
-	_, err = c.Do(ctx, request, nil, false)
+	_, err = c.Do(ctx, request, nil)
 
 }
 
-func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}, debug bool) (dt []byte, err error) {
+func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (dt []byte, err error) {
 	if ctx == nil {
 		return nil, errors.New("context must be non-nil")
 	}
@@ -169,10 +168,6 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}, debug
 		if decErr != nil {
 			err = decErr
 		}
-	}
-
-	if debug {
-		fmt.Println("resp Body:", string(body))
 	}
 
 	return body, err

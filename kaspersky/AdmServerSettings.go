@@ -43,7 +43,7 @@ func (as *AdmServerSettings) GetSharedFolder(ctx context.Context) (*PxgValStr, [
 
 	pxgValStr := new(PxgValStr)
 
-	raw, err := as.client.Do(ctx, request, &pxgValStr, false)
+	raw, err := as.client.Do(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -72,6 +72,6 @@ func (as *AdmServerSettings) ChangeSharedFolder(ctx context.Context, wNP WstrNet
 
 	pxgValStr := new(PxgValStr)
 
-	raw, err := as.client.Do(ctx, request, &pxgValStr, false)
+	raw, err := as.client.Do(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }

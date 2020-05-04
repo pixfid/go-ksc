@@ -81,6 +81,6 @@ func (ac *AsyncActionStateChecker) CheckActionState(ctx context.Context, wstrAct
 	}
 
 	aSResult := new(ActionStateResult)
-	raw, err := ac.client.Do(ctx, request, &aSResult, false)
+	raw, err := ac.client.Do(ctx, request, &aSResult)
 	return aSResult, raw, err
 }

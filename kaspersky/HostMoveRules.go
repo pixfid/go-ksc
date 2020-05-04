@@ -74,10 +74,9 @@ func (hs *HostMoveRules) GetRules(ctx context.Context) ([]byte, error) {
 		log.Fatal(err.Error())
 	}
 
-	raw, err := hs.client.Do(ctx, request, nil, false)
+	raw, err := hs.client.Do(ctx, request, nil)
 	return raw, err
 }
-
 
 //Acquire attributes of specified rule.
 //
@@ -98,7 +97,7 @@ func (hs *HostMoveRules) GetRule(ctx context.Context, nRule int64) ([]byte, erro
 		log.Fatal(err.Error())
 	}
 
-	raw, err := hs.client.Do(ctx, request, nil,false)
+	raw, err := hs.client.Do(ctx, request, nil)
 
 	return raw, err
 }
@@ -119,7 +118,7 @@ func (hs *HostMoveRules) DeleteRule(ctx context.Context, nRule int64) ([]byte, e
 		log.Fatal(err.Error())
 	}
 
-	raw, err := hs.client.Do(ctx, request, nil,false)
+	raw, err := hs.client.Do(ctx, request, nil)
 
 	return raw, err
 }

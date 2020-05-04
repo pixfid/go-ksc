@@ -97,7 +97,7 @@ func (ah *AdHosts) GetChildComputers(ctx context.Context, ccParams ChildComputer
 
 	pxgValStr := new(PxgValStr)
 
-	raw, err := ah.client.Do(ctx, request, &pxgValStr, false)
+	raw, err := ah.client.Do(ctx, request, &pxgValStr)
 
 	return pxgValStr, raw, err
 }
@@ -138,7 +138,7 @@ func (ah *AdHosts) GetChildOUs(ctx context.Context, cup ChildOUParams) (*PxgValS
 	postData, _ := json.Marshal(cup)
 	request, err := http.NewRequest("POST", ah.client.Server+"/api/v1.0/AdHosts.GetChildOUs", bytes.NewBuffer(postData))
 	pxgValStr := new(PxgValStr)
-	raw, err := ah.client.Do(ctx, request, &pxgValStr, false)
+	raw, err := ah.client.Do(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -197,7 +197,7 @@ func (ah *AdHosts) GetOU(ctx context.Context, oua OUAttributesParams) (*OUAttrib
 
 	request, err := http.NewRequest("POST", ah.client.Server+"/api/v1.0/AdHosts.GetOU", bytes.NewBuffer(postData))
 	oUAttributes := new(OUAttributes)
-	raw, err := ah.client.Do(ctx, request, &oUAttributes, false)
+	raw, err := ah.client.Do(ctx, request, &oUAttributes)
 	return oUAttributes, raw, err
 }
 
@@ -304,7 +304,7 @@ func (ah *AdHosts) FindAdGroups(ctx context.Context, fagP FindAdGroupsParams) (*
 
 	aDHostIterator := new(ADHostIterator)
 
-	raw, err := ah.client.Do(ctx, request, &aDHostIterator, false)
+	raw, err := ah.client.Do(ctx, request, &aDHostIterator)
 	return aDHostIterator, raw, err
 }
 
@@ -338,6 +338,6 @@ func (ah *AdHosts) GetChildComputer(ctx context.Context, ccp ChildComputerParams
 	request, err := http.NewRequest("POST", ah.client.Server+"/api/v1.0/AdHosts.GetChildComputer", bytes.NewBuffer(postData))
 
 	adHstIdParent := new(AdHstIDParent)
-	raw, err := ah.client.Do(ctx, request, &adHstIdParent, false)
+	raw, err := ah.client.Do(ctx, request, &adHstIdParent)
 	return adHstIdParent, raw, err
 }

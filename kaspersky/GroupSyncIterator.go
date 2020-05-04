@@ -49,7 +49,7 @@ func (ca *GroupSyncIterator) ReleaseIterator(ctx context.Context, szwIterator st
 		log.Fatal(err.Error())
 	}
 
-	jsonData, err := ca.client.Do(ctx, request, nil, false)
+	jsonData, err := ca.client.Do(ctx, request, nil)
 
 	if jsonData != nil {
 		return true
@@ -138,7 +138,7 @@ func (ca *GroupSyncIterator) GetNextItems(ctx context.Context, szwIterator strin
 
 	licenseKeysData := new(LicenseKeysData)
 
-	raw, err := ca.client.Do(ctx, request, licenseKeysData, false)
+	raw, err := ca.client.Do(ctx, request, licenseKeysData)
 
 	return licenseKeysData, raw, err
 }

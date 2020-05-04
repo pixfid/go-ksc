@@ -39,7 +39,7 @@ type DatabaseInfo struct {
 func (di *DatabaseInfo) GetDBSize(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.GetDBSize", nil)
 	pxgValInt := new(PxgValInt)
-	raw, err := di.client.Do(ctx, request, &pxgValInt, false)
+	raw, err := di.client.Do(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -52,7 +52,7 @@ func (di *DatabaseInfo) GetDBSize(ctx context.Context) (*PxgValInt, []byte, erro
 func (di *DatabaseInfo) GetDBDataSize(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.GetDBDataSize", nil)
 	pxgValInt := new(PxgValInt)
-	raw, err := di.client.Do(ctx, request, &pxgValInt, false)
+	raw, err := di.client.Do(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -65,7 +65,7 @@ func (di *DatabaseInfo) GetDBDataSize(ctx context.Context) (*PxgValInt, []byte, 
 func (di *DatabaseInfo) GetDBEventsCount(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.GetDBEventsCount", nil)
 	pxgValInt := new(PxgValInt)
-	raw, err := di.client.Do(ctx, request, &pxgValInt, false)
+	raw, err := di.client.Do(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -83,7 +83,7 @@ func (di *DatabaseInfo) IsCloudSQL(ctx context.Context, nCloudType int64) (*PxgV
 
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.IsCloudSQL", bytes.NewBuffer(postData))
 	pxgValBool := new(PxgValBool)
-	raw, err := di.client.Do(ctx, request, &pxgValBool, false)
+	raw, err := di.client.Do(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
 }
 
@@ -101,6 +101,6 @@ func (di *DatabaseInfo) CheckBackupPath(ctx context.Context, szwPath string) (*P
 
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.CheckBackupPath", bytes.NewBuffer(postData))
 	pxgValBool := new(PxgValBool)
-	raw, err := di.client.Do(ctx, request, &pxgValBool, false)
+	raw, err := di.client.Do(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
 }

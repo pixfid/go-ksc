@@ -42,7 +42,7 @@ func (ht *HostTasks) GetNextTask(ctx context.Context, strSrvObjId string) ([]byt
 		log.Fatal(err.Error())
 	}
 
-	raw, err := ht.client.Do(ctx, request, nil,false)
+	raw, err := ht.client.Do(ctx, request, nil)
 	return raw, err
 }
 
@@ -73,6 +73,6 @@ func (ht *HostTasks) ResetTasksIterator(ctx context.Context, strSrvObjId, strPro
 		log.Fatal(err.Error())
 	}
 
-	raw, err := ht.client.Do(ctx, request, nil,false)
+	raw, err := ht.client.Do(ctx, request, nil)
 	return raw, err
 }
