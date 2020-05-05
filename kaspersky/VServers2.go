@@ -26,25 +26,17 @@ import (
 	"net/http"
 )
 
-//	VServers2 Class Reference
-//
-//	Virtual servers processing. More...
-//
-//	Allow to get statistic information from a virtual server.
-//
-//	List of all members.
 type VServers2 struct {
 	client *Client
 }
 
-//	Acquire info on virtual server.
+//Acquire info on virtual server.
 //
-//	Returns info about the specified virtual server
+//Returns info about the specified virtual server
 //
-//	Parameters:
+//Parameters:
 //	- lVsId	(int64) virtual server id
-//
-//	Returns:
+//Returns:
 //	- (params) a container, see Virtual server statistic.
 func (vs *VServers2) GetVServerStatistic(ctx context.Context, lVsId int) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`
