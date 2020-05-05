@@ -27,28 +27,28 @@ import (
 	"net/http"
 )
 
-//VServers Class Reference
-//Virtual servers processing.
+//	VServers Class Reference
 //
-//Detailed Description
+//	Virtual servers processing.
 //
-//Virtual servers processing.
+//	Detailed Description
 //
-//Allows to create and destroy virtual servers, acquire and modify their attributes.
+//	Allows to create and destroy virtual servers, acquire and modify their attributes.
 type VServers struct {
 	client *Client
 }
 
-//Acquire virtual servers for the specified group.
+//	Acquire virtual servers for the specified group.
 //
-//Returns array of virtual servers for the specified group
+//	Returns array of virtual servers for the specified group
 //
-//Parameters:
+//	Parameters:
 //	- lParentGroup	(int64) id of parent group, -1 means 'from all groups'
-//Returns:
+//
+//	Returns:
 //	- (array) array, each element is a container KLPAR::ParamsPtr containing attributes "KLVSRV_*"
-//(see List of virtual server attributes).
-func (vs *VServers) GetVServers(ctx context.Context, lParentGroup int) ([]byte, error) {
+//	(see List of virtual server attributes).
+func (vs *VServers) GetVServers(ctx context.Context, lParentGroup int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lParentGroup": %d}`, lParentGroup))
 
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.GetVServers", bytes.NewBuffer(postData))
@@ -56,20 +56,20 @@ func (vs *VServers) GetVServers(ctx context.Context, lParentGroup int) ([]byte, 
 	return raw, err
 }
 
-//Register new virtual server.
+//	Register new virtual server.
 //
-//Registers new virtual server
+//	Registers new virtual server
 //
-// Parameters:
+//	Parameters:
 //	- strDisplayName	(string) virtual server display name, if display name is non-unique,
 //	it will be modified to become unique
 //	- lParentGroup	(int64) virtual server parent group
 //
 //	Returns:
-//	(params) a container KLPAR::ParamsPtr containing attributes "KLVSRV_ID" and "KLVSRV_DN" (
+//	- (params) a container KLPAR::ParamsPtr containing attributes "KLVSRV_ID" and "KLVSRV_DN" (
 //	see List of virtual server attributes).
 //
-//Example Result
+//	Example Result:
 //{
 //  "PxgRetVal" : {
 //    "KLVSRV_CREATED" : {
@@ -88,22 +88,22 @@ func (vs *VServers) GetVServers(ctx context.Context, lParentGroup int) ([]byte, 
 //    "KLVSRV_UNASSIGNED" : 170
 //  }
 //}
-func (vs *VServers) AddVServerInfo(ctx context.Context, strDisplayName string, lParentGroup int) ([]byte, error) {
+func (vs *VServers) AddVServerInfo(ctx context.Context, strDisplayName string, lParentGroup int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lParentGroup": %d, "strDisplayName" : "%s"}`, lParentGroup, strDisplayName))
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.AddVServerInfo", bytes.NewBuffer(postData))
 	raw, err := vs.client.Do(ctx, request, nil)
 	return raw, err
 }
 
-//Unregister specified Virtual Server.
+//	Unregister specified Virtual Server.
 //
-//Unregisters specified Virtual Server
+//	Unregisters specified Virtual Server
 //
-// Parameters:
+//	Parameters:
 //	- lVServer	(int64) Virtual Server id
 //	- [out]	strActionGuid	(string) id of asynchronous operation,
 //	to get status use AsyncActionStateChecker.CheckActionState
-func (vs *VServers) DelVServer(ctx context.Context, lVServer int) ([]byte, error) {
+func (vs *VServers) DelVServer(ctx context.Context, lVServer int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))
 
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.DelVServer", bytes.NewBuffer(postData))
@@ -111,7 +111,13 @@ func (vs *VServers) DelVServer(ctx context.Context, lVServer int) ([]byte, error
 	return raw, err
 }
 
-func (vs *VServers) GetPermissions(ctx context.Context, lVServer int) ([]byte, error) {
+//	Return ACL for the specified virtual server.
+//
+//	Returns ACL for the specified virtual server
+//
+//	Parameters:
+//	- lVServer	(int64) virtual server id
+func (vs *VServers) GetPermissions(ctx context.Context, lVServer int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))
 
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.GetPermissions", bytes.NewBuffer(postData))
@@ -125,9 +131,9 @@ type VServerParams struct {
 	PFields2Return []string `json:"pFields2Return"`
 }
 
-//Acquire info on virtual server.
+//	Acquire info on virtual server.
 //
-//Returns info about the specified virtual server
+//	Returns info about the specified virtual server
 //
 //	Parameters:
 //	- lVServer	(int64) virtual server id
@@ -150,32 +156,40 @@ func (vs *VServers) GetVServerInfo(ctx context.Context, lVServer int64) ([]byte,
 		"KLVSRV_HST_UID",
 		"KLVSRV_CREATED",
 	}}
-	postData, _ := json.Marshal(v) //[]byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))
+	postData, _ := json.Marshal(v)
 
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.GetVServerInfo", bytes.NewBuffer(postData))
 	raw, err := vs.client.Do(ctx, request, nil)
 	return raw, err
 }
 
-//TODO ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-
-func (vs *VServers) UpdateVServerInfo(ctx context.Context, lVServer int, v interface{}) ([]byte, error) {
-	postData := []byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))
-
-	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.UpdateVServerInfo", bytes.NewBuffer(postData))
-	raw, err := vs.client.Do(ctx, request, nil)
-	return raw, err
-}
-
-func (vs *VServers) MoveVServer(ctx context.Context, lVServer int) ([]byte, error) {
-	postData := []byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))
+//	Moves specified virtual server.
+//
+//	Moves specified virtual server
+//
+//	Parameters:
+//	- lVServer	(int64) in Virtual Server id
+//	- lNewParentGroup	(int) in New group
+//
+//	Return:
+//	- strActionGuid	(string) id of asynchronous operation,
+//	to get status use AsyncActionStateChecker.CheckActionState
+func (vs *VServers) MoveVServer(ctx context.Context, lVServer int64, lNewParentGroup int64) (*WActionGUID, []byte,
+	error) {
+	postData := []byte(fmt.Sprintf(`{"lVServer": %d, "lNewParentGroup" : %d}`, lVServer, lNewParentGroup))
 
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.MoveVServer", bytes.NewBuffer(postData))
-	raw, err := vs.client.Do(ctx, request, nil)
-	return raw, err
+	wActionGUID := new(WActionGUID)
+	raw, err := vs.client.Do(ctx, request, &wActionGUID)
+	return wActionGUID, raw, err
 }
 
-func (vs *VServers) RecallCertAndCloseConnections(ctx context.Context, lVServer int) ([]byte, error) {
+//	Function recalls Network Agent certificate from the specified virtual server
+//	and closes active connections from such Network Agents.
+//
+//	Parameters:
+//	- lVServer	(int64) virtual server id
+func (vs *VServers) RecallCertAndCloseConnections(ctx context.Context, lVServer int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))
 
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.RecallCertAndCloseConnections", bytes.NewBuffer(postData))
@@ -183,7 +197,34 @@ func (vs *VServers) RecallCertAndCloseConnections(ctx context.Context, lVServer 
 	return raw, err
 }
 
-func (vs *VServers) SetPermissions(ctx context.Context, lVServer int) ([]byte, error) {
+//TODO ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+
+//	Modify virtual server attributes.
+//
+//	Modifies attributes of the specified virtual server
+//
+//	Parameters:
+//	- lVServer	(int64) virtual server id
+//	- pInfo	(params) a container containing no-read-only attributes "KLVSRV_*" to chnage (
+//	see List of virtual server attributes). Following attributes may be specified: "KLVSRV_DN"
+func (vs *VServers) UpdateVServerInfo(ctx context.Context, lVServer int64, params interface{}) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))
+
+	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.UpdateVServerInfo", bytes.NewBuffer(postData))
+	raw, err := vs.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//	Set ACL for the specified virtual server.
+//
+//	Sets ACL for the specified virtual server
+//
+//	Parameters:
+//	- lVServer	(int64) virtual server id
+//	- pPermissions	(params) ACL, see Permissions structure
+//	- bProtection	(boolean) if true checks if the user does not denies access to the server to itself
+func (vs *VServers) SetPermissions(ctx context.Context, lVServer int64, params interface{}, bProtection bool) ([]byte,
+	error) {
 	postData := []byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))
 
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.SetPermissions", bytes.NewBuffer(postData))
