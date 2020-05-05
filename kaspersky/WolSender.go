@@ -22,30 +22,33 @@ package kaspersky
 import (
 	"bytes"
 	"context"
-	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 )
 
-//WolSender
-
+//	WolSender Class Reference
+//
+//	Wake-On-LAN signal sender.
+//
+//	List of all members.
 type WolSender struct {
 	client *Client
 }
 
-type WOLSignalParams struct {
-	SzwHostID string `json:"szwHostId,omitempty"`
-}
-
-//Sends Wake-On-LAN signal to host.
+//	Sends Wake-On-LAN signal to host.
 //
-//The goal of this call is to wake target host up.
-//This is done by sending WOL packets by server, some Update Agent Versions assigned to target host and some nAgent Versions which are likely to be located in same subnet where target host is located.
-//Besides server will wake up Connection gateway assigned to host as well.
-//Target WOL packets are sent to broadcast address 255.255.255.255, direct host IP and subnet-directed broadcast (like '10.11.12.255'). WOL packets sent to ports 7 and 9.
-func (ah *WolSender) SendWolSignal(ctx context.Context, wolsp WOLSignalParams) {
+//	The goal of this call is to wake target host up.
+//	This is done by sending WOL packets by server,
+//	some Update Agent Versions assigned to target host and some nAgent Versions which are likely
+//	to be located in same subnet where target host is located.
+//	Besides server will wake up Connection gateway assigned to host as well.
+//	Target WOL packets are sent to broadcast address 255.255.255.255,
+//	direct host IP and subnet-directed broadcast (like '10.11.12.255').
+//	WOL packets sent to ports 7 and 9.
+func (ah *WolSender) SendWolSignal(ctx context.Context, szwHostId string) {
 
-	postData, _ := json.Marshal(wolsp)
+	postData := []byte(fmt.Sprintf(`{"szwHostId":"%s"}`, szwHostId))
 
 	request, err := http.NewRequest("POST", ah.client.Server+"/api/v1.0/WolSender.SendWolSignal", bytes.NewBuffer(postData))
 	if err != nil {
