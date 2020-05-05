@@ -52,6 +52,7 @@ type Client struct {
 	DatabaseInfo                *DatabaseInfo
 	DataProtectionApi           *DataProtectionApi
 	EventNotificationProperties *EventNotificationProperties
+	EventProcessing             *EventProcessing
 	HostGroup                   *HostGroup
 	HostMoveRules               *HostMoveRules
 	HostTagsRulesApi            *HostTagsRulesApi
@@ -106,6 +107,7 @@ func New(cfg Config) *Client {
 	client.DatabaseInfo = &DatabaseInfo{client: client}
 	client.DataProtectionApi = &DataProtectionApi{client: client}
 	client.EventNotificationProperties = &EventNotificationProperties{client: client}
+	client.EventProcessing = &EventProcessing{client: client}
 	client.HostGroup = &HostGroup{client: client}
 	client.HostMoveRules = &HostMoveRules{client: client}
 	client.HostTagsRulesApi = &HostTagsRulesApi{client: client}
