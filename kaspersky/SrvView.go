@@ -28,6 +28,9 @@ import (
 	"net/http"
 )
 
+//	SrvView Class Reference
+//	Interface to get plain-queries from SC-server.
+//	List of all members.
 type SrvView struct {
 	client *Client
 }
@@ -37,8 +40,8 @@ type SrvViewParams struct {
 	WstrViewName      string      `json:"wstrViewName"`
 	WstrFilter        string      `json:"wstrFilter"`
 	VecFieldsToReturn []string    `json:"vecFieldsToReturn"`
-	VecFieldsToOrder  interface{} `json:"vecFieldsToOrder"`
-	PParams           interface{} `json:"pParams"`
+	VecFieldsToOrder  interface{} `json:"vecFieldsToOrder"` //todo
+	PParams           interface{} `json:"pParams"`          //todo
 	LifetimeSEC       int64       `json:"lifetimeSec"`
 }
 
