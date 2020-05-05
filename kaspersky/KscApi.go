@@ -70,6 +70,7 @@ type Client struct {
 	SecurityPolicy3             *SecurityPolicy3
 	ServerHierarchy             *ServerHierarchy
 	Session                     *Session
+	SrvView                     *SrvView
 	Tasks                       *Tasks
 	UserName, Password, Server  string
 	VServers                    *VServers
@@ -123,6 +124,7 @@ func New(cfg Config) *Client {
 	client.SecurityPolicy3 = &SecurityPolicy3{client: client}
 	client.ServerHierarchy = &ServerHierarchy{client: client}
 	client.Session = &Session{client: client}
+	client.SrvView = &SrvView{client: client}
 	client.Tasks = &Tasks{client: client}
 	client.VServers = &VServers{client: client}
 	client.VServers2 = &VServers2{client: client}

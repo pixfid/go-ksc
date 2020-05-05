@@ -136,3 +136,7 @@ type Value struct {
 	Name string `json:"Name"`
 	Asc  bool   `json:"Asc"`
 }
+
+type SrvViewIter struct {
+	WstrIteratorID string `json:"wstrIteratorId"`
+}
