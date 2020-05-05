@@ -76,7 +76,7 @@ type SrvViewParams struct {
 //	Passed lifetimeSec seconds after last access to the result-set (by methods GetRecordCount and GetRecordRange).
 //	Session to the Administration Server has been closed.
 //	ReleaseIterator has been called.
-func (sv *SrvView) ResetIterator(ctx context.Context, params interface{}) (*SrvViewIter, error) {
+func (sv *SrvView) ResetIterator(ctx context.Context, params interface{}) (*WstrIteratorID, error) {
 	postData, _ := json.Marshal(params)
 
 	request, err := http.NewRequest("POST", sv.client.Server+"/api/v1.0/SrvView.ResetIterator", bytes.NewBuffer(postData))
@@ -84,7 +84,7 @@ func (sv *SrvView) ResetIterator(ctx context.Context, params interface{}) (*SrvV
 		log.Fatal(err.Error())
 	}
 
-	srvViewIter := new(SrvViewIter)
+	srvViewIter := new(WstrIteratorID)
 	raw, err := sv.client.Do(ctx, request, &srvViewIter)
 	println(string(raw))
 	return srvViewIter, err

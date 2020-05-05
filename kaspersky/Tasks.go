@@ -22,6 +22,7 @@ package kaspersky
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -48,13 +49,8 @@ type Tasks struct {
 //	Returns:
 //	- (array) array of string with task ids
 func (ts *Tasks) GetAllTasksOfHost(ctx context.Context, strDomainName, strHostName string) (*PxgValArrayOfString,
-	[]byte,
-	error) {
-	postData := []byte(fmt.Sprintf(`
-	{
-	"strDomainName": "%s",
-	"strHostName": "%s"
-	}`, strDomainName, strHostName))
+	[]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"strDomainName": "%s","strHostName": "%s"}`, strDomainName, strHostName))
 
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.GetAllTasksOfHost", bytes.NewBuffer(postData))
 
@@ -131,8 +127,8 @@ func (ts *Tasks) GetTaskData(ctx context.Context, strTask string, tsk interface{
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	raw, err := ts.client.Do(ctx, request, &tsk)
 
+	raw, err := ts.client.Do(ctx, request, &tsk)
 	return raw, err
 }
 
@@ -144,11 +140,8 @@ func (ts *Tasks) GetTaskData(ctx context.Context, strTask string, tsk interface{
 //
 //	Returns:
 //	- (int64) group id
-func (ts *Tasks) GetTaskGroup(ctx context.Context, strTaskId string, v interface{}) ([]byte, error) {
-	postData := []byte(fmt.Sprintf(`
-	{
-	"strTaskId": "%s"
-	}`, strTaskId))
+func (ts *Tasks) GetTaskGroup(ctx context.Context, strTaskId string) (*PxgValInt, []byte, error) {
+	postData := []byte(fmt.Sprintf(`{"strTaskId": "%s"}`, strTaskId))
 
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.GetTaskGroup", bytes.NewBuffer(postData))
 
@@ -156,10 +149,13 @@ func (ts *Tasks) GetTaskGroup(ctx context.Context, strTaskId string, v interface
 		log.Fatal(err.Error())
 	}
 
-	raw, err := ts.client.Do(ctx, request, &v)
-	return raw, err
+	pxgValInt := new(PxgValInt)
+	raw, err := ts.client.Do(ctx, request, &pxgValInt)
+
+	return pxgValInt, raw, err
 }
 
+//TaskStatistics struct
 type TaskStatistics struct {
 	TaskStatistic TaskStatistic `json:"PxgRetVal"`
 }
@@ -185,22 +181,18 @@ type TaskStatistic struct {
 //	- strTask	(string) task id.
 //
 //	Returns:
-//(TaskStatistics) object containing task statistics, see List of task statistics attributes.
-func (ts *Tasks) GetTaskStatistics(ctx context.Context, strTask string) (*TaskStatistics, []byte,
-	error) {
-	postData := []byte(fmt.Sprintf(`
-	{
-	"strTask": "%s"
-	}`, strTask))
+//	- (TaskStatistics struct) object containing task statistics, see List of task statistics attributes.
+func (ts *Tasks) GetTaskStatistics(ctx context.Context, strTask string) (*TaskStatistics, []byte, error) {
+	postData := []byte(fmt.Sprintf(`{"strTask": "%s"}`, strTask))
 
-	tsks := new(TaskStatistics)
+	taskStatistics := new(TaskStatistics)
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.GetTaskStatistics", bytes.NewBuffer(postData))
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 
-	raw, err := ts.client.Do(ctx, request, &tsks)
-	return tsks, raw, err
+	raw, err := ts.client.Do(ctx, request, &taskStatistics)
+	return taskStatistics, raw, err
 }
 
 //	Suspend execution of the specified task.
@@ -210,12 +202,8 @@ func (ts *Tasks) GetTaskStatistics(ctx context.Context, strTask string) (*TaskSt
 //	Parameters:
 //	- ctx	(context.Context) context.
 //	- strTask	(string) task id.
-func (ts *Tasks) SuspendTask(ctx context.Context, strTask string) ([]byte,
-	error) {
-	postData := []byte(fmt.Sprintf(`
-	{
-	"strTask": "%s"
-	}`, strTask))
+func (ts *Tasks) SuspendTask(ctx context.Context, strTask string) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"strTask": "%s"}`, strTask))
 
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.SuspendTask", bytes.NewBuffer(postData))
 	if err != nil {
@@ -233,12 +221,8 @@ func (ts *Tasks) SuspendTask(ctx context.Context, strTask string) ([]byte,
 //	Parameters:
 //	- ctx	(context.Context) context.
 //	- strTask	(string) task id.
-func (ts *Tasks) ResumeTask(ctx context.Context, strTask string) ([]byte,
-	error) {
-	postData := []byte(fmt.Sprintf(`
-	{
-	"strTask": "%s"
-	}`, strTask))
+func (ts *Tasks) ResumeTask(ctx context.Context, strTask string) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"strTask": "%s"}`, strTask))
 
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.ResumeTask", bytes.NewBuffer(postData))
 	if err != nil {
@@ -256,12 +240,8 @@ func (ts *Tasks) ResumeTask(ctx context.Context, strTask string) ([]byte,
 //	Parameters:
 //	- ctx	(context.Context) context.
 //	- strTask	(string) task id.
-func (ts *Tasks) RunTask(ctx context.Context, strTask string) ([]byte,
-	error) {
-	postData := []byte(fmt.Sprintf(`
-	{
-	"strTask": "%s"
-	}`, strTask))
+func (ts *Tasks) RunTask(ctx context.Context, strTask string) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"strTask": "%s"}`, strTask))
 
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.RunTask", bytes.NewBuffer(postData))
 	if err != nil {
@@ -279,12 +259,8 @@ func (ts *Tasks) RunTask(ctx context.Context, strTask string) ([]byte,
 //	Parameters:
 //	- ctx	(context.Context) context.
 //	- strTask	(string) task id.
-func (ts *Tasks) DeleteTask(ctx context.Context, strTask string) ([]byte,
-	error) {
-	postData := []byte(fmt.Sprintf(`
-	{
-	"strTask": "%s"
-	}`, strTask))
+func (ts *Tasks) DeleteTask(ctx context.Context, strTask string) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"strTask": "%s"}`, strTask))
 
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.DeleteTask", bytes.NewBuffer(postData))
 	if err != nil {
@@ -293,4 +269,100 @@ func (ts *Tasks) DeleteTask(ctx context.Context, strTask string) ([]byte,
 
 	raw, err := ts.client.Do(ctx, request, nil)
 	return raw, err
+}
+
+//	Cancel execution of the specified task.
+//
+//	Cancels execution of the specified task.
+//
+//	Parameters:
+//	- strTask	(string) task id.
+func (ts *Tasks) CancelTask(ctx context.Context, strTask string) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"strTask": "%s"}`, strTask))
+
+	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.CancelTask", bytes.NewBuffer(postData))
+
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	raw, err := ts.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+type TaskHistoryParams struct {
+	StrTask        string        `json:"strTask"`
+	PFields2Return []string      `json:"pFields2Return"`
+	PSortFields    []PSortFields `json:"pSortFields"`
+	StrHostName    string        `json:"strHostName"`
+	PFilter        interface{}   `json:"pFilter"`
+}
+
+type PSortFields struct {
+	Type       string     `json:"type"`
+	PSortField PSortField `json:"value"`
+}
+
+type PSortField struct {
+	Name string `json:"Name"`
+	Asc  bool   `json:"Asc"`
+}
+
+//	Acquire task execution history events.
+//
+//	Returns task execution history events.
+//
+//Parameters:
+//	- strTask	(string) task id.
+//	- pFields2Return	(array) array of task history event attribute names to return See List of event attributes for
+//	attribute names.
+//	- pSortFields	(array) array of containers each of them containing two attributes:
+//		-- "Name" of type String, name of attribute used for sorting. See List of event attributes for attribute names.
+//		-- "Asc" of type Boolean, ascending if true descending otherwise
+//	- strHostName	(string) name of the host. Events for specified host will be returned.
+//	*Events from all hosts will be returned if "" (empty string) is specified.*
+//	- pFilter	(params) object containing values for attributes to filter events.
+//	Only events with matching attribute values will be returned.
+//	If empty all events for task will be returned. See List of event filter attributes for attribute names.
+//
+//	Return:
+//	 -strIteratorId	(string) result-set ID, identifier of the server-side collection of task history events,
+//	 to acquire data use EventProcessing.GetRecordRange,
+//	 after iterator MUST be realesed by EventProcessing.ReleaseIterator.
+//
+//	Example:
+//	strIteratorId, _, _ := client.Tasks.GetTaskHistory(ctx, kaspersky.TaskHistoryParams{
+//		StrTask:        "195",
+//		PFields2Return: []string{
+//			"hostdn",
+//			"product_name",
+//			"product_displ_version",
+//			"product_version",
+//			"task_display_name",
+//			"GNRL_COMPLETED_PERCENT",
+//			"event_id",
+//			"host_type",
+//		},
+//		PSortFields:    []kaspersky.PSortFields{
+//			{Type: "params", PSortField: kaspersky.PSortField{
+//				Name: "event_id",
+//				Asc:  true,
+//			}},
+//		},
+//		StrHostName:    "c2b22f83-307c-45aa-8533-5ffffbcc6bf1",
+//		PFilter:        nil,
+//	})
+func (ts *Tasks) GetTaskHistory(ctx context.Context, params interface{}) (*StrIteratorId, []byte, error) {
+	postData, _ := json.Marshal(params)
+
+	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.GetTaskHistory", bytes.NewBuffer(postData))
+
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	strIteratorID := new(StrIteratorId)
+
+	raw, err := ts.client.Do(ctx, request, &strIteratorID)
+	return strIteratorID, raw, err
 }
