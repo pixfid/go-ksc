@@ -40,10 +40,10 @@ type AdHosts struct {
 
 //FindAdGroupsParams struct
 type FindAdGroupsParams struct {
-	VecFieldsToReturn []string           `json:"vecFieldsToReturn,omitempty"`
-	VecFieldsToOrder  []VecFieldsToOrder `json:"vecFieldsToOrder,empty"`
-	POptions          POptions           `json:"pOptions,omitempty"`
-	LMaxLifeTime      int64              `json:"lMaxLifeTime,omitempty"`
+	VecFieldsToReturn []string        `json:"vecFieldsToReturn,omitempty"`
+	VecFieldsToOrder  []FieldsToOrder `json:"vecFieldsToOrder,empty"`
+	POptions          POptions        `json:"pOptions,omitempty"`
+	LMaxLifeTime      int64           `json:"lMaxLifeTime,omitempty"`
 }
 
 type POptions struct {
@@ -67,7 +67,7 @@ type ADHostIterator struct {
 //			"adhst_adgroup_name",
 //			"adhst_adgroup_sam_name",
 //		},
-//		VecFieldsToOrder: []kaspersky.VecFieldsToOrder{
+//		FieldsToOrder: []kaspersky.FieldsToOrder{
 //			{
 //				Type: "params",
 //				Value: kaspersky.Value{

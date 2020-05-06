@@ -126,13 +126,13 @@ func ParseTime(dt string) string {
 	return t.Format(RUS)
 }
 
-//VecFieldsToOrder struct
-type VecFieldsToOrder struct {
-	Type  string `json:"type"`
-	Value Value  `json:"value"`
+//FieldsToOrder struct
+type FieldsToOrder struct {
+	Type       string     `json:"type"`
+	OrderValue OrderValue `json:"value"`
 }
 
-type Value struct {
+type OrderValue struct {
 	Name string `json:"Name"`
 	Asc  bool   `json:"Asc"`
 }
@@ -143,4 +143,8 @@ type WstrIteratorID struct {
 
 type StrIteratorId struct {
 	StrIteratorID string `json:"strIteratorId"`
+}
+
+type StrHostIteratorId struct {
+	StrHostIteratorId string `json:"strHostIteratorId"`
 }

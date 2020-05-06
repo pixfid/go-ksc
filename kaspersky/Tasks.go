@@ -185,11 +185,12 @@ type TaskStatistic struct {
 func (ts *Tasks) GetTaskStatistics(ctx context.Context, strTask string) (*TaskStatistics, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strTask": "%s"}`, strTask))
 
-	taskStatistics := new(TaskStatistics)
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.GetTaskStatistics", bytes.NewBuffer(postData))
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+
+	taskStatistics := new(TaskStatistics)
 
 	raw, err := ts.client.Do(ctx, request, &taskStatistics)
 	return taskStatistics, raw, err
@@ -291,21 +292,11 @@ func (ts *Tasks) CancelTask(ctx context.Context, strTask string) ([]byte, error)
 }
 
 type TaskHistoryParams struct {
-	StrTask        string        `json:"strTask"`
-	PFields2Return []string      `json:"pFields2Return"`
-	PSortFields    []PSortFields `json:"pSortFields"`
-	StrHostName    string        `json:"strHostName"`
-	PFilter        interface{}   `json:"pFilter"`
-}
-
-type PSortFields struct {
-	Type       string     `json:"type"`
-	PSortField PSortField `json:"value"`
-}
-
-type PSortField struct {
-	Name string `json:"Name"`
-	Asc  bool   `json:"Asc"`
+	StrTask        string          `json:"strTask"`
+	PFields2Return []string        `json:"pFields2Return"`
+	PSortFields    []FieldsToOrder `json:"pSortFields"`
+	StrHostName    string          `json:"strHostName"`
+	PFilter        interface{}     `json:"pFilter"`
 }
 
 //	Acquire task execution history events.
@@ -366,3 +357,395 @@ func (ts *Tasks) GetTaskHistory(ctx context.Context, params interface{}) (*StrIt
 	raw, err := ts.client.Do(ctx, request, &strIteratorID)
 	return strIteratorID, raw, err
 }
+
+//	Get task start event.
+//
+//	Returns event which should run the task.
+//
+//	Parameters:
+//	- strTask	(string) task id.
+//
+//	Returns:
+//	- (params) parameters of the event, see Task event filter attributes:
+//
+//	+------------------------------+-------------+-----------------------------------------------------------------------------------+
+//	|             Name             |    Type     |                                    Description                                    |
+//	+------------------------------+-------------+-----------------------------------------------------------------------------------+
+//	|                              |             |                                                                                   |
+//	| FILTER_EVENTS_PRODUCT_NAME   | string      | Name of a product which publishes an event                                        |
+//	|                              |             |                                                                                   |
+//	| FILTER_EVENTS_VERSION        | string      | Version of a product which publishes an event                                     |
+//	|                              |             |                                                                                   |
+//	| FILTER_EVENTS_COMPONENT_NAME | string      | Name of a component which publishes an event                                      |
+//	|                              |             |                                                                                   |
+//	| FILTER_EVENTS_INSTANCE_ID    | string      | Instance of a component which publishes an event                                  |
+//	|                              |             |                                                                                   |
+//	| EVENT_TYPE                   | string      | Type of an event. See List of event attributes for event types                    |
+//	|                              |             |                                                                                   |
+//	| EVENT_BODY_FILTER            | interface{} | Events filter. Here is an filter example for failure of a task:                   |
+//	|                              |             | +---EVENT_TYPE = (paramString)KLPRCI_TaskState                                    |
+//	|                              |             |     +---EVENT_BODY_FILTER (paramParams)                                           |
+//	|                              |             |     |   +---KLPRCI_TASK_TS_ID = (paramString)fef4c022-ae55-41a7-afb0-0cc7b3654e70 |
+//	|                              |             |     |   +---KLPRCI_newState = (paramInt)3                                         |
+//	|                              |             |                                                                                   |
+//	+------------------------------+-------------+-----------------------------------------------------------------------------------+
+func (ts *Tasks) GetTaskStartEvent(ctx context.Context, strTask string) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"strTask": "%s"}`, strTask))
+
+	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.GetTaskStartEvent", bytes.NewBuffer(postData))
+
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	raw, err := ts.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//	Encrypt an account password.
+//
+//	Encrypts account password to push as "klprts-TaskAccountPassword" attribute. See List of deployment task attributes
+//
+//	The same as DataProtectionApi.ProtectUtf16StringGlobally
+//
+//	Parameters:
+//	- strPassword	(string) password to protect
+//
+//	Returns:
+//	- (binary) Encrypted password
+//
+//	See also:
+//	DataProtectionApi.ProtectUtf16StringGlobally
+func (ts *Tasks) ProtectPassword(ctx context.Context, strPassword string) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"strPassword": "%s"}`, strPassword))
+
+	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.ProtectPassword", bytes.NewBuffer(postData))
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	raw, err := ts.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//TasksIteratorParams struct
+type TasksIteratorParams struct {
+	NGroupID            int64  `json:"nGroupId"`
+	BGroupIDSignificant bool   `json:"bGroupIdSignificant"`
+	StrProductName      string `json:"strProductName"`
+	StrVersion          string `json:"strVersion"`
+	StrComponentName    string `json:"strComponentName"`
+	StrInstanceID       string `json:"strInstanceId"`
+	StrTaskName         string `json:"strTaskName"`
+	BIncludeSupergroups bool   `json:"bIncludeSupergroups"`
+}
+
+//	Reset task iterator for a specified filter data.
+//
+//	If one of the parameters is not specified then the filtration will not be performed by this parameter.
+//
+//	Parameters:
+//	- nGroupId	(int64) group id
+//	- bGroupIdSignificant	(boolean) set true if group id is significant, if false nGroupId will be skipped
+//	- strProductName	(string) product name
+//	- strVersion	(string) product version
+//	- strComponentName	(string) component name
+//	- strInstanceId	(string) instance id
+//	- strTaskName	(string) task name
+//	- bIncludeSupergroups	(boolean) set true if you need to include Super groups.
+//
+//	The group Super is parent of the group Groups and is intended
+//	for assignment of group tasks and policies received from the master server.
+//
+//	Return:
+//	- strTaskIteratorId	(string) iterator id, to get data use Tasks.GetNextTask,
+//	after iterator MUST be realesed by Tasks.ReleaseTasksIterator
+func (ts *Tasks) ResetTasksIterator(ctx context.Context, params TasksIteratorParams) ([]byte, error) {
+	postData, _ := json.Marshal(params)
+	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.ResetTasksIterator", bytes.NewBuffer(postData))
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	raw, err := ts.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//	Release task iterator.
+//
+//	Parameters:
+//	- strTaskIteratorId	(string) iterator id got from Tasks.ResetTasksIterator
+func (ts *Tasks) ReleaseTasksIterator(ctx context.Context, strTaskIteratorId string) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"strTaskIteratorId": "%s"}`, strTaskIteratorId))
+
+	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.ReleaseTasksIterator", bytes.NewBuffer(postData))
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	raw, err := ts.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//	Release iterator of specified data.
+//
+//	Releases iterator of specified data and frees associated memory
+//
+//	Parameters:
+//	- strHostIteratorId	(string) iterator id which got from
+//	Tasks.ResetHostIteratorForTaskStatus
+//	or
+//	Tasks.ResetHostIteratorForTaskStatusEx
+func (ts *Tasks) ReleaseHostStatusIterator(ctx context.Context, strHostIteratorId string) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"strHostIteratorId": "%s"}`, strHostIteratorId))
+
+	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.ReleaseHostStatusIterator", bytes.NewBuffer(postData))
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	raw, err := ts.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//HostIteratorForTaskParams struct
+type HostIteratorForTaskParams struct {
+	StrTask        string   `json:"strTask"`
+	NHostStateMask string   `json:"nHostStateMask"`
+	PFields2Return []string `json:"pFields2Return"`
+	NLifetime      int64    `json:"nLifetime"`
+}
+
+//	Make host task states request.
+//
+//	Makes request of the status of group task that runs on many machines
+//
+//	Parameters:
+//	- strTask	(wstring) task id.
+//	- pFields2Return	(array) array of attribute names to return. See Host task state attributes
+//	- nHostStateMask	(int) host task state. See Bit masks of host task states
+//	- nLifetime	(int) lifetime in seconds
+//
+//	Return:
+//	- strHostIteratorId	(wstring) iterator id, to get requsted data use Tasks.GetNextHostStatus,
+//	Tasks.GetHostStatusRecordRange
+func (ts *Tasks) ResetHostIteratorForTaskStatus(ctx context.Context, params HostIteratorForTaskParams) ([]byte, error) {
+	postData, _ := json.Marshal(params)
+
+	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.ResetHostIteratorForTaskStatus", bytes.NewBuffer(postData))
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	raw, err := ts.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//HostIteratorForTaskParamsEx struct
+type HostIteratorForTaskParamsEx struct {
+	StrTask        string          `json:"strTask"`
+	NHostStateMask int64           `json:"nHostStateMask"`
+	PFields2Return []string        `json:"pFields2Return"`
+	PFields2Order  []FieldsToOrder `json:"pFields2Order"`
+	NLifetime      int64           `json:"nLifetime"`
+}
+
+//	Make host task states request.
+//
+//	Makes request of the status of group task that runs on many machines
+//
+//	Parameters:
+//	- strTask	(string) task id.
+//	- pFields2Return	(array) array of attribute names to return. See Host task state attributes
+//	- pFields2Order	(array) array of containers each of them containing two attributes:
+//		-- "Name" (paramString) name of attribute used for sorting
+//		-- "Asc" (paramBool) ascending if true descending otherwise
+//	- nHostStateMask	(int) host task state.
+//	Bit masks of host task states:
+//
+//	+------+------------------------------------------------------------------------------------------------------------------------+
+//	| Mask |                                                      Description                                                       |
+//	+------+------------------------------------------------------------------------------------------------------------------------+
+//	| 0x01 | "Pending" state, which means actual group synchronization associated with the task is not delivered to the target host |
+//	| 0x02 | "Running" state                                                                                                        |
+//	| 0x04 | "Finished successfully" state                                                                                          |
+//	| 0x08 | "Finished with warning" state                                                                                          |
+//	| 0x10 | "Failed" state                                                                                                         |
+//	| 0x20 | "Scheduled" state, which means task is ready to start (manually or by the schedule) on the target host                 |
+//	| 0x40 | "Paused" state                                                                                                         |
+//	+------+------------------------------------------------------------------------------------------------------------------------+
+//	- nLifetime	(int) lifetime in seconds
+//
+//	Return:
+//	- strHostIteratorId	(string) iterator id,
+//	to get requsted data use Tasks.GetNextHostStatus, Tasks.GetHostStatusRecordRange
+//
+//Example:
+//	iteratorForTaskStatusEx, _, _ := client.Tasks.ResetHostIteratorForTaskStatusEx(ctx, kaspersky.HostIteratorForTaskParams{
+//		StrTask:        "195",
+//		NHostStateMask: 0x01,
+//		PFields2Return: []string{"hostname", "state_descr"},
+//		PFields2Order:  []kaspersky.FieldsToOrder{
+//			{
+//				Type:	"params",
+//				OrderValue: kaspersky.OrderValue{
+//					Name: "hostname",
+//					Asc: true},
+//			},
+//		},
+//		NLifetime:      100,
+//	})
+func (ts *Tasks) ResetHostIteratorForTaskStatusEx(ctx context.Context, params HostIteratorForTaskParamsEx) (*StrHostIteratorId, []byte, error) {
+	postData, _ := json.Marshal(params)
+
+	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.ResetHostIteratorForTaskStatusEx", bytes.NewBuffer(postData))
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	strHostIteratorId := new(StrHostIteratorId)
+
+	raw, err := ts.client.Do(ctx, request, &strHostIteratorId)
+	return strHostIteratorId, raw, err
+}
+
+//	Get records count of result of operation
+//	ResetHostIteratorForTaskStatus or ResetHostIteratorForTaskStatusEx.
+//
+//	Parameters:
+//	- strHostIteratorId	(string) iterator id which got from
+//	Tasks.ResetHostIteratorForTaskStatus or Tasks.ResetHostIteratorForTaskStatusEx
+//
+//	Returns:
+//	- (int64) returns records count
+func (ts *Tasks) GetHostStatusRecordsCount(ctx context.Context, strHostIteratorId string) (*PxgValInt, []byte, error) {
+	postData := []byte(fmt.Sprintf(`{"strHostIteratorId": "%s"}`, strHostIteratorId))
+
+	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.GetHostStatusRecordsCount", bytes.NewBuffer(postData))
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	pxgValInt := new(PxgValInt)
+	raw, err := ts.client.Do(ctx, request, &pxgValInt)
+	return pxgValInt, raw, err
+}
+
+//	Get result of operation ResetHostIteratorForTaskStatus or ResetHostIteratorForTaskStatusEx.
+//
+//	Gets result of operation Tasks.ResetHostIteratorForTaskStatus or Tasks.ResetHostIteratorForTaskStatusEx
+//
+//	Parameters:
+//	- strHostIteratorId	(string) iterator id which got from
+//	Tasks.ResetHostIteratorForTaskStatus or Tasks.ResetHostIteratorForTaskStatusEx
+//	- nStart	(int) zero-based start position.
+//	- nEnd	(int) zero-based finish position.
+//
+//	Returns:
+//	- (int64) actual number of elements contained in the record set
+//	- pParHostStatus	(params) container that has requested elements in the array with name "statuses",
+//	each item of array contains attributes from Host task state attributes
+//
+//	Example:
+//{
+//  "pParHostStatus" : {
+//    "statuses" : [
+//      {
+//        "type" : "params",
+//        "value" : {
+//          "hostdn" : "HostDisplayName",
+//          "hostname" : "53bf5bda-d728-4888-b002-67e63b6e4c63"
+//        }
+//      }
+//    ]
+//  },
+//  "PxgRetVal" : 1
+//}
+func (ts *Tasks) GetHostStatusRecordRange(ctx context.Context, strHostIteratorId string, nStart, nEnd int64) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"strHostIteratorId": "%s", "nStart": %d, "nEnd" : %d}`, strHostIteratorId,
+		nStart, nEnd))
+
+	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.GetHostStatusRecordRange", bytes.NewBuffer(postData))
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	raw, err := ts.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//TODO ResolveTaskId
+
+//	Get task id by PRTS task id.
+//
+//	Parameters:
+//	- strPrtsTaskId	(wstring) PRTS task id
+//
+//	Returns:
+//	- (string) task id
+func (ts *Tasks) ResolveTaskId(ctx context.Context, strPrtsTaskId string) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"strPrtsTaskId": "%s"}`, strPrtsTaskId))
+
+	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.ResolveTaskId", bytes.NewBuffer(postData))
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	raw, err := ts.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//TODO - GetNextTask
+
+//	Sequentially get task data.
+//
+//	Gets result of operation Tasks.ResetTasksIterator
+//
+//	Parameters:
+//	- strTaskIteratorId	(string) iterator id got from Tasks.ResetTasksIterator
+//
+//	Return:
+//	- pTaskData	(params) task data with attributes from Task settings format.
+//	Call this method while pTaskData is not empty.
+func (ts *Tasks) GetNextTask(ctx context.Context, strTaskIteratorId string) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"strTaskIteratorId": "%s"}`, strTaskIteratorId))
+
+	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.GetNextTask", bytes.NewBuffer(postData))
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	raw, err := ts.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//TODO - GetNextHostStatus
+
+//	Sequentially get result of operation ResetHostIteratorForTaskStatus or ResetHostIteratorForTaskStatusEx.
+//
+//	Sequentially gets result of operation Tasks.ResetHostIteratorForTaskStatus or Tasks.ResetHostIteratorForTaskStatusEx
+//
+//	Parameters:
+//	- strHostIteratorId	(string) iterator id which got from
+//	Tasks.ResetHostIteratorForTaskStatus or Tasks.ResetHostIteratorForTaskStatusEx
+//	- nCount	(int) requested number of records
+//
+//	- [out]	nActual	(int) actual count of received records
+//	- [out]	pHostStatus	(params) container that has requested elements in the array with name "statuses",
+//	each item of array contains attributes from Host task state attributes
+//
+//	Returns:
+//	- (boolean) return false if the iterator reached end of the record list, in this case nActual contains zero
+func (ts *Tasks) GetNextHostStatus(ctx context.Context, strTaskIteratorId string) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"strTaskIteratorId": "%s"}`, strTaskIteratorId))
+
+	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.GetNextHostStatus", bytes.NewBuffer(postData))
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	raw, err := ts.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//TODO func (ts *Tasks) AddTask(ctx context.Context, params interface{}) ([]byte, error)

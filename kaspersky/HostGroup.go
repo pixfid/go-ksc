@@ -33,11 +33,11 @@ type HostGroup struct {
 }
 
 type HGParams struct {
-	WstrFilter        string             `json:"wstrFilter"`
-	VecFieldsToReturn []string           `json:"vecFieldsToReturn"`
-	VecFieldsToOrder  []VecFieldsToOrder `json:"vecFieldsToOrder"`
-	PParams           PParams            `json:"pParams"`
-	LMaxLifeTime      int64              `json:"lMaxLifeTime"`
+	WstrFilter        string          `json:"wstrFilter"`
+	VecFieldsToReturn []string        `json:"vecFieldsToReturn"`
+	VecFieldsToOrder  []FieldsToOrder `json:"vecFieldsToOrder"`
+	PParams           PParams         `json:"pParams"`
+	LMaxLifeTime      int64           `json:"lMaxLifeTime"`
 }
 
 type PParams struct {
