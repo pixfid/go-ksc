@@ -73,6 +73,7 @@ type Client struct {
 	Session                     *Session
 	SrvView                     *SrvView
 	Tasks                       *Tasks
+	TrafficManager              *TrafficManager
 	UserName, Password, Server  string
 	VServers                    *VServers
 	VServers2                   *VServers2
@@ -128,6 +129,7 @@ func New(cfg Config) *Client {
 	client.Session = &Session{client: client}
 	client.SrvView = &SrvView{client: client}
 	client.Tasks = &Tasks{client: client}
+	client.TrafficManager = &TrafficManager{client: client}
 	client.VServers = &VServers{client: client}
 	client.VServers2 = &VServers2{client: client}
 	client.WolSender = &WolSender{client: client}
