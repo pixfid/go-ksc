@@ -75,7 +75,9 @@ func (ce *ConEvents) Retrieve(ctx context.Context) ([]byte, error) {
 
 //	Subscribe on event.
 //
-//	Use this method to subscribe on events. Method returns period of polling. You should use it between retrieve calls. Also attribute pFilter allow you to cut off unnecessary events.
+//	Use this method to subscribe on events. Method returns period of polling.
+//	You should use it between retrieve calls.
+//	Also attribute pFilter allow you to cut off unnecessary events.
 //
 //	Parameters:
 //	- wstrEvent	[in] (string) event type
