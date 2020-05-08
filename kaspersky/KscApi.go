@@ -43,6 +43,7 @@ type Client struct {
 	AdHosts                     *AdHosts
 	AdmServerSettings           *AdmServerSettings
 	AppCtrlApi                  *AppCtrlApi
+	AKPatches                   *AKPatches
 	AsyncActionStateChecker     *AsyncActionStateChecker
 	CertPoolCtrl                *CertPoolCtrl
 	CertPoolCtrl2               *CertPoolCtrl2
@@ -53,6 +54,7 @@ type Client struct {
 	DataProtectionApi           *DataProtectionApi
 	EventNotificationProperties *EventNotificationProperties
 	EventProcessing             *EventProcessing
+	EventProcessingFactory      *EventProcessingFactory
 	HostGroup                   *HostGroup
 	HostMoveRules               *HostMoveRules
 	HostTagsRulesApi            *HostTagsRulesApi
@@ -98,6 +100,7 @@ func New(cfg Config) *Client {
 
 	client.AdHosts = &AdHosts{client: client}
 	client.AdmServerSettings = &AdmServerSettings{client: client}
+	client.AKPatches = &AKPatches{client: client}
 	client.AppCtrlApi = &AppCtrlApi{client: client}
 	client.AsyncActionStateChecker = &AsyncActionStateChecker{client: client}
 	client.CertPoolCtrl = &CertPoolCtrl{client: client}
@@ -109,6 +112,7 @@ func New(cfg Config) *Client {
 	client.DataProtectionApi = &DataProtectionApi{client: client}
 	client.EventNotificationProperties = &EventNotificationProperties{client: client}
 	client.EventProcessing = &EventProcessing{client: client}
+	client.EventProcessingFactory = &EventProcessingFactory{client: client}
 	client.HostGroup = &HostGroup{client: client}
 	client.HostMoveRules = &HostMoveRules{client: client}
 	client.HostTagsRulesApi = &HostTagsRulesApi{client: client}

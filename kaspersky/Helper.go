@@ -148,3 +148,8 @@ type StrIteratorId struct {
 type StrHostIteratorId struct {
 	StrHostIteratorId string `json:"strHostIteratorId"`
 }
+
+type PFilter struct {
+	GnrlEaSeverity int64  `json:"GNRL_EA_SEVERITY"`
+	ProductName    string `json:"product_name"`
+}
