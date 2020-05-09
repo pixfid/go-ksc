@@ -1,5 +1,5 @@
 # go-ksc #
-go-ksc is a Go client library for accessing the KSC (Kaspersky) Open API.
+go-ksc is a Go client library for accessing the KSC (Kaspersky Security Center) Open API.
 
 ## Usage ##
 
@@ -13,7 +13,7 @@ import (
 ```
 
 Construct a new KSC client, then use the various services on the client to
-access different parts of the KSC (Kaspersky) Open API. For example:
+access different parts of the KSC (Kaspersky Security Center) Open API. For example:
 
 ```go
 
@@ -37,8 +37,8 @@ func main() {
     	client.KSCAuth(ctx)
 
         //Get List of Windows domain in the network.
-        groupsDomains, _,_ := client.HostGroup.GetDomains(context.Background())
-        panic(groupsDomains)
+        raw,_ := client.HostGroup.GetDomains(context.Background())
+        println(string(raw))
 }
 ```
 
