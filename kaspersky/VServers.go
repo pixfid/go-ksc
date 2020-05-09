@@ -222,7 +222,7 @@ func (vs *VServers) UpdateVServerInfo(ctx context.Context, lVServer int64, param
 //	Parameters:
 //	- lVServer	(int64) virtual server id
 //	- pPermissions	(params) ACL, see Permissions structure
-//	- bProtection	(boolean) if true checks if the user does not denies access to the server to itself
+//	- bProtection	(bool) if true checks if the user does not denies access to the server to itself
 func (vs *VServers) SetPermissions(ctx context.Context, lVServer int64, params interface{}, bProtection bool) ([]byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))

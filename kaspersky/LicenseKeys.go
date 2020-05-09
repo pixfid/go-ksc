@@ -131,10 +131,10 @@ type HostsKeyIterator struct {
 //
 //	Parameters:
 //	- pInData	(params) container of input attributes:
-//	- "KLLIC_SERIAL" - serial number of the key which the hosts array will be returned for, mandatory (paramString).
-//	- pFields	(array) of paramString, array of host attribute names to return.
+//	- "KLLIC_SERIAL" - serial number of the key which the hosts array will be returned for, mandatory (string).
+//	- pFields	(array) of string, array of host attribute names to return.
 //	See List of host-specific license attributes for attribute names.
-//	- pFieldsToOrder	(array) of paramString, array of host attributes to be used for ordering
+//	- pFieldsToOrder	(array) of string, array of host attributes to be used for ordering
 //	- pOptions	(params) currently ignored.
 //	- lTimeoutSec	(int64) iterator timeout in seconds. Output iterator will be available for this time long.
 //		Default is zero which means 15 minutes long.
@@ -171,9 +171,9 @@ type EnumKeysParams struct {
 // Enumerate keys.
 //
 // Parameters:
-//	- pFields	(array) of paramString, array of attribute names to return,
+//	- pFields	(array) of string, array of attribute names to return,
 //	mandatory . See List of license key attributes for attribute names.
-//	- pFieldsToOrder	(array) of paramString, array of attributes to be used for ordering, mandatory
+//	- pFieldsToOrder	(array) of string, array of attributes to be used for ordering, mandatory
 //	- pOptions	(params) enumeration options, optional :
 //	"KLLICSRV_ENOPT_INSTALLED_ONLY" - true if you are enumerating only installed keys.
 //	Default is false - method will return all keys including ones not-installed on adm. server (product reported keys).
@@ -215,7 +215,7 @@ type PKeyInfo struct {
 //
 //	For any attribute to query you must put such attribute with any value into the container pKeyInfo.
 //	In particular, if you need the key body then put into
-//	pKeyInfo container the attribute with name "KLLICSRV_KEYDATA" of type (boolean).
+//	pKeyInfo container the attribute with name "KLLICSRV_KEYDATA" of type (bool).
 //	If the license key has been uploaded to the Administration Server
 //	so that and Administration Server has license key body then it will be returned in "KLLICSRV_KEYDATA" attribute.
 //	Note that the additional "ExportLicense" access right must be set up to the user under which this call is made.

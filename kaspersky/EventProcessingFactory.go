@@ -38,7 +38,7 @@ type EventProcessingFactory struct {
 
 //EventPFP struct
 type EventPFP struct {
-	PFilter           PFilter     `json:"pFilter"`
+	PFilter           *PFilter    `json:"pFilter"`
 	VecFieldsToOrder  interface{} `json:"vecFieldsToOrder"`
 	VecFieldsToReturn []string    `json:"vecFieldsToReturn"`
 	LifetimeSEC       int64       `json:"lifetimeSec"`

@@ -68,12 +68,12 @@ type PatchValue struct {
 //	    }
 //	  }
 //	}
-//	|-"NeedBackupServer" (boolean) true if is required to do SC-server backup before installation of the patch,
+//	|-"NeedBackupServer" (bool) true if is required to do SC-server backup before installation of the patch,
 //	optional
 //
 //	Returns:
 //	- ppResult (params) contains following attributes:
-//	- "CallResult" (boolean) true if success
+//	- "CallResult" (bool) true if success
 //	- "ErrorDescription" (string) error description, empty if no error
 func (akp *AKPatches) ApprovePatch(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, _ := json.Marshal(params)
@@ -105,7 +105,7 @@ func (akp *AKPatches) ApprovePatch(ctx context.Context, params interface{}) ([]b
 //
 //	Returns:
 //	- ppResult (params) contains following attributes:
-//	- "CallResult" (boolean) true if success
+//	- "CallResult" (bool) true if success
 //	- "ErrorDescription" (string) error description, empty if no error
 func (akp *AKPatches) ForbidPatch(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, _ := json.Marshal(params)

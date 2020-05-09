@@ -107,7 +107,7 @@ func (lp *LicensePolicy) GetTotalLicenseCount(ctx context.Context, nFunctionalit
 //	 - nFunctionality	(unsignedInt) functionality for checking
 //
 //	Returns:
-//	- (boolean) true if a functionality is in restricted mode, otherwise false
+//	- (bool) true if a functionality is in restricted mode, otherwise false
 //
 //	Exceptions:
 //	- Throws	exception in case of error.
@@ -137,7 +137,7 @@ func (lp *LicensePolicy) IsLimitedMode(ctx context.Context, nFunctionality int64
 //	Enable or disable restricted mode for functionality.
 //
 //	Parameters:
-//	- bLimited	(boolean) true enable restricted mode for functionality, false for disable
+//	- bLimited	(bool) true enable restricted mode for functionality, false for disable
 //	- eFunctionality	(int) functionality
 //
 //	Exceptions:

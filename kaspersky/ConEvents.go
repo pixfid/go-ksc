@@ -48,14 +48,14 @@ type ConEvents struct {
 //	+----------------------------+---------------+----------------------------+
 //	|         Attribute          |     Type      |        Description         |
 //	+----------------------------+---------------+----------------------------+
-//	| KLSRV_CON_EVENT_TYPE       | paramString   | Event type                 |
+//	| KLSRV_CON_EVENT_TYPE       | string   | Event type                 |
 //	| KLSRV_CON_EVENT_PARAMS     | paramParams   | Event params               |
 //	| KLSRV_CON_EVENT_BIRTH_TIME | paramDateTime | UTC time of creation       |
-//	| KLSRV_CON_EVENT_LIFE_TIME  | paramInt      | Event life time in seconds |
+//	| KLSRV_CON_EVENT_LIFE_TIME  | int64      | Event life time in seconds |
 //	+----------------------------+---------------+----------------------------+
 //
 //	Returns:
-//	- (boolean) true if all events retrieved, otherwise - false
+//	- (bool) true if all events retrieved, otherwise - false
 //
 //	Exceptions:
 //	- STDE_NOTFOUND	- subscription was not found
@@ -71,6 +71,17 @@ func (ce *ConEvents) Retrieve(ctx context.Context) ([]byte, error) {
 
 	raw, err := ce.client.Do(ctx, request, nil)
 	return raw, err
+}
+
+//SubscribeEventParam struct
+type SubscribeEventParam struct {
+	WstrEvent string `json:"wstrEvent"`
+}
+
+//SubscribeEventResponse struct
+type SubscribeEventResponse struct {
+	NPeriod   int64 `json:"nPeriod"`
+	PxgRetVal int64 `json:"PxgRetVal"`
 }
 
 //	Subscribe on event.

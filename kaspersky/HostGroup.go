@@ -127,7 +127,7 @@ type UHGParams struct {
 //	- pFieldsToReturn	(array) array of user's attribute names to return. See List of user's attributes
 //	- pFieldsToOrder	(array) array of containers each of them containing two attributes:
 //		"Name" of type String, name of attribute used for sorting
-//		"Asc" of type Boolean, ascending if true descending otherwise
+//		"Asc" of type bool, ascending if true descending otherwise
 //	- lMaxLifeTime	(int64) max lifetime of accessor (sec)
 //	- [out]	strAccessor	(string) result-set ID, identifier of the server-side ordered collection of found users.
 //	The result-set is destroyed and associated memory is freed in following cases:
@@ -157,8 +157,8 @@ func (hg *HostGroup) FindUsers(ctx context.Context, param UHGParams) (*Accessor,
 //Session to the Administration Server has been closed.
 //ChunkAccessor.Release has been called.
 //	- [out]	pFailedSlavesInfo	(params) information about slave servers the search for which failed due to various reasons, contains array KLGRP_FAILED_SLAVES_PARAMS of params which have attributes:
-//	- KLSRVH_SRV_ID - Slave server id (paramInt)
-//	- KLSRVH_SRV_DN - Slave server display name (paramString)
+//	- KLSRVH_SRV_ID - Slave server id (int64)
+//	- KLSRVH_SRV_DN - Slave server display name (string)
 //Returns:
 //	- (int64) number of found hosts
 func (hg *HostGroup) FindHostsAsyncGetAccessor(ctx context.Context, strRequestId string) (*AsyncAccessor,
@@ -182,7 +182,7 @@ func (hg *HostGroup) FindHostsAsyncGetAccessor(ctx context.Context, strRequestId
 //	- vecFieldsToReturn	([]string) array of host attribute names to return.
 //	See List of host attributes for attribute names
 //	- vecFieldsToOrder	([]string) array of containers each of them containing two attributes :
-//		"Name" (paramString) name of attribute used for sorting
+//		"Name" (string) name of attribute used for sorting
 //		"Asc" (paramBool) ascending if true descending otherwise
 //	- pParams	(params) extra options. Possible attributes are listed below
 //(see details in Extra search attributes for hosts and administration groups):
@@ -596,11 +596,11 @@ type RTInfo struct {
 //
 //Parameters:
 //	- pValues	(array) string array with names of requested values, possible values:
-//	- KLADMSRV_SSS_PORT - server port (paramInt)
-//	- KLADMSRV_SSS_ID - server id (paramString)
+//	- KLADMSRV_SSS_PORT - server port (int64)
+//	- KLADMSRV_SSS_ID - server id (string)
 //	- KLADMSRV_VS_LICDISABLED - licensing for the VS is disabled (paramBool)
 //	- KLADMSRV_SAAS_BLOCKED - adding new virtual servers is blocked due to expired/absent/blacklisted license (paramBool)
-//	- KLADMSRV_SAAS_EXPIRED_DAYS_TO_WORK - adding new virtual servers will be blocked in c_szwIfSaasExpiredDaysToWork days (paramInt)
+//	- KLADMSRV_SAAS_EXPIRED_DAYS_TO_WORK - adding new virtual servers will be blocked in c_szwIfSaasExpiredDaysToWork days (int64)
 //	- KLADMSRV_SAAS_OVERUSE - number of VS created is more specified in the license (paramBool)
 //	- KLADMSRV_IF_WAIK_INSTALLED - true if WAIK is installed (paramBool)
 //
@@ -669,8 +669,8 @@ const (
 //
 //Returns:
 //	- (array) array of domains, each item is container which contains following attributes:
-//	- KLHST_WKS_WINDOMAIN (paramString) domain name
-//	- KLHST_WKS_WINDOMAIN_TYPE (paramInt) domain type:
+//	- KLHST_WKS_WINDOMAIN (string) domain name
+//	- KLHST_WKS_WINDOMAIN_TYPE (int64) domain type:
 //
 //Type:
 //	- 0 Windows NT domain
@@ -806,33 +806,33 @@ type KladmsrvEvEvSize struct {
 //	- pValues	(array) string array with names of requested values, possible values are listed below.
 //	- KLADMSRV_SERVER_CERT - server certificate (paramBinary)
 //	- KLADMSRV_SERVER_KEY - server key (paramBinary)
-//	- InstancePort - instance port (paramInt)
-//	- KLADMSRV_SERVER_ADDRESSSES - array of server addresses that can be used by clients to connect to the administration server (paramArray|paramString)
-//	- KLADMSRV_SERVER_UNDER_SYSTEM_ACCOUNT - Name of account used by Administration Server (paramString)
+//	- InstancePort - instance port (int64)
+//	- KLADMSRV_SERVER_ADDRESSSES - array of server addresses that can be used by clients to connect to the administration server (paramArray|string)
+//	- KLADMSRV_SERVER_UNDER_SYSTEM_ACCOUNT - Name of account used by Administration Server (string)
 //	- KLADMSRV_OLA_ROOTCER_ACTUAL - Array of allowed OLA certificates, paramArray, each entry is a certificate as 'DER-encoded binary X.509' of type paramBinary
 //	- KLADMSRV_OLA_ROOTCER_REVOKED - Array of disallowed (revoked) OLA certificates, paramArray, each entry is a certificate as 'DER-encoded binary X.509' of type paramBinary
 //
 //If pValues is NULL then described below values will be returned.
 //
 //	- KLADMSRV_IS_VIRTUAL - true if server is virtual (paramBool)
-//	- KLADMSRV_VSID - VS id (paramInt)
-//	- KLADMSRV_GRP_ROOT - id of group groups (paramInt)
-//	- KLADMSRV_GRP_UNASSIGNED - id of group unassigned (paramInt)
-//	- KLADMSRV_GRP_SUPER - id of group super (paramInt)
-//	- KLADMSRV_SERVER_VERSION_ID - server version id (paramInt)
+//	- KLADMSRV_VSID - VS id (int64)
+//	- KLADMSRV_GRP_ROOT - id of group groups (int64)
+//	- KLADMSRV_GRP_UNASSIGNED - id of group unassigned (int64)
+//	- KLADMSRV_GRP_SUPER - id of group super (int64)
+//	- KLADMSRV_SERVER_VERSION_ID - server version id (int64)
 //	- KLADMSRV_B2B_CLOUD_MODE - if the server installed in the 'B2B Cloud' mode (paramBool)
 //	- KLADMSRV_PCLOUD_MODE - if public cloud support mode is turned on (paramBool)
-//	- KLADMSRV_PRODUCT_FULL_VERSION - server product full version (paramString)
-//	- KLADMSRV_SERVER_HOSTNAME - server host name (paramString)
-//	- KLADMSRV_PRODUCT_VERSION - server product version (paramString)
-//	- KLADMSRV_PRODUCT_NAME - server product name (paramString)
+//	- KLADMSRV_PRODUCT_FULL_VERSION - server product full version (string)
+//	- KLADMSRV_SERVER_HOSTNAME - server host name (string)
+//	- KLADMSRV_PRODUCT_VERSION - server product version (string)
+//	- KLADMSRV_PRODUCT_NAME - server product name (string)
 //	- KLADMSRV_FORCE_SYNC_SUPPORTED - force sync supported (paramBool)
 //	- KLADMSRV_MAINTENANCE_SUPPORTED - if maintenance task must is supported (paramBool)
 //	- KLADMSRV_NAgent Version_RUNNING - true if nAgent Version is running (paramBool)
 //	- KLADMSRV_NAC_IS_BEING_USED - true if NAC is used (paramBool)
 //	- KLADMSRV_SPL_PPC_ENABLED - If password policy compliance for SPL users is enabled (paramBool)
-//	- KLSRV_NETSIZE - network size (paramInt)
-//	- KLADMSRV_USERID - id of the user account; NULL if OS user account is used (paramInt)
+//	- KLSRV_NETSIZE - network size (int64)
+//	- KLADMSRV_USERID - id of the user account; NULL if OS user account is used (int64)
 //	- KLADMSRV_NEED_UNC_PATH - if UNC path must be specified into backup task settings (paramBool)
 //	- KLADMSRV_EV_EV_SIZE - average size of a single event, Kb (paramDouble)
 //
@@ -904,14 +904,14 @@ type KLHSTHFPRODUCTValue struct {
 //Returns:
 //	- (params) contains following attributes:
 //	- KLHST_HF_PRODUCTS - hotfix products (paramArray|paramParams)
-//	- KLHST_WKS_PRODUCT_NAME - product name (paramString)
-//	- KLHST_WKS_PRODUCT_VERSION - product version (paramString)
-//	- KLHST_WKS_PRODUCT_ID - productname and version divided by slash (paramString)
-//	- KLHST_HF_PRODID - hotfix product id (paramInt)
+//	- KLHST_WKS_PRODUCT_NAME - product name (string)
+//	- KLHST_WKS_PRODUCT_VERSION - product version (string)
+//	- KLHST_WKS_PRODUCT_ID - productname and version divided by slash (string)
+//	- KLHST_HF_PRODID - hotfix product id (int64)
 //	- KLHST_HF_DATA - hotfix data (paramArray|paramParams)
-//	- KLHST_HF_ID - hotfix id (paramString)
-//	- KLHST_HF_DN - hotfix display name (paramString)
-//	- KLHST_HF_PRODID - hotfix product id (paramInt)
+//	- KLHST_HF_ID - hotfix id (string)
+//	- KLHST_HF_DN - hotfix display name (string)
+//	- KLHST_HF_PRODID - hotfix product id (int64)
 func (hg *HostGroup) GetAllHostfixes(ctx context.Context) (*PxgHostFixes, []byte, error) {
 
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GetAllHostfixes", nil)
@@ -1040,10 +1040,10 @@ type PInfo struct {
 //Parameters:
 //	- pInfo	(params) the input container must contain variables:
 //	- KLHST_WKS_ANYNAME (paramArray) array of strings with host names
-//	- KLHST_WKS_GROUPID (paramInt) identifier of the group to which the designated hosts are to be placed
+//	- KLHST_WKS_GROUPID (int64) identifier of the group to which the designated hosts are to be placed
 //
 //[out]	pResults	(params) the output container will contain variables:
-//	- KLHST_WKS_RESULTS (paramArray) array of boolean values,
+//	- KLHST_WKS_RESULTS (paramArray) array of bool values,
 //If the i-th element of this array is false,
 //then the i-th host of the input array KLHST_WKS_ANYNAME could not be placed in the group (could not resolve name).
 //
@@ -1091,7 +1091,7 @@ func (hg *HostGroup) RemoveHost(ctx context.Context, strHostName string) {
 //
 //Parameters:
 //	- pHostNames	([]string) array of host names
-//	- bForceDestroy	(boolean) whether to force deleting hosts records
+//	- bForceDestroy	(bool) whether to force deleting hosts records
 func (hg *HostGroup) RemoveHosts(ctx context.Context, pHostNames []string, bForceDestroy bool) (*PxgValStr,
 	[]byte, error) {
 	vFtr, _ := json.Marshal(pHostNames)
@@ -1181,9 +1181,9 @@ func (hg *HostGroup) DeleteIncident(ctx context.Context, nId int64) ([]byte, err
 //	- domain	(string) domain name.
 //Returns:
 //	- (array) array of hosts in domain, each item is container which contains following attributes:
-//	- KLHST_WKS_HOSTNAME (paramString) host name (GUID-like identifier)
-//	- KLHST_WKS_WINHOSTNAME (paramString) host windows (NetBIOS) name
-//	- KLHST_WKS_STATUS (paramInt) host state:
+//	- KLHST_WKS_HOSTNAME (string) host name (GUID-like identifier)
+//	- KLHST_WKS_WINHOSTNAME (string) host windows (NetBIOS) name
+//	- KLHST_WKS_STATUS (int64) host state:
 //	- 0x00000001 - The computer is online ('visible')
 //	- 0x00000002 - The computer is added into the administration group
 //	- 0x00000004 - The computer has Network Agent Version installed
@@ -1216,7 +1216,7 @@ func (hg *HostGroup) GetDomainHosts(ctx context.Context, domain string) ([]byte,
 //	- pFieldsToReturn	([]string) array of incident attribute names to return. See List of incident attributes for attribute names
 //	- pFieldsToOrder	([]string) array of containers each of them containing two attributes:
 //"Name" of type String, name of attribute used for ordering (see Remarks below)
-//"Asc" of type Boolean, ascending if true descending otherwise
+//"Asc" of type bool, ascending if true descending otherwise
 //	- lMaxLifeTime	(int64) max lifetime of accessor (sec)
 //[out]	strAccessor	(string) result-set ID, identifier of the server-side ordered collection of found incidents. The result-set is destroyed and associated memory is freed in following cases:
 //Passed lMaxLifeTime seconds after last access to the result-set (by methods ChunkAccessor.GetItemsCount and ChunkAccessor.GetItemsChunk
@@ -1495,15 +1495,37 @@ func (hg *HostGroup) ZeroVirusCountForHosts(ctx context.Context, zvcfhp ZeroViru
 	return requestID, raw, err
 }
 
-func (hg *HostGroup) SS_Read(ctx context.Context) ([]byte, error) {
-	postData := []byte(fmt.Sprintf(`
-	{
-   		"strHostName":"879e5ad6-2e6b-4e68-8ba5-146fc45c4f82",
-   		"strType":"SS_SETTINGS",
-   		"strProduct":"1103",
-   		"strVersion":"11.0.0.29",
-		"strSection": "86"
-	}`))
+type SSParams struct {
+	StrHostName string `json:"strHostName"`
+	StrType     string `json:"strType"`
+	StrProduct  string `json:"strProduct"`
+	StrVersion  string `json:"strVersion"`
+	StrSection  string `json:"strSection"`
+}
+
+//	Read data from host settings storage.
+//
+//	Parameters:
+//	- params (SSParams)
+//	|- strHostName	(string) host name (unique server-generated string)
+//	|- strType	(string) type of storage, one of following:
+//			|- specify "SS_SETTINGS" to access local settings (see also Local settings and policy format for some products)
+//			|- specify "SS_PRODINFO" to access host system properties (see also Contents of host SS_PRODINFO storage)
+//	|- strProduct	(string) product name string, non-empty string, not longer than 31 character,
+//	and cannot contain characters /\:*?"<>.
+//	|- strVersion	(string) version string, non-empty string, not longer than 31 character,
+//	and cannot contain characters /\:*?"<>.
+//	|- strSection	(string) section name string, non-empty string, not longer than 31 character,
+//	and cannot contain characters /\:*?"<>.
+//
+//	Returns:
+//	- (params) host settings
+//
+//	See also:
+//	- Local settings and policy format for some products
+//	- Contents of host SS_PRODINFO storage
+func (hg *HostGroup) SS_Read(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, _ := json.Marshal(params)
 
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.SS_Read", bytes.NewBuffer(postData))
 	if err != nil {

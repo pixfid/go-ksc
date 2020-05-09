@@ -84,13 +84,13 @@ type ADHostIterator struct {
 //	}
 //	- Where:
 //	- vecFieldsToReturn	(array) attributes to return, possible values
-//	"adhst_adgroup_id" (paramInt) AD group id
-//	"adhst_adgroup_distinguished_name" (paramString) AD group unique name (distinguished name)
-//	"adhst_adgroup_name" (paramString) AD group short name (may be non-unique)
-//	"adhst_adgroup_sam_name" (paramString) AD group NT4-compatible name (unique but may be absent)
+//	"adhst_adgroup_id" (int64) AD group id
+//	"adhst_adgroup_distinguished_name" (string) AD group unique name (distinguished name)
+//	"adhst_adgroup_name" (string) AD group short name (may be non-unique)
+//	"adhst_adgroup_sam_name" (string) AD group NT4-compatible name (unique but may be absent)
 //
 //	- vecFieldsToOrder	(array) array of containers each of them containing two attributes :
-//	"Name" (paramString) name of attributes used for sorting
+//	"Name" (string) name of attributes used for sorting
 //	"Asc" (paramBool) ascending if true descending otherwise
 //
 //	- pOptions	(params) options, possible attributes:

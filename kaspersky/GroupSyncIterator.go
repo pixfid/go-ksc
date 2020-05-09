@@ -67,7 +67,7 @@ func (ca *GroupSyncIterator) ReleaseIterator(ctx context.Context, szwIterator st
 //
 //Returns:
 //	- int actual number of returned elements (less or equal to nCount)
-//	- bEOF	(boolean) returns false if the returned chunk is the last one,
+//	- bEOF	(bool) returns false if the returned chunk is the last one,
 //	and there's no need in further calls of this method
 //	- pData	(params) container that has needed elements in the array with name "KLCSP_ITERATOR_ARRAY"
 func (ca *GroupSyncIterator) GetNextItems(ctx context.Context, szwIterator string, nCount int64,

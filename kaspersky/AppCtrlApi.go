@@ -51,9 +51,9 @@ type AppCtrlApi struct {
 //	Examples:
 //	to get all possible fields: use NULL
 //	to get fields "FILE_ID" and "FILE_NAME" use:
-//                            +--"FILE_ID" = (paramString)""
+//                            +--"FILE_ID" = (string)""
 //                            |
-//                            +--"FILE_NAME" = (paramString)""
+//                            +--"FILE_NAME" = (string)""
 //
 func (ac *AppCtrlApi) GetExeFileInfo(ctx context.Context, szwHostId string, lFileId int64) bool {
 	//TODO Find correct request values

@@ -65,7 +65,7 @@ func (sh *ServerHierarchy) DelServer(ctx context.Context, lServer int64) ([]byte
 //
 //	Parameters:
 //	- lServer	Slave server id
-//	- pFields	paramArray array of paramString attributes to return.
+//	- pFields	paramArray array of string attributes to return.
 //	See list of slave server attributes for attributes list and description.
 //
 //	Returns:

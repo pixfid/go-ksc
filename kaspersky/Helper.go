@@ -150,6 +150,6 @@ type StrHostIteratorId struct {
 }
 
 type PFilter struct {
-	GnrlEaSeverity int64  `json:"GNRL_EA_SEVERITY"`
-	ProductName    string `json:"product_name"`
+	KlevpRfc2254Filter         string `json:"KLEVP_RFC2254_FILTER"`
+	KlevpEventRiseTimeLastDays int64  `json:"KLEVP_EVENT_RISE_TIME_LAST_DAYS"`
 }

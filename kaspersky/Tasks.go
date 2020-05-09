@@ -309,7 +309,7 @@ type TaskHistoryParams struct {
 //	attribute names.
 //	- pSortFields	(array) array of containers each of them containing two attributes:
 //		-- "Name" of type String, name of attribute used for sorting. See List of event attributes for attribute names.
-//		-- "Asc" of type Boolean, ascending if true descending otherwise
+//		-- "Asc" of type bool, ascending if true descending otherwise
 //	- strHostName	(string) name of the host. Events for specified host will be returned.
 //	*Events from all hosts will be returned if "" (empty string) is specified.*
 //	- pFilter	(params) object containing values for attributes to filter events.
@@ -383,10 +383,10 @@ func (ts *Tasks) GetTaskHistory(ctx context.Context, params interface{}) (*StrIt
 //	| EVENT_TYPE                   | string      | Type of an event. See List of event attributes for event types                    |
 //	|                              |             |                                                                                   |
 //	| EVENT_BODY_FILTER            | interface{} | Events filter. Here is an filter example for failure of a task:                   |
-//	|                              |             | +---EVENT_TYPE = (paramString)KLPRCI_TaskState                                    |
+//	|                              |             | +---EVENT_TYPE = (string)KLPRCI_TaskState                                    |
 //	|                              |             |     +---EVENT_BODY_FILTER (paramParams)                                           |
-//	|                              |             |     |   +---KLPRCI_TASK_TS_ID = (paramString)fef4c022-ae55-41a7-afb0-0cc7b3654e70 |
-//	|                              |             |     |   +---KLPRCI_newState = (paramInt)3                                         |
+//	|                              |             |     |   +---KLPRCI_TASK_TS_ID = (string)fef4c022-ae55-41a7-afb0-0cc7b3654e70 |
+//	|                              |             |     |   +---KLPRCI_newState = (int64)3                                         |
 //	|                              |             |                                                                                   |
 //	+------------------------------+-------------+-----------------------------------------------------------------------------------+
 func (ts *Tasks) GetTaskStartEvent(ctx context.Context, strTask string) ([]byte, error) {
@@ -446,13 +446,13 @@ type TasksIteratorParams struct {
 //
 //	Parameters:
 //	- nGroupId	(int64) group id
-//	- bGroupIdSignificant	(boolean) set true if group id is significant, if false nGroupId will be skipped
+//	- bGroupIdSignificant	(bool) set true if group id is significant, if false nGroupId will be skipped
 //	- strProductName	(string) product name
 //	- strVersion	(string) product version
 //	- strComponentName	(string) component name
 //	- strInstanceId	(string) instance id
 //	- strTaskName	(string) task name
-//	- bIncludeSupergroups	(boolean) set true if you need to include Super groups.
+//	- bIncludeSupergroups	(bool) set true if you need to include Super groups.
 //
 //	The group Super is parent of the group Groups and is intended
 //	for assignment of group tasks and policies received from the master server.
@@ -558,7 +558,7 @@ type HostIteratorForTaskParamsEx struct {
 //	- strTask	(string) task id.
 //	- pFields2Return	(array) array of attribute names to return. See Host task state attributes
 //	- pFields2Order	(array) array of containers each of them containing two attributes:
-//		-- "Name" (paramString) name of attribute used for sorting
+//		-- "Name" (string) name of attribute used for sorting
 //		-- "Asc" (paramBool) ascending if true descending otherwise
 //	- nHostStateMask	(int) host task state.
 //	Bit masks of host task states:
@@ -735,7 +735,7 @@ func (ts *Tasks) GetNextTask(ctx context.Context, strTaskIteratorId string) ([]b
 //	each item of array contains attributes from Host task state attributes
 //
 //	Returns:
-//	- (boolean) return false if the iterator reached end of the record list, in this case nActual contains zero
+//	- (bool) return false if the iterator reached end of the record list, in this case nActual contains zero
 func (ts *Tasks) GetNextHostStatus(ctx context.Context, strTaskIteratorId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strTaskIteratorId": "%s"}`, strTaskIteratorId))
 
