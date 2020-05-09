@@ -32,9 +32,7 @@ import (
 //	Wake-On-LAN signal sender.
 //
 //	List of all members.
-type WolSender struct {
-	client *Client
-}
+type WolSender service
 
 //	Sends Wake-On-LAN signal to host.
 //

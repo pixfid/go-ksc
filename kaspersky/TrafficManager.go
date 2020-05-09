@@ -53,9 +53,7 @@ import (
 //	+-----------------------+--------+--------------------------------------------------------------------------------------------------------+
 //
 //	List of all members:
-type TrafficManager struct {
-	client *Client
-}
+type TrafficManager service
 
 //TrafficRestrictions struct
 type TrafficRestrictions struct {

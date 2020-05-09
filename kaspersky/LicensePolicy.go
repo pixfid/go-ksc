@@ -30,9 +30,7 @@ import (
 //	LicensePolicy Class Reference
 //
 //	List of all members.
-type LicensePolicy struct {
-	client *Client
-}
+type LicensePolicy service
 
 //
 //	Get number of free licenses for functionality.

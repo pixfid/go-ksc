@@ -30,9 +30,7 @@ import (
 //	Interface to manage system of autoupdating by patch.exe patches.
 //
 //	List of all members.
-type AKPatches struct {
-	client *Client
-}
+type AKPatches service
 
 //PatchParams struct
 type PatchParams struct {

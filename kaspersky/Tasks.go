@@ -35,9 +35,7 @@ import (
 //	Allows to acquire task attributes, enumerate, control and delete tasks.
 //
 //	List of all members.
-type Tasks struct {
-	client *Client
-}
+type Tasks service
 
 //	Get all group and global tasks of specified host.
 //

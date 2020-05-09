@@ -27,9 +27,15 @@ import (
 	"net/http"
 )
 
-type HostMoveRules struct {
-	client *Client
-}
+//	HostMoveRules Class Reference
+//
+//	Modify and acquire move rules to hosts. More...
+//
+//	Interface allows to acquire and manage host moving rules.
+//	The rule will move host which fits KLHST_MR_Query to KLHST_MR_Group
+//
+//	List of all members.
+type HostMoveRules service
 
 //Enumerate all extended host moving rules.
 //

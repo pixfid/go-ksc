@@ -24,9 +24,7 @@ import (
 	"net/http"
 )
 
-type PackagesApi struct {
-	client *Client
-}
+type PackagesApi service
 
 //Request user agreements related to user packages, registered on current VS.
 func (pa *PackagesApi) GetUserAgreements(ctx context.Context) (*PxgValStr, []byte, error) {
@@ -95,7 +93,7 @@ func (pa *PackagesApi) GetPackageInfo2(ctx context.Context, nPackageId int) (SKl
 	"nPackageId": %d
 	}`, nPackageId))
 
-	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.GetPackageInfo2", bytes.NewBuffer(postData))
+	request, err := http.NewRequest("POST", pa.client.Server + "/api/v1.0/PackagesApi.GetPackageInfo2", bytes.NewBuffer(postData))
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -111,7 +109,7 @@ func (pa *PackagesApi) DeleteExecutablePkg(ctx context.Context, nPackageId int) 
 	"nPackageId": %d
 	}`, nPackageId))
 
-	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.DeleteExecutablePkg", bytes.NewBuffer(postData))
+	request, err := http.NewRequest("POST", pa.client.Server + "/api/v1.0/PackagesApi.DeleteExecutablePkg", bytes.NewBuffer(postData))
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -128,7 +126,7 @@ func (pa *PackagesApi) RemovePackage2(ctx context.Context, nPackageId int) (PDRe
 	"nPackageId": %d
 	}`, nPackageId))
 
-	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.RemovePackage2", bytes.NewBuffer(postData))
+	request, err := http.NewRequest("POST", pa.client.Server + "/api/v1.0/PackagesApi.RemovePackage2", bytes.NewBuffer(postData))
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -144,7 +142,7 @@ func (pa *PackagesApi) RemovePackage(ctx context.Context, nPackageId int) (SKlpk
 	"nPackageId": %d
 	}`, nPackageId))
 
-	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.RemovePackage", bytes.NewBuffer(postData))
+	request, err := http.NewRequest("POST", pa.client.Server + "/api/v1.0/PackagesApi.RemovePackage", bytes.NewBuffer(postData))
 	if err != nil {
 		log.Fatal(err.Error())
 	}

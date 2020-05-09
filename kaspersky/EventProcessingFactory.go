@@ -32,9 +32,7 @@ import (
 //	Interface to create event processing iterators
 //
 //	List of all members:
-type EventProcessingFactory struct {
-	client *Client
-}
+type EventProcessingFactory service
 
 //EventPFP struct
 type EventPFP struct {

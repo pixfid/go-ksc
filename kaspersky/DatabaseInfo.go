@@ -26,9 +26,7 @@ import (
 	"net/http"
 )
 
-type DatabaseInfo struct {
-	client *Client
-}
+type DatabaseInfo service
 
 //Get database's files size.
 //

@@ -27,9 +27,14 @@ import (
 	"net/http"
 )
 
-type Limits struct {
-	client *Client
-}
+//	Limits Class Reference
+//
+//	Interface for working with Limits subsystem. More...
+//
+//	This interface allow you to get a limit of specified parameter
+//
+//	List of all members.
+type Limits service
 
 //  Returns a limit of specified parameter.
 //

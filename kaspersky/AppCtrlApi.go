@@ -32,9 +32,7 @@ import (
 //	Interface to get info about execution files.
 //
 //	Public Member Functions
-type AppCtrlApi struct {
-	client *Client
-}
+type AppCtrlApi service
 
 //	Get data about instances of the execution file on the host.
 //

@@ -34,9 +34,7 @@ import (
 //	Allows to manage policies, change policies states and acquire policies data
 //
 //	List of all members.
-type Policy struct {
-	client *Client
-}
+type Policy service
 
 type PxgValPolicy struct {
 	PxgRetValPolicy PxgRetValPolicy `json:"PxgRetVal"`

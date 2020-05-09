@@ -27,9 +27,14 @@ import (
 	"net/http"
 )
 
-type HostTasks struct {
-	client *Client
-}
+//	HostTasks Class Reference
+//
+//	Basic management operations with host tasks. More...
+//
+//	Interface allows to acquire and manage tasks for hosts: add, update, remove, enumerate and perform other actions.
+//
+//	List of all members.
+type HostTasks service
 
 func (ht *HostTasks) GetNextTask(ctx context.Context, strSrvObjId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`

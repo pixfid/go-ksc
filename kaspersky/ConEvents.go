@@ -35,9 +35,7 @@ import (
 //	This interface allow user to subscribe on server events and retrieve them.
 //
 //	Public Member Functions
-type ConEvents struct {
-	client *Client
-}
+type ConEvents service
 
 //	Retrieve.
 //

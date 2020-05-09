@@ -31,9 +31,7 @@ import (
 //	Multitenancy product managing.
 //
 //	List of all members.
-type Multitenancy struct {
-	client *Client
-}
+type Multitenancy service
 
 //	Retrieves tenant identity.
 //

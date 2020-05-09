@@ -31,9 +31,7 @@ import (
 //	SrvView Class Reference
 //	Interface to get plain-queries from SC-server.
 //	List of all members.
-type SrvView struct {
-	client *Client
-}
+type SrvView service
 
 //SrvViewParams struct
 type SrvViewParams struct {

@@ -32,9 +32,7 @@ import (
 //	Interface implements the functionality for viewing and deleting events.
 //
 //	List of all members.
-type EventProcessing struct {
-	client *Client
-}
+type EventProcessing service
 
 //	Get record count in the result-set.
 //

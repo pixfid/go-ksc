@@ -27,9 +27,16 @@ import (
 	"net/http"
 )
 
-type InventoryApi struct {
-	client *Client
-}
+//	InventoryApi Class Reference
+//
+//	Interface for working with Software Inventory subsystem. More...
+//
+//	Interface allows to get information about software applications
+//	that's are installed on client hosts and modify some settings for Software Inventory subsystem.
+//	To get additional information you also can use srvview (see Software inventory list)
+//
+//	List of all members.
+type InventoryApi service
 
 //Acquire all software applications.
 //

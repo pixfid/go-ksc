@@ -27,9 +27,19 @@ import (
 	"net/http"
 )
 
-type AsyncActionStateChecker struct {
-	client *Client
-}
+//	AsyncActionStateChecker Class Reference
+//
+//	Interface to monitor state of async action. More...
+//
+//	It is supposed that client of the AsyncActionStateChecker
+//	has added async action and this action has identifier wstrActionGuid.
+//	After that client should wait while CheckActionState will return bFinalized
+//	for this action or should cancel this action.
+//	If the count of finalized actions is reach some
+//	limit then client connection will be closed automatically.
+//
+//	List of all members.
+type AsyncActionStateChecker service
 
 type ActionStateResult struct {
 	BFinalized         bool        `json:"bFinalized"`

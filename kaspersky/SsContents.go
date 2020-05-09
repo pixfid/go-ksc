@@ -31,9 +31,7 @@ import (
 //	Access to settings storage. More...
 //
 //	List of all members.
-type SsContents struct {
-	client *Client
-}
+type SsContents service
 
 //TODO Ss_Add
 

@@ -34,9 +34,7 @@ import (
 //	Allows to enumerate scanned active directory OU structure.
 //
 //	List of all members:
-type AdHosts struct {
-	client *Client
-}
+type AdHosts service
 
 //FindAdGroupsParams struct
 type FindAdGroupsParams struct {

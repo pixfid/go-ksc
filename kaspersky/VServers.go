@@ -34,9 +34,7 @@ import (
 //	Detailed Description
 //
 //	Allows to create and destroy virtual servers, acquire and modify their attributes.
-type VServers struct {
-	client *Client
-}
+type VServers service
 
 //	Acquire virtual servers for the specified group.
 //

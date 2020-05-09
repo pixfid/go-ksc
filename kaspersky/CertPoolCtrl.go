@@ -33,9 +33,7 @@ import (
 //	Kaspersky Security Center Server.
 //
 //	Public Member Functions
-type CertPoolCtrl struct {
-	client *Client
-}
+type CertPoolCtrl service
 
 //	Returns information about certificate from server's certificates pool.
 //

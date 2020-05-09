@@ -33,9 +33,7 @@ import (
 //	Operating with keys
 //
 //	Public Member Functions:
-type LicenseKeys struct {
-	client *Client
-}
+type LicenseKeys service
 
 //	Install a key on the server.
 //

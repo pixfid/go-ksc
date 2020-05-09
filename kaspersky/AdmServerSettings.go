@@ -32,9 +32,7 @@ import (
 //	Interface to manage server settings.
 //
 //	List of all members:
-type AdmServerSettings struct {
-	client *Client
-}
+type AdmServerSettings service
 
 //	Acquire shared folder.
 //

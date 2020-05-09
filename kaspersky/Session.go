@@ -24,9 +24,14 @@ import (
 	"net/http"
 )
 
-type Session struct {
-	client *Client
-}
+//	Session Class Reference
+//
+//	Session management interface. More...
+//
+//	It allows to create session token for current security context.
+//
+//	List of all members.
+type Session service
 
 //Creates session token.
 //

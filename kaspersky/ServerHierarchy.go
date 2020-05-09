@@ -33,9 +33,7 @@ import (
 //	Server hierarchy management interface.
 //
 //	List of all members.
-type ServerHierarchy struct {
-	client *Client
-}
+type ServerHierarchy service
 
 //	Remove specified slave server.
 //

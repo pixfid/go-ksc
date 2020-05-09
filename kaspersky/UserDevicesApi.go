@@ -31,9 +31,7 @@ import (
 //
 //	Interface to unified mobile device management
 //	List of all members:
-type UserDevicesApi struct {
-	client *Client
-}
+type UserDevicesApi service
 
 //	Delete a command previously posted to the specified device.
 //

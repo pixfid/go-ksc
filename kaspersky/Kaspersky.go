@@ -86,6 +86,11 @@ type Client struct {
 	VServers2                   *VServers2
 	WolSender                   *WolSender
 	client                      *http.Client
+	common                      service
+}
+
+type service struct {
+	client *Client
 }
 
 func New(cfg Config) *Client {
@@ -96,59 +101,59 @@ func New(cfg Config) *Client {
 		},
 	}
 
-	client := &Client{
+	c := &Client{
 		client:   httpClient,
 		Server:   cfg.Server,
 		UserName: cfg.Username,
 		Password: cfg.Password,
 	}
-
-	client.AdHosts = &AdHosts{client: client}
-	client.AdmServerSettings = &AdmServerSettings{client: client}
-	client.AKPatches = &AKPatches{client: client}
-	client.AppCtrlApi = &AppCtrlApi{client: client}
-	client.AsyncActionStateChecker = &AsyncActionStateChecker{client: client}
-	client.CertPoolCtrl = &CertPoolCtrl{client: client}
-	client.CertPoolCtrl2 = &CertPoolCtrl2{client: client}
-	client.CgwHelper = &CgwHelper{client: client}
-	client.ChunkAccessor = &ChunkAccessor{client: client}
-	client.ConEvents = &ConEvents{client: client}
-	client.DatabaseInfo = &DatabaseInfo{client: client}
-	client.DataProtectionApi = &DataProtectionApi{client: client}
-	client.EventNotificationProperties = &EventNotificationProperties{client: client}
-	client.EventNotificationsApi = &EventNotificationsApi{client: client}
-	client.EventProcessing = &EventProcessing{client: client}
-	client.EventProcessingFactory = &EventProcessingFactory{client: client}
-	client.HostGroup = &HostGroup{client: client}
-	client.HostMoveRules = &HostMoveRules{client: client}
-	client.HostTagsRulesApi = &HostTagsRulesApi{client: client}
-	client.HostTasks = &HostTasks{client: client}
-	client.HWInvStorage = &HWInvStorage{client: client}
-	client.GroupSyncIterator = &GroupSyncIterator{client: client}
-	client.InventoryApi = &InventoryApi{client: client}
-	client.LicenseKeys = &LicenseKeys{client: client}
-	client.LicensePolicy = &LicensePolicy{client: client}
-	client.Limits = &Limits{client: client}
-	client.ListTags = &ListTags{client: client}
-	client.Multitenancy = &Multitenancy{client: client}
-	client.NagCgwHelper = &NagCgwHelper{client: client}
-	client.NagHstCtl = &NagHstCtl{client: client}
-	client.PackagesApi = &PackagesApi{client: client}
-	client.Policy = &Policy{client: client}
-	client.SecurityPolicy3 = &SecurityPolicy3{client: client}
-	client.ServerHierarchy = &ServerHierarchy{client: client}
-	client.Session = &Session{client: client}
-	client.SrvView = &SrvView{client: client}
-	client.SsContents = &SsContents{client: client}
-	client.Tasks = &Tasks{client: client}
-	client.TrafficManager = &TrafficManager{client: client}
-	client.Updates = &Updates{client: client}
-	client.UserDevicesApi = &UserDevicesApi{client: client}
-	client.VServers = &VServers{client: client}
-	client.VServers2 = &VServers2{client: client}
-	client.WolSender = &WolSender{client: client}
-
-	return client
+	c.common.client = c
+	c.DatabaseInfo = (*DatabaseInfo)(&c.common)
+	c.AdHosts = (*AdHosts)(&c.common)
+	c.AdmServerSettings = (*AdmServerSettings)(&c.common)
+	c.AKPatches = (*AKPatches)(&c.common)
+	c.AppCtrlApi = (*AppCtrlApi)(&c.common)
+	c.AsyncActionStateChecker = (*AsyncActionStateChecker)(&c.common)
+	c.CertPoolCtrl = (*CertPoolCtrl)(&c.common)
+	c.CertPoolCtrl2 = (*CertPoolCtrl2)(&c.common)
+	c.CgwHelper = (*CgwHelper)(&c.common)
+	c.ChunkAccessor = (*ChunkAccessor)(&c.common)
+	c.ConEvents = (*ConEvents)(&c.common)
+	c.DatabaseInfo = (*DatabaseInfo)(&c.common)
+	c.DataProtectionApi = (*DataProtectionApi)(&c.common)
+	c.EventNotificationProperties = (*EventNotificationProperties)(&c.common)
+	c.EventNotificationsApi = (*EventNotificationsApi)(&c.common)
+	c.EventProcessing = (*EventProcessing)(&c.common)
+	c.EventProcessingFactory = (*EventProcessingFactory)(&c.common)
+	c.HostGroup = (*HostGroup)(&c.common)
+	c.HostMoveRules = (*HostMoveRules)(&c.common)
+	c.HostTagsRulesApi = (*HostTagsRulesApi)(&c.common)
+	c.HostTasks = (*HostTasks)(&c.common)
+	c.HWInvStorage = (*HWInvStorage)(&c.common)
+	c.GroupSyncIterator = (*GroupSyncIterator)(&c.common)
+	c.InventoryApi = (*InventoryApi)(&c.common)
+	c.LicenseKeys = (*LicenseKeys)(&c.common)
+	c.LicensePolicy = (*LicensePolicy)(&c.common)
+	c.Limits = (*Limits)(&c.common)
+	c.ListTags = (*ListTags)(&c.common)
+	c.Multitenancy = (*Multitenancy)(&c.common)
+	c.NagCgwHelper = (*NagCgwHelper)(&c.common)
+	c.NagHstCtl = (*NagHstCtl)(&c.common)
+	c.PackagesApi = (*PackagesApi)(&c.common)
+	c.Policy = (*Policy)(&c.common)
+	c.SecurityPolicy3 = (*SecurityPolicy3)(&c.common)
+	c.ServerHierarchy = (*ServerHierarchy)(&c.common)
+	c.Session = (*Session)(&c.common)
+	c.SrvView = (*SrvView)(&c.common)
+	c.SsContents = (*SsContents)(&c.common)
+	c.Tasks = (*Tasks)(&c.common)
+	c.TrafficManager = (*TrafficManager)(&c.common)
+	c.Updates = (*Updates)(&c.common)
+	c.UserDevicesApi = (*UserDevicesApi)(&c.common)
+	c.VServers = (*VServers)(&c.common)
+	c.VServers2 = (*VServers2)(&c.common)
+	c.WolSender = (*WolSender)(&c.common)
+	return c
 }
 
 func (c *Client) KSCAuth(ctx context.Context) {

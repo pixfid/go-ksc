@@ -32,9 +32,7 @@ import (
 //	CgwHelper (Connection Gateway) helper proxy class.
 //
 //	Public Member Functions
-type CgwHelper struct {
-	client *Client
-}
+type CgwHelper service
 
 //	Retrieves Slave Server Location.
 //

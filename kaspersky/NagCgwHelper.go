@@ -35,9 +35,7 @@ import (
 //	so use gateway connection to connect Network Agent and call interface methods.
 //
 //	List of all members.
-type NagCgwHelper struct {
-	client *Client
-}
+type NagCgwHelper service
 
 //	Retrieves product's component location.
 //

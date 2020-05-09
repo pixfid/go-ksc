@@ -27,9 +27,10 @@ import (
 	"net/http"
 )
 
-type HWInvStorage struct {
-	client *Client
-}
+//	Interface for working with Hardware storage subsystem. More...
+//
+//	List of all members.
+type HWInvStorage service
 
 //	Start export of hardware inventory.
 //

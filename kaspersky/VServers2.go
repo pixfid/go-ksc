@@ -26,9 +26,11 @@ import (
 	"net/http"
 )
 
-type VServers2 struct {
-	client *Client
-}
+//	VServers2 Class Reference
+//	Virtual servers processing. More...
+//
+//	List of all members:
+type VServers2 service
 
 //Acquire info on virtual server.
 //

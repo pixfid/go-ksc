@@ -32,10 +32,15 @@ import (
 //	Updates processing. More...
 //
 //	List of all members:
-type Updates struct {
-	client *Client
-}
+type Updates service
 
+//	Get available updates info.
+//
+//	Parameters:
+//	- strLocalization	(string) - localization to be used for compoments titles;
+//	can be one of "ru", "en", "fr", "de"; for other values "en" localization will be used.
+//	Return:
+//	- pAvailableUpdateComps	(params) - see Well-known retranslated update components list
 func (uda *Updates) GetAvailableUpdatesInfo(ctx context.Context, strLocalization string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strLocalization": "%s"}`, strLocalization))
 

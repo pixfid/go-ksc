@@ -27,9 +27,12 @@ import (
 	"net/http"
 )
 
-type GroupSyncIterator struct {
-	client *Client
-}
+//	GroupSyncIterator Class Reference
+//
+//	Access to the group synchronization forward iterator for the result-set. More...
+//
+//	List of all members.
+type GroupSyncIterator service
 
 //Releases the result-set.
 //

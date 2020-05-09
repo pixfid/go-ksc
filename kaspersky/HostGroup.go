@@ -33,9 +33,7 @@ import (
 //	Hosts and management groups processing. More...
 //
 //	List of all members.
-type HostGroup struct {
-	client *Client
-}
+type HostGroup service
 
 //	Add a new domain to the database.
 //

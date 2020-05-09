@@ -24,9 +24,7 @@ import (
 	"net/http"
 )
 
-type ListTags struct {
-	client *Client
-}
+type ListTags service
 
 //TODO Call ListTags.GetAllTags for the instance '' (listener '') does not exist (any more?)
 func (lt *ListTags) GetAllTags(ctx context.Context) (*PxgRetError, []byte, error) {

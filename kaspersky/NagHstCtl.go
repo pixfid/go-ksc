@@ -28,9 +28,13 @@ import (
 	"net/http"
 )
 
-type NagHstCtl struct {
-	client *Client
-}
+//	Manage nagent on host. More...
+//
+//	This interface is implemented at Network Agent side,
+//	so use gateway connection to connect Network Agent and call interface methods.
+//
+//	List of all members.
+type NagHstCtl service
 
 //	Acquire runtime host information
 //

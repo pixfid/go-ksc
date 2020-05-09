@@ -35,9 +35,7 @@ import (
 //	permissions (access mask 0x400) in User Permissions functional area on Administration server.
 //
 //	List of all members.
-type SecurityPolicy3 struct {
-	client *Client
-}
+type SecurityPolicy3 service
 
 //	Creates a security group on a server.
 //

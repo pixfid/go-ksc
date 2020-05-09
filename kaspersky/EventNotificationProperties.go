@@ -39,9 +39,7 @@ import (
 //	to send notifications via SMTP and/or SMTP SMS gateway, etc.
 //
 //	List of all members.
-type EventNotificationProperties struct {
-	client *Client
-}
+type EventNotificationProperties service
 
 //	Reads the default notification settings.
 //

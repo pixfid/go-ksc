@@ -32,9 +32,7 @@ import (
 //	Allows to publish event with Administration Server as publisher.
 //
 //	List of all members.
-type EventNotificationsApi struct {
-	client *Client
-}
+type EventNotificationsApi service
 
 //EventNotificationParams struct
 type EventNotificationParams struct {

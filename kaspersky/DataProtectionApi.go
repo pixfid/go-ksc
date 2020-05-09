@@ -32,9 +32,7 @@ import (
 //	Allows to protect sensitive data in policies, tasks, and/or on specified host.
 //
 //	List of all members.
-type DataProtectionApi struct {
-	client *Client
-}
+type DataProtectionApi service
 
 //	Checks if Spl password policy compliance is enabled for the specified Administration Server
 //	and checks the specified password for compliance to the password policy.

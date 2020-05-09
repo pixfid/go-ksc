@@ -48,9 +48,7 @@ import (
 //for other hosts if the tag has been established by the rule earlier
 //
 //	Public Member Functions:
-type HostTagsRulesApi struct {
-	client *Client
-}
+type HostTagsRulesApi service
 
 //HostTagsRulesParams struct
 type HostTagsRulesParams struct {

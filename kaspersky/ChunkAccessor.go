@@ -28,9 +28,14 @@ import (
 	"net/http"
 )
 
-type ChunkAccessor struct {
-	client *Client
-}
+//	ChunkAccessor Class Reference
+//
+//	Working with host result-set. More...
+//
+//	Working with a result-set, that is a server-side ordered collection of found hosts.
+//
+//	List of all members.
+type ChunkAccessor service
 
 //Release result-set.
 //
