@@ -29,6 +29,7 @@ import (
 )
 
 //	SecurityPolicy3 Class Reference
+//
 //	Allows to manage security groups of internal users.
 //	Use srvview SplUserGroupSrvViewName to get information about relationship between users and groups.
 //	To use this class, a caller must has 'Change security rights'

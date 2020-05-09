@@ -28,6 +28,7 @@ import (
 )
 
 //	SsContents Class Reference
+//
 //	Access to settings storage. More...
 //
 //	List of all members.

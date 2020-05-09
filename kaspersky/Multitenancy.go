@@ -28,6 +28,7 @@ import (
 )
 
 //	Multitenancy Class Reference
+//
 //	Multitenancy product managing.
 //
 //	List of all members.

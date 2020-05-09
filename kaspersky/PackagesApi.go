@@ -24,6 +24,11 @@ import (
 	"net/http"
 )
 
+//	PackagesApi Class Reference
+//
+//	Operating with packages. More...
+//
+//	List of all members.
 type PackagesApi service
 
 //Request user agreements related to user packages, registered on current VS.

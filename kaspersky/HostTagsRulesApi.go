@@ -28,24 +28,20 @@ import (
 	"net/http"
 )
 
-//HostTagsRulesApi Class Reference
-//Interface allows to acquire and manage host automatic tagging rules
+//	HostTagsRulesApi Class Reference
+//	Interface allows to acquire and manage host automatic tagging rules
 //
-//Detailed Description
+//	Detailed Description
 //
 //	Interface allows to acquire and manage host automatic tagging rules.
-//
 //	Administration server contains global list of the rules that may automatically set tags for computers.
-//Every rule is identified by szwTagValue that the rule will be set. szwTagValue is a non-empty string, up to 256 unicode characters.
-//
-//	Application of the rules happens on
-//
-//by HostTagsRulesApi.ExecuteRule call
-//Periodically. By default every 2 hours.
-//by notification about changing important settings that can change rule query output.
+//	Every rule is identified by szwTagValue that the rule will be set: szwTagValue is a non-empty string,
+//	up to 256 unicode characters.
+//	Application of the rules happens on by HostTagsRulesApi.ExecuteRule call Periodically.
+//	By default every 2 hours, by notification about changing important settings that can change rule query output.
 //
 //	Application of the rule is set the rule szwTagValue to the hosts falling under a rule scope and reset szwTagValue
-//for other hosts if the tag has been established by the rule earlier
+//	for other hosts if the tag has been established by the rule earlier
 //
 //	Public Member Functions:
 type HostTagsRulesApi service

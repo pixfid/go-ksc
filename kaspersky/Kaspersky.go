@@ -79,6 +79,7 @@ type Client struct {
 	SsContents                  *SsContents
 	Tasks                       *Tasks
 	TrafficManager              *TrafficManager
+	UaControl                   *UaControl
 	Updates                     *Updates
 	UserDevicesApi              *UserDevicesApi
 	UserName, Password, Server  string
@@ -148,6 +149,7 @@ func New(cfg Config) *Client {
 	c.SsContents = (*SsContents)(&c.common)
 	c.Tasks = (*Tasks)(&c.common)
 	c.TrafficManager = (*TrafficManager)(&c.common)
+	c.UaControl = (*UaControl)(&c.common)
 	c.Updates = (*Updates)(&c.common)
 	c.UserDevicesApi = (*UserDevicesApi)(&c.common)
 	c.VServers = (*VServers)(&c.common)
