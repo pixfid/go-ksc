@@ -53,6 +53,7 @@ type Client struct {
 	DatabaseInfo                *DatabaseInfo
 	DataProtectionApi           *DataProtectionApi
 	EventNotificationProperties *EventNotificationProperties
+	EventNotificationsApi       *EventNotificationsApi
 	EventProcessing             *EventProcessing
 	EventProcessingFactory      *EventProcessingFactory
 	HostGroup                   *HostGroup
@@ -70,12 +71,16 @@ type Client struct {
 	NagCgwHelper                *NagCgwHelper
 	NagHstCtl                   *NagHstCtl
 	PackagesApi                 *PackagesApi
+	Policy                      *Policy
 	SecurityPolicy3             *SecurityPolicy3
 	ServerHierarchy             *ServerHierarchy
 	Session                     *Session
 	SrvView                     *SrvView
+	SsContents                  *SsContents
 	Tasks                       *Tasks
 	TrafficManager              *TrafficManager
+	Updates                     *Updates
+	UserDevicesApi              *UserDevicesApi
 	UserName, Password, Server  string
 	VServers                    *VServers
 	VServers2                   *VServers2
@@ -111,6 +116,7 @@ func New(cfg Config) *Client {
 	client.DatabaseInfo = &DatabaseInfo{client: client}
 	client.DataProtectionApi = &DataProtectionApi{client: client}
 	client.EventNotificationProperties = &EventNotificationProperties{client: client}
+	client.EventNotificationsApi = &EventNotificationsApi{client: client}
 	client.EventProcessing = &EventProcessing{client: client}
 	client.EventProcessingFactory = &EventProcessingFactory{client: client}
 	client.HostGroup = &HostGroup{client: client}
@@ -128,12 +134,16 @@ func New(cfg Config) *Client {
 	client.NagCgwHelper = &NagCgwHelper{client: client}
 	client.NagHstCtl = &NagHstCtl{client: client}
 	client.PackagesApi = &PackagesApi{client: client}
+	client.Policy = &Policy{client: client}
 	client.SecurityPolicy3 = &SecurityPolicy3{client: client}
 	client.ServerHierarchy = &ServerHierarchy{client: client}
 	client.Session = &Session{client: client}
 	client.SrvView = &SrvView{client: client}
+	client.SsContents = &SsContents{client: client}
 	client.Tasks = &Tasks{client: client}
 	client.TrafficManager = &TrafficManager{client: client}
+	client.Updates = &Updates{client: client}
+	client.UserDevicesApi = &UserDevicesApi{client: client}
 	client.VServers = &VServers{client: client}
 	client.VServers2 = &VServers2{client: client}
 	client.WolSender = &WolSender{client: client}
