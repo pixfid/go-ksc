@@ -24,7 +24,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
+
 	"net/http"
 )
 
@@ -70,9 +70,8 @@ func (sp *SecurityPolicy3) AddSecurityGroup(ctx context.Context, params interfac
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", sp.client.Server+"/api/v1.0/SecurityPolicy3.AddSecurityGroup",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := sp.client.Do(ctx, request, nil)
@@ -98,9 +97,8 @@ func (sp *SecurityPolicy3) AddUserIntoSecurityGroup(ctx context.Context, lUserId
 	postData := []byte(fmt.Sprintf(`{"lUserId": %d, "lGrpId": %d}`, lUserId, lGrpId))
 	request, err := http.NewRequest("POST", sp.client.Server+"/api/v1.0/SecurityPolicy3.AddUserIntoSecurityGroup",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := sp.client.Do(ctx, request, nil)
@@ -115,9 +113,8 @@ func (sp *SecurityPolicy3) CloseUserConnections(ctx context.Context, lUserId int
 	postData := []byte(fmt.Sprintf(`{"lUserId": %d }`, lUserId))
 	request, err := http.NewRequest("POST", sp.client.Server+"/api/v1.0/SecurityPolicy3.CloseUserConnections",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := sp.client.Do(ctx, request, nil)
@@ -134,9 +131,8 @@ func (sp *SecurityPolicy3) DeleteSecurityGroup(ctx context.Context, lGrpId int64
 	postData := []byte(fmt.Sprintf(`{"lGrpId": %d}`, lGrpId))
 	request, err := http.NewRequest("POST", sp.client.Server+"/api/v1.0/SecurityPolicy3.DeleteSecurityGroup",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := sp.client.Do(ctx, request, nil)
@@ -155,9 +151,8 @@ func (sp *SecurityPolicy3) DeleteUserFromSecurityGroup(ctx context.Context, lUse
 	postData := []byte(fmt.Sprintf(`{"lUserId": %d, "lGrpId": %d}`, lUserId, lGrpId))
 	request, err := http.NewRequest("POST", sp.client.Server+"/api/v1.0/SecurityPolicy3.DeleteUserFromSecurityGroup",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := sp.client.Do(ctx, request, nil)
@@ -175,9 +170,8 @@ func (sp *SecurityPolicy3) MoveUserIntoOtherSecurityGroup(ctx context.Context, l
 	postData := []byte(fmt.Sprintf(`{"lUserId": %d, "lGrpIdFrom": %d, "lGrpIdTo": %d}`, lUserId, lGrpIdFrom, lGrpIdTo))
 	request, err := http.NewRequest("POST", sp.client.Server+"/api/v1.0/SecurityPolicy3.MoveUserIntoOtherSecurityGroup",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := sp.client.Do(ctx, request, nil)
@@ -215,9 +209,8 @@ func (sp *SecurityPolicy3) UpdateSecurityGroup(ctx context.Context, params inter
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", sp.client.Server+"/api/v1.0/SecurityPolicy3.UpdateSecurityGroup",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := sp.client.Do(ctx, request, nil)

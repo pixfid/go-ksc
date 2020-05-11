@@ -23,7 +23,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"log"
+
 	"net/http"
 )
 
@@ -42,7 +42,6 @@ func (uc *UaControl) GetAssignUasAutomatically(ctx context.Context) (*PxgValBool
 
 	pxgValBool := new(PxgValBool)
 	raw, err := uc.client.Do(ctx, request, &pxgValBool)
-
 	return pxgValBool, raw, err
 }
 
@@ -55,7 +54,6 @@ func (uc *UaControl) GetAssignUasAutomatically(ctx context.Context) (*PxgValBool
 func (uc *UaControl) GetDefaultUpdateAgentRegistrationInfo(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", uc.client.Server+"/api/v1.0/UaControl.GetDefaultUpdateAgentRegistrationInfo", nil)
 	raw, err := uc.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -70,12 +68,10 @@ func (uc *UaControl) GetDefaultUpdateAgentRegistrationInfo(ctx context.Context) 
 //	- pUaInfo	(array) of Update agents display info containers
 func (uc *UaControl) GetUpdateAgentsDisplayInfoForHost(ctx context.Context, wstrHostId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrHostId": "%s"}`, wstrHostId))
-
 	request, err := http.NewRequest("POST", uc.client.Server+"/api/v1.0/UaControl.GetUpdateAgentsDisplayInfoForHost",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := uc.client.Do(ctx, request, nil)
@@ -104,8 +100,7 @@ func (uc *UaControl) GetUpdateAgentsList(ctx context.Context) ([]byte, error) {
 //	Parameters:
 //	- bEnabled	(bool)	enable or disable bool
 func (uc *UaControl) SetAssignUasAutomatically(ctx context.Context, bEnabled bool) ([]byte, error) {
-	postData := []byte(fmt.Sprintf(`{"bEnabled": %b}`, bEnabled))
-
+	postData := []byte(fmt.Sprintf(`{"bEnabled": %v}`, bEnabled))
 	request, err := http.NewRequest("POST", uc.client.Server+"/api/v1.0/UaControl.UnregisterUpdateAgent",
 		bytes.NewBuffer(postData))
 
@@ -119,7 +114,6 @@ func (uc *UaControl) SetAssignUasAutomatically(ctx context.Context, bEnabled boo
 //	- wstrUaHostId	(string)	UA host id
 func (uc *UaControl) UnregisterUpdateAgent(ctx context.Context, wstrUaHostId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrUaHostId": "%s"}`, wstrUaHostId))
-
 	request, err := http.NewRequest("POST", uc.client.Server+"/api/v1.0/UaControl.UnregisterUpdateAgent",
 		bytes.NewBuffer(postData))
 

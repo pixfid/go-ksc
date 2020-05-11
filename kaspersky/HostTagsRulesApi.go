@@ -24,7 +24,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 )
 
@@ -70,17 +69,13 @@ type HostTagsRulesParams struct {
 //	"KLHST_HTR_Rules" - host automatic tagging rules (paramArray|paramParams)
 //	list of attributes that are specified in pFields2ReturnArray
 func (hs *HostTagsRulesApi) GetRules(ctx context.Context, params HostTagsRulesParams) ([]byte, error) {
-
 	postData, _ := json.Marshal(params)
-
 	request, err := http.NewRequest("POST", hs.client.Server+"/api/v1.0/HostTagsRulesApi.GetRules", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hs.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -94,17 +89,13 @@ func (hs *HostTagsRulesApi) GetRules(ctx context.Context, params HostTagsRulesPa
 //	Returns:
 //	- (params) object containing attributes of specified rule, see List of host automatic tagging rule attributes.
 func (hs *HostTagsRulesApi) GetRule(ctx context.Context, szwTagValue string) ([]byte, error) {
-
 	postData := []byte(fmt.Sprintf(`{"szwTagValue": "%s"}`, szwTagValue))
-
 	request, err := http.NewRequest("POST", hs.client.Server+"/api/v1.0/HostTagsRulesApi.GetRule", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hs.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -122,18 +113,14 @@ func (hs *HostTagsRulesApi) GetRule(ctx context.Context, szwTagValue string) ([]
 //	- [out]	wstrActionGuid	(string) id of asynchronous operation, to get status use AsyncActionStateChecker.
 //	CheckActionState
 func (hs *HostTagsRulesApi) ExecuteRule(ctx context.Context, szwTagValue string) (*WActionGUID, []byte, error) {
-
 	postData := []byte(fmt.Sprintf(`{"szwTagValue": "%s"}`, szwTagValue))
-
 	request, err := http.NewRequest("POST", hs.client.Server+"/api/v1.0/HostTagsRulesApi.ExecuteRule", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	wActionGUID := new(WActionGUID)
 	raw, err := hs.client.Do(ctx, request, &wActionGUID)
-
 	return wActionGUID, raw, err
 }
 
@@ -144,17 +131,13 @@ func (hs *HostTagsRulesApi) ExecuteRule(ctx context.Context, szwTagValue string)
 //	Parameters:
 //	- wstrActionGuid	(string). id of asynchronous operation that has been started earlier
 func (hs *HostTagsRulesApi) CancelAsyncAction(ctx context.Context, wstrActionGuid string) ([]byte, error) {
-
 	postData := []byte(fmt.Sprintf(`{"wstrActionGuid": "%s"}`, wstrActionGuid))
-
 	request, err := http.NewRequest("POST", hs.client.Server+"/api/v1.0/HostTagsRulesApi.CancelAsyncAction", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hs.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -163,17 +146,13 @@ func (hs *HostTagsRulesApi) CancelAsyncAction(ctx context.Context, wstrActionGui
 //	Parameters:
 //	- szwTagValue	(string). tag of the rule. rule id
 func (hs *HostTagsRulesApi) DeleteRule(ctx context.Context, szwTagValue string) ([]byte, error) {
-
 	postData := []byte(fmt.Sprintf(`{"szwTagValue": "%s"}`, szwTagValue))
-
 	request, err := http.NewRequest("POST", hs.client.Server+"/api/v1.0/HostTagsRulesApi.DeleteRule", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hs.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 

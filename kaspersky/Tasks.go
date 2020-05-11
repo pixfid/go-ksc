@@ -24,7 +24,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
+
 	"net/http"
 )
 
@@ -49,15 +49,13 @@ type Tasks service
 func (ts *Tasks) GetAllTasksOfHost(ctx context.Context, strDomainName, strHostName string) (*PxgValArrayOfString,
 	[]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strDomainName": "%s","strHostName": "%s"}`, strDomainName, strHostName))
-
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.GetAllTasksOfHost", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
+
 	pxgValArrayOfString := new(PxgValArrayOfString)
 	raw, err := ts.client.Do(ctx, request, &pxgValArrayOfString)
-
 	return pxgValArrayOfString, raw, err
 }
 
@@ -92,11 +90,9 @@ type PrtsTaskCreationDate struct {
 //	- (params) object containing task attributes (see List of task attributes).
 func (ts *Tasks) GetTask(ctx context.Context, strTask string) (*TaskData, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strTask": "%s"}`, strTask))
-
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.GetTask", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	taskData := new(TaskData)
@@ -119,11 +115,9 @@ func (ts *Tasks) GetTaskData(ctx context.Context, strTask string, tsk interface{
 	{
 	"strTask": "%s"
 	}`, strTask))
-
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.GetTaskData", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ts.client.Do(ctx, request, &tsk)
@@ -140,16 +134,13 @@ func (ts *Tasks) GetTaskData(ctx context.Context, strTask string, tsk interface{
 //	- (int64) group id
 func (ts *Tasks) GetTaskGroup(ctx context.Context, strTaskId string) (*PxgValInt, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strTaskId": "%s"}`, strTaskId))
-
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.GetTaskGroup", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	pxgValInt := new(PxgValInt)
 	raw, err := ts.client.Do(ctx, request, &pxgValInt)
-
 	return pxgValInt, raw, err
 }
 
@@ -182,14 +173,12 @@ type TaskStatistic struct {
 //	- (TaskStatistics struct) object containing task statistics, see List of task statistics attributes.
 func (ts *Tasks) GetTaskStatistics(ctx context.Context, strTask string) (*TaskStatistics, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strTask": "%s"}`, strTask))
-
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.GetTaskStatistics", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	taskStatistics := new(TaskStatistics)
-
 	raw, err := ts.client.Do(ctx, request, &taskStatistics)
 	return taskStatistics, raw, err
 }
@@ -203,10 +192,9 @@ func (ts *Tasks) GetTaskStatistics(ctx context.Context, strTask string) (*TaskSt
 //	- strTask	(string) task id.
 func (ts *Tasks) SuspendTask(ctx context.Context, strTask string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strTask": "%s"}`, strTask))
-
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.SuspendTask", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ts.client.Do(ctx, request, nil)
@@ -222,10 +210,9 @@ func (ts *Tasks) SuspendTask(ctx context.Context, strTask string) ([]byte, error
 //	- strTask	(string) task id.
 func (ts *Tasks) ResumeTask(ctx context.Context, strTask string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strTask": "%s"}`, strTask))
-
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.ResumeTask", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ts.client.Do(ctx, request, nil)
@@ -241,10 +228,9 @@ func (ts *Tasks) ResumeTask(ctx context.Context, strTask string) ([]byte, error)
 //	- strTask	(string) task id.
 func (ts *Tasks) RunTask(ctx context.Context, strTask string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strTask": "%s"}`, strTask))
-
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.RunTask", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ts.client.Do(ctx, request, nil)
@@ -260,10 +246,9 @@ func (ts *Tasks) RunTask(ctx context.Context, strTask string) ([]byte, error) {
 //	- strTask	(string) task id.
 func (ts *Tasks) DeleteTask(ctx context.Context, strTask string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strTask": "%s"}`, strTask))
-
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.DeleteTask", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ts.client.Do(ctx, request, nil)
@@ -278,11 +263,9 @@ func (ts *Tasks) DeleteTask(ctx context.Context, strTask string) ([]byte, error)
 //	- strTask	(string) task id.
 func (ts *Tasks) CancelTask(ctx context.Context, strTask string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strTask": "%s"}`, strTask))
-
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.CancelTask", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ts.client.Do(ctx, request, nil)
@@ -342,16 +325,17 @@ type TaskHistoryParams struct {
 //		PFilter:        nil,
 //	})
 func (ts *Tasks) GetTaskHistory(ctx context.Context, params interface{}) (*StrIteratorId, []byte, error) {
-	postData, _ := json.Marshal(params)
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.GetTaskHistory", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	strIteratorID := new(StrIteratorId)
-
 	raw, err := ts.client.Do(ctx, request, &strIteratorID)
 	return strIteratorID, raw, err
 }
@@ -389,11 +373,9 @@ func (ts *Tasks) GetTaskHistory(ctx context.Context, params interface{}) (*StrIt
 //	+------------------------------+-------------+-----------------------------------------------------------------------------------+
 func (ts *Tasks) GetTaskStartEvent(ctx context.Context, strTask string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strTask": "%s"}`, strTask))
-
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.GetTaskStartEvent", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ts.client.Do(ctx, request, nil)
@@ -416,10 +398,9 @@ func (ts *Tasks) GetTaskStartEvent(ctx context.Context, strTask string) ([]byte,
 //	DataProtectionApi.ProtectUtf16StringGlobally
 func (ts *Tasks) ProtectPassword(ctx context.Context, strPassword string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strPassword": "%s"}`, strPassword))
-
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.ProtectPassword", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ts.client.Do(ctx, request, nil)
@@ -462,7 +443,7 @@ func (ts *Tasks) ResetTasksIterator(ctx context.Context, params TasksIteratorPar
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.ResetTasksIterator", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ts.client.Do(ctx, request, nil)
@@ -475,10 +456,9 @@ func (ts *Tasks) ResetTasksIterator(ctx context.Context, params TasksIteratorPar
 //	- strTaskIteratorId	(string) iterator id got from Tasks.ResetTasksIterator
 func (ts *Tasks) ReleaseTasksIterator(ctx context.Context, strTaskIteratorId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strTaskIteratorId": "%s"}`, strTaskIteratorId))
-
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.ReleaseTasksIterator", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ts.client.Do(ctx, request, nil)
@@ -496,10 +476,9 @@ func (ts *Tasks) ReleaseTasksIterator(ctx context.Context, strTaskIteratorId str
 //	Tasks.ResetHostIteratorForTaskStatusEx
 func (ts *Tasks) ReleaseHostStatusIterator(ctx context.Context, strHostIteratorId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strHostIteratorId": "%s"}`, strHostIteratorId))
-
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.ReleaseHostStatusIterator", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ts.client.Do(ctx, request, nil)
@@ -528,11 +507,14 @@ type HostIteratorForTaskParams struct {
 //	- strHostIteratorId	(wstring) iterator id, to get requsted data use Tasks.GetNextHostStatus,
 //	Tasks.GetHostStatusRecordRange
 func (ts *Tasks) ResetHostIteratorForTaskStatus(ctx context.Context, params HostIteratorForTaskParams) ([]byte, error) {
-	postData, _ := json.Marshal(params)
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
 
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.ResetHostIteratorForTaskStatus", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ts.client.Do(ctx, request, nil)
@@ -595,14 +577,12 @@ type HostIteratorForTaskParamsEx struct {
 //	})
 func (ts *Tasks) ResetHostIteratorForTaskStatusEx(ctx context.Context, params HostIteratorForTaskParamsEx) (*StrHostIteratorId, []byte, error) {
 	postData, _ := json.Marshal(params)
-
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.ResetHostIteratorForTaskStatusEx", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	strHostIteratorId := new(StrHostIteratorId)
-
 	raw, err := ts.client.Do(ctx, request, &strHostIteratorId)
 	return strHostIteratorId, raw, err
 }
@@ -618,10 +598,9 @@ func (ts *Tasks) ResetHostIteratorForTaskStatusEx(ctx context.Context, params Ho
 //	- (int64) returns records count
 func (ts *Tasks) GetHostStatusRecordsCount(ctx context.Context, strHostIteratorId string) (*PxgValInt, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strHostIteratorId": "%s"}`, strHostIteratorId))
-
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.GetHostStatusRecordsCount", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	pxgValInt := new(PxgValInt)
@@ -662,10 +641,9 @@ func (ts *Tasks) GetHostStatusRecordsCount(ctx context.Context, strHostIteratorI
 func (ts *Tasks) GetHostStatusRecordRange(ctx context.Context, strHostIteratorId string, nStart, nEnd int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strHostIteratorId": "%s", "nStart": %d, "nEnd" : %d}`, strHostIteratorId,
 		nStart, nEnd))
-
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.GetHostStatusRecordRange", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ts.client.Do(ctx, request, nil)
@@ -683,10 +661,9 @@ func (ts *Tasks) GetHostStatusRecordRange(ctx context.Context, strHostIteratorId
 //	- (string) task id
 func (ts *Tasks) ResolveTaskId(ctx context.Context, strPrtsTaskId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strPrtsTaskId": "%s"}`, strPrtsTaskId))
-
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.ResolveTaskId", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ts.client.Do(ctx, request, nil)
@@ -707,10 +684,9 @@ func (ts *Tasks) ResolveTaskId(ctx context.Context, strPrtsTaskId string) ([]byt
 //	Call this method while pTaskData is not empty.
 func (ts *Tasks) GetNextTask(ctx context.Context, strTaskIteratorId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strTaskIteratorId": "%s"}`, strTaskIteratorId))
-
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.GetNextTask", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ts.client.Do(ctx, request, nil)
@@ -736,10 +712,9 @@ func (ts *Tasks) GetNextTask(ctx context.Context, strTaskIteratorId string) ([]b
 //	- (bool) return false if the iterator reached end of the record list, in this case nActual contains zero
 func (ts *Tasks) GetNextHostStatus(ctx context.Context, strTaskIteratorId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strTaskIteratorId": "%s"}`, strTaskIteratorId))
-
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.GetNextHostStatus", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ts.client.Do(ctx, request, nil)

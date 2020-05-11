@@ -23,7 +23,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"log"
 	"net/http"
 )
 
@@ -74,17 +73,18 @@ type PatchValue struct {
 //	- "CallResult" (bool) true if success
 //	- "ErrorDescription" (string) error description, empty if no error
 func (akp *AKPatches) ApprovePatch(ctx context.Context, params interface{}) ([]byte, error) {
-	postData, _ := json.Marshal(params)
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
 
 	request, err := http.NewRequest("POST", akp.client.Server+"/api/v1.0/AKPatches.ApprovePatch",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := akp.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -107,15 +107,12 @@ func (akp *AKPatches) ApprovePatch(ctx context.Context, params interface{}) ([]b
 //	- "ErrorDescription" (string) error description, empty if no error
 func (akp *AKPatches) ForbidPatch(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, _ := json.Marshal(params)
-
 	request, err := http.NewRequest("POST", akp.client.Server+"/api/v1.0/AKPatches.ForbidPatch",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := akp.client.Do(ctx, request, nil)
-
 	return raw, err
 }

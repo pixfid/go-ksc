@@ -28,7 +28,7 @@ import (
 	"errors"
 	"io"
 	"io/ioutil"
-	"log"
+
 	"net/http"
 )
 
@@ -40,6 +40,7 @@ type Config struct {
 
 //-------------Client------------------
 type Client struct {
+	AdfsSso                     *AdfsSso
 	AdHosts                     *AdHosts
 	AdmServerSettings           *AdmServerSettings
 	AppCtrlApi                  *AppCtrlApi
@@ -63,18 +64,26 @@ type Client struct {
 	HWInvStorage                *HWInvStorage
 	GroupSyncIterator           *GroupSyncIterator
 	InventoryApi                *InventoryApi
+	InvLicenseProducts          *InvLicenseProducts
+	KsnInternal                 *KsnInternal
 	LicenseKeys                 *LicenseKeys
 	LicensePolicy               *LicensePolicy
 	Limits                      *Limits
 	ListTags                    *ListTags
 	Multitenancy                *Multitenancy
 	NagCgwHelper                *NagCgwHelper
+	NagGuiCalls                 *NagGuiCalls
 	NagHstCtl                   *NagHstCtl
+	NagRdu                      *NagRdu
 	PackagesApi                 *PackagesApi
 	Policy                      *Policy
+	ScanDiapasons               *ScanDiapasons
 	SecurityPolicy3             *SecurityPolicy3
 	ServerHierarchy             *ServerHierarchy
+	ServerTransportSettings     *ServerTransportSettings
 	Session                     *Session
+	SmsQueue                    *SmsQueue
+	SmsSenders                  *SmsSenders
 	SrvView                     *SrvView
 	SsContents                  *SsContents
 	Tasks                       *Tasks
@@ -108,7 +117,9 @@ func New(cfg Config) *Client {
 		UserName: cfg.Username,
 		Password: cfg.Password,
 	}
+
 	c.common.client = c
+	c.AdfsSso = (*AdfsSso)(&c.common)
 	c.DatabaseInfo = (*DatabaseInfo)(&c.common)
 	c.AdHosts = (*AdHosts)(&c.common)
 	c.AdmServerSettings = (*AdmServerSettings)(&c.common)
@@ -133,18 +144,26 @@ func New(cfg Config) *Client {
 	c.HWInvStorage = (*HWInvStorage)(&c.common)
 	c.GroupSyncIterator = (*GroupSyncIterator)(&c.common)
 	c.InventoryApi = (*InventoryApi)(&c.common)
+	c.InvLicenseProducts = (*InvLicenseProducts)(&c.common)
+	c.KsnInternal = (*KsnInternal)(&c.common)
 	c.LicenseKeys = (*LicenseKeys)(&c.common)
 	c.LicensePolicy = (*LicensePolicy)(&c.common)
 	c.Limits = (*Limits)(&c.common)
 	c.ListTags = (*ListTags)(&c.common)
 	c.Multitenancy = (*Multitenancy)(&c.common)
 	c.NagCgwHelper = (*NagCgwHelper)(&c.common)
+	c.NagGuiCalls = (*NagGuiCalls)(&c.common)
 	c.NagHstCtl = (*NagHstCtl)(&c.common)
+	c.NagRdu = (*NagRdu)(&c.common)
 	c.PackagesApi = (*PackagesApi)(&c.common)
 	c.Policy = (*Policy)(&c.common)
+	c.ScanDiapasons = (*ScanDiapasons)(&c.common)
 	c.SecurityPolicy3 = (*SecurityPolicy3)(&c.common)
 	c.ServerHierarchy = (*ServerHierarchy)(&c.common)
+	c.ServerTransportSettings = (*ServerTransportSettings)(&c.common)
 	c.Session = (*Session)(&c.common)
+	c.SmsQueue = (*SmsQueue)(&c.common)
+	c.SmsSenders = (*SmsSenders)(&c.common)
 	c.SrvView = (*SrvView)(&c.common)
 	c.SsContents = (*SsContents)(&c.common)
 	c.Tasks = (*Tasks)(&c.common)
@@ -158,14 +177,13 @@ func New(cfg Config) *Client {
 	return c
 }
 
-func (c *Client) KSCAuth(ctx context.Context) {
+func (c *Client) KSCAuth(ctx context.Context) error {
 	c.UserName = base64.StdEncoding.EncodeToString([]byte(c.UserName))
 	c.Password = base64.StdEncoding.EncodeToString([]byte(c.Password))
 
 	request, err := http.NewRequest("POST", c.Server+"/api/v1.0/login", nil)
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return err
 	}
 
 	request.Header.Set("Authorization", "KSCBasic user=\""+c.UserName+"\", pass=\""+c.Password+"\"")
@@ -173,7 +191,7 @@ func (c *Client) KSCAuth(ctx context.Context) {
 	request.Header.Set("Content-Length", "2")
 
 	_, err = c.Do(ctx, request, nil)
-
+	return err
 }
 
 func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (dt []byte, err error) {

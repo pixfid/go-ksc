@@ -153,3 +153,15 @@ type PFilter struct {
 	KlevpRfc2254Filter         string `json:"KLEVP_RFC2254_FILTER"`
 	KlevpEventRiseTimeLastDays int64  `json:"KLEVP_EVENT_RISE_TIME_LAST_DAYS"`
 }
+
+// Bool is a helper routine that allocates a new bool value
+// to store v and returns a pointer to it.
+func Bool(v bool) *bool { return &v }
+
+// Int64 is a helper routine that allocates a new int64 value
+// to store v and returns a pointer to it.
+func Int64(v int64) *int64 { return &v }
+
+// String is a helper routine that allocates a new string value
+// to store v and returns a pointer to it.
+func String(v string) *string { return &v }

@@ -23,7 +23,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 )
 
@@ -49,7 +48,6 @@ type HostMoveRules service
 //
 //See List of extended host moving rule attributes
 func (hs *HostMoveRules) GetRules(ctx context.Context) ([]byte, error) {
-
 	postData := []byte(fmt.Sprintf(`
 	{
 	"pFields": ["KLHST_MR_ID",
@@ -73,11 +71,9 @@ func (hs *HostMoveRules) GetRules(ctx context.Context) ([]byte, error) {
 		"KLHST_MR_Custom",
 		"KLHST_MR_SPECIAL"]
 	}`))
-
 	request, err := http.NewRequest("POST", hs.client.Server+"/api/v1.0/HostMoveRules.GetRules", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hs.client.Do(ctx, request, nil)
@@ -94,17 +90,13 @@ func (hs *HostMoveRules) GetRules(ctx context.Context) ([]byte, error) {
 //	Returns:
 //	- (params) object containing attributes of specified rule, see List of extended host moving rule attributes
 func (hs *HostMoveRules) GetRule(ctx context.Context, nRule int64) ([]byte, error) {
-
 	postData := []byte(fmt.Sprintf(`{"nRule": %d}`, nRule))
-
 	request, err := http.NewRequest("POST", hs.client.Server+"/api/v1.0/HostMoveRules.GetRule", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hs.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -115,17 +107,13 @@ func (hs *HostMoveRules) GetRule(ctx context.Context, nRule int64) ([]byte, erro
 //	Parameters:
 //	- nRule	(int64) id of rule to remove
 func (hs *HostMoveRules) DeleteRule(ctx context.Context, nRule int64) ([]byte, error) {
-
 	postData := []byte(fmt.Sprintf(`{"nRule": %d}`, nRule))
-
 	request, err := http.NewRequest("POST", hs.client.Server+"/api/v1.0/HostMoveRules.DeleteRule", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hs.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 

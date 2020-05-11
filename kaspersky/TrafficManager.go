@@ -24,7 +24,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
+
 	"net/http"
 )
 
@@ -94,10 +94,14 @@ type TrafficPRestrictions struct {
 //	Returns:
 //	- (int64) added restriction id
 func (uc *TrafficManager) AddRestriction(ctx context.Context, params interface{}) (*PxgValInt, []byte, error) {
-	postData, _ := json.Marshal(params)
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+
 	request, err := http.NewRequest("POST", uc.client.Server+"/api/v1.0/TrafficManager.AddRestriction", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	pxgValInt := new(PxgValInt)
@@ -113,7 +117,7 @@ func (uc *TrafficManager) DeleteRestriction(ctx context.Context, nRestrictionId 
 	postData := []byte(fmt.Sprintf(`{"nRestrictionId": %d}`, nRestrictionId))
 	request, err := http.NewRequest("POST", uc.client.Server+"/api/v1.0/TrafficManager.DeleteRestriction", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := uc.client.Do(ctx, request, nil)
@@ -161,7 +165,7 @@ func (uc *TrafficManager) DeleteRestriction(ctx context.Context, nRestrictionId 
 func (uc *TrafficManager) GetRestrictions(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", uc.client.Server+"/api/v1.0/TrafficManager.GetRestrictions", nil)
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := uc.client.Do(ctx, request, nil)
@@ -197,7 +201,7 @@ func (uc *TrafficManager) UpdateRestriction(ctx context.Context, params interfac
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", uc.client.Server+"/api/v1.0/TrafficManager.UpdateRestriction", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := uc.client.Do(ctx, request, nil)

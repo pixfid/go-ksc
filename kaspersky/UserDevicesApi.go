@@ -23,7 +23,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"log"
+
 	"net/http"
 )
 
@@ -43,16 +43,13 @@ type UserDevicesApi service
 //	- (bool) true if the command has been successfully deleted
 func (uda *UserDevicesApi) DeleteCommand(ctx context.Context, c_wstrCommandGuid string, bForced bool) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"c_wstrCommandGuid" : "%s", "bForced" : %v }`, c_wstrCommandGuid, bForced))
-
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.DeleteCommand",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := uda.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -62,16 +59,13 @@ func (uda *UserDevicesApi) DeleteCommand(ctx context.Context, c_wstrCommandGuid 
 //	- lDeviceId	(int64) device id
 func (uda *UserDevicesApi) DeleteDevice(ctx context.Context, lDeviceId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lDeviceId": %d }`, lDeviceId))
-
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.DeleteDevice",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := uda.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -81,16 +75,13 @@ func (uda *UserDevicesApi) DeleteDevice(ctx context.Context, lDeviceId int64) ([
 //	- lEnrPkgId	(int64) enrollment package id
 func (uda *UserDevicesApi) DeleteEnrollmentPackage(ctx context.Context, lEnrPkgId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lEnrPkgId": %d }`, lEnrPkgId))
-
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.DeleteEnrollmentPackage",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := uda.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -109,16 +100,13 @@ func (uda *UserDevicesApi) GenerateQRCode(ctx context.Context, strInputData stri
 	lImageFormat int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strInputData": "%s", "lQRCodeSize": %d, "lImageFormat": %d }`, strInputData,
 		lQRCodeSize, lImageFormat))
-
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GenerateQRCode",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := uda.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -153,16 +141,13 @@ func (uda *UserDevicesApi) GenerateQRCode(ctx context.Context, strInputData stri
 // +---------------------------+--------+---------------------------------------------------------------------------------------------+
 func (uda *UserDevicesApi) GetCommands(ctx context.Context, lDeviceId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lDeviceId": %d }`, lDeviceId))
-
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GetCommands",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := uda.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -180,16 +165,13 @@ func (uda *UserDevicesApi) GetCommands(ctx context.Context, lDeviceId int64) ([]
 //	| "KLMDM_CMD_DEF_DISPLAY_NAME" | string | Default display name, localized by the Security Center |
 //	+------------------------------+--------+--------------------------------------------------------+
 func (uda *UserDevicesApi) GetCommandsLibrary(ctx context.Context) ([]byte, error) {
-
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GetCommandsLibrary",
 		nil)
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := uda.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -204,16 +186,13 @@ func (uda *UserDevicesApi) GetCommandsLibrary(ctx context.Context) ([]byte, erro
 //	- (params) device info, container Params contains attributes from List of device attributes
 func (uda *UserDevicesApi) GetDevice(ctx context.Context, lDeviceId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lDeviceId": %d }`, lDeviceId))
-
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GetDevice",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := uda.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -228,16 +207,13 @@ func (uda *UserDevicesApi) GetDevice(ctx context.Context, lDeviceId int64) ([]by
 //	- (params) container with enrollment package info (see Device enrollment packages info)
 func (uda *UserDevicesApi) GetEnrollmentPackage(ctx context.Context, llEnrPkgId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"llEnrPkgId": %d }`, llEnrPkgId))
-
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GetEnrollmentPackage",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := uda.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -250,16 +226,13 @@ func (uda *UserDevicesApi) GetEnrollmentPackageFileData(ctx context.Context, c_w
 		"lQRCodeSize": %d, 
 		"lImageFormat":%d
 	}`, c_wstrPackageId, c_wstrPackageFileType, lBuffOffset, lBuffSize))
-
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GetEnrollmentPackageFileData",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := uda.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -281,16 +254,13 @@ func (uda *UserDevicesApi) GetEnrollmentPackageFileInfo(ctx context.Context, c_w
 		"c_wstrUserAgent": "%s",
 		"c_wstrPackageFileType": "%s"
 	}`, c_wstrPackageId, c_wstrUserAgent, c_wstrPackageFileType))
-
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GetEnrollmentPackageFileInfo",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := uda.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -305,16 +275,13 @@ func (uda *UserDevicesApi) GetEnrollmentPackageFileInfo(ctx context.Context, c_w
 //	- (params) command result
 func (uda *UserDevicesApi) GetJournalCommandResult(ctx context.Context, llJrnlId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"llJrnlId": %d }`, llJrnlId))
-
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GetJournalCommandResult",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := uda.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -329,16 +296,13 @@ func (uda *UserDevicesApi) GetJournalCommandResult(ctx context.Context, llJrnlId
 //	- (array) array, each element contains record about completed or failed commands (see Journal records)
 func (uda *UserDevicesApi) GetJournalRecords(ctx context.Context, lDeviceId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lDeviceId": %d }`, lDeviceId))
-
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GetJournalRecords",
 		bytes.NewBuffer(postData))
 
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
-
 	raw, err := uda.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -354,16 +318,13 @@ func (uda *UserDevicesApi) GetJournalRecords(ctx context.Context, lDeviceId int6
 //	- (array) array, each element contains record about completed or failed commands (see Journal records)
 func (uda *UserDevicesApi) GetJournalRecords2(ctx context.Context, lDeviceId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lDeviceId": %d }`, lDeviceId))
-
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GetJournalRecords2",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := uda.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -376,16 +337,13 @@ func (uda *UserDevicesApi) GetJournalRecords2(ctx context.Context, lDeviceId int
 //	- (datetime) latest device activity date
 func (uda *UserDevicesApi) GetLatestDeviceActivityDate(ctx context.Context, lDeviceId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lDeviceId": %d }`, lDeviceId))
-
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GetLatestDeviceActivityDate",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := uda.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -400,16 +358,12 @@ func (uda *UserDevicesApi) GetLatestDeviceActivityDate(ctx context.Context, lDev
 func (uda *UserDevicesApi) GetMobileAgentSettingStorageData(ctx context.Context, lDeviceId int64,
 	c_wstrSectionName string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lDeviceId": %d, "c_wstrSectionName" : "%s" }`, lDeviceId, c_wstrSectionName))
-
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GetMobileAgentSettingStorageData",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
-
 	raw, err := uda.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -425,18 +379,14 @@ func (uda *UserDevicesApi) GetMobileAgentSettingStorageData(ctx context.Context,
 //	now settings available only for KLUMDM::MDMProtocol_IOSMDM (see MDM4IOS multitenancy server settings)
 func (uda *UserDevicesApi) GetMultitenancyServerSettings(ctx context.Context, c_wstrMtncServerId string) ([]byte,
 	error) {
-
 	postData := []byte(fmt.Sprintf(`{"c_wstrMtncServerId": "%s" }`, c_wstrMtncServerId))
-
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GetMultitenancyServerSettings",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := uda.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -449,18 +399,14 @@ func (uda *UserDevicesApi) GetMultitenancyServerSettings(ctx context.Context, c_
 //	- (array) array, each element contains information about multitenancy servers (see Multitenancy servers info)
 func (uda *UserDevicesApi) GetMultitenancyServersInfo(ctx context.Context, nProtocolIds int64) ([]byte,
 	error) {
-
 	postData := []byte(fmt.Sprintf(`{"nProtocolIds" : %d }`, nProtocolIds))
-
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GetMultitenancyServersInfo",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := uda.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -470,16 +416,14 @@ func (uda *UserDevicesApi) GetMultitenancyServersInfo(ctx context.Context, nProt
 //	- (bool) flag which means install or don't install SafeBrowser automatically
 func (uda *UserDevicesApi) GetSafeBrowserAutoinstallFlag(ctx context.Context) (*PxgValBool, []byte,
 	error) {
-
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GetSafeBrowserAutoinstallFlag",
 		nil)
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
+
 	pxgValBool := new(PxgValBool)
 	raw, err := uda.client.Do(ctx, request, &pxgValBool)
-
 	return pxgValBool, raw, err
 }
 
@@ -494,18 +438,14 @@ func (uda *UserDevicesApi) GetSafeBrowserAutoinstallFlag(ctx context.Context) (*
 //	Deprecated:
 func (uda *UserDevicesApi) GlueDevices(ctx context.Context, lDevice1Id, lDevice2Id int64) ([]byte,
 	error) {
-
 	postData := []byte(fmt.Sprintf(`{"lDevice1Id": %d, "lDevice2Id" : %d }`, lDevice1Id, lDevice2Id))
-
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GlueDevices",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := uda.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -520,18 +460,14 @@ func (uda *UserDevicesApi) GlueDevices(ctx context.Context, lDevice1Id, lDevice2
 //	- (bool) true if the command has not been delivered to the device yet
 func (uda *UserDevicesApi) RecallCommand(ctx context.Context, c_wstrCommandGuid string) ([]byte,
 	error) {
-
 	postData := []byte(fmt.Sprintf(`{"c_wstrCommandGuid": "%s"}`, c_wstrCommandGuid))
-
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.RecallCommand",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := uda.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -543,18 +479,14 @@ func (uda *UserDevicesApi) RecallCommand(ctx context.Context, c_wstrCommandGuid 
 //	- bInstall	(bool) flag means install or don't install SafeBrowser automatically
 func (uda *UserDevicesApi) SetSafeBrowserAutoinstallFlag(ctx context.Context, bInstall bool) ([]byte,
 	error) {
-
 	postData := []byte(fmt.Sprintf(`{"bInstall": %v}`, bInstall))
-
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.SetSafeBrowserAutoinstallFlag",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := uda.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 
@@ -564,16 +496,13 @@ func (uda *UserDevicesApi) SetSafeBrowserAutoinstallFlag(ctx context.Context, bI
 //	- STDE_NOACCESS	if login to SSP is not allowed
 func (uda *UserDevicesApi) SspLoginAllowed(ctx context.Context) ([]byte,
 	error) {
-
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.SspLoginAllowed",
 		nil)
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := uda.client.Do(ctx, request, nil)
-
 	return raw, err
 }
 

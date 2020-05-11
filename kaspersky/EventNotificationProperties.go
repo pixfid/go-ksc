@@ -23,7 +23,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 )
 
@@ -49,10 +48,9 @@ type EventNotificationProperties service
 //	- (params) object containing the current notification settings
 //	- (see Events notification settings).
 func (enp *EventNotificationProperties) GetDefaultSettings(ctx context.Context) ([]byte, error) {
-
 	request, err := http.NewRequest("POST", enp.client.Server+"/api/v1.0/EventNotificationProperties.GetDefaultSettings", nil)
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := enp.client.Do(ctx, request, nil)
@@ -65,10 +63,9 @@ func (enp *EventNotificationProperties) GetDefaultSettings(ctx context.Context) 
 //	Returns:
 //	- (params) object containing the current notification limits (see Events notification settings).
 func (enp *EventNotificationProperties) GetNotificationLimits(ctx context.Context) ([]byte, error) {
-
 	request, err := http.NewRequest("POST", enp.client.Server+"/api/v1.0/EventNotificationProperties.GetNotificationLimits", nil)
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := enp.client.Do(ctx, request, nil)
@@ -94,10 +91,9 @@ func (enp *EventNotificationProperties) TestNotification(ctx context.Context, eT
 		"eType": %d,
 		"pSettings": %v
 	}`, eType, pSettings))
-
 	request, err := http.NewRequest("POST", enp.client.Server+"/api/v1.0/EventNotificationProperties.TestNotification", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := enp.client.Do(ctx, request, nil)

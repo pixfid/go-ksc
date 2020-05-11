@@ -23,7 +23,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 )
 
@@ -41,10 +40,9 @@ func (ht *HostTasks) GetNextTask(ctx context.Context, strSrvObjId string) ([]byt
 	{
 	"strSrvObjId": "%s"
 	}`, strSrvObjId))
-
 	request, err := http.NewRequest("POST", ht.client.Server+"/api/v1.0/HostTasks.GetNextTask", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ht.client.Do(ctx, request, nil)
@@ -72,10 +70,9 @@ func (ht *HostTasks) ResetTasksIterator(ctx context.Context, strSrvObjId, strPro
 		"strInstanceId": "%s",
 		"strTaskName": "%s"
 	}`, strSrvObjId, strProductName, strVersion, strComponentName, strInstanceId, strTaskName))
-
 	request, err := http.NewRequest("POST", ht.client.Server+"/api/v1.0/HostTasks.ResetTasksIterator", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ht.client.Do(ctx, request, nil)

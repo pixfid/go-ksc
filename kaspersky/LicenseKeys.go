@@ -24,7 +24,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 )
 
@@ -61,18 +60,14 @@ type LicenseKeys service
 //
 //	Throws	exception in case of error.
 func (lk *LicenseKeys) InstallKey(ctx context.Context, pKeyInfo interface{}) bool {
-
 	postData, _ := json.Marshal(pKeyInfo)
-
 	request, err := http.NewRequest("POST", lk.client.Server+"/api/v1.0/LicenseKeys.InstallKey",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return false
 	}
 
 	raw, err := lk.client.Do(ctx, request, nil)
-
 	if raw != nil {
 		return true
 	}
@@ -92,16 +87,13 @@ func (lk *LicenseKeys) DownloadKeyFiles(ctx context.Context, wstrActivationCode 
 	{
 	"wstrActivationCode": "%s"
 	}`, wstrActivationCode))
-
 	request, err := http.NewRequest("POST", lk.client.Server+"/api/v1.0/LicenseKeys.DownloadKeyFiles",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return false
 	}
 
 	raw, err := lk.client.Do(ctx, request, nil)
-
 	if raw != nil {
 		return true
 	}
@@ -146,17 +138,14 @@ type HostsKeyIterator struct {
 func (lk *LicenseKeys) AcquireKeyHosts(ctx context.Context, params AcquireKeyHostsParams) (*HostsKeyIterator,
 	[]byte, error) {
 	postData, _ := json.Marshal(params)
-
 	request, err := http.NewRequest("POST", lk.client.Server+"/api/v1.0/LicenseKeys.AcquireKeyHosts",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	hostsKeyIterator := new(HostsKeyIterator)
 	raw, err := lk.client.Do(ctx, request, &hostsKeyIterator)
-
 	return hostsKeyIterator, raw, nil
 }
 
@@ -186,9 +175,7 @@ type EnumKeysParams struct {
 //Exceptions:
 //	Throws	exception in case of error.
 func (lk *LicenseKeys) EnumKeys(ctx context.Context, params EnumKeysParams, v interface{}) ([]byte, error) {
-
 	postData, _ := json.Marshal(params)
-
 	request, err := http.NewRequest("POST", lk.client.Server+"/api/v1.0/LicenseKeys.EnumKeys",
 		bytes.NewBuffer(postData))
 
@@ -222,7 +209,6 @@ type PKeyInfo struct {
 //	(params) container with the requested key attribute values. See List of license key attributes for attribute names.
 func (lk *LicenseKeys) GetKeyData(ctx context.Context, params KeyDataParams, v interface{}) ([]byte, error) {
 	postData, _ := json.Marshal(params)
-
 	request, err := http.NewRequest("POST", lk.client.Server+"/api/v1.0/LicenseKeys.GetKeyData",
 		bytes.NewBuffer(postData))
 

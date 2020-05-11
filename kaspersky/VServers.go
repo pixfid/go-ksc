@@ -48,8 +48,8 @@ type VServers service
 //	(see List of virtual server attributes).
 func (vs *VServers) GetVServers(ctx context.Context, lParentGroup int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lParentGroup": %d}`, lParentGroup))
-
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.GetVServers", bytes.NewBuffer(postData))
+
 	raw, err := vs.client.Do(ctx, request, nil)
 	return raw, err
 }
@@ -89,6 +89,7 @@ func (vs *VServers) GetVServers(ctx context.Context, lParentGroup int64) ([]byte
 func (vs *VServers) AddVServerInfo(ctx context.Context, strDisplayName string, lParentGroup int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lParentGroup": %d, "strDisplayName" : "%s"}`, lParentGroup, strDisplayName))
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.AddVServerInfo", bytes.NewBuffer(postData))
+
 	raw, err := vs.client.Do(ctx, request, nil)
 	return raw, err
 }
@@ -103,8 +104,8 @@ func (vs *VServers) AddVServerInfo(ctx context.Context, strDisplayName string, l
 //	to get status use AsyncActionStateChecker.CheckActionState
 func (vs *VServers) DelVServer(ctx context.Context, lVServer int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))
-
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.DelVServer", bytes.NewBuffer(postData))
+
 	raw, err := vs.client.Do(ctx, request, nil)
 	return raw, err
 }
@@ -117,8 +118,8 @@ func (vs *VServers) DelVServer(ctx context.Context, lVServer int64) ([]byte, err
 //	- lVServer	(int64) virtual server id
 func (vs *VServers) GetPermissions(ctx context.Context, lVServer int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))
-
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.GetPermissions", bytes.NewBuffer(postData))
+
 	raw, err := vs.client.Do(ctx, request, nil)
 	return raw, err
 }
@@ -157,6 +158,7 @@ func (vs *VServers) GetVServerInfo(ctx context.Context, lVServer int64) ([]byte,
 	postData, _ := json.Marshal(v)
 
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.GetVServerInfo", bytes.NewBuffer(postData))
+
 	raw, err := vs.client.Do(ctx, request, nil)
 	return raw, err
 }
@@ -177,6 +179,7 @@ func (vs *VServers) MoveVServer(ctx context.Context, lVServer int64, lNewParentG
 	postData := []byte(fmt.Sprintf(`{"lVServer": %d, "lNewParentGroup" : %d}`, lVServer, lNewParentGroup))
 
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.MoveVServer", bytes.NewBuffer(postData))
+
 	wActionGUID := new(WActionGUID)
 	raw, err := vs.client.Do(ctx, request, &wActionGUID)
 	return wActionGUID, raw, err
@@ -191,6 +194,7 @@ func (vs *VServers) RecallCertAndCloseConnections(ctx context.Context, lVServer 
 	postData := []byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))
 
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.RecallCertAndCloseConnections", bytes.NewBuffer(postData))
+
 	raw, err := vs.client.Do(ctx, request, nil)
 	return raw, err
 }
@@ -209,6 +213,7 @@ func (vs *VServers) UpdateVServerInfo(ctx context.Context, lVServer int64, param
 	postData := []byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))
 
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.UpdateVServerInfo", bytes.NewBuffer(postData))
+
 	raw, err := vs.client.Do(ctx, request, nil)
 	return raw, err
 }
@@ -226,6 +231,7 @@ func (vs *VServers) SetPermissions(ctx context.Context, lVServer int64, params i
 	postData := []byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))
 
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.SetPermissions", bytes.NewBuffer(postData))
+
 	raw, err := vs.client.Do(ctx, request, nil)
 	return raw, err
 }

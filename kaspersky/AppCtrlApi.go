@@ -22,17 +22,27 @@ package kaspersky
 import (
 	"bytes"
 	"context"
-	"fmt"
-	"log"
+	"encoding/json"
 	"net/http"
 )
 
 //	AppCtrlApi Class Reference
-//	Interface to get info about execution files. More...
+//
 //	Interface to get info about execution files.
 //
 //	Public Member Functions
 type AppCtrlApi service
+
+type ExeFileInfoParams struct {
+	SzwHostID  *string     `json:"szwHostId,omitempty"`
+	LFileID    *int64      `json:"lFileId,omitempty"`
+	ExePFilter *ExePFilter `json:"pFilter,omitempty"`
+}
+
+type ExePFilter struct {
+	FileID   *string `json:"FILE_ID,omitempty"`
+	FileName *string `json:"FILE_NAME,omitempty"`
+}
 
 //	Get data about instances of the execution file on the host.
 //
@@ -53,21 +63,14 @@ type AppCtrlApi service
 //                            |
 //                            +--"FILE_NAME" = (string)""
 //
-func (ac *AppCtrlApi) GetExeFileInfo(ctx context.Context, szwHostId string, lFileId int64) bool {
-	//TODO Find correct request values
-	postData := []byte(fmt.Sprintf(`{"szwHostId": "%s", "lFileId" : %d }`, szwHostId, lFileId))
-
+func (ac *AppCtrlApi) GetExeFileInfo(ctx context.Context, params ExeFileInfoParams) ([]byte, error) {
+	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", ac.client.Server+"/api/v1.0/AppCtrlApi.GetExeFileInfo",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ac.client.Do(ctx, request, nil)
-
-	if raw != nil {
-		return true
-	}
-	return false
+	return raw, err
 }

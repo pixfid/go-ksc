@@ -23,7 +23,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"log"
+
 	"net/http"
 )
 
@@ -52,10 +52,9 @@ type SsContents service
 //	- wstrID	(string) identifier of opened SsContents
 func (sc *SsContents) Ss_Apply(ctx context.Context, wstrID string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`	{ "wstrID": "%s"}`, wstrID))
-
 	request, err := http.NewRequest("POST", sc.client.Server+"/api/v1.0/SsContents.Ss_Apply", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := sc.client.Do(ctx, request, nil)
@@ -85,10 +84,9 @@ func (sc *SsContents) Ss_CreateSection(ctx context.Context, wstrID, wstrProduct,
 		"wstrProduct": "%s",
 		"wstrVersion": "%s",
 		"wstrSection": "%s" }`, wstrID, wstrProduct, wstrVersion, wstrSection))
-
 	request, err := http.NewRequest("POST", sc.client.Server+"/api/v1.0/SsContents.Ss_CreateSection", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := sc.client.Do(ctx, request, nil)
@@ -104,10 +102,9 @@ func (sc *SsContents) Ss_DeleteSection(ctx context.Context, wstrID, wstrProduct,
 		"wstrProduct": "%s",
 		"wstrVersion": "%s",
 		"wstrSection": "%s" }`, wstrID, wstrProduct, wstrVersion, wstrSection))
-
 	request, err := http.NewRequest("POST", sc.client.Server+"/api/v1.0/SsContents.Ss_DeleteSection", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := sc.client.Do(ctx, request, nil)
@@ -133,10 +130,9 @@ func (sc *SsContents) SS_GetNames(ctx context.Context, wstrID, wstrProduct, wstr
 		wstrID,
 		wstrProduct,
 		wstrVersion))
-
 	request, err := http.NewRequest("POST", sc.client.Server+"/api/v1.0/SsContents.SS_GetNames", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := sc.client.Do(ctx, request, nil)
@@ -165,10 +161,9 @@ func (sc *SsContents) Ss_Read(ctx context.Context, wstrID, wstrProduct, wstrVers
 		"wstrProduct": "%s",
 		"wstrVersion": "%s",
 		"wstrSection": "%s" }`, wstrID, wstrProduct, wstrVersion, wstrSection))
-
 	request, err := http.NewRequest("POST", sc.client.Server+"/api/v1.0/SsContents.Ss_Read", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := sc.client.Do(ctx, request, nil)
@@ -184,10 +179,9 @@ func (sc *SsContents) Ss_Read(ctx context.Context, wstrID, wstrProduct, wstrVers
 //	- wstrID	(string) identifier of opened SsContents
 func (pl *SsContents) Ss_Release(ctx context.Context, wstrID string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrID": "%s"}`, wstrID))
-
 	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/SsContents.Ss_Release", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := pl.client.Do(ctx, request, nil)

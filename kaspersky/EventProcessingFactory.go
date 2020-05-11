@@ -23,7 +23,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"log"
 	"net/http"
 )
 
@@ -76,17 +75,14 @@ type EventPFP struct {
 func (epf *EventProcessingFactory) CreateEventProcessing(ctx context.Context, params interface{}) (*StrIteratorId,
 	[]byte, error) {
 	postData, _ := json.Marshal(params)
-
 	request, err := http.NewRequest("POST", epf.client.Server+"/api/v1.0/EventProcessingFactory.CreateEventProcessing",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	strIteratorId := new(StrIteratorId)
 	raw, err := epf.client.Do(ctx, request, &strIteratorId)
-
 	return strIteratorId, raw, err
 }
 
@@ -129,17 +125,14 @@ func (epf *EventProcessingFactory) CreateEventProcessing(ctx context.Context, pa
 func (epf *EventProcessingFactory) CreateEventProcessing2(ctx context.Context, params interface{}) (*StrIteratorId,
 	[]byte, error) {
 	postData, _ := json.Marshal(params)
-
 	request, err := http.NewRequest("POST", epf.client.Server+"/api/v1.0/EventProcessingFactory.CreateEventProcessing2",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	strIteratorId := new(StrIteratorId)
 	raw, err := epf.client.Do(ctx, request, &strIteratorId)
-
 	return strIteratorId, raw, err
 }
 
@@ -198,17 +191,14 @@ type EventPFH struct {
 func (epf *EventProcessingFactory) CreateEventProcessingForHost(ctx context.Context, params interface{}) (*StrIteratorId,
 	[]byte, error) {
 	postData, _ := json.Marshal(params)
-
 	request, err := http.NewRequest("POST", epf.client.Server+"/api/v1.0/EventProcessingFactory.CreateEventProcessingForHost",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	strIteratorId := new(StrIteratorId)
 	raw, err := epf.client.Do(ctx, request, &strIteratorId)
-
 	return strIteratorId, raw, err
 }
 
@@ -257,16 +247,13 @@ func (epf *EventProcessingFactory) CreateEventProcessingForHost(ctx context.Cont
 func (epf *EventProcessingFactory) CreateEventProcessingForHost2(ctx context.Context, params interface{}) (*StrIteratorId,
 	[]byte, error) {
 	postData, _ := json.Marshal(params)
-
 	request, err := http.NewRequest("POST", epf.client.Server+"/api/v1.0/EventProcessingFactory.CreateEventProcessingForHost2",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	strIteratorId := new(StrIteratorId)
 	raw, err := epf.client.Do(ctx, request, &strIteratorId)
-
 	return strIteratorId, raw, err
 }

@@ -24,7 +24,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 )
 
@@ -64,7 +63,7 @@ func (ce *ConEvents) Retrieve(ctx context.Context) ([]byte, error) {
 		nil)
 
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ce.client.Do(ctx, request, nil)
@@ -126,7 +125,7 @@ func (ce *ConEvents) Subscribe(ctx context.Context, v interface{}) ([]byte, erro
 	request, err := http.NewRequest("POST", ce.client.Server+"/api/v1.0/ConEvents.Subscribe", bytes.NewBuffer(postData))
 
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ce.client.Do(ctx, request, nil)
@@ -147,7 +146,7 @@ func (ce *ConEvents) UnSubscribe(ctx context.Context, nSubsId int64) ([]byte, er
 	request, err := http.NewRequest("POST", ce.client.Server+"/api/v1.0/ConEvents.UnSubscribe", bytes.NewBuffer(postData))
 
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ce.client.Do(ctx, request, nil)

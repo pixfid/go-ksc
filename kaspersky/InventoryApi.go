@@ -23,7 +23,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 )
 
@@ -52,16 +51,13 @@ type InventoryApi service
 //(params) contains following attributes:
 //	- raw []byte, err error
 func (ia *InventoryApi) GetHostInvProducts(ctx context.Context, szwHostId string, v interface{}) ([]byte, error) {
-
 	postData := []byte(fmt.Sprintf(`
 	{
 	"szwHostId": "%s"
 	}`, szwHostId))
-
 	request, err := http.NewRequest("POST", ia.client.Server+"/api/v1.0/InventoryApi.GetHostInvProducts", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ia.client.Do(ctx, request, &v)
@@ -89,11 +85,9 @@ func (ia *InventoryApi) GetHostInvPatches(ctx context.Context, szwHostId string,
 	{
 	"szwHostId": "%s"
 	}`, szwHostId))
-
 	request, err := http.NewRequest("POST", ia.client.Server+"/api/v1.0/InventoryApi.GetHostInvPatches", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ia.client.Do(ctx, request, &v)
@@ -113,8 +107,9 @@ func (ia *InventoryApi) GetHostInvPatches(ctx context.Context, szwHostId string,
 func (ia *InventoryApi) GetInvPatchesList(ctx context.Context, v interface{}) ([]byte, error) {
 	request, err := http.NewRequest("POST", ia.client.Server+"/api/v1.0/InventoryApi.GetInvPatchesList", nil)
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
+
 	raw, err := ia.client.Do(ctx, request, &v)
 	return raw, err
 }
@@ -130,7 +125,7 @@ func (ia *InventoryApi) GetInvPatchesList(ctx context.Context, v interface{}) ([
 func (ia *InventoryApi) GetInvProductsList(ctx context.Context, v interface{}) ([]byte, error) {
 	request, err := http.NewRequest("POST", ia.client.Server+"/api/v1.0/InventoryApi.GetInvProductsList", nil)
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ia.client.Do(ctx, request, &v)
@@ -144,7 +139,7 @@ func (ia *InventoryApi) GetInvProductsList(ctx context.Context, v interface{}) (
 func (ia *InventoryApi) DeleteUninstalledApps(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", ia.client.Server+"/api/v1.0/InventoryApi.DeleteUninstalledApps", nil)
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ia.client.Do(ctx, request, nil)
@@ -171,16 +166,13 @@ func (ia *InventoryApi) GetSrvCompetitorIniFileInfoList(ctx context.Context, wst
 	{
 		"wstrType": "%s"
 	}`, wstrType))
-
 	request, err := http.NewRequest("POST", ia.client.Server+"/api/v1.0/InventoryApi.GetSrvCompetitorIniFileInfoList", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	pxgValCIFIL := new(PxgValCIFIL)
 	raw, err := ia.client.Do(ctx, request, &pxgValCIFIL)
-
 	return pxgValCIFIL, raw, err
 }
 

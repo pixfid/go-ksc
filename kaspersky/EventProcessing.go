@@ -23,7 +23,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 )
 
@@ -45,11 +44,9 @@ type EventProcessing service
 //	- (int64) number of elements contained in the specified result-set.
 func (ts *EventProcessing) GetRecordCount(ctx context.Context, strIteratorId string) (*PxgValInt, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strIteratorId": "%s"}`, strIteratorId))
-
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/EventProcessing.GetRecordCount", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	pxgValInt := new(PxgValInt)
@@ -71,11 +68,9 @@ func (ts *EventProcessing) GetRecordCount(ctx context.Context, strIteratorId str
 func (ts *EventProcessing) GetRecordRange(ctx context.Context, strIteratorId string, nStart, nEnd int64) ([]byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"strIteratorId": "%s", "nStart": %d, "nEnd": %d}`, strIteratorId, nStart, nEnd))
-
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/EventProcessing.GetRecordRange", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ts.client.Do(ctx, request, nil)
@@ -91,11 +86,9 @@ func (ts *EventProcessing) GetRecordRange(ctx context.Context, strIteratorId str
 //	identifier of the server-side ordered collection of found data records.
 func (ts *EventProcessing) ReleaseIterator(ctx context.Context, strIteratorId string) (*PxgValInt, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strIteratorId": "%s"}`, strIteratorId))
-
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/EventProcessing.ReleaseIterator", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	pxgValInt := new(PxgValInt)
@@ -115,8 +108,8 @@ func (ts *EventProcessing) ReleaseIterator(ctx context.Context, strIteratorId st
 //
 //	EVP_EVENT_BLOCKS // paramArray
 //    +---0 // paramParams
-//        +---EVP_EVENT_BLOCK_BEGIN_ID // paramLong, write here Event ID (event_db_id) to set start of block, see List of event attributes for attribute names.
-//        +---EVP_EVENT_BLOCK_END_ID // paramLong, write here Event ID (event_db_id) to set end of block, see List of event attributes for attribute names.
+//        +---EVP_EVENT_BLOCK_BEGIN_ID // int64, write here Event ID (event_db_id) to set start of block, see List of event attributes for attribute names.
+//        +---EVP_EVENT_BLOCK_END_ID // int64, write here Event ID (event_db_id) to set end of block, see List of event attributes for attribute names.
 //    +---1 // paramParams
 //        ...
 //    ...
@@ -137,8 +130,8 @@ func (ts *EventProcessing) InitiateDelete(ctx context.Context, params interface{
 //
 //	EVP_EVENT_BLOCKS // paramArray
 //    +---0 // paramParams
-//        +---EVP_EVENT_BLOCK_BEGIN_ID // paramLong, write here Event ID (event_db_id) to set start of block, see List of event attributes for attribute names.
-//        +---EVP_EVENT_BLOCK_END_ID // paramLong, write here Event ID (event_db_id) to set end of block, see List of event attributes for attribute names.
+//        +---EVP_EVENT_BLOCK_BEGIN_ID // int64, write here Event ID (event_db_id) to set start of block, see List of event attributes for attribute names.
+//        +---EVP_EVENT_BLOCK_END_ID // int64, write here Event ID (event_db_id) to set end of block, see List of event attributes for attribute names.
 //    +---1 // paramParams
 //        ...
 //    ...

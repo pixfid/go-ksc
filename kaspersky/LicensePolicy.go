@@ -23,7 +23,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"log"
+
 	"net/http"
 )
 
@@ -53,13 +53,10 @@ type LicensePolicy service
 //	|             5 | PCLOUD is available via Pay-per-use (Paid AMI) licensing |
 //	+---------------+----------------------------------------------------------+
 func (lp *LicensePolicy) GetFreeLicenseCount(ctx context.Context, nFunctionality int64) ([]byte, error) {
-
 	postData := []byte(fmt.Sprintf(`{"nFunctionality": %d}`, nFunctionality))
-
 	request, err := http.NewRequest("POST", lp.client.Server+"/api/v1.0/LicensePolicy.GetFreeLicenseCount", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := lp.client.Do(ctx, request, nil)
@@ -86,13 +83,10 @@ func (lp *LicensePolicy) GetFreeLicenseCount(ctx context.Context, nFunctionality
 //	|             5 | PCLOUD is available via Pay-per-use (Paid AMI) licensing |
 //	+---------------+----------------------------------------------------------+
 func (lp *LicensePolicy) GetTotalLicenseCount(ctx context.Context, nFunctionality int64) ([]byte, error) {
-
 	postData := []byte(fmt.Sprintf(`{"nFunctionality": %d}`, nFunctionality))
-
 	request, err := http.NewRequest("POST", lp.client.Server+"/api/v1.0/LicensePolicy.GetTotalLicenseCount", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := lp.client.Do(ctx, request, nil)
@@ -119,13 +113,10 @@ func (lp *LicensePolicy) GetTotalLicenseCount(ctx context.Context, nFunctionalit
 //	|             5 | PCLOUD is available via Pay-per-use (Paid AMI) licensing |
 //	+---------------+----------------------------------------------------------+
 func (lp *LicensePolicy) IsLimitedMode(ctx context.Context, nFunctionality int64) ([]byte, error) {
-
 	postData := []byte(fmt.Sprintf(`{"nFunctionality": %d}`, nFunctionality))
-
 	request, err := http.NewRequest("POST", lp.client.Server+"/api/v1.0/LicensePolicy.IsLimitedMode", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := lp.client.Do(ctx, request, nil)
@@ -150,13 +141,10 @@ func (lp *LicensePolicy) IsLimitedMode(ctx context.Context, nFunctionality int64
 //	|             5 | PCLOUD is available via Pay-per-use (Paid AMI) licensing |
 //	+---------------+----------------------------------------------------------+
 func (lp *LicensePolicy) SetLimitedModeTest(ctx context.Context, bLimited bool, eFunctionality int64) ([]byte, error) {
-
 	postData := []byte(fmt.Sprintf(`{"bLimited": %v, "eFunctionality": %d}`, bLimited, eFunctionality))
-
 	request, err := http.NewRequest("POST", lp.client.Server+"/api/v1.0/LicensePolicy.SetLimitedModeTest", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := lp.client.Do(ctx, request, nil)
@@ -182,13 +170,10 @@ func (lp *LicensePolicy) SetLimitedModeTest(ctx context.Context, bLimited bool, 
 //	+---------------+----------------------------------------------------------+
 func (lp *LicensePolicy) SetTotalLicenseCountTest(ctx context.Context, eFunctionality, nCount int64) ([]byte,
 	error) {
-
 	postData := []byte(fmt.Sprintf(`{"eFunctionality": %d, "nCount": %d}`, eFunctionality, nCount))
-
 	request, err := http.NewRequest("POST", lp.client.Server+"/api/v1.0/LicensePolicy.SetTotalLicenseCountTest", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := lp.client.Do(ctx, request, nil)
@@ -213,13 +198,10 @@ func (lp *LicensePolicy) SetTotalLicenseCountTest(ctx context.Context, eFunction
 //	|             5 | PCLOUD is available via Pay-per-use (Paid AMI) licensing |
 //	+---------------+----------------------------------------------------------+
 func (lp *LicensePolicy) SetUsedLicenseCountTest(ctx context.Context, eFunctionality, nCount int64) ([]byte, error) {
-
 	postData := []byte(fmt.Sprintf(`{"eFunctionality": %d, "nCount": %d}`, eFunctionality, nCount))
-
 	request, err := http.NewRequest("POST", lp.client.Server+"/api/v1.0/LicensePolicy.SetUsedLicenseCountTest", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := lp.client.Do(ctx, request, nil)

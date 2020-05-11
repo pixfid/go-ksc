@@ -23,7 +23,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 )
 
@@ -41,11 +40,10 @@ type AdmServerSettings service
 func (as *AdmServerSettings) GetSharedFolder(ctx context.Context) (*PxgValStr, []byte, error) {
 	request, err := http.NewRequest("POST", as.client.Server+"/api/v1.0/AdmServerSettings.GetSharedFolder", nil)
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	pxgValStr := new(PxgValStr)
-
 	raw, err := as.client.Do(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
@@ -72,7 +70,7 @@ func (as *AdmServerSettings) ChangeSharedFolder(ctx context.Context, wstrNetwork
 	postData := []byte(fmt.Sprintf(`{"wstrNetworkPath": "%s"}`, wstrNetworkPath))
 	request, err := http.NewRequest("POST", as.client.Server+"/api/v1.0/AdmServerSettings.ChangeSharedFolder", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := as.client.Do(ctx, request, nil)

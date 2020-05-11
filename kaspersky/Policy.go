@@ -23,7 +23,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"log"
+
 	"net/http"
 )
 
@@ -75,10 +75,9 @@ type Klpol struct {
 //	- nPolicy	(int64) identifier of the policy to delete
 func (pl *Policy) DeletePolicy(ctx context.Context, nPolicy int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nPolicy": %d}`, nPolicy))
-
 	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.DeletePolicy", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := pl.client.Do(ctx, request, nil)
@@ -99,10 +98,9 @@ func (pl *Policy) DeletePolicy(ctx context.Context, nPolicy int64) ([]byte, erro
 //	List of policy attributes
 func (pl *Policy) GetEffectivePoliciesForGroup(ctx context.Context, nGroupId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nGroupId": %d}`, nGroupId))
-
 	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.GetEffectivePoliciesForGroup", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := pl.client.Do(ctx, request, nil)
@@ -121,10 +119,9 @@ func (pl *Policy) GetEffectivePoliciesForGroup(ctx context.Context, nGroupId int
 //	See also:
 //	Policy outbreak attributes
 func (pl *Policy) GetOutbreakPolicies(ctx context.Context) ([]byte, error) {
-
 	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.GetOutbreakPolicies", nil)
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := pl.client.Do(ctx, request, nil)
@@ -145,10 +142,9 @@ func (pl *Policy) GetOutbreakPolicies(ctx context.Context) ([]byte, error) {
 //	List of policy attributes
 func (pl *Policy) GetPoliciesForGroup(ctx context.Context, nGroupId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nGroupId": %d}`, nGroupId))
-
 	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.GetPoliciesForGroup", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := pl.client.Do(ctx, request, nil)
@@ -170,11 +166,11 @@ func (pl *Policy) GetPolicyContents(ctx context.Context, nPolicy, nRevisionId, n
 	error) {
 	postData := []byte(fmt.Sprintf(`{ "nPolicy": %d , "nRevisionId": %d , "nLifeTime": %d }`, nPolicy, nRevisionId,
 		nLifeTime))
-
 	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.GetPolicyContents", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
+
 	pxgValStr := new(PxgValStr)
 	raw, err := pl.client.Do(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
@@ -191,10 +187,9 @@ func (pl *Policy) GetPolicyContents(ctx context.Context, nPolicy, nRevisionId, n
 //	- (params) container with policy attributes ( See List of policy attributes)
 func (pl *Policy) GetPolicyData(ctx context.Context, nPolicy int64) (*PxgValPolicy, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nPolicy": %d}`, nPolicy))
-
 	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.GetPolicyData", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	pxgValPolicy := new(PxgValPolicy)
@@ -220,10 +215,9 @@ func (pl *Policy) GetPolicyData(ctx context.Context, nPolicy int64) (*PxgValPoli
 //	List of policy attributes
 func (pl *Policy) MakePolicyActive(ctx context.Context, nPolicy int64, bActive bool) (*PxgValPolicy, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nPolicy": %d, "bActive": %v}`, nPolicy, bActive))
-
 	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.MakePolicyActive", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	pxgValPolicy := new(PxgValPolicy)
@@ -246,10 +240,9 @@ func (pl *Policy) MakePolicyActive(ctx context.Context, nPolicy int64, bActive b
 //	List of policy attributes
 func (pl *Policy) MakePolicyRoaming(ctx context.Context, nPolicy int64) (*PxgValPolicy, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nPolicy": %d}`, nPolicy))
-
 	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.MakePolicyRoaming", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	pxgValPolicy := new(PxgValPolicy)
@@ -267,10 +260,9 @@ func (pl *Policy) MakePolicyRoaming(ctx context.Context, nPolicy int64) (*PxgVal
 func (pl *Policy) RevertPolicyToRevision(ctx context.Context, nPolicy, nRevisionId int64) (*PxgValPolicy, []byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"nPolicy": %d, "nRevisionId": %d}`, nPolicy, nRevisionId))
-
 	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.RevertPolicyToRevision", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	pxgValPolicy := new(PxgValPolicy)

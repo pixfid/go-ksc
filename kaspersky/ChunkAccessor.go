@@ -24,7 +24,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 )
 
@@ -45,15 +44,12 @@ type ChunkAccessor service
 //	- strAccessor	(string) result-set ID, identifier of the server-side ordered collection of found hosts
 func (ca *ChunkAccessor) Release(ctx context.Context, accessor string) bool {
 	postData := []byte(fmt.Sprintf(`{"strAccessor": "%s"}`, accessor))
-
 	request, err := http.NewRequest("POST", ca.client.Server+"/api/v1.0/ChunkAccessor.Release", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return false
 	}
 
 	raw, err := ca.client.Do(ctx, request, nil)
-
 	if raw != nil {
 		return true
 	}
@@ -69,18 +65,14 @@ func (ca *ChunkAccessor) Release(ctx context.Context, accessor string) bool {
 //Returns:
 //	- (data.PxgValInt) number of elements contained in the specified result-set
 func (ca *ChunkAccessor) GetItemsCount(ctx context.Context, accessor string) (*PxgValInt, []byte, error) {
-
 	postData := []byte(fmt.Sprintf(`	{"strAccessor": "%s"}`, accessor))
 	request, err := http.NewRequest("POST", ca.client.Server+"/api/v1.0/ChunkAccessor.GetItemsCount", bytes.NewBuffer(postData))
-
 	if err != nil {
 		panic(err)
 	}
 
 	pxgValInt := new(PxgValInt)
-
 	raw, err := ca.client.Do(ctx, request, &pxgValInt)
-
 	return pxgValInt, raw, err
 }
 
@@ -101,15 +93,14 @@ type ItemsChunkParams struct {
 //	- [out]	pChunk	(params) container that has needed elements in the array with name "KLCSP_ITERATOR_ARRAY"
 //	Returns:
 //	- (int64) actual number of returned elements (less or equal to nCount)
-func (ca *ChunkAccessor) GetItemsChunk(ctx context.Context, icp ItemsChunkParams, result interface{}) ([]byte,
+func (ca *ChunkAccessor) GetItemsChunk(ctx context.Context, params ItemsChunkParams, result interface{}) ([]byte,
 	error) {
-
-	postData, _ := json.Marshal(icp)
+	postData, _ := json.Marshal(params)
 
 	request, err := http.NewRequest("POST", ca.client.Server+"/api/v1.0/ChunkAccessor.GetItemsChunk", bytes.NewBuffer(postData))
 
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ca.client.Do(ctx, request, &result)

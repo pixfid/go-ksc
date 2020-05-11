@@ -23,7 +23,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"log"
 	"net/http"
 )
 
@@ -59,12 +58,11 @@ type PEventBody struct {
 //	|- tmBirthTime	(datetime) time when event was published
 func (ts *EventNotificationsApi) PublishEvent(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, _ := json.Marshal(params)
-
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/EventNotificationsApi.PublishEvent", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
+
 	raw, err := ts.client.Do(ctx, request, nil)
 	return raw, err
 }

@@ -23,7 +23,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"log"
+
 	"net/http"
 )
 
@@ -78,10 +78,9 @@ func (nc *NagCgwHelper) GetProductComponentLocation(ctx context.Context, szwProd
 		"szwVersion": "%s",
 		"szwComponent": "%s"
 	}`, szwProduct, szwVersion, szwComponent))
-
 	request, err := http.NewRequest("POST", nc.client.Server+"/api/v1.0/NagCgwHelper.GetProductComponentLocation", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := nc.client.Do(ctx, request, nil)

@@ -23,7 +23,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 )
 
@@ -49,9 +48,8 @@ func (cp *CertPoolCtrl2) GetCertificateInfoDetails(ctx context.Context, nVServer
 	postData := []byte(fmt.Sprintf(`{"nVServerId": %d, "nFunction" : %d }`, nVServerId, nFunction))
 	request, err := http.NewRequest("POST", cp.client.Server+"/api/v1.0/CertPoolCtrl2.GetCertificateInfoDetails",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := cp.client.Do(ctx, request, nil)

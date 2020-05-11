@@ -103,11 +103,12 @@ type ADHostIterator struct {
 //ChunkAccessor.Release has been called.
 func (ah *AdHosts) FindAdGroups(ctx context.Context, params FindAdGroupsParams) (*ADHostIterator, []byte, error) {
 	postData, _ := json.Marshal(params)
-
 	request, err := http.NewRequest("POST", ah.client.Server+"/api/v1.0/AdHosts.FindAdGroups", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
 
 	aDHostIterator := new(ADHostIterator)
-
 	raw, err := ah.client.Do(ctx, request, &aDHostIterator)
 	return aDHostIterator, raw, err
 }
@@ -142,7 +143,6 @@ type AdHstIDParentPxgRetVal struct {
 func (ah *AdHosts) GetChildComputer(ctx context.Context, params ChildComputerParams) (*AdHstIDParent,
 	[]byte, error) {
 	postData, _ := json.Marshal(params)
-
 	request, err := http.NewRequest("POST", ah.client.Server+"/api/v1.0/AdHosts.GetChildComputer", bytes.NewBuffer(postData))
 
 	adHstIdParent := new(AdHstIDParent)
@@ -204,15 +204,14 @@ func (ah *AdHosts) GetChildComputer(ctx context.Context, params ChildComputerPar
 //	Session to the Administration Server has been closed.
 //	ChunkAccessor.Release has been called.
 func (ah *AdHosts) GetChildComputers(ctx context.Context, params ChildComputersParams) (*PxgValStr, []byte, error) {
-
 	postData, _ := json.Marshal(params)
-
 	request, err := http.NewRequest("POST", ah.client.Server+"/api/v1.0/AdHosts.GetChildComputers", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
 
 	pxgValStr := new(PxgValStr)
-
 	raw, err := ah.client.Do(ctx, request, &pxgValStr)
-
 	return pxgValStr, raw, err
 }
 
@@ -309,8 +308,11 @@ type AdhstBinOu struct {
 //   (params) object containing specified attributes
 func (ah *AdHosts) GetOU(ctx context.Context, params OUAttributesParams) (*OUAttributes, []byte, error) {
 	postData, _ := json.Marshal(params)
-
 	request, err := http.NewRequest("POST", ah.client.Server+"/api/v1.0/AdHosts.GetOU", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
 	oUAttributes := new(OUAttributes)
 	raw, err := ah.client.Do(ctx, request, &oUAttributes)
 	return oUAttributes, raw, err

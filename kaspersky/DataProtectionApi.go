@@ -23,7 +23,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 )
 
@@ -64,10 +63,9 @@ type DataProtectionApi service
 //	- KLSTD::STDE_NOFUNC	the password does not comply with the password policy
 func (dp *DataProtectionApi) CheckPasswordSplPpc(ctx context.Context, szwPassword string) (*PxgValBool, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"szwPassword": "%s"}`, szwPassword))
-
 	request, err := http.NewRequest("POST", dp.client.Server+"/api/v1.0/DataProtectionApi.CheckPasswordSplPpc", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	pxgValBool := new(PxgValBool)
@@ -112,10 +110,9 @@ func (dp *DataProtectionApi) CheckPasswordSplPpc(ctx context.Context, szwPasswor
 func (dp *DataProtectionApi) ProtectUtf16StringForHost(ctx context.Context, szwHostId, szwPlainText string) ([]byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"szwPassword" : "%s", "szwPlainText" : "%s"}`, szwHostId, szwPlainText))
-
 	request, err := http.NewRequest("POST", dp.client.Server+"/api/v1.0/DataProtectionApi.ProtectUtf16StringForHost", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := dp.client.Do(ctx, request, nil)
@@ -138,10 +135,9 @@ func (dp *DataProtectionApi) ProtectUtf16StringForHost(ctx context.Context, szwH
 func (dp *DataProtectionApi) ProtectUtf16StringGlobally(ctx context.Context, szwPlainText string) ([]byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"szwPlainText" : "%s"}`, szwPlainText))
-
 	request, err := http.NewRequest("POST", dp.client.Server+"/api/v1.0/DataProtectionApi.ProtectUtf16StringGlobally", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := dp.client.Do(ctx, request, nil)
@@ -163,10 +159,9 @@ func (dp *DataProtectionApi) ProtectUtf16StringGlobally(ctx context.Context, szw
 func (dp *DataProtectionApi) ProtectUtf8StringForHost(ctx context.Context, szwHostId, szwPlainText string) ([]byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"szwPassword" : "%s", "szwPlainText" : "%s"}`, szwHostId, szwPlainText))
-
 	request, err := http.NewRequest("POST", dp.client.Server+"/api/v1.0/DataProtectionApi.ProtectUtf8StringForHost", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := dp.client.Do(ctx, request, nil)
@@ -187,10 +182,9 @@ func (dp *DataProtectionApi) ProtectUtf8StringForHost(ctx context.Context, szwHo
 func (dp *DataProtectionApi) ProtectUtf8StringGlobally(ctx context.Context, szwPlainText string) ([]byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"szwPlainText" : "%s"}`, szwPlainText))
-
 	request, err := http.NewRequest("POST", dp.client.Server+"/api/v1.0/DataProtectionApi.ProtectUtf8StringGlobally", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := dp.client.Do(ctx, request, nil)

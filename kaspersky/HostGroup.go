@@ -24,7 +24,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 )
 
@@ -50,10 +49,9 @@ func (hg *HostGroup) AddDomain(ctx context.Context, strDomain string, nType int6
 	{
 	"strDomain": "%s", "nType" : %d
 	}`, strDomain, nType))
-
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.AddDomain", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hg.client.Do(ctx, request, nil)
@@ -79,10 +77,9 @@ func (hg *HostGroup) AddGroup(ctx context.Context, name string, parentId int) (*
         	"parentId": %d
     	}
 	}`, name, parentId))
-
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.AddGroup", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	pxgValInt := new(PxgValInt)
@@ -101,10 +98,9 @@ func (hg *HostGroup) AddGroup(ctx context.Context, name string, parentId int) (*
 func (hg *HostGroup) AddGroupHostsForSync(ctx context.Context, nGroupId int64, strSSType string) (*WActionGUID, []byte,
 	error) {
 	postData := []byte(fmt.Sprintf(` {"nGroupId": %d , "strSSType": "%s" }`, nGroupId, strSSType))
-
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.AddGroupHostsForSync", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	wActionGUID := new(WActionGUID)
@@ -140,11 +136,14 @@ func (hg *HostGroup) AddGroupHostsForSync(ctx context.Context, nGroupId int64, s
 //	Returns:
 //	- (string) unique server-generated string
 func (hg *HostGroup) AddHost(ctx context.Context, params interface{}) (*PxgValStr, []byte, error) {
-	postData, _ := json.Marshal(params)
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.AddHost", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	pxgValStr := new(PxgValStr)
@@ -153,7 +152,40 @@ func (hg *HostGroup) AddHost(ctx context.Context, params interface{}) (*PxgValSt
 }
 
 //TODO AddHostsForSync
-//TODO AddHostsForSync
+
+//	AddIncidentsParams struct
+type AddIncidentsParams struct {
+	PData PData `json:"pData"`
+}
+
+//	PData struct
+type PData struct {
+	KlincdtSeverity  *int64    `json:"KLINCDT_SEVERITY"`
+	KlincdtAdded     *DateTime `json:"KLINCDT_ADDED"`
+	KlincdtBody      *string   `json:"KLINCDT_BODY"`
+	KlhstWksHostname *string   `json:"KLHST_WKS_HOSTNAME"`
+	KlhstuserID      *int64    `json:"KLHSTUSER_ID"`
+}
+
+type DateTime struct {
+	Type  *string `json:"type"`
+	Value *string `json:"value"`
+}
+
+func (hg *HostGroup) AddIncident(ctx context.Context, params AddIncidentsParams) (*PxgValStr, []byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.AddIncident", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	pxgValStr := new(PxgValStr)
+	raw, err := hg.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, raw, err
+}
 
 //	Removes a domain from the database.
 //
@@ -164,10 +196,9 @@ func (hg *HostGroup) DelDomain(ctx context.Context, strDomain string) ([]byte, e
 	{
 	"strDomain": "%s"
 	}`, strDomain))
-
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.DelDomain", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hg.client.Do(ctx, request, nil)
@@ -180,10 +211,9 @@ func (hg *HostGroup) DelDomain(ctx context.Context, strDomain string) ([]byte, e
 //	- nId (int64)	incident id
 func (hg *HostGroup) DeleteIncident(ctx context.Context, nId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nId": %d}`, nId))
-
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.DeleteIncident", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hg.client.Do(ctx, request, nil)
@@ -216,9 +246,15 @@ type PParams struct {
 //
 //Returns:
 //	- (int64) number of found groups
-func (hg *HostGroup) FindGroups(ctx context.Context, pParams HGParams) (*Accessor, []byte, error) {
-	postData, _ := json.Marshal(pParams)
+func (hg *HostGroup) FindGroups(ctx context.Context, params HGParams) (*Accessor, []byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.FindGroups", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
 
 	accessor := new(Accessor)
 	raw, err := hg.client.Do(ctx, request, &accessor)
@@ -246,13 +282,15 @@ func (hg *HostGroup) FindGroups(ctx context.Context, pParams HGParams) (*Accesso
 //
 //Returns:
 //(int64) number of found hosts
-func (hg *HostGroup) FindHosts(ctx context.Context, hgParams HGParams) (*Accessor, []byte, error) {
-
-	postData, _ := json.Marshal(hgParams)
-	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.FindHosts", bytes.NewBuffer(postData))
-
+func (hg *HostGroup) FindHosts(ctx context.Context, params HGParams) (*Accessor, []byte, error) {
+	postData, err := json.Marshal(params)
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
+	}
+
+	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.FindHosts", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
 	}
 
 	accessor := new(Accessor)
@@ -286,12 +324,15 @@ func (hg *HostGroup) FindHosts(ctx context.Context, hgParams HGParams) (*Accesso
 //	to get accessor id call HostGroup.FindHostsAsyncGetAccessor
 //
 //	to cancel operation call HostGroup.FindHostsAsyncCancel
-func (hg *HostGroup) FindHostsAsync(ctx context.Context, pParam HGParams) (*RequestID, []byte, error) {
-	postData, _ := json.Marshal(pParam)
-	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.FindHostsAsync", bytes.NewBuffer(postData))
-
+func (hg *HostGroup) FindHostsAsync(ctx context.Context, params HGParams) (*RequestID, []byte, error) {
+	postData, err := json.Marshal(params)
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
+	}
+
+	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.FindHostsAsync", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
 	}
 
 	requestID := new(RequestID)
@@ -306,16 +347,13 @@ func (hg *HostGroup) FindHostsAsync(ctx context.Context, pParam HGParams) (*Requ
 //	Parameters:
 //	- strRequestId	(string) identity of asynchronous operation
 func (hg *HostGroup) FindHostsAsyncCancel(ctx context.Context, strRequestId string) {
-
 	postData := []byte(fmt.Sprintf(`
 	{
 	"strRequestId": "%s"
 	}`, strRequestId))
-
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.FindHostsAsyncCancel", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return
 	}
 
 	_, err = hg.client.Do(ctx, request, nil)
@@ -339,12 +377,18 @@ func (hg *HostGroup) FindHostsAsyncCancel(ctx context.Context, strRequestId stri
 func (hg *HostGroup) FindHostsAsyncGetAccessor(ctx context.Context, strRequestId string) (*AsyncAccessor,
 	[]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strRequestId" : "%s" }`, strRequestId))
-
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.FindHostsAsyncGetAccessor", bytes.NewBuffer(postData))
 
 	asyncAccessor := new(AsyncAccessor)
 	raw, err := hg.client.Do(ctx, request, &asyncAccessor)
 	return asyncAccessor, raw, err
+}
+
+type FindIncidentsParams struct {
+	StrFilter       *string          `json:"strFilter,omitempty"`
+	PFieldsToReturn *[]string        `json:"pFieldsToReturn,omitempty"`
+	PFieldsToOrder  *[]FieldsToOrder `json:"pFieldsToOrder,omitempty"`
+	LMaxLifeTime    *int64           `json:"lMaxLifeTime,omitempty"`
 }
 
 //	Find incident by filter string.
@@ -358,6 +402,27 @@ func (hg *HostGroup) FindHostsAsyncGetAccessor(ctx context.Context, strRequestId
 //		|- "Name" of type String, name of attribute used for ordering (see Remarks below)
 //		|- "Asc" of type bool, ascending if true descending otherwise
 //	- lMaxLifeTime	(int64) max lifetime of accessor (sec)
+//
+//	Example request params struct:
+//	{
+//	  "strFilter": "(&(!KLINCDT_ID = 0))",
+//	  "pFieldsToReturn": [
+//	    "KLINCDT_ID",
+//	    "KLINCDT_BODY",
+//	    "KLHST_WKS_HOSTNAME",
+//	    "KLINCDT_SEVERITY"
+//	  ],
+//	  "pFieldsToOrder": [
+//	    {
+//	      "type": "params",
+//	      "value": {
+//	        "Name": "KLINCDT_ID",
+//	        "Asc": true
+//	      }
+//	    }
+//	  ],
+//	  "lMaxLifeTime": 120
+//	}
 //
 //	Return:
 //	- strAccessor	(string) result-set ID, identifier of the server-side ordered collection of found incidents.
@@ -389,21 +454,15 @@ func (hg *HostGroup) FindHostsAsyncGetAccessor(ctx context.Context, strRequestId
 //	|-"KLINCDT_BODY"
 //	|-"KLHST_WKS_HOSTNAME"
 //	|-"GNRL_EXTRA_PARAMS"
-func (hg *HostGroup) FindIncidents(ctx context.Context, strFilter string, pFieldsToReturn []string,
-	lMaxLifeTime int64) (*Accessor, []byte, error) {
-	vFtr, _ := json.Marshal(pFieldsToReturn)
-
-	postData := []byte(fmt.Sprintf(`{
-		"strFilter" : "%s", 
-		"pFieldsToReturn" : %s, 
-		"pFieldsToOrder" : [],
-		"lMaxLifeTime" : %d
-	}`, strFilter, string(vFtr), lMaxLifeTime))
+func (hg *HostGroup) FindIncidents(ctx context.Context, params FindIncidentsParams) (*Accessor, []byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.FindIncidents", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	accessor := new(Accessor)
@@ -437,8 +496,11 @@ type UHGParams struct {
 //	Session to the Administration Server has been closed.
 //	ChunkAccessor.Release has been called.
 //	- (int64) number of records found
-func (hg *HostGroup) FindUsers(ctx context.Context, param UHGParams) (*Accessor, []byte, error) {
-	postData, _ := json.Marshal(param)
+func (hg *HostGroup) FindUsers(ctx context.Context, params UHGParams) (*Accessor, []byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.FindUsers", bytes.NewBuffer(postData))
 
@@ -461,17 +523,65 @@ func (hg *HostGroup) FindUsers(ctx context.Context, param UHGParams) (*Accessor,
 //	- KLHST_HF_DN - hotfix display name (string)
 //	- KLHST_HF_PRODID - hotfix product id (int64)
 func (hg *HostGroup) GetAllHostfixes(ctx context.Context) ([]byte, error) {
-
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GetAllHostfixes", nil)
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hg.client.Do(ctx, request, nil)
 	return raw, err
 }
 
-//TODO GetComponentsForProductOnHost
+//	ProductComponents is returned by GetComponentsForProductOnHost
+type ProductComponents struct {
+	ProductComponentsArray []ProductComponentsArray `json:"PxgRetVal"`
+}
+
+type ProductComponentsArray struct {
+	Type             *string           `json:"type,omitempty"`
+	ProductComponent *ProductComponent `json:"value,omitempty"`
+}
+
+type ProductComponent struct {
+	KlhstPrcstComponentDN      *string                     `json:"KLHST_PRCST_COMPONENT_DN,omitempty"`
+	KlhstPrcstComponentID      *KlhstPrcstComponentID      `json:"KLHST_PRCST_COMPONENT_ID,omitempty"`
+	KlhstPrcstComponentStatus  *int64                      `json:"KLHST_PRCST_COMPONENT_STATUS,omitempty"`
+	KlhstPrcstComponentVersion *KlhstPrcstComponentVersion `json:"KLHST_PRCST_COMPONENT_VERSION,omitempty"`
+}
+
+type KlhstPrcstComponentID struct {
+	Type  *string `json:"type,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+type KlhstPrcstComponentVersion struct {
+	Type  *string `json:"type,omitempty"`
+	Value *int64  `json:"value,omitempty"`
+}
+
+//	Return array of product components for specified host and product.
+//
+//	Parameters:
+//	- strHostName	(string) host name
+//	- strProductName	(string) product name
+//	- strProductVersion	(string) product version
+//
+//	Returns:
+//	- (array) each item of array is container (params) with information about component,
+//	see List of product component attributes
+func (hg *HostGroup) GetComponentsForProductOnHost(ctx context.Context, strHostName, strProductName,
+	strProductVersion string) (*ProductComponents, []byte, error) {
+	postData := []byte(fmt.Sprintf(`{"strHostName": "%s","strProductName": "%s","strProductVersion": "%s"}`,
+		strHostName, strProductName, strProductVersion))
+	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GetComponentsForProductOnHost", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var productComponents *ProductComponents
+	raw, err := hg.client.Do(ctx, request, &productComponents)
+	return productComponents, raw, err
+}
 
 //	Return a list of workstation names in the domain.
 //
@@ -495,14 +605,10 @@ func (hg *HostGroup) GetAllHostfixes(ctx context.Context) ([]byte, error) {
 //	Deprecated:
 //	- This method is deprecated, use either HostGroup.FindHostsAsync or HostGroup.FindHosts instead.
 func (hg *HostGroup) GetDomainHosts(ctx context.Context, domain string) ([]byte, error) {
-	postData := []byte(fmt.Sprintf(`
-	{
-	"domain": "%s"
-	}`, domain))
-
+	postData := []byte(fmt.Sprintf(`{"domain": "%s"}`, domain))
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GetDomainHosts", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hg.client.Do(ctx, request, nil)
@@ -513,15 +619,15 @@ func (hg *HostGroup) GetDomainHosts(ctx context.Context, domain string) ([]byte,
 //
 //	Returns:
 //	- (array) array of domains, each item is container which contains following attributes:
-//		|- KLHST_WKS_WINDOMAIN (paramString) domain name
-//		|- KLHST_WKS_WINDOMAIN_TYPE (paramInt) domain type:
+//		|- KLHST_WKS_WINDOMAIN (string) domain name
+//		|- KLHST_WKS_WINDOMAIN_TYPE (int64) domain type:
 //
 //			0 - Windows NT domain
 //			1 - Windows work group
 func (hg *HostGroup) GetDomains(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GetDomains", nil)
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hg.client.Do(ctx, request, nil)
@@ -540,10 +646,9 @@ func (hg *HostGroup) GetDomains(ctx context.Context) ([]byte, error) {
 //	- (int64) id of group found and -1 if no group was found.
 func (hg *HostGroup) GetGroupId(ctx context.Context, nParent int64, strName string) (*PxgValInt, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nParent": %d, "strName": "%s"}`, nParent, strName))
-
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GetGroupId", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	pxgValInt := new(PxgValInt)
@@ -564,10 +669,9 @@ func (hg *HostGroup) GetGroupId(ctx context.Context, nParent int64, strName stri
 //Deprecated: Use HostGroup.GetGroupInfoEx instead
 func (hg *HostGroup) GetGroupInfo(ctx context.Context, nGroupId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nGroupId": %d}`, nGroupId))
-
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GetGroupInfo", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hg.client.Do(ctx, request, nil)
@@ -593,18 +697,74 @@ func (hg *HostGroup) GetGroupInfo(ctx context.Context, nGroupId int64) ([]byte, 
 //
 //	Remark: not working on KSC 10
 func (hg *HostGroup) GetGroupInfoEx(ctx context.Context, params interface{}) ([]byte, error) {
-	postData, _ := json.Marshal(params)
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
 
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GetGroupInfoEx", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hg.client.Do(ctx, request, nil)
 	return raw, err
 }
 
-//TODO GetHostfixesForProductOnHost
+//	ProductFixes struct
+type ProductFixes struct {
+	Fixes []Fixes `json:"PxgRetVal"`
+}
+
+type Fixes struct {
+	Type       string     `json:"type"`
+	FixesValue FixesValue `json:"value"`
+}
+
+type FixesValue struct {
+	KlhstHFDN string `json:"KLHST_HF_DN"`
+	KlhstHFID string `json:"KLHST_HF_ID"`
+}
+
+//	Return array of hotfixes for specified host and product.
+//
+//	Array is ordered according hotfix installation order.
+//
+//	Parameters:
+//	- strHostName	(string) host name
+//	- strProductName	(string) product name
+//	- strProductVersion	(string) product version
+//
+//	Returns:
+//	- (array) each item of array is container (params) with following attributes:
+//		|- KLHST_HF_ID - hotfix id (string)
+//		|- KLHST_HF_DN - hotfix display name (string)
+//
+//	Example response:
+//	{
+//	  "PxgRetVal" : [
+//	    {
+//	      "type" : "params",
+//	      "value" : {
+//	        "KLHST_HF_DN" : "a",
+//	        "KLHST_HF_ID" : "{F1FE7235-5744-49D8-8BF6-A55A345383E2}"
+//	      }
+//	    }
+//	  ]
+//	}
+func (hg *HostGroup) GetHostfixesForProductOnHost(ctx context.Context, strHostName, strProductName,
+	strProductVersion string) (*ProductFixes, []byte, error) {
+	postData := []byte(fmt.Sprintf(`{"strHostName": "%s","strProductName": "%s","strProductVersion": "%s"}`,
+		strHostName, strProductName, strProductVersion))
+	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GetHostfixesForProductOnHost", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	productFixes := new(ProductFixes)
+	raw, err := hg.client.Do(ctx, request, &productFixes)
+	return productFixes, raw, err
+}
 
 //	Acquire specified host attributes.
 //
@@ -626,13 +786,14 @@ func (hg *HostGroup) GetGroupInfoEx(ctx context.Context, params interface{}) ([]
 //	Returns:
 //	- (params) container with host attributes. See List of host attributes.
 func (hg *HostGroup) GetHostInfo(ctx context.Context, params interface{}) ([]byte, error) {
-
-	postData, _ := json.Marshal(params)
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
 
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GetHostInfo", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hg.client.Do(ctx, request, nil)
@@ -660,13 +821,10 @@ func (hg *HostGroup) GetHostInfo(ctx context.Context, params interface{}) ([]byt
 //	Product info attributes
 //	Local settings and policy format for some products
 func (hg *HostGroup) GetHostProducts(ctx context.Context, strHostName string) ([]byte, error) {
-
 	postData := []byte(fmt.Sprintf(`{"strHostName": "%s"}`, strHostName))
-
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GetHostProducts", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hg.client.Do(ctx, request, nil)
@@ -682,12 +840,15 @@ func (hg *HostGroup) GetHostProducts(ctx context.Context, strHostName string) ([
 //	- (string) server object ID to acquire and manage host tasks, used to HostTasks
 func (hg *HostGroup) GetHostTasks(ctx context.Context, hostId string) (*PxgValStr, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strHostName": "%s"}`, hostId))
-
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GetHostTasks", bytes.NewBuffer(postData))
 	pxgValStr := new(PxgValStr)
 
 	raw, err := hg.client.Do(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
+}
+
+type InstanceStatisticsParams struct {
+	VecFilterFields []string `json:"vecFilterFields"` // <- can be empty, but not nil
 }
 
 //	Acquire Server statistics info.
@@ -702,30 +863,28 @@ func (hg *HostGroup) GetHostTasks(ctx context.Context, hostId string) (*PxgValSt
 //		|- "KLSRV_ST_VIRT_SERVERS_DETAILS"	Array of active hosts count on virtual server
 //		|- "KLSRV_ST_CON_EVENTS"	Container with ConEvents statistics
 //
-//	Example request params struct:
-//
-//	type InstanceStatisticsParams struct {
-//		VecFilterFields []string `json:"vecFilterFields"` // <- can be empty, but not nil
-//	}
-//
 //	Returns:
 //	- filtered statistic
 //
 //	Remark:
 //	- not working on KSC 10
-func (hg *HostGroup) GetInstanceStatistics(ctx context.Context, params interface{}) ([]byte, error) {
-
-	postData, _ := json.Marshal(params)
+func (hg *HostGroup) GetInstanceStatistics(ctx context.Context, params InstanceStatisticsParams) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
 
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GetInstanceStatistics", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hg.client.Do(ctx, request, nil)
-
 	return raw, err
+}
+
+type StaticInfoParams struct {
+	PValues []string `json:"pValues"`
 }
 
 // Return server run-time info.
@@ -740,21 +899,17 @@ func (hg *HostGroup) GetInstanceStatistics(ctx context.Context, params interface
 //		|- KLADMSRV_SAAS_OVERUSE - number of VS created is more specified in the license (paramBool)
 //		|- KLADMSRV_IF_WAIK_INSTALLED - true if WAIK is installed (paramBool)
 //
-//	Examples request params struct:
-//
-//	type RunTimeInfoParams struct {
-//		PValues []string `json:"pValues"`
-//	}
-//
 //	Returns:
 //	- (params) requsted values
-func (hg *HostGroup) GetRunTimeInfo(ctx context.Context, params interface{}) ([]byte, error) {
-	postData, _ := json.Marshal(params)
+func (hg *HostGroup) GetRunTimeInfo(ctx context.Context, params StaticInfoParams) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
 
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GetRunTimeInfo", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hg.client.Do(ctx, request, nil)
@@ -797,22 +952,17 @@ func (hg *HostGroup) GetRunTimeInfo(ctx context.Context, params interface{}) ([]
 //	- KLADMSRV_NEED_UNC_PATH - if UNC path must be specified into backup task settings (paramBool)
 //	- KLADMSRV_EV_EV_SIZE - average size of a single event, Kb (paramDouble)
 //
-//	Examples request params struct:
-//
-//	type StaticInfoParams struct {
-//		PValues []string `json:"pValues"` <- can be nil or empty
-//	}
-//
 //	Returns:
 //	- (params) requsted values
-func (hg *HostGroup) GetStaticInfo(ctx context.Context, params interface{}) ([]byte, error) {
-
-	postData, _ := json.Marshal(params)
+func (hg *HostGroup) GetStaticInfo(ctx context.Context, params StaticInfoParams) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
 
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GetStaticInfo", bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hg.client.Do(ctx, request, nil)
@@ -830,11 +980,11 @@ func (hg *HostGroup) GetStaticInfo(ctx context.Context, params interface{}) ([]b
 //	"id" (subgroup id), "name" (subgroup name) and "groups" (similar recursive array), may be NULL.
 func (hg *HostGroup) GetSubgroups(ctx context.Context, nGroupId int64, nDepth int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nParent": %d, "nDepth": %d }`, nGroupId, nDepth))
-
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GetSubgroups", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
+
 	raw, err := hg.client.Do(ctx, request, nil)
 	return raw, err
 }
@@ -846,8 +996,9 @@ func (hg *HostGroup) GetSubgroups(ctx context.Context, nGroupId int64, nDepth in
 func (hg *HostGroup) GroupIdGroups(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GroupIdGroups", nil)
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
+
 	pxgValInt := new(PxgValInt)
 	raw, err := hg.client.Do(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
@@ -860,7 +1011,7 @@ func (hg *HostGroup) GroupIdGroups(ctx context.Context) (*PxgValInt, []byte, err
 func (hg *HostGroup) GroupIdSuper(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GroupIdSuper", nil)
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	pxgValInt := new(PxgValInt)
@@ -875,7 +1026,7 @@ func (hg *HostGroup) GroupIdSuper(ctx context.Context) (*PxgValInt, []byte, erro
 func (hg *HostGroup) GroupIdUnassigned(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GroupIdUnassigned", nil)
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	pxgValInt := new(PxgValInt)
@@ -897,13 +1048,18 @@ func (hg *HostGroup) GroupIdUnassigned(ctx context.Context) (*PxgValInt, []byte,
 func (hg *HostGroup) MoveHostsFromGroupToGroup(ctx context.Context, nSrcGroupId int64,
 	nDstGroupId int64) (*WActionGUID, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nSrcGroupId": %d, "nDstGroupId": %d}`, nSrcGroupId, nDstGroupId))
-
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.MoveHostsFromGroupToGroup", bytes.NewBuffer(postData))
-
+	if err != nil {
+		return nil, nil, err
+	}
 	wActionGUID := new(WActionGUID)
-
 	raw, err := hg.client.Do(ctx, request, &wActionGUID)
 	return wActionGUID, raw, err
+}
+
+type HostsToGroupParams struct {
+	NGroup     int64    `json:"nGroup"`
+	PHostNames []string `json:"pHostNames"`
 }
 
 //Move multiple hosts into specified administration group.
@@ -911,18 +1067,17 @@ func (hg *HostGroup) MoveHostsFromGroupToGroup(ctx context.Context, nSrcGroupId 
 //Parameters:
 //	- nGroup	(int64) id of destination group
 //	- pHostNames	([]string) array of host names
-//
-//	Example request params struct:
-//
-//	type HostsToGroupParams struct {
-//		NGroup     int64    `json:"nGroup"`
-//		PHostNames []string `json:"pHostNames"`
-//	}
-func (hg *HostGroup) MoveHostsToGroup(ctx context.Context, params interface{}) ([]byte, error) {
-	postData, _ := json.Marshal(params)
+func (hg *HostGroup) MoveHostsToGroup(ctx context.Context, params HostsToGroupParams) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
 
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.MoveHostsToGroup",
 		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
 
 	raw, err := hg.client.Do(ctx, request, nil)
 	return raw, err
@@ -943,7 +1098,6 @@ func (hg *HostGroup) MoveHostsToGroup(ctx context.Context, params interface{}) (
 //	lStateCode "1" means OK and "0" means fail
 func (hg *HostGroup) RemoveGroup(ctx context.Context, nGroup, nFlags int64) (*WActionGUID, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{ "nGroup": %d, "nFlags": %d }`, nGroup, nFlags))
-
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.RemoveGroup", bytes.NewBuffer(postData))
 	wActionGUID := new(WActionGUID)
 
@@ -958,10 +1112,9 @@ func (hg *HostGroup) RemoveGroup(ctx context.Context, nGroup, nFlags int64) (*WA
 //	It is NOT the same as computer network name (DNS-, FQDN-, NetBIOS-name)
 func (hg *HostGroup) RemoveHost(ctx context.Context, strHostName string) {
 	postData := []byte(fmt.Sprintf(`{ "strHostName": "%s" }`, strHostName))
-
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.RemoveHost", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return
 	}
 
 	_, err = hg.client.Do(ctx, request, nil)
@@ -987,7 +1140,6 @@ func (hg *HostGroup) RemoveHost(ctx context.Context, strHostName string) {
 //
 func (hg *HostGroup) RemoveHosts(ctx context.Context, params struct{}) ([]byte, error) {
 	postData, _ := json.Marshal(params)
-
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.RemoveHosts", bytes.NewBuffer(postData))
 
 	raw, err := hg.client.Do(ctx, request, nil)
@@ -1044,12 +1196,13 @@ type PInfo struct {
 //		"KLHST_WKS_GROUPID" : 1 //GroupID
 //		}
 //	}
-func (hg *HostGroup) ResolveAndMoveToGroup(ctx context.Context, pInfo PInfoRaM) (*KlhstWksResults, []byte, error) {
-	postData, _ := json.Marshal(pInfo)
+func (hg *HostGroup) ResolveAndMoveToGroup(ctx context.Context, params PInfoRaM) (*KlhstWksResults, []byte, error) {
+	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.ResolveAndMoveToGroup", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
+
 	klhstWksResults := new(KlhstWksResults)
 	raw, err := hg.client.Do(ctx, request, &klhstWksResults)
 	return klhstWksResults, raw, err
@@ -1068,10 +1221,9 @@ func (hg *HostGroup) RestartNetworkScanning(ctx context.Context, nType int64) (*
 	{
 	"nType": %d
 	}`, nType))
-
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.RestartNetworkScanning", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	pxgRetError := new(PxgRetError)
@@ -1112,10 +1264,9 @@ func (hg *HostGroup) RestartNetworkScanning(ctx context.Context, nType int64) (*
 //	Local settings and policy format for some products
 func (hg *HostGroup) SS_GetNames(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, _ := json.Marshal(params)
-
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.SS_GetNames", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hg.client.Do(ctx, request, nil)
@@ -1154,10 +1305,9 @@ func (hg *HostGroup) SS_GetNames(ctx context.Context, params interface{}) ([]byt
 //	- Contents of host SS_PRODINFO storage
 func (hg *HostGroup) SS_Read(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, _ := json.Marshal(params)
-
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.SS_Read", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hg.client.Do(ctx, request, nil)
@@ -1174,7 +1324,6 @@ func (hg *HostGroup) SS_Read(ctx context.Context, params interface{}) ([]byte, e
 //	May contain non-readonly attributes from the List of group attributes
 func (hg *HostGroup) UpdateGroup(ctx context.Context, params interface{}) (*PxgValStr, []byte, error) {
 	postData, _ := json.Marshal(params)
-
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.UpdateGroup", bytes.NewBuffer(postData))
 	pxgValStr := new(PxgValStr)
 
@@ -1189,7 +1338,6 @@ func (hg *HostGroup) UpdateGroup(ctx context.Context, params interface{}) (*PxgV
 //	- pInfo	(params) container with group attributes.
 //	May contain non-readonly attributes from the List of group attributes
 func (hg *HostGroup) UpdateHost(ctx context.Context, v interface{}) (*Accessor, []byte, error) {
-
 	data, _ := json.Marshal(v)
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.UpdateHost", bytes.NewBuffer(data))
 
@@ -1209,15 +1357,13 @@ func (hg *HostGroup) UpdateHost(ctx context.Context, v interface{}) (*Accessor, 
 //to get status use AsyncActionStateChecker.CheckActionState, lStateCode "1" means OK and "0" means fail
 func (hg *HostGroup) ZeroVirusCountForGroup(ctx context.Context, nParent int64) (*WActionGUID, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nParent": %d}`, nParent))
-
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.ZeroVirusCountForGroup", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	wActionGUID := new(WActionGUID)
 	raw, err := hg.client.Do(ctx, request, &wActionGUID)
-
 	return wActionGUID, raw, err
 }
 
@@ -1238,15 +1384,13 @@ func (hg *HostGroup) ZeroVirusCountForGroup(ctx context.Context, nParent int64) 
 //	to get status use AsyncActionStateChecker.CheckActionState,
 //	lStateCode "1" means OK and "0" means fail
 func (hg *HostGroup) ZeroVirusCountForHosts(ctx context.Context, params interface{}) (*WActionGUID, []byte, error) {
-
 	postData, _ := json.Marshal(params)
-
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.ZeroVirusCountForHosts", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
+
 	wActionGUID := new(WActionGUID)
 	raw, err := hg.client.Do(ctx, request, &wActionGUID)
-
 	return wActionGUID, raw, err
 }

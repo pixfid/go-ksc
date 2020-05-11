@@ -23,7 +23,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 )
 
@@ -53,10 +52,9 @@ func (hw *HWInvStorage) ExportHWInvStorage2(ctx context.Context, eExportType int
 	{
 	"eExportType": %d
 	}`, eExportType))
-
 	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.ExportHWInvStorage2", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hw.client.Do(ctx, request, nil)
@@ -80,10 +78,9 @@ func (hw *HWInvStorage) ImportHWInvStorage2(ctx context.Context, eImportType int
 	{
 	"eImportType": %d
 	}`, eImportType))
-
 	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.ImportHWInvStorage2", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hw.client.Do(ctx, request, nil)
@@ -93,7 +90,7 @@ func (hw *HWInvStorage) ImportHWInvStorage2(ctx context.Context, eImportType int
 func (hw *HWInvStorage) EnumDynColumns(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.EnumDynColumns", nil)
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hw.client.Do(ctx, request, nil)
@@ -103,7 +100,7 @@ func (hw *HWInvStorage) EnumDynColumns(ctx context.Context) ([]byte, error) {
 func (hw *HWInvStorage) GetProcessingRules(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.GetProcessingRules", nil)
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hw.client.Do(ctx, request, nil)
@@ -117,7 +114,7 @@ func (hw *HWInvStorage) GetHWInvObject(ctx context.Context, nObjId int64) ([]byt
 	}`, nObjId))
 	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.GetHWInvObject", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hw.client.Do(ctx, request, nil)
@@ -132,7 +129,7 @@ func (hw *HWInvStorage) ExportHWInvStorageGetData(ctx context.Context, wstrAsync
 	}`, wstrAsyncId, 10000000))
 	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.ExportHWInvStorageGetData", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := hw.client.Do(ctx, request, nil)

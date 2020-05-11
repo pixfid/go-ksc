@@ -23,7 +23,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"log"
+
 	"net/http"
 )
 
@@ -43,7 +43,7 @@ type Multitenancy service
 func (m *Multitenancy) GetTenantId(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", m.client.Server+"/api/v1.0/Multitenancy.GetTenantId", nil)
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := m.client.Do(ctx, request, nil)
@@ -75,7 +75,7 @@ func (m *Multitenancy) GetProducts(ctx context.Context, strProdName, strProdVers
 	}`, strProdName, strProdVersion))
 	request, err := http.NewRequest("POST", m.client.Server+"/api/v1.0/Multitenancy.GetProducts", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := m.client.Do(ctx, request, nil)
@@ -91,7 +91,7 @@ func (m *Multitenancy) GetProducts(ctx context.Context, strProdName, strProdVers
 func (m *Multitenancy) GetAuthToken(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", m.client.Server+"/api/v1.0/Multitenancy.GetAuthToken", nil)
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := m.client.Do(ctx, request, nil)

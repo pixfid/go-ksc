@@ -24,7 +24,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
+
 	"net/http"
 )
 
@@ -49,10 +49,9 @@ func (sh *ServerHierarchy) DelServer(ctx context.Context, lServer int64) ([]byte
 	{
 	"lServer": %d
 	}`, lServer))
-
 	request, err := http.NewRequest("POST", sh.client.Server+"/api/v1.0/ServerHierarchy.DelServer", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, _ := sh.client.Do(ctx, request, nil)
@@ -99,10 +98,9 @@ func (sh *ServerHierarchy) DelServer(ctx context.Context, lServer int64) ([]byte
 //	}
 func (sh *ServerHierarchy) GetServerInfo(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, _ := json.Marshal(params)
-
 	request, err := http.NewRequest("POST", sh.client.Server+"/api/v1.0/ServerHierarchy.GetServerInfo", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := sh.client.Do(ctx, request, nil)
@@ -139,10 +137,9 @@ func (sh *ServerHierarchy) GetChildServers(ctx context.Context, nGroupId int64) 
 	{
 	"nGroupId": %d
 	}`, nGroupId))
-
 	request, err := http.NewRequest("POST", sh.client.Server+"/api/v1.0/ServerHierarchy.GetChildServers", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, _ := sh.client.Do(ctx, request, nil)

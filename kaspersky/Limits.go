@@ -23,7 +23,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"log"
+
 	"net/http"
 )
 
@@ -108,10 +108,9 @@ type Limits service
 //  56	Groups syncs (tasks, polocies, etc) from the master server affects virtual servers of current server (which is slave)
 func (ls *Limits) GetLimits(ctx context.Context, param int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{ "param": %d }`, param))
-
 	request, err := http.NewRequest("POST", ls.client.Server+"/api/v1.0/Limits.GetLimits", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := ls.client.Do(ctx, request, nil)

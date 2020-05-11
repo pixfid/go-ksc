@@ -42,9 +42,70 @@ type Session service
 //	- Session token. (data.PxgValStr)
 func (s *Session) CreateToken(ctx context.Context) (*PxgValStr, []byte, error) {
 	request, err := http.NewRequest("POST", s.client.Server+"/api/v1.0/Session.CreateToken", nil)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	pxgValStr := new(PxgValStr)
-
 	raw, err := s.client.Do(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
+
+//	Does nothing. May be used to effectively verify session validity.
+//	Session id to verify is passed in "X-KSC-Session" header.
+//
+//	See also:
+//	Authenticated session
+func (s *Session) Ping(ctx context.Context) ([]byte, error) {
+	request, err := http.NewRequest("POST", s.client.Server+"/api/v1.0/Session.Ping", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := s.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//	Terminate authentication session.
+//	After this call all requests within session will fail with 403 Forbidden status.
+//	If current session is bount do a gateway connection, such connection will be closed.
+//
+//	Session id to terminate is passed in "X-KSC-Session" header.
+//
+//	Returns:
+//	- Session token.
+//
+//	See also:
+//
+//	Authenticated session
+func (s *Session) EndSession(ctx context.Context) ([]byte, error) {
+	request, err := http.NewRequest("POST", s.client.Server+"/api/v1.0/Session.EndSession", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := s.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//	Method to create authenticated session.
+//	Authentication details should be provided in Authorization HTTP header.
+//
+//	Returns:
+//	- Session token.
+//
+//	See also:
+//
+//	Authenticated session
+func (s *Session) StartSession(ctx context.Context) (*PxgValStr, []byte, error) {
+	request, err := http.NewRequest("POST", s.client.Server+"/api/v1.0/Session.StartSession", nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	pxgValStr := new(PxgValStr)
+	raw, err := s.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, raw, err
+}
+
+//TODO func (s *Session) CreateBlob(ctx context.Context, params interface{}) ([]byte, error) {return nil, nil}

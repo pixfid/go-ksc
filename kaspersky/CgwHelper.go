@@ -23,7 +23,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 )
 
@@ -45,9 +44,8 @@ func (cp *CgwHelper) GetSlaveServerLocation(ctx context.Context, nSlaveServerId 
 	postData := []byte(fmt.Sprintf(`{"nSlaveServerId": %d}`, nSlaveServerId))
 	request, err := http.NewRequest("POST", cp.client.Server+"/api/v1.0/CgwHelper.GetSlaveServerLocation",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := cp.client.Do(ctx, request, nil)
@@ -65,9 +63,8 @@ func (cp *CgwHelper) GetNagentLocation(ctx context.Context, wsHostName string) (
 	postData := []byte(fmt.Sprintf(`{"wsHostName": "%s"}`, wsHostName))
 	request, err := http.NewRequest("POST", cp.client.Server+"/api/v1.0/CgwHelper.GetNagentLocation",
 		bytes.NewBuffer(postData))
-
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := cp.client.Do(ctx, request, nil)

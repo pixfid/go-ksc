@@ -24,7 +24,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
+
 	"net/http"
 )
 
@@ -75,7 +75,7 @@ func (nh *NagHstCtl) GetHostRuntimeInfo(ctx context.Context, params interface{})
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", nh.client.Server+"/api/v1.0/NagHstCtl.GetHostRuntimeInfo", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := nh.client.Do(ctx, request, nil)
@@ -132,13 +132,12 @@ func (nh *NagHstCtl) SendTaskAction(ctx context.Context, szwProduct, szwVersion,
 		"szwProduct": "%s",
 		"szwVersion": "%s",
 		"szwTaskStorageId": "%s",
-        "parentId": %d
+        "nTaskAction": %d
     
 	}`, szwProduct, szwVersion, szwTaskStorageId, nTaskAction))
-
 	request, err := http.NewRequest("POST", nh.client.Server+"/api/v1.0/NagHstCtl.SendTaskAction", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := nh.client.Do(ctx, request, nil)
@@ -190,12 +189,11 @@ func (nh *NagHstCtl) SendProductAction(ctx context.Context, szwProduct, szwVersi
 	{
 		"szwProduct": "%s",
 		"szwVersion": "%s",
-		"szwTaskStorageId": %d    
+		"nProductAction": %d    
 	}`, szwProduct, szwVersion, nProductAction))
-
 	request, err := http.NewRequest("POST", nh.client.Server+"/api/v1.0/NagHstCtl.SendProductAction", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := nh.client.Do(ctx, request, nil)

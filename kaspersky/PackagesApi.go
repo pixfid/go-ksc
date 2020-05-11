@@ -34,8 +34,11 @@ type PackagesApi service
 //Request user agreements related to user packages, registered on current VS.
 func (pa *PackagesApi) GetUserAgreements(ctx context.Context) (*PxgValStr, []byte, error) {
 	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.GetUserAgreements", nil)
-	pxgValStr := new(PxgValStr)
+	if err != nil {
+		return nil, nil, err
+	}
 
+	pxgValStr := new(PxgValStr)
 	raw, err := pa.client.Do(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
@@ -75,19 +78,23 @@ type KlpkgNpiSize struct {
 
 func (pa *PackagesApi) GetPackages(ctx context.Context) (*ListOfPackages, []byte, error) {
 	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.GetPackages", nil)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	listOfPackages := new(ListOfPackages)
 	raw, err := pa.client.Do(ctx, request, listOfPackages)
-
 	return listOfPackages, raw, err
 }
 
 func (pa *PackagesApi) GetPackages2(ctx context.Context) (*ListOfPackages, []byte, error) {
 	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.GetPackages2", nil)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	listOfPackages := new(ListOfPackages)
 	raw, err := pa.client.Do(ctx, request, listOfPackages)
-
 	return listOfPackages, raw, err
 }
 
@@ -99,9 +106,9 @@ func (pa *PackagesApi) GetPackageInfo2(ctx context.Context, nPackageId int) (SKl
 	}`, nPackageId))
 
 	request, err := http.NewRequest("POST", pa.client.Server + "/api/v1.0/PackagesApi.GetPackageInfo2", bytes.NewBuffer(postData))
-	if err != nil {
-		log.Fatal(err.Error())
-	}
+    if err != nil {
+    return nil, err
+  }
 
 	raw, err := pa.client.Do(ctx, request)
 	pxgRetVal, err := UnmarshalKlpkg(raw)
@@ -115,9 +122,9 @@ func (pa *PackagesApi) DeleteExecutablePkg(ctx context.Context, nPackageId int) 
 	}`, nPackageId))
 
 	request, err := http.NewRequest("POST", pa.client.Server + "/api/v1.0/PackagesApi.DeleteExecutablePkg", bytes.NewBuffer(postData))
-	if err != nil {
-		log.Fatal(err.Error())
-	}
+    if err != nil {
+    return nil, err
+  }
 
 	raw, err := pa.client.Do(ctx, request)
 	pxgRetVal, err := UnmarshalKlpkg(raw)
@@ -132,9 +139,9 @@ func (pa *PackagesApi) RemovePackage2(ctx context.Context, nPackageId int) (PDRe
 	}`, nPackageId))
 
 	request, err := http.NewRequest("POST", pa.client.Server + "/api/v1.0/PackagesApi.RemovePackage2", bytes.NewBuffer(postData))
-	if err != nil {
-		log.Fatal(err.Error())
-	}
+    if err != nil {
+    return nil, err
+  }
 
 	raw, err := pa.client.Do(ctx, request)
 	pxgRetVal, err := UnmarshalPDResult(raw)
@@ -148,9 +155,9 @@ func (pa *PackagesApi) RemovePackage(ctx context.Context, nPackageId int) (SKlpk
 	}`, nPackageId))
 
 	request, err := http.NewRequest("POST", pa.client.Server + "/api/v1.0/PackagesApi.RemovePackage", bytes.NewBuffer(postData))
-	if err != nil {
-		log.Fatal(err.Error())
-	}
+    if err != nil {
+    return nil, err
+  }
 
 	raw, err := pa.client.Do(ctx, request)
 	pxgRetVal, err := UnmarshalKlpkg(raw)

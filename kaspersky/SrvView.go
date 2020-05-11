@@ -24,7 +24,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
+
 	"net/http"
 )
 
@@ -35,12 +35,16 @@ type SrvView service
 
 //SrvViewParams struct
 type SrvViewParams struct {
-	WstrViewName      string      `json:"wstrViewName"`
-	WstrFilter        string      `json:"wstrFilter"`
-	VecFieldsToReturn []string    `json:"vecFieldsToReturn"`
-	VecFieldsToOrder  interface{} `json:"vecFieldsToOrder"` //todo
-	PParams           interface{} `json:"pParams"`          //todo
-	LifetimeSEC       int64       `json:"lifetimeSec"`
+	WstrViewName      *string         `json:"wstrViewName"`
+	WstrFilter        *string         `json:"wstrFilter"`
+	VecFieldsToReturn []string        `json:"vecFieldsToReturn"`
+	VecFieldsToOrder  []FieldsToOrder `json:"vecFieldsToOrder"`
+	PParams           *ESrvViewParams `json:"pParams"`
+	LifetimeSEC       *int64          `json:"lifetimeSec"`
+}
+
+type ESrvViewParams struct {
+	TopN *int64 `json:"TOP_N,omitempty"`
 }
 
 //	Find srvview data by filter string.
@@ -74,18 +78,20 @@ type SrvViewParams struct {
 //	Passed lifetimeSec seconds after last access to the result-set (by methods GetRecordCount and GetRecordRange).
 //	Session to the Administration Server has been closed.
 //	ReleaseIterator has been called.
-func (sv *SrvView) ResetIterator(ctx context.Context, params interface{}) (*WstrIteratorID, error) {
-	postData, _ := json.Marshal(params)
+func (sv *SrvView) ResetIterator(ctx context.Context, params SrvViewParams) (*WstrIteratorID, []byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	request, err := http.NewRequest("POST", sv.client.Server+"/api/v1.0/SrvView.ResetIterator", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	srvViewIter := new(WstrIteratorID)
 	raw, err := sv.client.Do(ctx, request, &srvViewIter)
-	println(string(raw))
-	return srvViewIter, err
+	return srvViewIter, raw, err
 }
 
 //	Acquire count of result-set elements.
@@ -97,17 +103,16 @@ func (sv *SrvView) ResetIterator(ctx context.Context, params interface{}) (*Wstr
 //
 //	Returns:
 //	(int64) number of elements contained in the specified result-set
-func (sv *SrvView) GetRecordCount(ctx context.Context, wstrIteratorId string) (*PxgValInt, error) {
+func (sv *SrvView) GetRecordCount(ctx context.Context, wstrIteratorId string) (*PxgValInt, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrIteratorId":"%s"}`, wstrIteratorId))
-
 	request, err := http.NewRequest("POST", sv.client.Server+"/api/v1.0/SrvView.GetRecordCount", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	pxgValInt := new(PxgValInt)
-	_, err = sv.client.Do(ctx, request, &pxgValInt)
-	return pxgValInt, err
+	raw, err := sv.client.Do(ctx, request, &pxgValInt)
+	return pxgValInt, raw, err
 }
 
 //	Release result-set.
@@ -119,14 +124,19 @@ func (sv *SrvView) GetRecordCount(ctx context.Context, wstrIteratorId string) (*
 //	wstrIteratorId	(string) result-set ID, identifier of the server-side ordered collection of found data records
 func (sv *SrvView) ReleaseIterator(ctx context.Context, wstrIteratorId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrIteratorId":"%s"}`, wstrIteratorId))
-
 	request, err := http.NewRequest("POST", sv.client.Server+"/api/v1.0/SrvView.ReleaseIterator", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := sv.client.Do(ctx, request, nil)
 	return raw, err
+}
+
+type RecordRangeParams struct {
+	WstrIteratorID *string `json:"wstrIteratorId,omitempty"`
+	NStart         *int64  `json:"nStart,omitempty"`
+	NEnd           *int64  `json:"nEnd,omitempty"`
 }
 
 //	Acquire subset of result-set elements by range.
@@ -142,16 +152,15 @@ func (sv *SrvView) ReleaseIterator(ctx context.Context, wstrIteratorId string) (
 //
 //	Return:
 //	- pRecords	(params) container that has needed elements in the array with name "KLCSP_ITERATOR_ARRAY"
-func (sv *SrvView) GetRecordRange(ctx context.Context, wstrIteratorId string, nStart, nEnd int64) ([]byte, error) {
-	postData := []byte(fmt.Sprintf(`{
-	"wstrIteratorId":"%s",
-	"nStart": %d,
-	"nEnd": %d
-	}`, wstrIteratorId, nStart, nEnd))
+func (sv *SrvView) GetRecordRange(ctx context.Context, params RecordRangeParams) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
 
 	request, err := http.NewRequest("POST", sv.client.Server+"/api/v1.0/SrvView.GetRecordRange", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	raw, err := sv.client.Do(ctx, request, nil)

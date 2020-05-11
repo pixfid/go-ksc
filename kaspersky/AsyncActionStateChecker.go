@@ -23,7 +23,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 )
 
@@ -87,7 +86,7 @@ func (ac *AsyncActionStateChecker) CheckActionState(ctx context.Context, wstrAct
 	}`, wstrActionGuid))
 	request, err := http.NewRequest("POST", ac.client.Server+"/api/v1.0/AsyncActionStateChecker.CheckActionState", bytes.NewBuffer(postData))
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, nil, err
 	}
 
 	aSResult := new(ActionStateResult)
