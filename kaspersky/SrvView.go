@@ -78,8 +78,8 @@ type ESrvViewParams struct {
 //	Passed lifetimeSec seconds after last access to the result-set (by methods GetRecordCount and GetRecordRange).
 //	Session to the Administration Server has been closed.
 //	ReleaseIterator has been called.
-func (sv *SrvView) ResetIterator(ctx context.Context, params SrvViewParams) (*WstrIteratorID, []byte, error) {
-	postData, err := json.Marshal(params)
+func (sv *SrvView) ResetIterator(ctx context.Context, params *SrvViewParams) (*WstrIteratorID, []byte, error) {
+	postData, err := json.Marshal(&params)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -152,8 +152,8 @@ type RecordRangeParams struct {
 //
 //	Return:
 //	- pRecords	(params) container that has needed elements in the array with name "KLCSP_ITERATOR_ARRAY"
-func (sv *SrvView) GetRecordRange(ctx context.Context, params RecordRangeParams) ([]byte, error) {
-	postData, err := json.Marshal(params)
+func (sv *SrvView) GetRecordRange(ctx context.Context, params *RecordRangeParams) ([]byte, error) {
+	postData, err := json.Marshal(&params)
 	if err != nil {
 		return nil, err
 	}

@@ -53,6 +53,7 @@ type Client struct {
 	ConEvents                   *ConEvents
 	DatabaseInfo                *DatabaseInfo
 	DataProtectionApi           *DataProtectionApi
+	DpeKeyService               *DpeKeyService
 	EventNotificationProperties *EventNotificationProperties
 	EventNotificationsApi       *EventNotificationsApi
 	EventProcessing             *EventProcessing
@@ -77,6 +78,7 @@ type Client struct {
 	NagRdu                      *NagRdu
 	PackagesApi                 *PackagesApi
 	Policy                      *Policy
+	ReportManager               *ReportManager
 	ScanDiapasons               *ScanDiapasons
 	SecurityPolicy3             *SecurityPolicy3
 	ServerHierarchy             *ServerHierarchy
@@ -133,6 +135,7 @@ func New(cfg Config) *Client {
 	c.ConEvents = (*ConEvents)(&c.common)
 	c.DatabaseInfo = (*DatabaseInfo)(&c.common)
 	c.DataProtectionApi = (*DataProtectionApi)(&c.common)
+	c.DpeKeyService = (*DpeKeyService)(&c.common)
 	c.EventNotificationProperties = (*EventNotificationProperties)(&c.common)
 	c.EventNotificationsApi = (*EventNotificationsApi)(&c.common)
 	c.EventProcessing = (*EventProcessing)(&c.common)
@@ -157,6 +160,7 @@ func New(cfg Config) *Client {
 	c.NagRdu = (*NagRdu)(&c.common)
 	c.PackagesApi = (*PackagesApi)(&c.common)
 	c.Policy = (*Policy)(&c.common)
+	c.ReportManager = (*ReportManager)(&c.common)
 	c.ScanDiapasons = (*ScanDiapasons)(&c.common)
 	c.SecurityPolicy3 = (*SecurityPolicy3)(&c.common)
 	c.ServerHierarchy = (*ServerHierarchy)(&c.common)

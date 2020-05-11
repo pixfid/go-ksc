@@ -26,13 +26,19 @@ import (
 	"net/http"
 )
 
+//	DatabaseInfo Class Reference
+//
+//	Database processing. More...
+//	Allow to get information from a Database.
+//
+//	List of all members.
 type DatabaseInfo service
 
-//Get database's files size.
+//	Get database's files size.
 //
-//Returns size of files of database
+//	Returns size of files of database
 //
-//Returns:
+//	Returns:
 //	- (data.PxgValInt) size of files of database.
 func (di *DatabaseInfo) GetDBSize(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.GetDBSize", nil)
@@ -41,11 +47,11 @@ func (di *DatabaseInfo) GetDBSize(ctx context.Context) (*PxgValInt, []byte, erro
 	return pxgValInt, raw, err
 }
 
-//Get database's data size.
+//	Get database's data size.
 //
-//Returns size of data of database
+//	Returns size of data of database
 //
-//Returns:
+//	Returns:
 //	- (data.PxgValInt) size of data of database.
 func (di *DatabaseInfo) GetDBDataSize(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.GetDBDataSize", nil)
@@ -54,11 +60,11 @@ func (di *DatabaseInfo) GetDBDataSize(ctx context.Context) (*PxgValInt, []byte, 
 	return pxgValInt, raw, err
 }
 
-//Get database's events count.
+//	Get database's events count.
 //
-//Returns count of events of database
+//	Returns count of events of database
 //
-//Returns:
+//	Returns:
 //	- (data.PxgValInt) count of events of database
 func (di *DatabaseInfo) GetDBEventsCount(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.GetDBEventsCount", nil)
@@ -67,11 +73,12 @@ func (di *DatabaseInfo) GetDBEventsCount(ctx context.Context) (*PxgValInt, []byt
 	return pxgValInt, raw, err
 }
 
-//Check is current SQL server in cloud (Amazon RDS or Azure SQL)
+//	Check is current SQL server in cloud (Amazon RDS or Azure SQL)
 //
-//Parameters:
+//	Parameters:
 //	- nCloudType	(int64) Cloud type (KLCLOUD::CloudType)
-//Returns:
+//
+//	Returns:
 //	- (data.PxgValBool) true if there is SQL database of this cloud type
 func (di *DatabaseInfo) IsCloudSQL(ctx context.Context, nCloudType int64) (*PxgValBool, []byte, error) {
 	postData := []byte(fmt.Sprintf(`
@@ -85,11 +92,12 @@ func (di *DatabaseInfo) IsCloudSQL(ctx context.Context, nCloudType int64) (*PxgV
 	return pxgValBool, raw, err
 }
 
-//TODO Check the server administration and SQL-server permissions to read and write files along path.
 //
-//Parameters:
+//	Check the server administration and SQL-server permissions to read and write files along path.
+//
+//	Parameters:
 //	- szwPath	(string) full-path to checkable directory
-//Exceptions:
+//	Exceptions:
 //	- Throw	exception if there are no any permissions
 func (di *DatabaseInfo) CheckBackupPath(ctx context.Context, szwPath string) (*PxgValBool, []byte, error) {
 	postData := []byte(fmt.Sprintf(`
@@ -98,6 +106,38 @@ func (di *DatabaseInfo) CheckBackupPath(ctx context.Context, szwPath string) (*P
 	}`, szwPath))
 
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.CheckBackupPath", bytes.NewBuffer(postData))
+	pxgValBool := new(PxgValBool)
+	raw, err := di.client.Do(ctx, request, &pxgValBool)
+	return pxgValBool, raw, err
+}
+
+//	Check the server administration and SQL-server permissions to read and write files along path.
+//
+//	Parameters:
+//	- szwWinPath	(string) full-path to checkable directory for KSC-server
+//	- szwLinuxPath	(string) full-path to checkable directory for SQL-server
+//
+//	Exceptions:
+//	- Throw	exception if there are no any permissions
+func (di *DatabaseInfo) CheckBackupPath2(ctx context.Context, szwWinPath, szwLinuxPath string) (*PxgValBool, []byte, error) {
+	postData := []byte(fmt.Sprintf(`
+	{
+		"szwWinPath": "%s",
+		"szwLinuxPath": "%s"
+	}`, szwWinPath, szwLinuxPath))
+
+	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.CheckBackupPath2", bytes.NewBuffer(postData))
+	pxgValBool := new(PxgValBool)
+	raw, err := di.client.Do(ctx, request, &pxgValBool)
+	return pxgValBool, raw, err
+}
+
+//	Check is current SQL server in on Linux.
+//
+//	Returns:
+//	- (bool) true if there is SQL database on Linux SQL instance
+func (di *DatabaseInfo) IsLinuxSQL(ctx context.Context) (*PxgValBool, []byte, error) {
+	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.IsLinuxSQL", nil)
 	pxgValBool := new(PxgValBool)
 	raw, err := di.client.Do(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
