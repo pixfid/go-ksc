@@ -32,6 +32,28 @@ import (
 //	List of all members:
 type VServers2 service
 
+//VServerStatistic struct
+type VServerStatistic struct {
+	VSStatistic *VSStatistic `json:"PxgRetVal,omitempty"`
+}
+
+type VSStatistic struct {
+	KlvsrvCreated   *Klvsrv       `json:"KLVSRV_CREATED,omitempty"`
+	KlvsrvGroups    *int64        `json:"KLVSRV_GROUPS,omitempty"`
+	KlvsrvHosts     *int64        `json:"KLVSRV_HOSTS,omitempty"`
+	KlvsrvLicenses  []interface{} `json:"KLVSRV_LICENSES"`
+	KlvsrvMdmios    *int64        `json:"KLVSRV_MDMIOS,omitempty"`
+	KlvsrvMobilies  *int64        `json:"KLVSRV_MOBILIES,omitempty"`
+	KlvsrvProducts  *Klvsrv       `json:"KLVSRV_PRODUCTS,omitempty"`
+	KlvsrvProducts2 *Klvsrv       `json:"KLVSRV_PRODUCTS_2,omitempty"`
+	KlvsrvUsers     *int64        `json:"KLVSRV_USERS,omitempty"`
+}
+
+type Klvsrv struct {
+	Type  *string `json:"type,omitempty"`
+	Value *string `json:"value"`
+}
+
 //Acquire info on virtual server.
 //
 //Returns info about the specified virtual server
@@ -40,14 +62,11 @@ type VServers2 service
 //	- lVsId	(int64) virtual server id
 //Returns:
 //	- (params) a container, see Virtual server statistic.
-func (vs *VServers2) GetVServerStatistic(ctx context.Context, lVsId int) ([]byte, error) {
-	postData := []byte(fmt.Sprintf(`
-	{
-	"lVsId": %d
-	}`, lVsId))
-
+func (vs *VServers2) GetVServerStatistic(ctx context.Context, lVsId int) (*VServerStatistic, []byte, error) {
+	postData := []byte(fmt.Sprintf(`{"lVsId": %d}`, lVsId))
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers2.GetVServerStatistic", bytes.NewBuffer(postData))
 
-	raw, err := vs.client.Do(ctx, request, nil)
-	return raw, err
+	vServerStatistic := new(VServerStatistic)
+	raw, err := vs.client.Do(ctx, request, &vServerStatistic)
+	return vServerStatistic, raw, err
 }

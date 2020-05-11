@@ -54,9 +54,32 @@ func (vs *VServers) GetVServers(ctx context.Context, lParentGroup int64) ([]byte
 	return raw, err
 }
 
+type VServerInfo struct {
+	VServer *VServer `json:"PxgRetVal,omitempty"`
+}
+
+type VServer struct {
+	KlvsrvCreated            *KlvsrvCreated `json:"KLVSRV_CREATED,omitempty"`
+	KlvsrvDN                 *string        `json:"KLVSRV_DN,omitempty"`
+	KlvsrvEnabled            *bool          `json:"KLVSRV_ENABLED,omitempty"`
+	KlvsrvGroups             *int64         `json:"KLVSRV_GROUPS,omitempty"`
+	KlvsrvGrp                *int64         `json:"KLVSRV_GRP,omitempty"`
+	KlvsrvHstUid             *string        `json:"KLVSRV_HST_UID,omitempty"`
+	KlvsrvID                 *int64         `json:"KLVSRV_ID,omitempty"`
+	KlvsrvLicEnabled         *bool          `json:"KLVSRV_LIC_ENABLED,omitempty"`
+	KlvsrvNewHostsProhibited *bool          `json:"KLVSRV_NEW_HOSTS_PROHIBITED,omitempty"`
+	KlvsrvSuper              *int64         `json:"KLVSRV_SUPER,omitempty"`
+	KlvsrvTooMuchHosts       *bool          `json:"KLVSRV_TOO_MUCH_HOSTS,omitempty"`
+	KlvsrvUid                *string        `json:"KLVSRV_UID,omitempty"`
+	KlvsrvUnassigned         *int64         `json:"KLVSRV_UNASSIGNED,omitempty"`
+}
+
+type KlvsrvCreated struct {
+	Type  *string `json:"type,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
 //	Register new virtual server.
-//
-//	Registers new virtual server
 //
 //	Parameters:
 //	- strDisplayName	(string) virtual server display name, if display name is non-unique,
@@ -67,31 +90,14 @@ func (vs *VServers) GetVServers(ctx context.Context, lParentGroup int64) ([]byte
 //	- (params) a container KLPAR::ParamsPtr containing attributes "KLVSRV_ID" and "KLVSRV_DN" (
 //	see List of virtual server attributes).
 //
-//	Example Result:
-//{
-//  "PxgRetVal" : {
-//    "KLVSRV_CREATED" : {
-//      "type" : "datetime",
-//      "value" : "2020-05-03T00:59:09Z"
-//    },
-//    "KLVSRV_DN" : "vservx",
-//    "KLVSRV_ENABLED" : true,
-//    "KLVSRV_GROUPS" : 167,
-//    "KLVSRV_GRP" : 0,
-//    "KLVSRV_HST_UID" : "VSRVa80a675f-40d1-4f50-aec8-ff79bd8793d4",
-//    "KLVSRV_ID" : 1,
-//    "KLVSRV_LIC_ENABLED" : true,
-//    "KLVSRV_SUPER" : 166,
-//    "KLVSRV_UID" : "VSRVa80a675f-40d1-4f50-aec8-ff79bd8793d4",
-//    "KLVSRV_UNASSIGNED" : 170
-//  }
-//}
-func (vs *VServers) AddVServerInfo(ctx context.Context, strDisplayName string, lParentGroup int64) ([]byte, error) {
+func (vs *VServers) AddVServerInfo(ctx context.Context, strDisplayName string, lParentGroup int64) (*VServer, []byte,
+	error) {
 	postData := []byte(fmt.Sprintf(`{"lParentGroup": %d, "strDisplayName" : "%s"}`, lParentGroup, strDisplayName))
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.AddVServerInfo", bytes.NewBuffer(postData))
 
-	raw, err := vs.client.Do(ctx, request, nil)
-	return raw, err
+	vServer := new(VServer)
+	raw, err := vs.client.Do(ctx, request, &vServer)
+	return vServer, raw, err
 }
 
 //	Unregister specified Virtual Server.

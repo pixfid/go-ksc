@@ -86,6 +86,7 @@ type Client struct {
 	Session                     *Session
 	SmsQueue                    *SmsQueue
 	SmsSenders                  *SmsSenders
+	SrvSsRevision               *SrvSsRevision
 	SrvView                     *SrvView
 	SsContents                  *SsContents
 	Tasks                       *Tasks
@@ -168,6 +169,7 @@ func New(cfg Config) *Client {
 	c.Session = (*Session)(&c.common)
 	c.SmsQueue = (*SmsQueue)(&c.common)
 	c.SmsSenders = (*SmsSenders)(&c.common)
+	c.SrvSsRevision = (*SrvSsRevision)(&c.common)
 	c.SrvView = (*SrvView)(&c.common)
 	c.SsContents = (*SsContents)(&c.common)
 	c.Tasks = (*Tasks)(&c.common)
