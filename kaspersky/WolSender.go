@@ -44,13 +44,14 @@ type WolSender service
 //	Target WOL packets are sent to broadcast address 255.255.255.255,
 //	direct host IP and subnet-directed broadcast (like '10.11.12.255').
 //	WOL packets sent to ports 7 and 9.
-func (ah *WolSender) SendWolSignal(ctx context.Context, szwHostId string) error {
+func (ws *WolSender) SendWolSignal(ctx context.Context, szwHostId string) error {
 	postData := []byte(fmt.Sprintf(`{"szwHostId":"%s"}`, szwHostId))
-	request, err := http.NewRequest("POST", ah.client.Server+"/api/v1.0/WolSender.SendWolSignal", bytes.NewBuffer(postData))
+	request, err := http.NewRequest("POST", ws.client.Server+"/api/v1.0/WolSender.SendWolSignal",
+		bytes.NewBuffer(postData))
 	if err != nil {
 		return err
 	}
 
-	_, err = ah.client.Do(ctx, request, nil)
+	_, err = ws.client.Do(ctx, request, nil)
 	return err
 }

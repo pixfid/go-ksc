@@ -63,13 +63,13 @@ type NagGuiCalls service
 //	 | KLSTD                                          | 1193 | KLSTD.STDE_NOTPERM      | Operation is not permitted                       |
 //	 | KLCONN                                         | 1194 | KLCONN.GCR_NO_SUCH_CALL |  No such GUI call (GUI call is not implemented)  |
 //	 +------------------------------------------------+------+--------------------------+--------------------------------------------------+
-func (sd *NagGuiCalls) CallConnectorAsync(ctx context.Context, params interface{}) ([]byte, error) {
+func (ngc *NagGuiCalls) CallConnectorAsync(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, _ := json.Marshal(params)
-	request, err := http.NewRequest("POST", sd.client.Server+"/api/v1.0/NagGuiCalls.CallConnectorAsync", bytes.NewBuffer(postData))
+	request, err := http.NewRequest("POST", ngc.client.Server+"/api/v1.0/NagGuiCalls.CallConnectorAsync", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := sd.client.Do(ctx, request, nil)
+	raw, err := ngc.client.Do(ctx, request, nil)
 	return raw, err
 }

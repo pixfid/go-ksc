@@ -93,19 +93,19 @@ type TrafficPRestrictions struct {
 //
 //	Returns:
 //	- (int64) added restriction id
-func (uc *TrafficManager) AddRestriction(ctx context.Context, params interface{}) (*PxgValInt, []byte, error) {
+func (tm *TrafficManager) AddRestriction(ctx context.Context, params interface{}) (*PxgValInt, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	request, err := http.NewRequest("POST", uc.client.Server+"/api/v1.0/TrafficManager.AddRestriction", bytes.NewBuffer(postData))
+	request, err := http.NewRequest("POST", tm.client.Server+"/api/v1.0/TrafficManager.AddRestriction", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, nil, err
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := uc.client.Do(ctx, request, &pxgValInt)
+	raw, err := tm.client.Do(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -113,14 +113,14 @@ func (uc *TrafficManager) AddRestriction(ctx context.Context, params interface{}
 //
 //	Parameters:
 //	- nRestrictionId	(int64)	restriction to delete
-func (uc *TrafficManager) DeleteRestriction(ctx context.Context, nRestrictionId int64) ([]byte, error) {
+func (tm *TrafficManager) DeleteRestriction(ctx context.Context, nRestrictionId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nRestrictionId": %d}`, nRestrictionId))
-	request, err := http.NewRequest("POST", uc.client.Server+"/api/v1.0/TrafficManager.DeleteRestriction", bytes.NewBuffer(postData))
+	request, err := http.NewRequest("POST", tm.client.Server+"/api/v1.0/TrafficManager.DeleteRestriction", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := uc.client.Do(ctx, request, nil)
+	raw, err := tm.client.Do(ctx, request, nil)
 	return raw, err
 }
 
@@ -162,13 +162,13 @@ func (uc *TrafficManager) DeleteRestriction(ctx context.Context, nRestrictionId 
 //	    }
 //	  ]
 //	}
-func (uc *TrafficManager) GetRestrictions(ctx context.Context) ([]byte, error) {
-	request, err := http.NewRequest("POST", uc.client.Server+"/api/v1.0/TrafficManager.GetRestrictions", nil)
+func (tm *TrafficManager) GetRestrictions(ctx context.Context) ([]byte, error) {
+	request, err := http.NewRequest("POST", tm.client.Server+"/api/v1.0/TrafficManager.GetRestrictions", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := uc.client.Do(ctx, request, nil)
+	raw, err := tm.client.Do(ctx, request, nil)
 	return raw, err
 }
 
@@ -197,13 +197,13 @@ func (uc *TrafficManager) GetRestrictions(ctx context.Context) ([]byte, error) {
 //
 //	Returns:
 //	- (int) modified restriction id. If restriction did not exist before call then newly created restriction id.
-func (uc *TrafficManager) UpdateRestriction(ctx context.Context, params interface{}) ([]byte, error) {
+func (tm *TrafficManager) UpdateRestriction(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, _ := json.Marshal(params)
-	request, err := http.NewRequest("POST", uc.client.Server+"/api/v1.0/TrafficManager.UpdateRestriction", bytes.NewBuffer(postData))
+	request, err := http.NewRequest("POST", tm.client.Server+"/api/v1.0/TrafficManager.UpdateRestriction", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := uc.client.Do(ctx, request, nil)
+	raw, err := tm.client.Do(ctx, request, nil)
 	return raw, err
 }

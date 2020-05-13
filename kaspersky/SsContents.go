@@ -177,14 +177,14 @@ func (sc *SsContents) Ss_Read(ctx context.Context, wstrID, wstrProduct, wstrVers
 //
 //	Parameters:
 //	- wstrID	(string) identifier of opened SsContents
-func (pl *SsContents) Ss_Release(ctx context.Context, wstrID string) ([]byte, error) {
+func (sc *SsContents) Ss_Release(ctx context.Context, wstrID string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrID": "%s"}`, wstrID))
-	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/SsContents.Ss_Release", bytes.NewBuffer(postData))
+	request, err := http.NewRequest("POST", sc.client.Server+"/api/v1.0/SsContents.Ss_Release", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := pl.client.Do(ctx, request, nil)
+	raw, err := sc.client.Do(ctx, request, nil)
 	return raw, err
 }
 

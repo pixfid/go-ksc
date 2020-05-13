@@ -41,15 +41,15 @@ type Updates service
 //	can be one of "ru", "en", "fr", "de"; for other values "en" localization will be used.
 //	Return:
 //	- pAvailableUpdateComps	(params) - see Well-known retranslated update components list
-func (uda *Updates) GetAvailableUpdatesInfo(ctx context.Context, strLocalization string) ([]byte, error) {
+func (upd *Updates) GetAvailableUpdatesInfo(ctx context.Context, strLocalization string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strLocalization": "%s"}`, strLocalization))
-	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/Updates.GetAvailableUpdatesInfo",
+	request, err := http.NewRequest("POST", upd.client.Server+"/api/v1.0/Updates.GetAvailableUpdatesInfo",
 		bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := upd.client.Do(ctx, request, nil)
 	return raw, err
 }
 
@@ -61,15 +61,15 @@ func (uda *Updates) GetAvailableUpdatesInfo(ctx context.Context, strLocalization
 //
 //	Returns:
 //(array) result, see List of attributes of a retranslated update component bundle
-func (uda *Updates) GetUpdatesInfo(ctx context.Context) ([]byte, error) {
+func (upd *Updates) GetUpdatesInfo(ctx context.Context) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"pFilter" : ["KAS20EXCH"]}`))
-	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/Updates.GetUpdatesInfo",
+	request, err := http.NewRequest("POST", upd.client.Server+"/api/v1.0/Updates.GetUpdatesInfo",
 		bytes.NewBuffer(postData))
 
 	if err != nil {
 		return nil, err
 	}
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := upd.client.Do(ctx, request, nil)
 	return raw, err
 }
 
@@ -78,15 +78,15 @@ func (uda *Updates) GetUpdatesInfo(ctx context.Context) ([]byte, error) {
 //	Returns:
 //	- (string) request id of asynchronous operation, to cancel call Updates.RemoveUpdatesCancel,
 //	to get status call AsyncActionStateChecker.CheckActionState with returned request id as action guid
-func (uda *Updates) RemoveUpdates(ctx context.Context) (*RequestID, []byte, error) {
-	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/Updates.RemoveUpdates",
+func (upd *Updates) RemoveUpdates(ctx context.Context) (*RequestID, []byte, error) {
+	request, err := http.NewRequest("POST", upd.client.Server+"/api/v1.0/Updates.RemoveUpdates",
 		nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	requestID := new(RequestID)
-	raw, err := uda.client.Do(ctx, request, &requestID)
+	raw, err := upd.client.Do(ctx, request, &requestID)
 	return requestID, raw, err
 }
 
@@ -94,15 +94,15 @@ func (uda *Updates) RemoveUpdates(ctx context.Context) (*RequestID, []byte, erro
 //
 //	Parameters:
 //	- strRequestId	(string) request id of asynchronous operation Updates.RemoveUpdates
-func (uda *Updates) RemoveUpdatesCancel(ctx context.Context, strRequestId string) (*RequestID, []byte, error) {
+func (upd *Updates) RemoveUpdatesCancel(ctx context.Context, strRequestId string) (*RequestID, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strRequestId": "%s"}`, strRequestId))
-	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/Updates.RemoveUpdatesCancel",
+	request, err := http.NewRequest("POST", upd.client.Server+"/api/v1.0/Updates.RemoveUpdatesCancel",
 		bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, nil, err
 	}
 
 	requestID := new(RequestID)
-	raw, err := uda.client.Do(ctx, request, &requestID)
+	raw, err := upd.client.Do(ctx, request, &requestID)
 	return requestID, raw, err
 }
