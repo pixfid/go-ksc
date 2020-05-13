@@ -79,7 +79,6 @@ type CIFILValue struct {
 
 //	PxgRetError struct
 type PxgRetError struct {
-	Response *http.Response
 	PxgError *PxgError `json:"PxgError,omitempty"`
 }
 

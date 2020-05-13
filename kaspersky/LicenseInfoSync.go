@@ -47,15 +47,15 @@ type LicenseInfoSync service
 //
 //	Exceptions:
 //	Throws	exception in case of error.
-func (cp *LicenseInfoSync) IsPCloudKey(ctx context.Context, nProductId int64) ([]byte, error) {
+func (lis *LicenseInfoSync) IsPCloudKey(ctx context.Context, nProductId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nProductId": %d}`, nProductId))
-	request, err := http.NewRequest("POST", cp.client.Server+"/api/v1.0/LicenseInfoSync.IsPCloudKey",
+	request, err := http.NewRequest("POST", lis.client.Server+"/api/v1.0/LicenseInfoSync.IsPCloudKey",
 		bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := cp.client.Do(ctx, request, nil)
+	raw, err := lis.client.Do(ctx, request, nil)
 	return raw, err
 }
 
@@ -70,15 +70,15 @@ func (cp *LicenseInfoSync) IsPCloudKey(ctx context.Context, nProductId int64) ([
 //
 //	Exceptions:
 //	Throws	exception in case of error.
-func (gs *LicenseInfoSync) SynchronizeLicInfo2(ctx context.Context) (*PxgValStr, []byte, error) {
-	request, err := http.NewRequest("POST", gs.client.Server+"/api/v1.0/LicenseInfoSync.SynchronizeLicInfo2",
+func (lis *LicenseInfoSync) SynchronizeLicInfo2(ctx context.Context) (*PxgValStr, []byte, error) {
+	request, err := http.NewRequest("POST", lis.client.Server+"/api/v1.0/LicenseInfoSync.SynchronizeLicInfo2",
 		nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := gs.client.Do(ctx, request, &pxgValStr)
+	raw, err := lis.client.Do(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -91,14 +91,14 @@ func (gs *LicenseInfoSync) SynchronizeLicInfo2(ctx context.Context) (*PxgValStr,
 //
 //	Exceptions:
 //	Throws	exception in case of error.
-func (cp *LicenseInfoSync) TryToUnistallLicense(ctx context.Context, bCurrent bool) ([]byte, error) {
+func (lis *LicenseInfoSync) TryToUnistallLicense(ctx context.Context, bCurrent bool) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"bCurrent": %v}`, bCurrent))
-	request, err := http.NewRequest("POST", cp.client.Server+"/api/v1.0/LicenseInfoSync.TryToUnistallLicense",
+	request, err := http.NewRequest("POST", lis.client.Server+"/api/v1.0/LicenseInfoSync.TryToUnistallLicense",
 		bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := cp.client.Do(ctx, request, nil)
+	raw, err := lis.client.Do(ctx, request, nil)
 	return raw, err
 }

@@ -75,6 +75,7 @@ type Client struct {
 	LicensePolicy               *LicensePolicy
 	Limits                      *Limits
 	ListTags                    *ListTags
+	MigrationData               *MigrationData
 	Multitenancy                *Multitenancy
 	NagCgwHelper                *NagCgwHelper
 	NagGuiCalls                 *NagGuiCalls
@@ -84,6 +85,7 @@ type Client struct {
 	Policy                      *Policy
 	ReportManager               *ReportManager
 	ScanDiapasons               *ScanDiapasons
+	SecurityPolicy              *SecurityPolicy
 	SecurityPolicy3             *SecurityPolicy3
 	ServerHierarchy             *ServerHierarchy
 	ServerTransportSettings     *ServerTransportSettings
@@ -162,6 +164,7 @@ func New(cfg Config) *Client {
 	c.LicensePolicy = (*LicensePolicy)(&c.common)
 	c.Limits = (*Limits)(&c.common)
 	c.ListTags = (*ListTags)(&c.common)
+	c.MigrationData = (*MigrationData)(&c.common)
 	c.Multitenancy = (*Multitenancy)(&c.common)
 	c.NagCgwHelper = (*NagCgwHelper)(&c.common)
 	c.NagGuiCalls = (*NagGuiCalls)(&c.common)
@@ -171,6 +174,7 @@ func New(cfg Config) *Client {
 	c.Policy = (*Policy)(&c.common)
 	c.ReportManager = (*ReportManager)(&c.common)
 	c.ScanDiapasons = (*ScanDiapasons)(&c.common)
+	c.SecurityPolicy = (*SecurityPolicy)(&c.common)
 	c.SecurityPolicy3 = (*SecurityPolicy3)(&c.common)
 	c.ServerHierarchy = (*ServerHierarchy)(&c.common)
 	c.ServerTransportSettings = (*ServerTransportSettings)(&c.common)
