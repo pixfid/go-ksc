@@ -22,6 +22,7 @@ package kaspersky
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"net/http"
@@ -161,7 +162,7 @@ func (pl *Policy) GetPoliciesForGroup(ctx context.Context, nGroupId int64) ([]by
 //	- nLifeTime	(int64) timeout in milliseconds to keep this SsContents object alive, zero means 'default value'
 //
 //	Returns:
-//	- (string) identifier of opened SsContents, must be closed with SsContents::SS_Release
+//	- (string) identifier of opened SsContents, must be closed with SsContents.SS_Release
 func (pl *Policy) GetPolicyContents(ctx context.Context, nPolicy, nRevisionId, nLifeTime int64) (*PxgValStr, []byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{ "nPolicy": %d , "nRevisionId": %d , "nLifeTime": %d }`, nPolicy, nRevisionId,
@@ -209,7 +210,7 @@ func (pl *Policy) GetPolicyData(ctx context.Context, nPolicy int64) (*PxgValPoli
 //	(returns false if the policy is already inactive)
 //
 //	Returns:
-//	- (boolean) true if policy was successfully set to active or false otherwise
+//	- ( bool) true if policy was successfully set to active or false otherwise
 //
 //	See also:
 //	List of policy attributes
@@ -272,3 +273,62 @@ func (pl *Policy) RevertPolicyToRevision(ctx context.Context, nPolicy, nRevision
 
 //TODO SetOutbreakPolicies
 //TODO UpdatePolicyData
+
+//	Export policy to a blob.
+//
+//	Exports policy into single chunk.
+//
+//	Parameters:
+//	- lPolicy	(int64) policy id
+//
+//	Returns:
+//	- blob with exported policy
+//
+//	See also:
+//	Policy.ImportPolicy
+func (pl *Policy) ExportPolicy(ctx context.Context, lPolicy int64) (*PxgValStr, []byte, error) {
+	postData := []byte(fmt.Sprintf(`{"lPolicy": %d}`, lPolicy))
+	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.ExportPolicy", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	pxgValStr := new(PxgValStr)
+	raw, err := pl.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, raw, err
+}
+
+//PolicyBlob struct
+type PolicyBlob struct {
+	LGroup *int64 `json:"lGroup,omitempty"`
+	//	PData raw []byte data of policy base64 encoded
+	PData *string `json:"pData,omitempty"`
+}
+
+//	Import policy from blob.
+//
+//	Exports policy from a single chunk.
+//
+//	Parameters:
+//	- params	(PolicyBlob)
+//
+//	Returns:
+//	- policy id
+//
+//	See also:
+//	- Policy.ExportPolicy
+func (pl *Policy) ImportPolicy(ctx context.Context, params PolicyBlob) (*PxgValStr, []byte, error) {
+	postData, err := json.Marshal(&params)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.ImportPolicy", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	pxgValStr := new(PxgValStr)
+	raw, err := pl.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, raw, err
+}

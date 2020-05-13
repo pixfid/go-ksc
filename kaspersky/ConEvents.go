@@ -41,7 +41,7 @@ type ConEvents service
 //	Use this method to retrieve events.
 //
 //	Parameters:
-//	- pEvents	[out] (array) Events array. Each element of array is params with attributes:
+//	- pEvents (array) Events array. Each element of array is params with attributes:
 //	+----------------------------+---------------+----------------------------+
 //	|         Attribute          |     Type      |        Description         |
 //	+----------------------------+---------------+----------------------------+
@@ -88,9 +88,9 @@ type SubscribeEventResponse struct {
 //	Also attribute pFilter allow you to cut off unnecessary events.
 //
 //	Parameters:
-//	- wstrEvent	[in] (string) event type
-//	- pFilter	[in] (params) event filter
-//	- nPeriod	[out] (int64) new value of polling period, milliseconds
+//	- wstrEvent (string) event type
+//	- pFilter (params) event filter
+//	- nPeriod (int64) new value of polling period, milliseconds
 //
 //	Returns:
 //	- (int64) subscription id
@@ -137,7 +137,7 @@ func (ce *ConEvents) Subscribe(ctx context.Context, v interface{}) ([]byte, erro
 //	Use this method to unsubscribe from an event.
 //
 //	- Parameters:
-//	nSubsId	[in] (int64) subscription id (see method ConEvents::Subscribe)
+//	nSubsId (int64) subscription id (see method ConEvents.Subscribe)
 //
 //	Exceptions:
 //	- STDE_NOTFOUND	subscription was not found

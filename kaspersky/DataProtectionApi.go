@@ -60,7 +60,7 @@ type DataProtectionApi service
 //	- szwPassword	(string)	The password to check.
 //
 //	Exceptions:
-//	- KLSTD::STDE_NOFUNC	the password does not comply with the password policy
+//	- KLSTD.STDE_NOFUNC	the password does not comply with the password policy
 func (dp *DataProtectionApi) CheckPasswordSplPpc(ctx context.Context, szwPassword string) (*PxgValBool, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"szwPassword": "%s"}`, szwPassword))
 	request, err := http.NewRequest("POST", dp.client.Server+"/api/v1.0/DataProtectionApi.CheckPasswordSplPpc", bytes.NewBuffer(postData))
@@ -76,24 +76,24 @@ func (dp *DataProtectionApi) CheckPasswordSplPpc(ctx context.Context, szwPasswor
 //	Protects sensitive data to store in SettingsStorage or local task.
 //
 //	Parameters:
-//	- szwHostId	[in] host name
-//	- pData	[in] pointer to data
+//	- szwHostId host name
+//	- pData pointer to data
 //
-//	- pDataProtected	[out] pointer to protected data block.
+//	- pDataProtected pointer to protected data block.
 //
 //Exceptions:
-//	- KLSTD::STDE_NOTPERM	host has no public key (
+//	- KLSTD.STDE_NOTPERM	host has no public key (
 //	possibly it doesn't support data protection or nagent isn't installed
 //	there or host belongs to other virtual server)
-//	- KLSTD::STDE_NOFUNC	server doesn't support data protection
+//	- KLSTD.STDE_NOFUNC	server doesn't support data protection
 //TODO func (dp *DataProtectionApi) ProtectDataForHost(ctx context.Context, szwHostId string, pData []byte) ([]byte,
 //error)
 
 //	Protects sensitive data to store in policy or global/group task.
 //
 //	Parameters:
-//	- pData	[in] pointer to data
-//	- pDataProtected	[out] pointer to protected data block.
+//	- pData pointer to data
+//	- pDataProtected pointer to protected data block.
 //TODO func (dp *DataProtectionApi) ProtectDataForHost(ctx context.Context, szwHostId string, pData []byte) ([]byte,
 //error)
 
@@ -102,8 +102,8 @@ func (dp *DataProtectionApi) CheckPasswordSplPpc(ctx context.Context, szwPasswor
 //	Protects the specified text as UTF16 string encrypted with the key of the specified host.
 //
 //	Parameters:
-//	- szwHostId	[in] host name
-//	- szwPlainText	[in] plainText
+//	- szwHostId host name
+//	- szwPlainText plainText
 //
 //	Returns:
 //	- Ciphertext
@@ -125,10 +125,10 @@ func (dp *DataProtectionApi) ProtectUtf16StringForHost(ctx context.Context, szwH
 //	Protects the specified text as UTF16 string encrypted with the key
 //	of the Administration Server.
 //
-//	The same as Tasks::ProtectPassword
+//	The same as Tasks.ProtectPassword
 //
 //	Parameters:
-//	- szwPlainText	[in] plainText
+//	- szwPlainText plainText
 //
 //Returns:
 //	- Ciphertext
@@ -151,8 +151,8 @@ func (dp *DataProtectionApi) ProtectUtf16StringGlobally(ctx context.Context, szw
 //	of the specified host.
 //
 //	Parameters:
-//	- szwHostId	[in] host name
-//	- szwPlainText	[in] plainText
+//	- szwHostId host name
+//	- szwPlainText plainText
 //
 //Returns:
 //	- Ciphertext
@@ -175,7 +175,7 @@ func (dp *DataProtectionApi) ProtectUtf8StringForHost(ctx context.Context, szwHo
 //	of the Administration Server.
 //
 //	Parameters:
-//	- szwPlainText	[in] plainText
+//	- szwPlainText plainText
 //
 //	Returns:
 //	- Ciphertext

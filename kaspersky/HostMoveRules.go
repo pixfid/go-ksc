@@ -117,7 +117,7 @@ func (hs *HostMoveRules) DeleteRule(ctx context.Context, nRule int64) ([]byte, e
 	return raw, err
 }
 
-//TODO HostMoveRules::AddRule
-//TODO HostMoveRules::ExecuteRulesNow
-//TODO HostMoveRules::SetRulesOrder
-//TODO HostMoveRules::UpdateRule
+//TODO HostMoveRules.AddRule
+//TODO HostMoveRules.ExecuteRulesNow
+//TODO HostMoveRules.SetRulesOrder
+//TODO HostMoveRules.UpdateRule

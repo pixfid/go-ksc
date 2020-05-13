@@ -134,7 +134,7 @@ type HostsKeyIterator struct {
 //	- wstrIterator	(string) forward-iterator name for accesing key attributes through GroupSyncIterator.
 //
 //	Note:
-//	Call GroupSyncIterator::GetNextItems to iterate. Call GroupSyncIterator::ReleaseIterator when you are done.
+//	Call GroupSyncIterator.GetNextItems to iterate. Call GroupSyncIterator.ReleaseIterator when you are done.
 func (lk *LicenseKeys) AcquireKeyHosts(ctx context.Context, params AcquireKeyHostsParams) (*HostsKeyIterator,
 	[]byte, error) {
 	postData, _ := json.Marshal(params)
@@ -170,7 +170,7 @@ type EnumKeysParams struct {
 //	- lKeyCount	(int64) count of keys returned via enumerator.
 //	- wstrIterator	(string) forward-iterator name for accesing key attributes through GroupSyncIterator.
 //
-//	Call GroupSyncIterator::GetNextItems to iterate. Call GroupSyncIterator::ReleaseIterator when you are done.
+//	Call GroupSyncIterator.GetNextItems to iterate. Call GroupSyncIterator.ReleaseIterator when you are done.
 //
 //Exceptions:
 //	Throws	exception in case of error.

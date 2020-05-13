@@ -41,7 +41,7 @@ type SrvSsRevision service
 //	- szwType	only "SS_SETTINGS" is supported
 //
 //	Returns:
-//	opened settings storage identifier, it must be closed via SrvSsRevision::SsRevision_Close method
+//	opened settings storage identifier, it must be closed via SrvSsRevision.SsRevision_Close method
 func (ssr *SrvSsRevision) SsRevision_Open(ctx context.Context, nVServer, nRevision int64, szwType string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{
 		"nVServer": %d, 
@@ -57,7 +57,7 @@ func (ssr *SrvSsRevision) SsRevision_Open(ctx context.Context, nVServer, nRevisi
 	return raw, err
 }
 
-//	Close settings storage opened by SrvSsRevision::SsRevision_Open
+//	Close settings storage opened by SrvSsRevision.SsRevision_Open
 //
 //	Parameters:
 //	- szwId	settings storage identifier returned by SrvSsRevision.SsRevision_Open method

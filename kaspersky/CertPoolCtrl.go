@@ -37,8 +37,8 @@ type CertPoolCtrl service
 //	Returns information about certificate from server's certificates pool.
 //
 //	Parameters:
-//	- nVServerId	[in] (int64) Virtual server id (-1 for current, 0 for main server)
-//	- nFunction	[in] (int64) Certificate function (see "KLCERTP::CertificateFunction enum values")
+//	- nVServerId (int64) Virtual server id (-1 for current, 0 for main server)
+//	- nFunction (int64) Certificate function (see "KLCERTP.CertificateFunction enum values")
 //
 //	Returns:
 //	- (params) If certificate present then it returns params

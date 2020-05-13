@@ -48,8 +48,8 @@ type NagGuiCalls service
 //	- asynchronous request ID, used to get the result
 //
 //	Remarks:
-//	Check the operation state by calling AsyncActionStateChecker::CheckActionState periodically until it's
-//	finalized. If the operation succedes then AsyncActionStateChecker::CheckActionState returns call-results in pStateData. Otherwise, a call to AsyncActionStateChecker::CheckActionState returns error in pStateData.
+//	Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's
+//	finalized. If the operation succedes then AsyncActionStateChecker.CheckActionState returns call-results in pStateData. Otherwise, a call to AsyncActionStateChecker.CheckActionState returns error in pStateData.
 //
 //	Exceptions:
 //	Throws	exception in case of error, see Some error definitions
@@ -57,11 +57,11 @@ type NagGuiCalls service
 //	 +------------------------------------------------+------+--------------------------+--------------------------------------------------+
 //	 |                  Module name                   | Code |      Mnemonic name       |                Error description                 |
 //	 +------------------------------------------------+------+--------------------------+--------------------------------------------------+
-//	 | KLPRSS                                         | 1125 | KLPRSS::NOT_EXIST        | Parameter with the specified name does not exist |
-//	 | KLSTD                                          | 1184 | KLSTD::STDE_NOACCESS     | Access denied                                    |
-//	 | KLSTD                                          | 1186 | KLSTD::STDE_NOTFOUND     | Object not found                                 |
-//	 | KLSTD                                          | 1193 | KLSTD::STDE_NOTPERM      | Operation is not permitted                       |
-//	 | KLCONN                                         | 1194 | KLCONN::GCR_NO_SUCH_CALL |  No such GUI call (GUI call is not implemented)  |
+//	 | KLPRSS                                         | 1125 | KLPRSS.NOT_EXIST        | Parameter with the specified name does not exist |
+//	 | KLSTD                                          | 1184 | KLSTD.STDE_NOACCESS     | Access denied                                    |
+//	 | KLSTD                                          | 1186 | KLSTD.STDE_NOTFOUND     | Object not found                                 |
+//	 | KLSTD                                          | 1193 | KLSTD.STDE_NOTPERM      | Operation is not permitted                       |
+//	 | KLCONN                                         | 1194 | KLCONN.GCR_NO_SUCH_CALL |  No such GUI call (GUI call is not implemented)  |
 //	 +------------------------------------------------+------+--------------------------+--------------------------------------------------+
 func (sd *NagGuiCalls) CallConnectorAsync(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, _ := json.Marshal(params)

@@ -41,9 +41,9 @@ type KsnInternal service
 //	- (bool) Returns true if connection checked. Otherwise - false.
 //
 //	Exceptions:
-//	- KLSTD::STDE_NOACCESS	- Access denied
-//	- KLSTD::STDE_NOTPERM - KsnProxy is disabled,
-//	- KLPRCP::ERR_CANT_CONNECT - Can not connect to KSN.
+//	- KLSTD.STDE_NOACCESS	- Access denied
+//	- KLSTD.STDE_NOTPERM - KsnProxy is disabled,
+//	- KLPRCP.ERR_CANT_CONNECT - Can not connect to KSN.
 func (sd *KsnInternal) CheckKsnConnection(ctx context.Context) (*PxgValBool, []byte, error) {
 	request, err := http.NewRequest("POST", sd.client.Server+"/api/v1.0/KsnInternal.CheckKsnConnection", nil)
 
@@ -55,12 +55,12 @@ func (sd *KsnInternal) CheckKsnConnection(ctx context.Context) (*PxgValBool, []b
 //	Get all KPSN eula.
 //
 //	Return:
-//	- pNKsnEulas	[out] (array) Array of eula.
+//	- pNKsnEulas (array) Array of eula.
 //	See Format of KPSN eula params.
 //
 //	Exceptions:
-//	- KLSTD::STDE_NOTPERM	- Can't call on virtual server,
-//	- KLSTD::STDE_NOACCESS - Access denied.
+//	- KLSTD.STDE_NOTPERM	- Can't call on virtual server,
+//	- KLSTD.STDE_NOACCESS - Access denied.
 func (sd *KsnInternal) GetNKsnEulas(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", sd.client.Server+"/api/v1.0/KsnInternal.GetNKsnEulas", nil)
 
@@ -85,7 +85,7 @@ type PSettings struct {
 //	Returns settings of KsnProxy. May be used on virtual server.
 //
 //	Parameters:
-//	- pSettings	[out] (params) Section KSNPROXY_SETTINGS.
+//	- pSettings (params) Section KSNPROXY_SETTINGS.
 //	See Section KSNPROXY_SETTINGS attributes.
 func (sd *KsnInternal) GetSettings(ctx context.Context) (*KsnSettings, []byte, error) {
 	request, err := http.NewRequest("POST", sd.client.Server+"/api/v1.0/KsnInternal.GetSettings", nil)
@@ -118,9 +118,9 @@ func (sd *KsnInternal) NeedToSendStatistics(ctx context.Context) (*PxgValBool, [
 //	Only NKsnEula and NKsnEulaLoc present.
 //
 //	Exceptions:
-//	- KLSTD::STDE_NOTPERM	- Can't call on virtual server
-//	- KLSTD::STDE_NOACCESS - Access denied,
-//	- KLSTD::STDE_NOTFOUND - Eula with specified localization not found.
+//	- KLSTD.STDE_NOTPERM	- Can't call on virtual server
+//	- KLSTD.STDE_NOACCESS - Access denied,
+//	- KLSTD.STDE_NOTFOUND - Eula with specified localization not found.
 func (sd *KsnInternal) GetNKsnEula(ctx context.Context, wstrNKsnLoc string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrNKsnLoc": "%s"}`, wstrNKsnLoc))
 	request, err := http.NewRequest("POST", sd.client.Server+"/api/v1.0/KsnInternal.GetNKsnEula", bytes.NewBuffer(postData))

@@ -156,4 +156,4 @@ func (hs *HostTagsRulesApi) DeleteRule(ctx context.Context, szwTagValue string) 
 	return raw, err
 }
 
-//TODO HostTagsRulesApi::UpdateRule
+//TODO HostTagsRulesApi.UpdateRule

@@ -239,10 +239,10 @@ func (rm *ReportManager) GetReportTypeDetailedInfo(ctx context.Context, lReportT
 	return raw, err
 }
 
-//	Get result of ReportManager::RequestStatisticsData operation.
+//	Get result of ReportManager.RequestStatisticsData operation.
 //
 //	Gets result of asynchronous operation
-//	ReportManager::RequestStatisticsData, such as statistics, general statuses and dashboards data.
+//	ReportManager.RequestStatisticsData, such as statistics, general statuses and dashboards data.
 //
 //	Parameters:
 //	- strRequestId	(string) identity of asynchronous operation
@@ -351,7 +351,7 @@ func (rm *ReportManager) CancelStatisticsRequest(ctx context.Context, strRequest
 	return raw, err
 }
 
-//	Cancel ReportManager::ExecuteReportAsync operation.
+//	Cancel ReportManager.ExecuteReportAsync operation.
 //
 //	Cancels asynchronous operation ReportManager.ExecuteReportAsync.
 //

@@ -144,7 +144,7 @@ func (sc *SsContents) SS_GetNames(ctx context.Context, wstrID, wstrProduct, wstr
 //	Reads saved data from the specified section of settings storage.
 //
 //	Parameters:
-//	- wstrID	(string) identifier of opened SsContents. Use PolicyProfiles::GetEffectivePolicyContents to get it
+//	- wstrID	(string) identifier of opened SsContents. Use PolicyProfiles.GetEffectivePolicyContents to get it
 //	- wstrProduct	(string) product name string (see Settings storage section parameters)
 //	- wstrVersion	(string) version string (see Settings storage section parameters)
 //	- wstrSection	(string) section name string (see Settings storage section parameters)

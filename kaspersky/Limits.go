@@ -39,13 +39,13 @@ type Limits service
 //  Returns a limit of specified parameter.
 //
 //  Parameters:
-//  - param	[in] (int64) See Limited parameters.
+//  - param (int64) See Limited parameters.
 //
 //  Returns:
 //  - (int64) Parameter limit. For bool types 1 - true, 0 - false.
 //
 // Exceptions:
-//  - KLSTD::STDE_NOACCESS	- Access to object is denied
+//  - KLSTD.STDE_NOACCESS	- Access to object is denied
 //
 // Limits params:
 //  ParamID	Description

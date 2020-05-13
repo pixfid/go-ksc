@@ -44,7 +44,7 @@ type VServers service
 //	- lParentGroup	(int64) id of parent group, -1 means 'from all groups'
 //
 //	Returns:
-//	- (array) array, each element is a container KLPAR::ParamsPtr containing attributes "KLVSRV_*"
+//	- (array) array, each element is a container KLPAR.ParamsPtr containing attributes "KLVSRV_*"
 //	(see List of virtual server attributes).
 func (vs *VServers) GetVServers(ctx context.Context, lParentGroup int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lParentGroup": %d}`, lParentGroup))
@@ -87,7 +87,7 @@ type KlvsrvCreated struct {
 //	- lParentGroup	(int64) virtual server parent group
 //
 //	Returns:
-//	- (params) a container KLPAR::ParamsPtr containing attributes "KLVSRV_ID" and "KLVSRV_DN" (
+//	- (params) a container KLPAR.ParamsPtr containing attributes "KLVSRV_ID" and "KLVSRV_DN" (
 //	see List of virtual server attributes).
 //
 func (vs *VServers) AddVServerInfo(ctx context.Context, strDisplayName string, lParentGroup int64) (*VServer, []byte,

@@ -376,7 +376,7 @@ func (uda *UserDevicesApi) GetMobileAgentSettingStorageData(ctx context.Context,
 //
 //	Returns:
 //	- (params) container which contains current settings of the multitenancy server,
-//	now settings available only for KLUMDM::MDMProtocol_IOSMDM (see MDM4IOS multitenancy server settings)
+//	now settings available only for KLUMDM.MDMProtocol_IOSMDM (see MDM4IOS multitenancy server settings)
 func (uda *UserDevicesApi) GetMultitenancyServerSettings(ctx context.Context, c_wstrMtncServerId string) ([]byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"c_wstrMtncServerId": "%s" }`, c_wstrMtncServerId))

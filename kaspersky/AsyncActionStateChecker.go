@@ -69,12 +69,12 @@ type PStateData struct {
 //if returns bFinalized==true then this action has been removed, and wstrActionGuid is not valid any more.
 //Otherwise in lNextCheckDelay it should be returned delay in msec to Do next call of the CheckActionState
 //Parameters:
-//	- wstrActionGuid	[in] string) action identifier
-//	- bFinalized	[out] (bool) true if action has been finished. false otherwise.
-//	- bSuccededFinalized	[out] (bool) This parameter take sense if bFinalized is true. true if action successfully completed.
-//	- lStateCode	[out] (int64) current action state code. The format is depends from action
-//	- pStateData	[out] (params) current action state data. The format is depends from action. In case of error it typically contains KLBLAG_ERROR_INFO field.
-//	- lNextCheckDelay	[out] (int64) This parameter take sense if bFinalized is false. In that case it is needed to Do next call of CheckActionState not earlier then there have passed lNextCheckDelay milliseconds
+//	- wstrActionGuid string) action identifier
+//	- bFinalized (bool) true if action has been finished. false otherwise.
+//	- bSuccededFinalized (bool) This parameter take sense if bFinalized is true. true if action successfully completed.
+//	- lStateCode (int64) current action state code. The format is depends from action
+//	- pStateData (params) current action state data. The format is depends from action. In case of error it typically contains KLBLAG_ERROR_INFO field.
+//	- lNextCheckDelay (int64) This parameter take sense if bFinalized is false. In that case it is needed to Do next call of CheckActionState not earlier then there have passed lNextCheckDelay milliseconds
 //Exceptions:
 //	- STDE_NOTFOUND	- the action with identifier wstrActionGuid is not found.
 //	- STDE_NOACCESS	- the action has been added on other connection.

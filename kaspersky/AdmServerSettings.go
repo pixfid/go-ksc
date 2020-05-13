@@ -60,9 +60,9 @@ func (as *AdmServerSettings) GetSharedFolder(ctx context.Context) (*PxgValStr, [
 //	"\\\\Server-ksc\\klshare\\"
 //
 //	Remarks:
-//	Check the operation state by calling AsyncActionStateChecker::CheckActionState periodically until it's finalized.
-//	If the operation success, then AsyncActionStateChecker::CheckActionState will return bFinalized=true and lStateCode=1.
-//	Otherwise, a call to AsyncActionStateChecker::CheckActionState returns error in pStateData.
+//	Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
+//	If the operation success, then AsyncActionStateChecker.CheckActionState will return bFinalized=true and lStateCode=1.
+//	Otherwise, a call to AsyncActionStateChecker.CheckActionState returns error in pStateData.
 //
 //	Exceptions:
 //	- Throws	exception in case of error.

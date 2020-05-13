@@ -37,9 +37,9 @@ type DpeKeyService service
 //	Returns information about host and key for chosen encrypted device.
 //
 //	Parameters:
-//	- wstrDeviceId	[in] (string) Device id
+//	- wstrDeviceId (string) Device id
 //	Return:
-//	- pKeyInfos	[out] (array) Array of params with key info. See Srvview encrypted devices on hosts.
+//	- pKeyInfos (array) Array of params with key info. See Srvview encrypted devices on hosts.
 //	The difference is that the key is decrypted.
 func (di *DpeKeyService) GetDeviceKeys3(ctx context.Context, wstrDeviceId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrDeviceId": "%s"}`, wstrDeviceId))
