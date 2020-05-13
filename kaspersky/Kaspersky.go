@@ -58,12 +58,15 @@ type Client struct {
 	EventNotificationsApi       *EventNotificationsApi
 	EventProcessing             *EventProcessing
 	EventProcessingFactory      *EventProcessingFactory
+	FileCategorizer2            *FileCategorizer2
+	GroupSync                   *GroupSync
 	HostGroup                   *HostGroup
 	HostMoveRules               *HostMoveRules
 	HostTagsRulesApi            *HostTagsRulesApi
 	HostTasks                   *HostTasks
 	HWInvStorage                *HWInvStorage
 	GroupSyncIterator           *GroupSyncIterator
+	GroupTaskControlApi         *GroupTaskControlApi
 	InventoryApi                *InventoryApi
 	InvLicenseProducts          *InvLicenseProducts
 	KsnInternal                 *KsnInternal
@@ -141,12 +144,15 @@ func New(cfg Config) *Client {
 	c.EventNotificationsApi = (*EventNotificationsApi)(&c.common)
 	c.EventProcessing = (*EventProcessing)(&c.common)
 	c.EventProcessingFactory = (*EventProcessingFactory)(&c.common)
+	c.FileCategorizer2 = (*FileCategorizer2)(&c.common)
+	c.GroupSync = (*GroupSync)(&c.common)
 	c.HostGroup = (*HostGroup)(&c.common)
 	c.HostMoveRules = (*HostMoveRules)(&c.common)
 	c.HostTagsRulesApi = (*HostTagsRulesApi)(&c.common)
 	c.HostTasks = (*HostTasks)(&c.common)
 	c.HWInvStorage = (*HWInvStorage)(&c.common)
 	c.GroupSyncIterator = (*GroupSyncIterator)(&c.common)
+	c.GroupTaskControlApi = (*GroupTaskControlApi)(&c.common)
 	c.InventoryApi = (*InventoryApi)(&c.common)
 	c.InvLicenseProducts = (*InvLicenseProducts)(&c.common)
 	c.KsnInternal = (*KsnInternal)(&c.common)
