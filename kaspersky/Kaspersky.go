@@ -70,6 +70,7 @@ type Client struct {
 	InventoryApi                *InventoryApi
 	InvLicenseProducts          *InvLicenseProducts
 	KsnInternal                 *KsnInternal
+	LicenseInfoSync             *LicenseInfoSync
 	LicenseKeys                 *LicenseKeys
 	LicensePolicy               *LicensePolicy
 	Limits                      *Limits
@@ -156,6 +157,7 @@ func New(cfg Config) *Client {
 	c.InventoryApi = (*InventoryApi)(&c.common)
 	c.InvLicenseProducts = (*InvLicenseProducts)(&c.common)
 	c.KsnInternal = (*KsnInternal)(&c.common)
+	c.LicenseInfoSync = (*LicenseInfoSync)(&c.common)
 	c.LicenseKeys = (*LicenseKeys)(&c.common)
 	c.LicensePolicy = (*LicensePolicy)(&c.common)
 	c.Limits = (*Limits)(&c.common)
