@@ -28,7 +28,7 @@ import (
 
 //	KsnInternal Class Reference
 //
-//	Interface for working with KsnProxy subsystem. More...
+//	Interface for working with KsnProxy subsystem..
 //
 //	This interface allow you to set KPSN settings, check license and check connection.
 //

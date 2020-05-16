@@ -25,7 +25,7 @@ import (
 
 //	ListTags Class Reference
 //
-//	Interface allows to acquire and manage tags to various KSC objects. More...
+//	Interface allows to acquire and manage tags to various KSC objects..
 //
 //	To manage tags for the list with name "ListName" it is needed to create this Interface with instance "ListName"
 //	. Examples of list names: "HostsTags", "InventoryTags", "UmdmDeviceTags"

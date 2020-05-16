@@ -28,7 +28,7 @@ import (
 
 //	GroupSyncIterator Class Reference
 //
-//	Access to the group synchronization forward iterator for the result-set. More...
+//	Access to the group synchronization forward iterator for the result-set..
 //
 //	List of all members.
 type GroupSyncIterator service

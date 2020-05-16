@@ -29,7 +29,7 @@ import (
 
 //	GroupTaskControlApi Class Reference
 //
-//	Interface to perform some management actions over group tasks. More...
+//	Interface to perform some management actions over group tasks..
 
 //	List of all members.
 type GroupTaskControlApi service

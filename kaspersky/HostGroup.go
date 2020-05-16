@@ -29,7 +29,7 @@ import (
 
 //	HostGroup Class Reference
 //
-//	Hosts and management groups processing. More...
+//	Hosts and management groups processing..
 //
 //	List of all members.
 type HostGroup service

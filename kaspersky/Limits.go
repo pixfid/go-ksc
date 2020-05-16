@@ -29,7 +29,7 @@ import (
 
 //	Limits Class Reference
 //
-//	Interface for working with Limits subsystem. More...
+//	Interface for working with Limits subsystem..
 //
 //	This interface allow you to get a limit of specified parameter
 //

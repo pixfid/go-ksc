@@ -26,7 +26,7 @@ import (
 	"net/http"
 )
 
-//	Interface for working with Hardware storage subsystem. More...
+//	Interface for working with Hardware storage subsystem..
 //
 //	List of all members.
 type HWInvStorage service

@@ -28,7 +28,7 @@ import (
 
 //	DatabaseInfo Class Reference
 //
-//	Database processing. More...
+//	Database processing..
 //	Allow to get information from a Database.
 //
 //	List of all members.

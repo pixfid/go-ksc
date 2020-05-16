@@ -29,7 +29,7 @@ import (
 
 //	SsContents Class Reference
 //
-//	Access to settings storage. More...
+//	Access to settings storage..
 //
 //	List of all members.
 type SsContents service

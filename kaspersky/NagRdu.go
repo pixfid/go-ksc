@@ -26,7 +26,7 @@ import (
 
 //	NagRdu Class Reference
 //
-//	Remote diagnostics on host. More...
+//	Remote diagnostics on host..
 //
 //	This interface is implemented at Network Agent side,
 //	so use gateway connection to connect Network Agent and call interface methods.

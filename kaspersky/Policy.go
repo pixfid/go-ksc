@@ -30,7 +30,7 @@ import (
 
 //	Policy Class Reference
 //
-//	Policies processing. More...
+//	Policies processing..
 //
 //	Allows to manage policies, change policies states and acquire policies data
 //

@@ -28,7 +28,7 @@ import (
 
 //	InventoryApi Class Reference
 //
-//	Interface for working with Software Inventory subsystem. More...
+//	Interface for working with Software Inventory subsystem..
 //
 //	Interface allows to get information about software applications
 //	that's are installed on client hosts and modify some settings for Software Inventory subsystem.

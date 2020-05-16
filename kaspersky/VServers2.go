@@ -27,7 +27,7 @@ import (
 )
 
 //	VServers2 Class Reference
-//	Virtual servers processing. More...
+//	Virtual servers processing..
 //
 //	List of all members:
 type VServers2 service

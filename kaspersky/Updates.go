@@ -29,7 +29,7 @@ import (
 
 //	Updates Class Reference
 //
-//	Updates processing. More...
+//	Updates processing..
 //
 //	List of all members:
 type Updates service

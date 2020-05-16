@@ -27,7 +27,7 @@ import (
 )
 
 //	GroupSync Class Reference
-//	Access to group synchronization objects. More...
+//	Access to group synchronization objects..
 //
 //	List of all members.
 type GroupSync service

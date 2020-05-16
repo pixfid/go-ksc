@@ -29,7 +29,7 @@ import (
 
 //	ChunkAccessor Class Reference
 //
-//	Working with host result-set. More...
+//	Working with host result-set..
 //
 //	Working with a result-set, that is a server-side ordered collection of found hosts.
 //

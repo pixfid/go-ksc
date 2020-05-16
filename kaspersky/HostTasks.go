@@ -28,7 +28,7 @@ import (
 
 //	HostTasks Class Reference
 //
-//	Basic management operations with host tasks. More...
+//	Basic management operations with host tasks..
 //
 //	Interface allows to acquire and manage tasks for hosts: add, update, remove, enumerate and perform other actions.
 //

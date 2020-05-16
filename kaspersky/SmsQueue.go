@@ -29,7 +29,7 @@ import (
 
 //	SmsQueue Class Reference
 //
-//	Manage SMS message queue. More...
+//	Manage SMS message queue..
 //
 //	List of all members.
 type SmsQueue service

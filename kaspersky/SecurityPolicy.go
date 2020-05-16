@@ -230,3 +230,6 @@ func (sp *SecurityPolicy) LoadPerUserData(ctx context.Context) ([]byte, error) {
 
 //TODO SecurityPolicy.SavePerUserData
 //TODO SecurityPolicy.UpdateTrustee
+func (i *SecurityPolicy) UpdateTrustee(ctx context.Context, params interface{}) ([]byte, error) {
+	return nil, nil
+}

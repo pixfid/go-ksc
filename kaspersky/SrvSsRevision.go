@@ -28,7 +28,7 @@ import (
 
 //	SrvSsRevision Class Reference
 //
-//	Access to virtual server settings storage revisions. More...
+//	Access to virtual server settings storage revisions..
 //
 //	List of all members.
 type SrvSsRevision service

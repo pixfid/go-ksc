@@ -26,7 +26,7 @@ import (
 
 //	PackagesApi Class Reference
 //
-//	Operating with packages. More...
+//	Operating with packages..
 //
 //	List of all members.
 type PackagesApi service

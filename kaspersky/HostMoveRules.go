@@ -28,7 +28,7 @@ import (
 
 //	HostMoveRules Class Reference
 //
-//	Modify and acquire move rules to hosts. More...
+//	Modify and acquire move rules to hosts..
 //
 //	Interface allows to acquire and manage host moving rules.
 //	The rule will move host which fits KLHST_MR_Query to KLHST_MR_Group

@@ -27,13 +27,11 @@ import (
 )
 
 //	DpeKeyService Class Reference
-//	Interface for working with encrypted devices. More...
+//	Interface for working with encrypted devices..
 //
 //	List of all members.
 type DpeKeyService service
 
-//TODO: Not working now!!!
-//
 //	Returns information about host and key for chosen encrypted device.
 //
 //	Parameters:

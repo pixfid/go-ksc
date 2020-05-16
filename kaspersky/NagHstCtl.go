@@ -28,7 +28,7 @@ import (
 	"net/http"
 )
 
-//	Manage nagent on host. More...
+//	Manage nagent on host..
 //
 //	This interface is implemented at Network Agent side,
 //	so use gateway connection to connect Network Agent and call interface methods.

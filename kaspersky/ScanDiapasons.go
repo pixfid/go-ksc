@@ -26,7 +26,7 @@ import (
 
 //	ScanDiapasons Class Reference
 //
-//	Network subnets processing. More...
+//	Network subnets processing..
 //
 //	List of all members.
 type ScanDiapasons service

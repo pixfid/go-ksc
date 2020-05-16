@@ -28,7 +28,7 @@ import (
 
 //	ServerTransportSettings Class Reference
 //
-//	Server transport settings proxy class. More...
+//	Server transport settings proxy class..
 //
 //	List of all members.
 type ServerTransportSettings service

@@ -26,7 +26,7 @@ import (
 
 //	InvLicenseProducts Class Reference
 //
-//	Interface to manage License Management (third party) Functionality. More...
+//	Interface to manage License Management (third party) Functionality..
 //
 //	List of all members.
 type InvLicenseProducts service

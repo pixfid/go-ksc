@@ -28,7 +28,7 @@ import (
 
 //	AdfsSso Class Reference
 //
-//	Interface for working with ADFS SSO. More...
+//	Interface for working with ADFS SSO..
 //
 //	This interface allow you to manage ADFS SSO settings
 //

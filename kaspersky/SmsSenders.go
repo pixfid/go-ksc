@@ -27,7 +27,7 @@ import (
 
 //	SmsSenders Class Reference
 //
-//	Configure mobile devices as SMS senders. More...
+//	Configure mobile devices as SMS senders..
 //
 //	List of all members.
 type SmsSenders service

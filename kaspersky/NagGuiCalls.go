@@ -28,7 +28,7 @@ import (
 
 //	NagGuiCalls Class Reference
 //
-//	Remote host caller. More...
+//	Remote host caller..
 //
 //	This interface is implemented at Network Agent side,
 //	so use gateway connection to connect Network Agent and call interface methods.

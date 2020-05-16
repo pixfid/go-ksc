@@ -29,7 +29,7 @@ import (
 
 //	ReportManager Class Reference
 //
-//	Reports managing. More...
+//	Reports managing..
 //
 //	Allows to enumerate, create, execute and delete reports.
 //

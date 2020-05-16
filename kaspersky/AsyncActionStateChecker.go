@@ -28,7 +28,7 @@ import (
 
 //	AsyncActionStateChecker Class Reference
 //
-//	Interface to monitor state of async action. More...
+//	Interface to monitor state of async action..
 //
 //	It is supposed that client of the AsyncActionStateChecker
 //	has added async action and this action has identifier wstrActionGuid.

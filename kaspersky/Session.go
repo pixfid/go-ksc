@@ -26,7 +26,7 @@ import (
 
 //	Session Class Reference
 //
-//	Session management interface. More...
+//	Session management interface..
 //
 //	It allows to create session token for current security context.
 //
