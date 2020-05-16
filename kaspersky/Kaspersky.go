@@ -84,6 +84,7 @@ type Client struct {
 	PackagesApi                 *PackagesApi
 	Policy                      *Policy
 	ReportManager               *ReportManager
+	RetrFiles                   *RetrFiles
 	ScanDiapasons               *ScanDiapasons
 	SecurityPolicy              *SecurityPolicy
 	SecurityPolicy3             *SecurityPolicy3
@@ -173,6 +174,7 @@ func New(cfg Config) *Client {
 	c.PackagesApi = (*PackagesApi)(&c.common)
 	c.Policy = (*Policy)(&c.common)
 	c.ReportManager = (*ReportManager)(&c.common)
+	c.RetrFiles = (*RetrFiles)(&c.common)
 	c.ScanDiapasons = (*ScanDiapasons)(&c.common)
 	c.SecurityPolicy = (*SecurityPolicy)(&c.common)
 	c.SecurityPolicy3 = (*SecurityPolicy3)(&c.common)
