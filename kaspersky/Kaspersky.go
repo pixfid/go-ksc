@@ -58,6 +58,7 @@ type Client struct {
 	EventNotificationsApi       *EventNotificationsApi
 	EventProcessing             *EventProcessing
 	EventProcessingFactory      *EventProcessingFactory
+	ExtAud                      *ExtAud
 	FileCategorizer2            *FileCategorizer2
 	GroupSync                   *GroupSync
 	HostGroup                   *HostGroup
@@ -148,6 +149,7 @@ func New(cfg Config) *Client {
 	c.EventNotificationsApi = (*EventNotificationsApi)(&c.common)
 	c.EventProcessing = (*EventProcessing)(&c.common)
 	c.EventProcessingFactory = (*EventProcessingFactory)(&c.common)
+	c.ExtAud = (*ExtAud)(&c.common)
 	c.FileCategorizer2 = (*FileCategorizer2)(&c.common)
 	c.GroupSync = (*GroupSync)(&c.common)
 	c.HostGroup = (*HostGroup)(&c.common)
