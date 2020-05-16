@@ -65,6 +65,7 @@ type Client struct {
 	HostMoveRules               *HostMoveRules
 	HostTagsRulesApi            *HostTagsRulesApi
 	HostTasks                   *HostTasks
+	HstAccessControl            *HstAccessControl
 	HWInvStorage                *HWInvStorage
 	GroupSyncIterator           *GroupSyncIterator
 	GroupTaskControlApi         *GroupTaskControlApi
@@ -156,6 +157,7 @@ func New(cfg Config) *Client {
 	c.HostMoveRules = (*HostMoveRules)(&c.common)
 	c.HostTagsRulesApi = (*HostTagsRulesApi)(&c.common)
 	c.HostTasks = (*HostTasks)(&c.common)
+	c.HstAccessControl = (*HstAccessControl)(&c.common)
 	c.HWInvStorage = (*HWInvStorage)(&c.common)
 	c.GroupSyncIterator = (*GroupSyncIterator)(&c.common)
 	c.GroupTaskControlApi = (*GroupTaskControlApi)(&c.common)
