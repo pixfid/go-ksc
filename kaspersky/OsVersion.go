@@ -42,8 +42,7 @@ type OSIndices struct {
 
 //OSAttributes struct
 type OSAttributes struct {
-	OSAttribute    *[]OSAttribute `json:"PxgRetVal"`
-	PDataToResolve *[]OSAttribute `json:"pDataToResolve"`
+	OSAttribute *[]OSAttribute `json:"PxgRetVal"`
 }
 
 type OSAttribute struct {
