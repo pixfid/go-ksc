@@ -83,6 +83,7 @@ type Client struct {
 	NagGuiCalls                 *NagGuiCalls
 	NagHstCtl                   *NagHstCtl
 	NagRdu                      *NagRdu
+	OsVersion                   *OsVersion
 	PackagesApi                 *PackagesApi
 	Policy                      *Policy
 	ReportManager               *ReportManager
@@ -175,6 +176,7 @@ func New(cfg Config) *Client {
 	c.NagGuiCalls = (*NagGuiCalls)(&c.common)
 	c.NagHstCtl = (*NagHstCtl)(&c.common)
 	c.NagRdu = (*NagRdu)(&c.common)
+	c.OsVersion = (*OsVersion)(&c.common)
 	c.PackagesApi = (*PackagesApi)(&c.common)
 	c.Policy = (*Policy)(&c.common)
 	c.ReportManager = (*ReportManager)(&c.common)
