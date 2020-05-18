@@ -122,13 +122,13 @@ func (ia *InventoryApi) GetInvPatchesList(ctx context.Context, v interface{}) ([
 // (params) contains following attributes:
 // "KLEVP_EA_PARAM_1" - list of software applications (paramArray|paramParams)
 // each element contains attributes from List of attributes of software inventory application.
-func (ia *InventoryApi) GetInvProductsList(ctx context.Context, v interface{}) ([]byte, error) {
+func (ia *InventoryApi) GetInvProductsList(ctx context.Context, params interface{}) ([]byte, error) {
 	request, err := http.NewRequest("POST", ia.client.Server+"/api/v1.0/InventoryApi.GetInvProductsList", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := ia.client.Do(ctx, request, &v)
+	raw, err := ia.client.Do(ctx, request, nil)
 	return raw, err
 }
 
@@ -176,7 +176,31 @@ func (ia *InventoryApi) GetSrvCompetitorIniFileInfoList(ctx context.Context, wst
 	return pxgValCIFIL, raw, err
 }
 
+//	Acquire list of observed applications.
+//
+//	Acquire list of observed applications.
+//	When observed application is installed on any host it is published
+//	"KLNAG_EV_INV_OBS_APP_INSTALLED" event.
+//	When observed application is uninstalled on any host
+//	it is published "KLNAG_EV_INV_OBS_APP_UNINSTALLED" event.
+//
+//	Parameters:
+//	- pParams	reserved. (params)
+//
+//	Returns:
+//	- (array) collection of paramString application string Id. (
+//	see "ProductID" from List of attributes of software inventory application )
+func (ia *InventoryApi) GetObservedApps(ctx context.Context, params interface{}) (*PxgValArrayOfString, []byte, error) {
+	request, err := http.NewRequest("POST", ia.client.Server+"/api/v1.0/InventoryApi.GetObservedApps", nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	pxgValArrayOfString := new(PxgValArrayOfString)
+	raw, err := ia.client.Do(ctx, request, &pxgValArrayOfString)
+	return pxgValArrayOfString, raw, err
+}
+
 /*
-	TODO -> func (ia *InventoryApi) GetObservedApps(ctx context.Context) ([]byte, error)
 	TODO -> func (ia *InventoryApi) SetObservedApps(ctx context.Context, v interface{}) ([]byte, error)
 */
