@@ -71,6 +71,7 @@ type Client struct {
 	GroupTaskControlApi         *GroupTaskControlApi
 	InventoryApi                *InventoryApi
 	InvLicenseProducts          *InvLicenseProducts
+	IWebSrvSettings             *IWebSrvSettings
 	KsnInternal                 *KsnInternal
 	LicenseInfoSync             *LicenseInfoSync
 	LicenseKeys                 *LicenseKeys
@@ -164,6 +165,7 @@ func New(cfg Config) *Client {
 	c.GroupTaskControlApi = (*GroupTaskControlApi)(&c.common)
 	c.InventoryApi = (*InventoryApi)(&c.common)
 	c.InvLicenseProducts = (*InvLicenseProducts)(&c.common)
+	c.IWebSrvSettings = (*IWebSrvSettings)(&c.common)
 	c.KsnInternal = (*KsnInternal)(&c.common)
 	c.LicenseInfoSync = (*LicenseInfoSync)(&c.common)
 	c.LicenseKeys = (*LicenseKeys)(&c.common)
