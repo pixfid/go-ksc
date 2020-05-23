@@ -34,22 +34,41 @@ import (
 )
 
 //	SrvView Class Reference
+//
 //	Interface to get plain-queries from SC-server.
+//
 //	List of all members.
 type SrvView service
 
 //SrvViewParams struct
 type SrvViewParams struct {
-	WstrViewName      *string         `json:"wstrViewName"`
-	WstrFilter        *string         `json:"wstrFilter"`
-	VecFieldsToReturn []string        `json:"vecFieldsToReturn"`
-	VecFieldsToOrder  []FieldsToOrder `json:"vecFieldsToOrder"`
-	PParams           *ESrvViewParams `json:"pParams"`
-	LifetimeSEC       *int64          `json:"lifetimeSec"`
+	//name of srvview see List of supported srvviews.
+	WstrViewName string `json:"wstrViewName"`
+
+	//filter string, contains a condition over srvview attributes, see also Search filter syntax.
+	WstrFilter string `json:"wstrFilter"`
+
+	//array of srvview attribute names to return.
+	VecFieldsToReturn []string `json:"vecFieldsToReturn"`
+
+	//array of containers each of them containing two attributes:
+	//	-	"Name" (paramString) name of attribute used for sorting
+	//	- "Asc" (paramBool) ascending if true descending otherwise
+	VecFieldsToOrder []FieldsToOrder `json:"vecFieldsToOrder"`
+
+	//extra options. This parameter can contain additional options to configure query.
+	//Some options are specific to the wstrViewName and are part of it specification.
+	//And some options are common for all srvviews. List of common options:
+	//"TOP_N" (int64) acquire only first N records
+	PParams *ESrvViewParams `json:"pParams"`
+
+	//max result-set lifetime in seconds
+	LifetimeSEC int64 `json:"lifetimeSec"`
 }
 
 type ESrvViewParams struct {
-	TopN *int64 `json:"TOP_N,omitempty"`
+	//acquire only first N records
+	TopN int64 `json:"TOP_N,omitempty"`
 }
 
 //	Find srvview data by filter string.
@@ -139,9 +158,9 @@ func (sv *SrvView) ReleaseIterator(ctx context.Context, wstrIteratorId string) (
 }
 
 type RecordRangeParams struct {
-	WstrIteratorID *string `json:"wstrIteratorId,omitempty"`
-	NStart         *int64  `json:"nStart,omitempty"`
-	NEnd           *int64  `json:"nEnd,omitempty"`
+	WstrIteratorID string `json:"wstrIteratorId,omitempty"`
+	NStart         int64  `json:"nStart,omitempty"`
+	NEnd           int64  `json:"nEnd,omitempty"`
 }
 
 //	Acquire subset of result-set elements by range.

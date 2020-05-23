@@ -87,15 +87,16 @@ func (lp *LicensePolicy) GetFreeLicenseCount(ctx context.Context, nFunctionality
 //	|             4 | PCLOUD is available via KL license                       |
 //	|             5 | PCLOUD is available via Pay-per-use (Paid AMI) licensing |
 //	+---------------+----------------------------------------------------------+
-func (lp *LicensePolicy) GetTotalLicenseCount(ctx context.Context, nFunctionality int64) ([]byte, error) {
+func (lp *LicensePolicy) GetTotalLicenseCount(ctx context.Context, nFunctionality int64) (*PxgValInt, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nFunctionality": %d}`, nFunctionality))
 	request, err := http.NewRequest("POST", lp.client.Server+"/api/v1.0/LicensePolicy.GetTotalLicenseCount", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	raw, err := lp.client.Do(ctx, request, nil)
-	return raw, err
+	pxgValInt := new(PxgValInt)
+	raw, err := lp.client.Do(ctx, request, &pxgValInt)
+	return pxgValInt, raw, err
 }
 
 //	Check a functionality in restricted mode.
@@ -117,15 +118,16 @@ func (lp *LicensePolicy) GetTotalLicenseCount(ctx context.Context, nFunctionalit
 //	|             4 | PCLOUD is available via KL license                       |
 //	|             5 | PCLOUD is available via Pay-per-use (Paid AMI) licensing |
 //	+---------------+----------------------------------------------------------+
-func (lp *LicensePolicy) IsLimitedMode(ctx context.Context, nFunctionality int64) ([]byte, error) {
+func (lp *LicensePolicy) IsLimitedMode(ctx context.Context, nFunctionality int64) (*PxgValBool, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nFunctionality": %d}`, nFunctionality))
 	request, err := http.NewRequest("POST", lp.client.Server+"/api/v1.0/LicensePolicy.IsLimitedMode", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	raw, err := lp.client.Do(ctx, request, nil)
-	return raw, err
+	pxgValBool := new(PxgValBool)
+	raw, err := lp.client.Do(ctx, request, &pxgValBool)
+	return pxgValBool, raw, err
 }
 
 //	Enable or disable restricted mode for functionality.

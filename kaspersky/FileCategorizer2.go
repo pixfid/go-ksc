@@ -34,11 +34,13 @@ import (
 
 //	FileCategorizer2 Class Reference
 //
-//	Interface for working with FileCategorizer subsystem..
+//	Interface for working with FileCategorizer subsystem.
+//
 //	There are 3 types of categories: simple, autoupdate and silverimage.
-//	Simple category can be created by user manually.
-//	Autoupdate category is working on server side and calculating hashes of files from choosen directory.
-//	SilverImage category type accumulates hashes of files from choosen hosts.
+//	- Simple category can be created by user manually.
+//	- Autoupdate category is working on server side and calculating hashes of files from choosen directory.
+//	- SilverImage category type accumulates hashes of files from choosen hosts.
+//
 //	List of all members.
 type FileCategorizer2 service
 

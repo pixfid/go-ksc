@@ -33,6 +33,7 @@ import (
 )
 
 //	HostTagsRulesApi Class Reference
+//
 //	Interface allows to acquire and manage host automatic tagging rules
 //
 //	Detailed Description

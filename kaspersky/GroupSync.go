@@ -32,6 +32,7 @@ import (
 )
 
 //	GroupSync Class Reference
+//
 //	Access to group synchronization objects..
 //
 //	List of all members.

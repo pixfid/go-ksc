@@ -32,6 +32,7 @@ import (
 )
 
 //	HstAccessControl Class Reference
+//
 //	Security policy Allows to specify permissions
 //	for administrration groups and non-group objects.
 //

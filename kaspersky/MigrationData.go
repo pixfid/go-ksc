@@ -32,8 +32,8 @@ import (
 )
 
 //	MigrationData Class Reference
-//	Detailed Description:
 //
+//	Detailed Description:
 //	Migration of data between KSC On-Premise and KSCHosted.
 //	Migration of data from KSC On-Premise to KSCHosted
 //

@@ -32,6 +32,7 @@ import (
 )
 
 //	RetrFiles Class Reference
+//
 //	Class provides means to get retranslated files info..
 //
 //	List of all members.

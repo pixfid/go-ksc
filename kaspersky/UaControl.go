@@ -33,6 +33,7 @@ import (
 )
 
 //	UaControl Class Reference
+//
 //	Update agents and Connection gateways management.
 //
 //	List of all members.

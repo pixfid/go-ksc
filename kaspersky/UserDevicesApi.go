@@ -35,6 +35,7 @@ import (
 //	UserDevicesApi Class Reference
 //
 //	Interface to unified mobile device management
+//
 //	List of all members:
 type UserDevicesApi service
 

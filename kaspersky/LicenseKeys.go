@@ -190,12 +190,17 @@ func (lk *LicenseKeys) EnumKeys(ctx context.Context, params EnumKeysParams, v in
 
 //KeyDataParams struct
 type KeyDataParams struct {
+	//	PKeyInfo container which must contain "KLLIC_SERIAL" attribute to specify the interested license.
+	//	For any attribute to query you must put such attribute with any value into the container pKeyInfo.
+	//	In particular, if you need the key body then put into pKeyInfo container the attribute with name "KLLICSRV_KEYDATA" of type
 	PKeyInfo PKeyInfo `json:"pKeyInfo,omitempty"`
 }
 
 type PKeyInfo struct {
-	KllicSerial     string `json:"KLLIC_SERIAL,omitempty"`
-	KllicsrvKeydata bool   `json:"KLLICSRV_KEYDATA,omitempty"`
+	//	KllicSerial
+	KllicSerial string `json:"KLLIC_SERIAL,omitempty"`
+	//	KllicsrvKeydata
+	KllicsrvKeydata bool `json:"KLLICSRV_KEYDATA,omitempty"`
 }
 
 //	Get data of a key.
@@ -243,18 +248,34 @@ func (lk *LicenseKeys) SaasTryToUninstall(ctx context.Context, bCurrent bool) ([
 	return raw, err
 }
 
+//	AdjustKeyParams struct
+type AdjustKeyParams struct {
+	//	PKData container of input attributes, mandatory.
+	//	See List of license key attributes for attribute names
+	PKData *PKData `json:"pData,omitempty"`
+}
+
+//	PKData struct
+type PKData struct {
+	// KllicsrvAutokey License serial number (mandatory)
+	KllicsrvAutokey *bool `json:"KLLICSRV_AUTOKEY,omitempty"`
+	// KllicSerial true if license can be deployed automatically,
+	// false otherwise (string, mandatory)
+	KllicSerial *string `json:"KLLIC_SERIAL,omitempty"`
+}
+
 //	Adjust adm. server's license attributes.
 //
 //	Parameters:
 //	- pData	(params) container of input attributes,
 //	mandatory. See List of license key attributes for attribute names. Supported attributes:
-//	- "KLLIC_SERIAL" - (wstring) License serial number (mandatory)
-//	- "KLLICSRV_AUTOKEY" - (boolean) true if license can be deployed automatically, false otherwise (paramString,
+//	- "KLLIC_SERIAL" - (string) License serial number (mandatory)
+//	- "KLLICSRV_AUTOKEY" - (bool) true if license can be deployed automatically, false otherwise (paramString,
 //	mandatory)
 //
 //	Exceptions:
 //	- Throws	exception in case of error.
-func (lk *LicenseKeys) AdjustKey(ctx context.Context, params interface{}, v interface{}) ([]byte, error) {
+func (lk *LicenseKeys) AdjustKey(ctx context.Context, params AdjustKeyParams, v interface{}) ([]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", lk.client.Server+"/api/v1.0/LicenseKeys.AdjustKey",
 		bytes.NewBuffer(postData))
