@@ -55,6 +55,7 @@ type Client struct {
 	CertPoolCtrl2               *CertPoolCtrl2
 	CgwHelper                   *CgwHelper
 	ChunkAccessor               *ChunkAccessor
+	CloudAccess                 *CloudAccess
 	ConEvents                   *ConEvents
 	DatabaseInfo                *DatabaseInfo
 	DataProtectionApi           *DataProtectionApi
@@ -77,6 +78,7 @@ type Client struct {
 	InventoryApi                *InventoryApi
 	InvLicenseProducts          *InvLicenseProducts
 	IWebSrvSettings             *IWebSrvSettings
+	KillChain                   *KillChain
 	KsnInternal                 *KsnInternal
 	LicenseInfoSync             *LicenseInfoSync
 	LicenseKeys                 *LicenseKeys
@@ -92,6 +94,7 @@ type Client struct {
 	OsVersion                   *OsVersion
 	PackagesApi                 *PackagesApi
 	Policy                      *Policy
+	QBTNetworkListApi           *QBTNetworkListApi
 	ReportManager               *ReportManager
 	RetrFiles                   *RetrFiles
 	ScanDiapasons               *ScanDiapasons
@@ -152,6 +155,7 @@ func New(cfg Config) *Client {
 	c.CertPoolCtrl2 = (*CertPoolCtrl2)(&c.common)
 	c.CgwHelper = (*CgwHelper)(&c.common)
 	c.ChunkAccessor = (*ChunkAccessor)(&c.common)
+	c.CloudAccess = (*CloudAccess)(&c.common)
 	c.ConEvents = (*ConEvents)(&c.common)
 	c.DatabaseInfo = (*DatabaseInfo)(&c.common)
 	c.DataProtectionApi = (*DataProtectionApi)(&c.common)
@@ -174,6 +178,7 @@ func New(cfg Config) *Client {
 	c.InventoryApi = (*InventoryApi)(&c.common)
 	c.InvLicenseProducts = (*InvLicenseProducts)(&c.common)
 	c.IWebSrvSettings = (*IWebSrvSettings)(&c.common)
+	c.KillChain = (*KillChain)(&c.common)
 	c.KsnInternal = (*KsnInternal)(&c.common)
 	c.LicenseInfoSync = (*LicenseInfoSync)(&c.common)
 	c.LicenseKeys = (*LicenseKeys)(&c.common)
@@ -189,6 +194,7 @@ func New(cfg Config) *Client {
 	c.OsVersion = (*OsVersion)(&c.common)
 	c.PackagesApi = (*PackagesApi)(&c.common)
 	c.Policy = (*Policy)(&c.common)
+	c.QBTNetworkListApi = (*QBTNetworkListApi)(&c.common)
 	c.ReportManager = (*ReportManager)(&c.common)
 	c.RetrFiles = (*RetrFiles)(&c.common)
 	c.ScanDiapasons = (*ScanDiapasons)(&c.common)
