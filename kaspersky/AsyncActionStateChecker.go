@@ -85,10 +85,7 @@ type PStateData struct {
 //	- STDE_NOACCESS	- the action has been added on other connection.
 //	- STDE_UNAVAIL	- CheckActionState has been called too early.
 func (ac *AsyncActionStateChecker) CheckActionState(ctx context.Context, wstrActionGuid string) (*ActionStateResult, []byte, error) {
-	postData := []byte(fmt.Sprintf(`
-	{
-	"wstrActionGuid": "%s"
-	}`, wstrActionGuid))
+	postData := []byte(fmt.Sprintf(`{"wstrActionGuid": "%s"}`, wstrActionGuid))
 	request, err := http.NewRequest("POST", ac.client.Server+"/api/v1.0/AsyncActionStateChecker.CheckActionState", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, nil, err

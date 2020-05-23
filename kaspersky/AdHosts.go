@@ -28,7 +28,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 )
 
@@ -323,29 +322,40 @@ func (ah *AdHosts) GetOU(ctx context.Context, params OUAttributesParams) (*OUAtt
 	return oUAttributes, raw, err
 }
 
+//UpdateOUParams struct
+type UpdateOUParams struct {
+	//Id of organization unit
+	IDOU *int64 `json:"idOU,omitempty"`
+
+	//Params
+	OUPData *OUPData `json:"pData,omitempty"`
+}
+
+//OUPData struct
+type OUPData struct {
+	//If scanning of this OU is allowed
+	AdhstEnableAdScan *bool `json:"adhst_enable_ad_scan,omitempty"`
+}
+
 //	Updates OU properties.
 //
 //	Parameters:
-//	- idOU	(int64) id of organization unit
-//	- pData	(params) may contain following values:
+//	- params UpdateOUParams
+//	|- idOU	(int64) id of organization unit
+//	|- pData	(params) may contain following values:
 //
 //	"adhst_enable_ad_scan" (see Active Directory-specific attributes for organization units and computers.)
-func (ah *AdHosts) UpdateOU(ctx context.Context, idOU int, params interface{}) ([]byte, error) {
-	//postData, _ := json.Marshal(params)
-	//TODO Find correct request
-	postData := []byte(fmt.Sprintf(`
-	{
-		"idOU":   %d,
-		"pData": {
-			"type" : "params",
-			"value" : {
-				"adhst_enable_ad_scan" : 1 
-			}
-		}
-	}`, idOU))
+func (ah *AdHosts) UpdateOU(ctx context.Context, params UpdateOUParams) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
 
 	request, err := http.NewRequest("POST", ah.client.Server+"/api/v1.0/AdHosts.UpdateOU", bytes.NewBuffer(postData))
-	raw, err := ah.client.Do(ctx, request, nil)
+	if err != nil {
+		return nil, err
+	}
 
+	raw, err := ah.client.Do(ctx, request, nil)
 	return raw, err
 }

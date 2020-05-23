@@ -26,6 +26,7 @@ package kaspersky
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
@@ -175,3 +176,12 @@ func Uint64(v uint64) *uint64 { return &v }
 func String(v string) *string { return &v }
 
 type Null struct{}
+
+//ToJson is a helper routine that marshal (interface{}) object to string
+func ToJson(a interface{}) string {
+	jsn, err := json.Marshal(a)
+	if err == nil {
+		return string(jsn)
+	}
+	return ""
+}
