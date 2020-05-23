@@ -216,8 +216,48 @@ func (lk *LicenseKeys) GetKeyData(ctx context.Context, params KeyDataParams, v i
 	return raw, err
 }
 
-//TODO func (lk *LicenseKeys) AdjustKey(ctx context.Context, params Params, v interface{})
+//	Uninstall an adm. server's license.
+//
+//	Parameters:
+//	- bCurrent	(bool) true if the current license should be uninstalled, false to uninstall the reserved one.
+//
+//	Exceptions:
+//	- Throws	exception in case of error.
+//
+//	See also:
+//	SaasTryToInstall
+func (lk *LicenseKeys) SaasTryToUninstall(ctx context.Context, bCurrent bool) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"bCurrent": %v}`, bCurrent))
+	request, err := http.NewRequest("POST", lk.client.Server+"/api/v1.0/LicenseKeys.SaasTryToUninstall",
+		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := lk.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//	Adjust adm. server's license attributes.
+//
+//	Parameters:
+//	- pData	(params) container of input attributes,
+//	mandatory. See List of license key attributes for attribute names. Supported attributes:
+//	- "KLLIC_SERIAL" - (wstring) License serial number (mandatory)
+//	- "KLLICSRV_AUTOKEY" - (boolean) true if license can be deployed automatically, false otherwise (paramString,
+//	mandatory)
+//
+//	Exceptions:
+//	- Throws	exception in case of error.
+func (lk *LicenseKeys) AdjustKey(ctx context.Context, params interface{}, v interface{}) ([]byte, error) {
+	postData, _ := json.Marshal(params)
+	request, err := http.NewRequest("POST", lk.client.Server+"/api/v1.0/LicenseKeys.AdjustKey",
+		bytes.NewBuffer(postData))
+
+	raw, err := lk.client.Do(ctx, request, &v)
+	return raw, err
+}
+
 //TODO func (lk *LicenseKeys) CheckIfSaasLicenseIsValid(ctx context.Context, params Params, v interface{})
 //TODO func (lk *LicenseKeys) SaasTryToInstall(ctx context.Context, params Params, v interface{})
-//TODO func (lk *LicenseKeys) SaasTryToUninstall(ctx context.Context, params Params, v interface{})
 //TODO func (lk *LicenseKeys) UninstallKey(ctx context.Context, params Params, v interface{})

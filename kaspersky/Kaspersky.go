@@ -97,14 +97,17 @@ type Client struct {
 	Session                     *Session
 	SmsQueue                    *SmsQueue
 	SmsSenders                  *SmsSenders
+	SrvCloud                    *SrvCloud
 	SrvSsRevision               *SrvSsRevision
 	SrvView                     *SrvView
 	SsContents                  *SsContents
+	SubnetMasks                 *SubnetMasks
 	Tasks                       *Tasks
 	TrafficManager              *TrafficManager
 	UaControl                   *UaControl
 	Updates                     *Updates
 	UserDevicesApi              *UserDevicesApi
+	VapmControlApi              *VapmControlApi
 	UserName, Password, Server  string
 	VServers                    *VServers
 	VServers2                   *VServers2
@@ -191,14 +194,17 @@ func New(cfg Config) *Client {
 	c.Session = (*Session)(&c.common)
 	c.SmsQueue = (*SmsQueue)(&c.common)
 	c.SmsSenders = (*SmsSenders)(&c.common)
+	c.SrvCloud = (*SrvCloud)(&c.common)
 	c.SrvSsRevision = (*SrvSsRevision)(&c.common)
 	c.SrvView = (*SrvView)(&c.common)
 	c.SsContents = (*SsContents)(&c.common)
+	c.SubnetMasks = (*SubnetMasks)(&c.common)
 	c.Tasks = (*Tasks)(&c.common)
 	c.TrafficManager = (*TrafficManager)(&c.common)
 	c.UaControl = (*UaControl)(&c.common)
 	c.Updates = (*Updates)(&c.common)
 	c.UserDevicesApi = (*UserDevicesApi)(&c.common)
+	c.VapmControlApi = (*VapmControlApi)(&c.common)
 	c.VServers = (*VServers)(&c.common)
 	c.VServers2 = (*VServers2)(&c.common)
 	c.WolSender = (*WolSender)(&c.common)
