@@ -47,6 +47,9 @@ type ServerTransportSettings service
 //	It returns total number of managed devices for main server and all virtual servers.
 func (sts *ServerTransportSettings) GetNumberOfManagedDevicesAgentless(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", sts.client.Server+"/api/v1.0/ServerTransportSettings.GetNumberOfManagedDevicesAgentless", nil)
+	if err != nil {
+		return nil, err
+	}
 
 	raw, err := sts.client.Do(ctx, request, nil)
 	return raw, err
@@ -61,6 +64,9 @@ func (sts *ServerTransportSettings) GetNumberOfManagedDevicesAgentless(ctx conte
 //	It returns total number of managed devices for main server and all virtual servers.
 func (sts *ServerTransportSettings) GetNumberOfManagedDevicesKSM(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", sts.client.Server+"/api/v1.0/ServerTransportSettings.GetNumberOfManagedDevicesKSM", nil)
+	if err != nil {
+		return nil, err
+	}
 
 	raw, err := sts.client.Do(ctx, request, nil)
 	return raw, err
@@ -91,8 +97,7 @@ func (sts *ServerTransportSettings) IsFeatureActive(ctx context.Context, szwCert
 //	- szwCertType	Certificate type. For "CERT_TYPE_MOBILE" only!
 //	- bFeatureActive	Should be true to activate feature.
 func (sts *ServerTransportSettings) SetFeatureActive(ctx context.Context, szwCertType string,
-	bFeatureActive bool) (*PxgValBool, []byte,
-	error) {
+	bFeatureActive bool) (*PxgValBool, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"szwCertType": "%s", "bFeatureActive" : %v}`, szwCertType, bFeatureActive))
 	request, err := http.NewRequest("POST", sts.client.Server+"/api/v1.0/ServerTransportSettings.SetFeatureActive", bytes.NewBuffer(postData))
 	if err != nil {
@@ -129,11 +134,20 @@ type CurrentConnectionSettings struct {
 }
 
 type CCSettings struct {
-	CERTPub                   *CERTPub `json:"CERT_PUB,omitempty"`
-	TrspSettingsFQDN          *string  `json:"TRSP_SETTINGS_FQDN,omitempty"`
-	TrspSettingsIsdefcertused *bool    `json:"TRSP_SETTINGS_ISDEFCERTUSED,omitempty"`
-	TrspSettingsOpenPort      *bool    `json:"TRSP_SETTINGS_OPEN_PORT,omitempty"`
-	TrspSettingsPort          *int64   `json:"TRSP_SETTINGS_PORT,omitempty"`
+	//current certificate's public key
+	CERTPub *CERTPub `json:"CERT_PUB,omitempty"`
+
+	//actual endpoint FQDN (from certificate)
+	TrspSettingsFQDN *string `json:"TRSP_SETTINGS_FQDN,omitempty"`
+
+	//is default certificate used ?
+	TrspSettingsIsdefcertused *bool `json:"TRSP_SETTINGS_ISDEFCERTUSED,omitempty"`
+
+	//true if port should be opened, false otherwise.
+	TrspSettingsOpenPort *bool `json:"TRSP_SETTINGS_OPEN_PORT,omitempty"`
+
+	//actual enpoint port
+	TrspSettingsPort *int64 `json:"TRSP_SETTINGS_PORT,omitempty"`
 }
 
 type CERTPub struct {
