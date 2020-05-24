@@ -182,6 +182,7 @@ func (hg *HostGroup) AddIncident(ctx context.Context, params AddIncidentsParams)
 	if err != nil {
 		return nil, nil, err
 	}
+
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.AddIncident", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, nil, err
@@ -379,10 +380,13 @@ func (hg *HostGroup) FindHostsAsyncCancel(ctx context.Context, strRequestId stri
 //		|- KLSRVH_SRV_ID - Slave server id (int64)
 //		|- KLSRVH_SRV_DN - Slave server display name (string)
 //	- (int64) number of found hosts
-func (hg *HostGroup) FindHostsAsyncGetAccessor(ctx context.Context, strRequestId string) (*AsyncAccessor,
-	[]byte, error) {
+func (hg *HostGroup) FindHostsAsyncGetAccessor(ctx context.Context, strRequestId string) (*AsyncAccessor, []byte,
+	error) {
 	postData := []byte(fmt.Sprintf(`{"strRequestId" : "%s" }`, strRequestId))
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.FindHostsAsyncGetAccessor", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
 
 	asyncAccessor := new(AsyncAccessor)
 	raw, err := hg.client.Do(ctx, request, &asyncAccessor)
@@ -1057,6 +1061,7 @@ func (hg *HostGroup) MoveHostsFromGroupToGroup(ctx context.Context, nSrcGroupId 
 	if err != nil {
 		return nil, nil, err
 	}
+
 	wActionGUID := new(WActionGUID)
 	raw, err := hg.client.Do(ctx, request, &wActionGUID)
 	return wActionGUID, raw, err
@@ -1104,8 +1109,11 @@ func (hg *HostGroup) MoveHostsToGroup(ctx context.Context, params HostsToGroupPa
 func (hg *HostGroup) RemoveGroup(ctx context.Context, nGroup, nFlags int64) (*WActionGUID, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{ "nGroup": %d, "nFlags": %d }`, nGroup, nFlags))
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.RemoveGroup", bytes.NewBuffer(postData))
-	wActionGUID := new(WActionGUID)
+	if err != nil {
+		return nil, nil, err
+	}
 
+	wActionGUID := new(WActionGUID)
 	raw, err := hg.client.Do(ctx, request, &wActionGUID)
 	return wActionGUID, raw, err
 }
@@ -1125,6 +1133,14 @@ func (hg *HostGroup) RemoveHost(ctx context.Context, strHostName string) {
 	_, err = hg.client.Do(ctx, request, nil)
 }
 
+//RemoveHostsParams struct
+type RemoveHostsParams struct {
+	//Array of host names
+	PHostNames []string `json:"pHostNames"`
+	//Whether to force deleting hosts records
+	BForceDestroy bool `json:"bForceDestroy"`
+}
+
 //	Remove multiple hosts.
 //
 //	Removes multiple hosts. Function behavior depends on bForceDestroy flag.
@@ -1133,19 +1149,19 @@ func (hg *HostGroup) RemoveHost(ctx context.Context, strHostName string) {
 //	or its subgroups, others will be moved into corresponding subgroups of group "Unassigned computers".
 //
 //	Parameters:
-//	- pHostNames	([]string) array of host names
-//	- bForceDestroy	(bool) whether to force deleting hosts records
-//
-//	Example request params struct:
-//
-//	type RemoveHostsParams struct {
-//		PHostNames    []string `json:"pHostNames"`
-//		BForceDestroy bool     `json:"bForceDestroy"`
-//	}
-//
-func (hg *HostGroup) RemoveHosts(ctx context.Context, params struct{}) ([]byte, error) {
-	postData, _ := json.Marshal(params)
+//	- RemoveHostsParams
+//	|- pHostNames	([]string) array of host names
+//	|- bForceDestroy	(bool) whether to force deleting hosts records
+func (hg *HostGroup) RemoveHosts(ctx context.Context, params RemoveHostsParams) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.RemoveHosts", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
 
 	raw, err := hg.client.Do(ctx, request, nil)
 	return raw, err
@@ -1202,7 +1218,11 @@ type PInfo struct {
 //		}
 //	}
 func (hg *HostGroup) ResolveAndMoveToGroup(ctx context.Context, params PInfoRaM) (*KlhstWksResults, []byte, error) {
-	postData, _ := json.Marshal(params)
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.ResolveAndMoveToGroup", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, nil, err
@@ -1217,15 +1237,16 @@ func (hg *HostGroup) ResolveAndMoveToGroup(ctx context.Context, params PInfoRaM)
 //
 //	Parameters:
 //	- nType	(int64) IN network scanning type:
-//		|- 1 - AD
-//		|- 2 - Ms network fast scanning
-//		|- 3 - Ms network full scanning
-//		|- 4 - Ip diapasons scanning
+//	╔════╦══════════════════════════╗
+//	║ ID ║       Description        ║
+//	╠════╬══════════════════════════╣
+//	║  1 ║ AD                       ║
+//	║  2 ║ Ms network fast scanning ║
+//	║  3 ║ Ms network full scanning ║
+//	║  4 ║ Ip diapasons scanning    ║
+//	╚════╩══════════════════════════╝
 func (hg *HostGroup) RestartNetworkScanning(ctx context.Context, nType int64) (*PxgRetError, []byte, error) {
-	postData := []byte(fmt.Sprintf(`
-	{
-	"nType": %d
-	}`, nType))
+	postData := []byte(fmt.Sprintf(`{"nType": %d	}`, nType))
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.RestartNetworkScanning", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, nil, err
@@ -1268,7 +1289,11 @@ func (hg *HostGroup) RestartNetworkScanning(ctx context.Context, nType int64) (*
 //	See also:
 //	Local settings and policy format for some products
 func (hg *HostGroup) SS_GetNames(ctx context.Context, params interface{}) ([]byte, error) {
-	postData, _ := json.Marshal(params)
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.SS_GetNames", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
@@ -1309,7 +1334,11 @@ func (hg *HostGroup) SS_GetNames(ctx context.Context, params interface{}) ([]byt
 //	- Local settings and policy format for some products
 //	- Contents of host SS_PRODINFO storage
 func (hg *HostGroup) SS_Read(ctx context.Context, params interface{}) ([]byte, error) {
-	postData, _ := json.Marshal(params)
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.SS_Read", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
@@ -1328,10 +1357,17 @@ func (hg *HostGroup) SS_Read(ctx context.Context, params interface{}) ([]byte, e
 //	- pInfo	(params) container with group attributes.
 //	May contain non-readonly attributes from the List of group attributes
 func (hg *HostGroup) UpdateGroup(ctx context.Context, params interface{}) (*PxgValStr, []byte, error) {
-	postData, _ := json.Marshal(params)
-	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.UpdateGroup", bytes.NewBuffer(postData))
-	pxgValStr := new(PxgValStr)
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
 
+	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.UpdateGroup", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	pxgValStr := new(PxgValStr)
 	raw, err := hg.client.Do(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
@@ -1342,9 +1378,16 @@ func (hg *HostGroup) UpdateGroup(ctx context.Context, params interface{}) (*PxgV
 //	- nGroup	(int) id of the group
 //	- pInfo	(params) container with group attributes.
 //	May contain non-readonly attributes from the List of group attributes
-func (hg *HostGroup) UpdateHost(ctx context.Context, v interface{}) (*Accessor, []byte, error) {
-	data, _ := json.Marshal(v)
-	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.UpdateHost", bytes.NewBuffer(data))
+func (hg *HostGroup) UpdateHost(ctx context.Context, params interface{}) (*Accessor, []byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.UpdateHost", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
 
 	accessor := new(Accessor)
 	raw, err := hg.client.Do(ctx, request, &accessor)
