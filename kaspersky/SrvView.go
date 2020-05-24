@@ -53,7 +53,7 @@ type SrvViewParams struct {
 
 	//array of containers each of them containing two attributes:
 	//	-	"Name" (paramString) name of attribute used for sorting
-	//	- "Asc" (paramBool) ascending if true descending otherwise
+	//	-	"Asc" (paramBool) ascending if true descending otherwise
 	VecFieldsToOrder []FieldsToOrder `json:"vecFieldsToOrder"`
 
 	//extra options. This parameter can contain additional options to configure query.

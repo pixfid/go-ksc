@@ -38,15 +38,13 @@ import (
 //	List of all members.
 type KillChain service
 
-//TODO "Call KillChain.GetByIDs for the instance '' (listener '') does not exist (any more?)","module":"KLSTD"}}
-func (ilp *KillChain) GetByIDs(ctx context.Context, wstrHostID, wstrElementID string) (*PxgRetError, []byte, error) {
+func (ilp *KillChain) GetByIDs(ctx context.Context, wstrHostID, wstrElementID string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrHostID": "%s", "wstrElementID": "%s"}`, wstrHostID, wstrElementID))
 	request, err := http.NewRequest("POST", ilp.client.Server+"/api/v1.0/KillChain.GetByIDs", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
-	pxgRetError := new(PxgRetError)
-	raw, err := ilp.client.Do(ctx, request, &pxgRetError)
-	return pxgRetError, raw, err
+	raw, err := ilp.client.Do(ctx, request, nil)
+	return raw, err
 }

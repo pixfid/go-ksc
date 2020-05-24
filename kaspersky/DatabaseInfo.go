@@ -47,6 +47,10 @@ type DatabaseInfo service
 //	- (data.PxgValInt) size of files of database.
 func (di *DatabaseInfo) GetDBSize(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.GetDBSize", nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
 	pxgValInt := new(PxgValInt)
 	raw, err := di.client.Do(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
@@ -60,6 +64,10 @@ func (di *DatabaseInfo) GetDBSize(ctx context.Context) (*PxgValInt, []byte, erro
 //	- (data.PxgValInt) size of data of database.
 func (di *DatabaseInfo) GetDBDataSize(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.GetDBDataSize", nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
 	pxgValInt := new(PxgValInt)
 	raw, err := di.client.Do(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
@@ -73,6 +81,10 @@ func (di *DatabaseInfo) GetDBDataSize(ctx context.Context) (*PxgValInt, []byte, 
 //	- (data.PxgValInt) count of events of database
 func (di *DatabaseInfo) GetDBEventsCount(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.GetDBEventsCount", nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
 	pxgValInt := new(PxgValInt)
 	raw, err := di.client.Do(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
@@ -86,12 +98,12 @@ func (di *DatabaseInfo) GetDBEventsCount(ctx context.Context) (*PxgValInt, []byt
 //	Returns:
 //	- (data.PxgValBool) true if there is SQL database of this cloud type
 func (di *DatabaseInfo) IsCloudSQL(ctx context.Context, nCloudType int64) (*PxgValBool, []byte, error) {
-	postData := []byte(fmt.Sprintf(`
-	{
-		"nCloudType": %d
-	}`, nCloudType))
-
+	postData := []byte(fmt.Sprintf(`{"nCloudType": %d}`, nCloudType))
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.IsCloudSQL", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
 	pxgValBool := new(PxgValBool)
 	raw, err := di.client.Do(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
@@ -105,12 +117,12 @@ func (di *DatabaseInfo) IsCloudSQL(ctx context.Context, nCloudType int64) (*PxgV
 //	Exceptions:
 //	- Throw	exception if there are no any permissions
 func (di *DatabaseInfo) CheckBackupPath(ctx context.Context, szwPath string) (*PxgValBool, []byte, error) {
-	postData := []byte(fmt.Sprintf(`
-	{
-		"szwPath": "%s"
-	}`, szwPath))
-
+	postData := []byte(fmt.Sprintf(`{"szwPath": "%s"}`, szwPath))
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.CheckBackupPath", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
 	pxgValBool := new(PxgValBool)
 	raw, err := di.client.Do(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
@@ -125,13 +137,12 @@ func (di *DatabaseInfo) CheckBackupPath(ctx context.Context, szwPath string) (*P
 //	Exceptions:
 //	- Throw	exception if there are no any permissions
 func (di *DatabaseInfo) CheckBackupPath2(ctx context.Context, szwWinPath, szwLinuxPath string) (*PxgValBool, []byte, error) {
-	postData := []byte(fmt.Sprintf(`
-	{
-		"szwWinPath": "%s",
-		"szwLinuxPath": "%s"
-	}`, szwWinPath, szwLinuxPath))
-
+	postData := []byte(fmt.Sprintf(`{"szwWinPath": "%s",	"szwLinuxPath": "%s"}`, szwWinPath, szwLinuxPath))
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.CheckBackupPath2", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
 	pxgValBool := new(PxgValBool)
 	raw, err := di.client.Do(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
@@ -143,6 +154,10 @@ func (di *DatabaseInfo) CheckBackupPath2(ctx context.Context, szwWinPath, szwLin
 //	- (bool) true if there is SQL database on Linux SQL instance
 func (di *DatabaseInfo) IsLinuxSQL(ctx context.Context) (*PxgValBool, []byte, error) {
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.IsLinuxSQL", nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
 	pxgValBool := new(PxgValBool)
 	raw, err := di.client.Do(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
