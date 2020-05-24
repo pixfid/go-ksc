@@ -112,6 +112,10 @@ type PTaskParams struct{}
 //	- params	(QBTParams)
 func (nc *QBTNetworkListApi) AddListItemTask(ctx context.Context, params QBTParams) ([]byte, error) {
 	postData, err := json.Marshal(&params)
+	if err != nil {
+		return nil, err
+	}
+
 	request, err := http.NewRequest("POST", nc.client.Server+"/api/v1.0/QBTNetworkListApi.AddListItemTask", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
@@ -150,6 +154,10 @@ type QBTsParam struct {
 //	- params	(QBTsParam)
 func (nc *QBTNetworkListApi) AddListItemsTask(ctx context.Context, params QBTsParam) ([]byte, error) {
 	postData, err := json.Marshal(&params)
+	if err != nil {
+		return nil, err
+	}
+
 	request, err := http.NewRequest("POST", nc.client.Server+"/api/v1.0/QBTNetworkListApi.AddListItemsTask", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err

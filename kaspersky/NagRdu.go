@@ -48,6 +48,9 @@ type NagRdu service
 //	- throws	exception in case of error
 func (nr *NagRdu) GetCurrentHostState(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", nr.client.Server+"/api/v1.0/NagRdu.GetCurrentHostState", nil)
+	if err != nil {
+		return nil, err
+	}
 
 	raw, err := nr.client.Do(ctx, request, nil)
 	return raw, err
@@ -65,6 +68,9 @@ func (nr *NagRdu) GetCurrentHostState(ctx context.Context) ([]byte, error) {
 //	Some typical resources path prefixes
 func (nr *NagRdu) GetUrlToUploadFileToHost(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", nr.client.Server+"/api/v1.0/NagRdu.GetUrlToUploadFileToHost", nil)
+	if err != nil {
+		return nil, err
+	}
 
 	raw, err := nr.client.Do(ctx, request, nil)
 	return raw, err

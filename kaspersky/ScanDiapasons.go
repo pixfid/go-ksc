@@ -41,6 +41,9 @@ type ScanDiapasons service
 //	Restarts the task scanning IP diapasons.
 func (sd *ScanDiapasons) NotifyDpnsTask(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", sd.client.Server+"/api/v1.0/ScanDiapasons.NotifyDpnsTask", nil)
+	if err != nil {
+		return nil, err
+	}
 
 	raw, err := sd.client.Do(ctx, request, nil)
 	return raw, err

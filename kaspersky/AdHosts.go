@@ -146,7 +146,11 @@ type AdHstIDParentPxgRetVal struct {
 //	See List of host attributes and List of attributes of organization units for attribute names.
 func (ah *AdHosts) GetChildComputer(ctx context.Context, params ChildComputerParams) (*AdHstIDParent,
 	[]byte, error) {
-	postData, _ := json.Marshal(params)
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+
 	request, err := http.NewRequest("POST", ah.client.Server+"/api/v1.0/AdHosts.GetChildComputer", bytes.NewBuffer(postData))
 
 	adHstIdParent := new(AdHstIDParent)
@@ -253,7 +257,11 @@ type ChildOUParams struct {
 //ChunkAccessor.Release has been called.
 func (ah *AdHosts) GetChildOUs(ctx context.Context, params ChildOUParams) (*PxgValStr,
 	[]byte, error) {
-	postData, _ := json.Marshal(params)
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+
 	request, err := http.NewRequest("POST", ah.client.Server+"/api/v1.0/AdHosts.GetChildOUs", bytes.NewBuffer(postData))
 	pxgValStr := new(PxgValStr)
 	raw, err := ah.client.Do(ctx, request, &pxgValStr)

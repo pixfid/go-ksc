@@ -352,17 +352,22 @@ func (hg *HostGroup) FindHostsAsync(ctx context.Context, params HGParams) (*Requ
 //
 //	Parameters:
 //	- strRequestId	(string) identity of asynchronous operation
-func (hg *HostGroup) FindHostsAsyncCancel(ctx context.Context, strRequestId string) {
+func (hg *HostGroup) FindHostsAsyncCancel(ctx context.Context, strRequestId string) error {
 	postData := []byte(fmt.Sprintf(`
 	{
 	"strRequestId": "%s"
 	}`, strRequestId))
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.FindHostsAsyncCancel", bytes.NewBuffer(postData))
 	if err != nil {
-		return
+		return err
 	}
 
 	_, err = hg.client.Do(ctx, request, nil)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 //	Get result of FindHostsAsync operation.
@@ -512,6 +517,9 @@ func (hg *HostGroup) FindUsers(ctx context.Context, params UHGParams) (*Accessor
 	}
 
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.FindUsers", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
 
 	accessor := new(Accessor)
 	raw, err := hg.client.Do(ctx, request, &accessor)
@@ -850,8 +858,11 @@ func (hg *HostGroup) GetHostProducts(ctx context.Context, strHostName string) ([
 func (hg *HostGroup) GetHostTasks(ctx context.Context, hostId string) (*PxgValStr, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strHostName": "%s"}`, hostId))
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GetHostTasks", bytes.NewBuffer(postData))
-	pxgValStr := new(PxgValStr)
+	if err != nil {
+		return nil, nil, err
+	}
 
+	pxgValStr := new(PxgValStr)
 	raw, err := hg.client.Do(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
@@ -1123,14 +1134,18 @@ func (hg *HostGroup) RemoveGroup(ctx context.Context, nGroup, nFlags int64) (*WA
 //	Parameters:
 //	- strHostName	(string) host name, a unique server-generated string (see KLHST_WKS_HOSTNAME attribute).
 //	It is NOT the same as computer network name (DNS-, FQDN-, NetBIOS-name)
-func (hg *HostGroup) RemoveHost(ctx context.Context, strHostName string) {
+func (hg *HostGroup) RemoveHost(ctx context.Context, strHostName string) error {
 	postData := []byte(fmt.Sprintf(`{ "strHostName": "%s" }`, strHostName))
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.RemoveHost", bytes.NewBuffer(postData))
 	if err != nil {
-		return
+		return err
 	}
 
 	_, err = hg.client.Do(ctx, request, nil)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 //RemoveHostsParams struct

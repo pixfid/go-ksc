@@ -59,8 +59,11 @@ type ExtAud service
 func (ea *ExtAud) GetRevision(ctx context.Context, nObjId, nObjType, nObjRevision int64, out interface{}) ([]byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"nObjId": %d,"nObjType": %d,"nObjRevision": %d}`, nObjId, nObjType, nObjRevision))
-
 	request, err := http.NewRequest("POST", ea.client.Server+"/api/v1.0/ExtAud.GetRevision", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
 	raw, err := ea.client.Do(ctx, request, &out)
 	return raw, err
 }
@@ -86,8 +89,11 @@ func (ea *ExtAud) UpdateRevisionDesc(ctx context.Context, nObjId, nObjType, nObj
 		nObjId,
 		nObjType,
 		nObjRevision, wstrNewDescription))
-
 	request, err := http.NewRequest("POST", ea.client.Server+"/api/v1.0/ExtAud.UpdateRevisionDesc", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
 	raw, err := ea.client.Do(ctx, request, nil)
 	return raw, err
 }

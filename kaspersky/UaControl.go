@@ -45,6 +45,9 @@ type UaControl service
 //	- true if UAs assigned automatically
 func (uc *UaControl) GetAssignUasAutomatically(ctx context.Context) (*PxgValBool, []byte, error) {
 	request, err := http.NewRequest("POST", uc.client.Server+"/api/v1.0/UaControl.GetAssignUasAutomatically", nil)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	pxgValBool := new(PxgValBool)
 	raw, err := uc.client.Do(ctx, request, &pxgValBool)
@@ -59,6 +62,10 @@ func (uc *UaControl) GetAssignUasAutomatically(ctx context.Context) (*PxgValBool
 //	- pUaInfo	default settings, see Update agent settings
 func (uc *UaControl) GetDefaultUpdateAgentRegistrationInfo(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", uc.client.Server+"/api/v1.0/UaControl.GetDefaultUpdateAgentRegistrationInfo", nil)
+	if err != nil {
+		return nil, err
+	}
+
 	raw, err := uc.client.Do(ctx, request, nil)
 	return raw, err
 }
@@ -92,6 +99,9 @@ func (uc *UaControl) GetUpdateAgentsDisplayInfoForHost(ctx context.Context, wstr
 //	- pUasArr	(array) of Update agents info containers.
 func (uc *UaControl) GetUpdateAgentsList(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", uc.client.Server+"/api/v1.0/UaControl.GetUpdateAgentsList", nil)
+	if err != nil {
+		return nil, err
+	}
 
 	raw, err := uc.client.Do(ctx, request, nil)
 	return raw, err
@@ -109,6 +119,9 @@ func (uc *UaControl) SetAssignUasAutomatically(ctx context.Context, bEnabled boo
 	postData := []byte(fmt.Sprintf(`{"bEnabled": %v}`, bEnabled))
 	request, err := http.NewRequest("POST", uc.client.Server+"/api/v1.0/UaControl.UnregisterUpdateAgent",
 		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
 
 	raw, err := uc.client.Do(ctx, request, nil)
 	return raw, err
@@ -122,6 +135,10 @@ func (uc *UaControl) UnregisterUpdateAgent(ctx context.Context, wstrUaHostId str
 	postData := []byte(fmt.Sprintf(`{"wstrUaHostId": "%s"}`, wstrUaHostId))
 	request, err := http.NewRequest("POST", uc.client.Server+"/api/v1.0/UaControl.UnregisterUpdateAgent",
 		bytes.NewBuffer(postData))
+
+	if err != nil {
+		return nil, err
+	}
 
 	raw, err := uc.client.Do(ctx, request, nil)
 	return raw, err

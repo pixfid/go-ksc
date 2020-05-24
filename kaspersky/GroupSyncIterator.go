@@ -44,21 +44,21 @@ type GroupSyncIterator service
 //
 //Parameters:
 //	- szwIterator	(string) result-set ID
-func (ca *GroupSyncIterator) ReleaseIterator(ctx context.Context, szwIterator string) bool {
+func (ca *GroupSyncIterator) ReleaseIterator(ctx context.Context, szwIterator string) error {
 	postData := []byte(fmt.Sprintf(`
 	{
 	"szwIterator": "%s"
 	}`, szwIterator))
 	request, err := http.NewRequest("POST", ca.client.Server+"/api/v1.0/GroupSyncIterator.ReleaseIterator", bytes.NewBuffer(postData))
 	if err != nil {
-		return false
+		return err
 	}
 
-	raw, err := ca.client.Do(ctx, request, nil)
-	if raw != nil {
-		return true
+	_, err = ca.client.Do(ctx, request, nil)
+	if err != nil {
+		return err
 	}
-	return false
+	return nil
 }
 
 //	Acquire subset of elements contained in the result-set

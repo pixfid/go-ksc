@@ -99,6 +99,9 @@ func (vs *VServers) AddVServerInfo(ctx context.Context, strDisplayName string, l
 	error) {
 	postData := []byte(fmt.Sprintf(`{"lParentGroup": %d, "strDisplayName" : "%s"}`, lParentGroup, strDisplayName))
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.AddVServerInfo", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
 
 	vServer := new(VServer)
 	raw, err := vs.client.Do(ctx, request, &vServer)
@@ -116,6 +119,9 @@ func (vs *VServers) AddVServerInfo(ctx context.Context, strDisplayName string, l
 func (vs *VServers) DelVServer(ctx context.Context, lVServer int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.DelVServer", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
 
 	raw, err := vs.client.Do(ctx, request, nil)
 	return raw, err
@@ -130,6 +136,9 @@ func (vs *VServers) DelVServer(ctx context.Context, lVServer int64) ([]byte, err
 func (vs *VServers) GetPermissions(ctx context.Context, lVServer int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.GetPermissions", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
 
 	raw, err := vs.client.Do(ctx, request, nil)
 	return raw, err
@@ -167,8 +176,10 @@ func (vs *VServers) GetVServerInfo(ctx context.Context, lVServer int64) ([]byte,
 		"KLVSRV_CREATED",
 	}}
 	postData, _ := json.Marshal(v)
-
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.GetVServerInfo", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
 
 	raw, err := vs.client.Do(ctx, request, nil)
 	return raw, err
@@ -188,8 +199,10 @@ func (vs *VServers) GetVServerInfo(ctx context.Context, lVServer int64) ([]byte,
 func (vs *VServers) MoveVServer(ctx context.Context, lVServer int64, lNewParentGroup int64) (*WActionGUID, []byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"lVServer": %d, "lNewParentGroup" : %d}`, lVServer, lNewParentGroup))
-
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.MoveVServer", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
 
 	wActionGUID := new(WActionGUID)
 	raw, err := vs.client.Do(ctx, request, &wActionGUID)
@@ -203,8 +216,10 @@ func (vs *VServers) MoveVServer(ctx context.Context, lVServer int64, lNewParentG
 //	- lVServer	(int64) virtual server id
 func (vs *VServers) RecallCertAndCloseConnections(ctx context.Context, lVServer int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))
-
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.RecallCertAndCloseConnections", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
 
 	raw, err := vs.client.Do(ctx, request, nil)
 	return raw, err
@@ -222,8 +237,10 @@ func (vs *VServers) RecallCertAndCloseConnections(ctx context.Context, lVServer 
 //	see List of virtual server attributes). Following attributes may be specified: "KLVSRV_DN"
 func (vs *VServers) UpdateVServerInfo(ctx context.Context, lVServer int64, params interface{}) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))
-
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.UpdateVServerInfo", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
 
 	raw, err := vs.client.Do(ctx, request, nil)
 	return raw, err
@@ -240,8 +257,10 @@ func (vs *VServers) UpdateVServerInfo(ctx context.Context, lVServer int64, param
 func (vs *VServers) SetPermissions(ctx context.Context, lVServer int64, params interface{}, bProtection bool) ([]byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))
-
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.SetPermissions", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
 
 	raw, err := vs.client.Do(ctx, request, nil)
 	return raw, err

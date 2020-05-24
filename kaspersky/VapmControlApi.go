@@ -52,7 +52,7 @@ func (sc *VapmControlApi) GetAttributesSetVersionNum(ctx context.Context, params
 
 	pxgValInt := new(PxgValInt)
 	raw, err := sc.client.Do(ctx, request, &pxgValInt)
-	return pxgValInt, raw, nil
+	return pxgValInt, raw, err
 }
 
 //	Get identities of VAPM tasks which rules are still being processed.
@@ -69,7 +69,7 @@ func (sc *VapmControlApi) GetPendingRulesTasks(ctx context.Context) ([]byte, err
 	}
 
 	raw, err := sc.client.Do(ctx, request, nil)
-	return raw, nil
+	return raw, err
 }
 
 func (sc *VapmControlApi) InitiateDownload(ctx context.Context) ([]byte, error) {
@@ -80,7 +80,7 @@ func (sc *VapmControlApi) InitiateDownload(ctx context.Context) ([]byte, error) 
 	}
 
 	raw, err := sc.client.Do(ctx, request, nil)
-	return raw, nil
+	return raw, err
 }
 
 //TODO

@@ -52,6 +52,9 @@ type FileCategorizer2 service
 func (fc *FileCategorizer2) CancelFileMetadataOperations(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2."+
 		"CancelFileMetadataOperations", nil)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	pxgValInt := new(PxgValInt)
 	raw, err := fc.client.Do(ctx, request, &pxgValInt)
@@ -65,6 +68,9 @@ func (fc *FileCategorizer2) CancelFileMetadataOperations(ctx context.Context) (*
 func (fc *FileCategorizer2) CancelFileUpload(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2."+
 		"CancelFileUpload", nil)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	pxgValInt := new(PxgValInt)
 	raw, err := fc.client.Do(ctx, request, &pxgValInt)
@@ -183,6 +189,9 @@ func (fc *FileCategorizer2) ForceCategoryUpdate(ctx context.Context, nCategoryId
 func (fc *FileCategorizer2) GetCategoriesModificationCounter(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2."+
 		"GetCategoriesModificationCounter", nil)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	pxgValInt := new(PxgValInt)
 	raw, err := fc.client.Do(ctx, request, &pxgValInt)
@@ -416,6 +425,9 @@ func (fc *FileCategorizer2) GetSerializedCategoryBody2(ctx context.Context, nCat
 func (fc *FileCategorizer2) GetSyncId(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2."+
 		"GetSyncId", nil)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	pxgValInt := new(PxgValInt)
 	raw, err := fc.client.Do(ctx, request, &pxgValInt)

@@ -65,7 +65,7 @@ func (sc *SrvCloud) GetCloudsInfo(ctx context.Context, params Null) ([]byte, err
 	}
 
 	raw, err := sc.client.Do(ctx, request, nil)
-	return raw, nil
+	return raw, err
 }
 
 //	Returns properties of the cloud host.

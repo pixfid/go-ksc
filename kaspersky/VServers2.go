@@ -71,6 +71,9 @@ type Klvsrv struct {
 func (vs *VServers2) GetVServerStatistic(ctx context.Context, lVsId int) (*VServerStatistic, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lVsId": %d}`, lVsId))
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers2.GetVServerStatistic", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
 
 	vServerStatistic := new(VServerStatistic)
 	raw, err := vs.client.Do(ctx, request, &vServerStatistic)

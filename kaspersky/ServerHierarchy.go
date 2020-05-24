@@ -99,7 +99,11 @@ func (sh *ServerHierarchy) DelServer(ctx context.Context, lServer int64) ([]byte
 //			]
 //	}
 func (sh *ServerHierarchy) GetServerInfo(ctx context.Context, params interface{}) ([]byte, error) {
-	postData, _ := json.Marshal(params)
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
 	request, err := http.NewRequest("POST", sh.client.Server+"/api/v1.0/ServerHierarchy.GetServerInfo", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err

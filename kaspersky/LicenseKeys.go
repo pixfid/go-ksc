@@ -142,7 +142,11 @@ type HostsKeyIterator struct {
 //	Call GroupSyncIterator.GetNextItems to iterate. Call GroupSyncIterator.ReleaseIterator when you are done.
 func (lk *LicenseKeys) AcquireKeyHosts(ctx context.Context, params AcquireKeyHostsParams) (*HostsKeyIterator,
 	[]byte, error) {
-	postData, _ := json.Marshal(params)
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+
 	request, err := http.NewRequest("POST", lk.client.Server+"/api/v1.0/LicenseKeys.AcquireKeyHosts",
 		bytes.NewBuffer(postData))
 	if err != nil {
@@ -180,7 +184,11 @@ type EnumKeysParams struct {
 //Exceptions:
 //	Throws	exception in case of error.
 func (lk *LicenseKeys) EnumKeys(ctx context.Context, params EnumKeysParams, v interface{}) ([]byte, error) {
-	postData, _ := json.Marshal(params)
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
 	request, err := http.NewRequest("POST", lk.client.Server+"/api/v1.0/LicenseKeys.EnumKeys",
 		bytes.NewBuffer(postData))
 
@@ -218,7 +226,10 @@ type PKeyInfo struct {
 //	Returns:
 //	(params) container with the requested key attribute values. See List of license key attributes for attribute names.
 func (lk *LicenseKeys) GetKeyData(ctx context.Context, params KeyDataParams, v interface{}) ([]byte, error) {
-	postData, _ := json.Marshal(params)
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
 	request, err := http.NewRequest("POST", lk.client.Server+"/api/v1.0/LicenseKeys.GetKeyData",
 		bytes.NewBuffer(postData))
 
@@ -276,7 +287,10 @@ type PKData struct {
 //	Exceptions:
 //	- Throws	exception in case of error.
 func (lk *LicenseKeys) AdjustKey(ctx context.Context, params AdjustKeyParams, v interface{}) ([]byte, error) {
-	postData, _ := json.Marshal(params)
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
 	request, err := http.NewRequest("POST", lk.client.Server+"/api/v1.0/LicenseKeys.AdjustKey",
 		bytes.NewBuffer(postData))
 

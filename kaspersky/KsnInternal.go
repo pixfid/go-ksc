@@ -51,6 +51,9 @@ type KsnInternal service
 //	- KLPRCP.ERR_CANT_CONNECT - Can not connect to KSN.
 func (sd *KsnInternal) CheckKsnConnection(ctx context.Context) (*PxgValBool, []byte, error) {
 	request, err := http.NewRequest("POST", sd.client.Server+"/api/v1.0/KsnInternal.CheckKsnConnection", nil)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	pxgValBool := new(PxgValBool)
 	raw, err := sd.client.Do(ctx, request, &pxgValBool)
@@ -68,6 +71,9 @@ func (sd *KsnInternal) CheckKsnConnection(ctx context.Context) (*PxgValBool, []b
 //	- KLSTD.STDE_NOACCESS - Access denied.
 func (sd *KsnInternal) GetNKsnEulas(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", sd.client.Server+"/api/v1.0/KsnInternal.GetNKsnEulas", nil)
+	if err != nil {
+		return nil, err
+	}
 
 	raw, err := sd.client.Do(ctx, request, nil)
 	return raw, err
@@ -94,6 +100,9 @@ type PSettings struct {
 //	See Section KSNPROXY_SETTINGS attributes.
 func (sd *KsnInternal) GetSettings(ctx context.Context) (*KsnSettings, []byte, error) {
 	request, err := http.NewRequest("POST", sd.client.Server+"/api/v1.0/KsnInternal.GetSettings", nil)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	ksnSettings := new(KsnSettings)
 	raw, err := sd.client.Do(ctx, request, &ksnSettings)
@@ -107,6 +116,9 @@ func (sd *KsnInternal) GetSettings(ctx context.Context) (*KsnSettings, []byte, e
 //	Otherwise - false.
 func (sd *KsnInternal) NeedToSendStatistics(ctx context.Context) (*PxgValBool, []byte, error) {
 	request, err := http.NewRequest("POST", sd.client.Server+"/api/v1.0/KsnInternal.NeedToSendStatistics", nil)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	pxgValBool := new(PxgValBool)
 	raw, err := sd.client.Do(ctx, request, &pxgValBool)
@@ -129,6 +141,9 @@ func (sd *KsnInternal) NeedToSendStatistics(ctx context.Context) (*PxgValBool, [
 func (sd *KsnInternal) GetNKsnEula(ctx context.Context, wstrNKsnLoc string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrNKsnLoc": "%s"}`, wstrNKsnLoc))
 	request, err := http.NewRequest("POST", sd.client.Server+"/api/v1.0/KsnInternal.GetNKsnEula", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
 
 	raw, err := sd.client.Do(ctx, request, nil)
 	return raw, err
