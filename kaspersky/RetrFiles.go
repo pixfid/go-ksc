@@ -40,17 +40,23 @@ type RetrFiles service
 
 //FilesRequest struct using in GetInfo
 type FilesRequest struct {
+	//Array of params, each cell (paramParams) contains request-info for one updatable file:
 	FilesRequestElement []FilesRequestElement `json:"aRequest"`
 }
 
 type FilesRequestElement struct {
-	Type              *string            `json:"type,omitempty"`
+	Type              string             `json:"type,omitempty"`
 	FilesRequestValue *FilesRequestValue `json:"value,omitempty"`
 }
 
 type FilesRequestValue struct {
-	Index    *string `json:"Index,omitempty"`
-	CompID   *string `json:"CompId,omitempty"`
+	//primary index relative path in lowercase, e.g. "index/u1313g.xml";
+	Index *string `json:"Index,omitempty"`
+
+	//updatable file component id in UPPERCASE, e.g. "KSC";
+	CompID *string `json:"CompId,omitempty"`
+
+	//file name without path in lowercase, e.g. "kscdat.zip".
 	FileName *string `json:"FileName,omitempty"`
 }
 
