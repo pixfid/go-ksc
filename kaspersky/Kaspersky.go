@@ -91,6 +91,7 @@ type Client struct {
 	NagGuiCalls                 *NagGuiCalls
 	NagHstCtl                   *NagHstCtl
 	NagRdu                      *NagRdu
+	NagRemoteScreen             *NagRemoteScreen
 	OsVersion                   *OsVersion
 	PackagesApi                 *PackagesApi
 	Policy                      *Policy
@@ -191,6 +192,7 @@ func New(cfg Config) *Client {
 	c.NagGuiCalls = (*NagGuiCalls)(&c.common)
 	c.NagHstCtl = (*NagHstCtl)(&c.common)
 	c.NagRdu = (*NagRdu)(&c.common)
+	c.NagRemoteScreen = (*NagRemoteScreen)(&c.common)
 	c.OsVersion = (*OsVersion)(&c.common)
 	c.PackagesApi = (*PackagesApi)(&c.common)
 	c.Policy = (*Policy)(&c.common)
@@ -248,6 +250,7 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (dt [
 
 	var resp *http.Response
 
+	req.Header.Set("User-Agent", "go-ksc")
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Accept-Encoding", "gzip")
 
