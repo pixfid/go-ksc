@@ -50,10 +50,7 @@ type ServerHierarchy service
 //	Parameters:
 //	- lServer	Slave server id
 func (sh *ServerHierarchy) DelServer(ctx context.Context, lServer int64) ([]byte, error) {
-	postData := []byte(fmt.Sprintf(`
-	{
-	"lServer": %d
-	}`, lServer))
+	postData := []byte(fmt.Sprintf(`{"lServer": %d}`, lServer))
 	request, err := http.NewRequest("POST", sh.client.Server+"/api/v1.0/ServerHierarchy.DelServer", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
@@ -138,10 +135,7 @@ func (sh *ServerHierarchy) GetServerInfo(ctx context.Context, params interface{}
 //	+----------------------------+----------+-------------------------------------------------------------------------------------------------------+
 //	See list of slave server attributes for attributes description.
 func (sh *ServerHierarchy) GetChildServers(ctx context.Context, nGroupId int64) ([]byte, error) {
-	postData := []byte(fmt.Sprintf(`
-	{
-	"nGroupId": %d
-	}`, nGroupId))
+	postData := []byte(fmt.Sprintf(`{"nGroupId": %d}`, nGroupId))
 	request, err := http.NewRequest("POST", sh.client.Server+"/api/v1.0/ServerHierarchy.GetChildServers", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
