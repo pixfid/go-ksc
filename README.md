@@ -1,8 +1,9 @@
 # go-ksc #
 go-ksc is a Go client library for accessing the KSC (Kaspersky Security Center) Open API.
 
+## Badges
 [![Go Report Card](https://goreportcard.com/badge/github.com/pixfid/go-ksc)](https://goreportcard.com/report/github.com/pixfid/go-ksc)
-
+[![License](https://img.shields.io/github/license/pixfid/go-ksc?style=flat-square)](/LICENSE)
 ## Usage ##
 
 ```go
