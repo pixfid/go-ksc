@@ -92,6 +92,7 @@ type Client struct {
 	NagHstCtl                   *NagHstCtl
 	NagRdu                      *NagRdu
 	NagRemoteScreen             *NagRemoteScreen
+	NlaDefinedNetworks          *NlaDefinedNetworks
 	OsVersion                   *OsVersion
 	PackagesApi                 *PackagesApi
 	Policy                      *Policy
@@ -193,6 +194,7 @@ func New(cfg Config) *Client {
 	c.NagHstCtl = (*NagHstCtl)(&c.common)
 	c.NagRdu = (*NagRdu)(&c.common)
 	c.NagRemoteScreen = (*NagRemoteScreen)(&c.common)
+	c.NlaDefinedNetworks = (*NlaDefinedNetworks)(&c.common)
 	c.OsVersion = (*OsVersion)(&c.common)
 	c.PackagesApi = (*PackagesApi)(&c.common)
 	c.Policy = (*Policy)(&c.common)
