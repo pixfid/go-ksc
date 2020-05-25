@@ -28,6 +28,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -38,7 +39,6 @@ import (
 //	List of all members.
 type GroupSync service
 
-//TODO GetSyncDeliveryTime
 //TODO GetSyncHostsInfo
 
 //GroupSyncInfoParams struct
@@ -87,4 +87,27 @@ func (gs *GroupSync) GetSyncInfo(ctx context.Context, params GroupSyncInfoParams
 	groupSyncInfo := new(GroupSyncInfo)
 	raw, err := gs.client.Do(ctx, request, &groupSyncInfo)
 	return groupSyncInfo, raw, err
+}
+
+//	Acquire group synchronization delivery time for the specified host.
+//
+//	Returns UTC time when the specified synchronization has been delivered to the specified host
+//
+//	Parameters:
+//	- nSync	(int64) id of the group synchronization. Can be retrieved from policy attribute KLPOL_GSYN_ID
+//	- szwHostId	(string) host name (see KLHST_WKS_HOSTNAME)
+//
+//	Returns:
+//	- group synchronization delivery UTC time
+func (gs *GroupSync) GetSyncDeliveryTime(ctx context.Context, nSync int64, szwHostId string) (*PxgValInt,
+	[]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"nSync": %d, "szwHostId": "%s"}`, nSync, szwHostId))
+	request, err := http.NewRequest("POST", gs.client.Server+"/api/v1.0/GroupSync.GetSyncDeliveryTime", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	pxgValInt := new(PxgValInt)
+	raw, err := gs.client.Do(ctx, request, &pxgValInt)
+	return pxgValInt, raw, err
 }

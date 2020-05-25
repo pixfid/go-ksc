@@ -57,21 +57,36 @@ func (cp *CgwHelper) GetSlaveServerLocation(ctx context.Context, nSlaveServerId 
 	return raw, err
 }
 
+//NagentLocation struct
+type NagentLocation struct {
+	NagLocation *NagLocation `json:"PxgRetVal,omitempty"`
+}
+
+type NagLocation struct {
+	GwLOCHostID          *string `json:"GwLocHostId,omitempty"`
+	GwLOCIndirect        *bool   `json:"GwLocIndirect,omitempty"`
+	GwLOCLocation        *string `json:"GwLocLocation,omitempty"`
+	GwLOCSignUDP         *bool   `json:"GwLocSignUdp,omitempty"`
+	GwLOCTargetComponent *string `json:"GwLocTargetComponent,omitempty"`
+	GwLOCUseCompression  *bool   `json:"GwLocUseCompression,omitempty"`
+}
+
 //	Retrieves Nagent Location by host name.
 //
 //	Parameters:
-//	- wsHostName	Host name.
+//	- wsHostName (string)	Host name.
 //
 //	Returns:
 //	- (params) Location params (non-transparent for a user).
-func (cp *CgwHelper) GetNagentLocation(ctx context.Context, wsHostName string) ([]byte, error) {
+func (cp *CgwHelper) GetNagentLocation(ctx context.Context, wsHostName string) (*NagentLocation, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wsHostName": "%s"}`, wsHostName))
 	request, err := http.NewRequest("POST", cp.client.Server+"/api/v1.0/CgwHelper.GetNagentLocation",
 		bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	raw, err := cp.client.Do(ctx, request, nil)
-	return raw, err
+	nagentLocation := new(NagentLocation)
+	raw, err := cp.client.Do(ctx, request, &nagentLocation)
+	return nagentLocation, raw, err
 }

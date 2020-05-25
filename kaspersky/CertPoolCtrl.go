@@ -60,6 +60,6 @@ func (cp *CertPoolCtrl) GetCertificateInfo(ctx context.Context, nVServerId, nFun
 	return raw, err
 }
 
-//TODO func (cp *SetCertificate) GetCertificateInfo(ctx context.Context, nVServerId, nFunction int64,
+//TODO func (cp *CertPoolCtrl) SetCertificate(ctx context.Context, nVServerId, nFunction int64,
 //pCertData interface{}) ([]byte,
 //error)

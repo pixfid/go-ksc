@@ -122,7 +122,11 @@ type KlinvlicKey struct {
 //	Returns:
 //	- (int64) id of created License Key.
 func (ilp *InvLicenseProducts) AddLicenseKey(ctx context.Context, params LicenseKeyParams) (*PxgValInt, []byte, error) {
-	postData, _ := json.Marshal(params)
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+
 	request, err := http.NewRequest("POST", ilp.client.Server+"/api/v1.0/InvLicenseProducts.AddLicenseKey", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, nil, err
@@ -175,7 +179,11 @@ type KlinvlicMasksValue struct {
 //	Returns:
 //	- (int64) id of created License Product.
 func (ilp *InvLicenseProducts) AddLicenseProduct(ctx context.Context, params LicenseProductParams) (*PxgValInt, []byte, error) {
-	postData, _ := json.Marshal(params)
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+
 	request, err := http.NewRequest("POST", ilp.client.Server+"/api/v1.0/InvLicenseProducts.AddLicenseProduct", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, nil, err
