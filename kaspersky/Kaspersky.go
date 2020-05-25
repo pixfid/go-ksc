@@ -96,6 +96,7 @@ type Client struct {
 	OsVersion                   *OsVersion
 	PackagesApi                 *PackagesApi
 	Policy                      *Policy
+	QueriesStorage              *QueriesStorage
 	QBTNetworkListApi           *QBTNetworkListApi
 	ReportManager               *ReportManager
 	RetrFiles                   *RetrFiles
@@ -198,6 +199,7 @@ func New(cfg Config) *Client {
 	c.OsVersion = (*OsVersion)(&c.common)
 	c.PackagesApi = (*PackagesApi)(&c.common)
 	c.Policy = (*Policy)(&c.common)
+	c.QueriesStorage = (*QueriesStorage)(&c.common)
 	c.QBTNetworkListApi = (*QBTNetworkListApi)(&c.common)
 	c.ReportManager = (*ReportManager)(&c.common)
 	c.RetrFiles = (*RetrFiles)(&c.common)
