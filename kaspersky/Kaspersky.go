@@ -38,93 +38,94 @@ import (
 )
 
 type Config struct {
-	Server   string
-	Username string
-	Password string
+	Server      string
+	Username    string
+	Password    string
+	VServerName string
 }
 
 //-------------Client------------------
 type Client struct {
-	AdfsSso                     *AdfsSso
-	AdHosts                     *AdHosts
-	AdmServerSettings           *AdmServerSettings
-	AppCtrlApi                  *AppCtrlApi
-	AKPatches                   *AKPatches
-	AsyncActionStateChecker     *AsyncActionStateChecker
-	CertPoolCtrl                *CertPoolCtrl
-	CertPoolCtrl2               *CertPoolCtrl2
-	CgwHelper                   *CgwHelper
-	ChunkAccessor               *ChunkAccessor
-	CloudAccess                 *CloudAccess
-	ConEvents                   *ConEvents
-	DatabaseInfo                *DatabaseInfo
-	DataProtectionApi           *DataProtectionApi
-	DpeKeyService               *DpeKeyService
-	EventNotificationProperties *EventNotificationProperties
-	EventNotificationsApi       *EventNotificationsApi
-	EventProcessing             *EventProcessing
-	EventProcessingFactory      *EventProcessingFactory
-	ExtAud                      *ExtAud
-	FileCategorizer2            *FileCategorizer2
-	GroupSync                   *GroupSync
-	HostGroup                   *HostGroup
-	HostMoveRules               *HostMoveRules
-	HostTagsRulesApi            *HostTagsRulesApi
-	HostTasks                   *HostTasks
-	HstAccessControl            *HstAccessControl
-	HWInvStorage                *HWInvStorage
-	GroupSyncIterator           *GroupSyncIterator
-	GroupTaskControlApi         *GroupTaskControlApi
-	InventoryApi                *InventoryApi
-	InvLicenseProducts          *InvLicenseProducts
-	IWebSrvSettings             *IWebSrvSettings
-	KillChain                   *KillChain
-	KsnInternal                 *KsnInternal
-	LicenseInfoSync             *LicenseInfoSync
-	LicenseKeys                 *LicenseKeys
-	LicensePolicy               *LicensePolicy
-	Limits                      *Limits
-	ListTags                    *ListTags
-	MigrationData               *MigrationData
-	Multitenancy                *Multitenancy
-	NagCgwHelper                *NagCgwHelper
-	NagGuiCalls                 *NagGuiCalls
-	NagHstCtl                   *NagHstCtl
-	NagRdu                      *NagRdu
-	NagRemoteScreen             *NagRemoteScreen
-	NlaDefinedNetworks          *NlaDefinedNetworks
-	OsVersion                   *OsVersion
-	PackagesApi                 *PackagesApi
-	Policy                      *Policy
-	QueriesStorage              *QueriesStorage
-	QBTNetworkListApi           *QBTNetworkListApi
-	ReportManager               *ReportManager
-	RetrFiles                   *RetrFiles
-	ScanDiapasons               *ScanDiapasons
-	SecurityPolicy              *SecurityPolicy
-	SecurityPolicy3             *SecurityPolicy3
-	ServerHierarchy             *ServerHierarchy
-	ServerTransportSettings     *ServerTransportSettings
-	Session                     *Session
-	SmsQueue                    *SmsQueue
-	SmsSenders                  *SmsSenders
-	SrvCloud                    *SrvCloud
-	SrvSsRevision               *SrvSsRevision
-	SrvView                     *SrvView
-	SsContents                  *SsContents
-	SubnetMasks                 *SubnetMasks
-	Tasks                       *Tasks
-	TrafficManager              *TrafficManager
-	UaControl                   *UaControl
-	Updates                     *Updates
-	UserDevicesApi              *UserDevicesApi
-	VapmControlApi              *VapmControlApi
-	UserName, Password, Server  string
-	VServers                    *VServers
-	VServers2                   *VServers2
-	WolSender                   *WolSender
-	client                      *http.Client
-	common                      service
+	AdfsSso                                 *AdfsSso
+	AdHosts                                 *AdHosts
+	AdmServerSettings                       *AdmServerSettings
+	AppCtrlApi                              *AppCtrlApi
+	AKPatches                               *AKPatches
+	AsyncActionStateChecker                 *AsyncActionStateChecker
+	CertPoolCtrl                            *CertPoolCtrl
+	CertPoolCtrl2                           *CertPoolCtrl2
+	CgwHelper                               *CgwHelper
+	ChunkAccessor                           *ChunkAccessor
+	CloudAccess                             *CloudAccess
+	ConEvents                               *ConEvents
+	DatabaseInfo                            *DatabaseInfo
+	DataProtectionApi                       *DataProtectionApi
+	DpeKeyService                           *DpeKeyService
+	EventNotificationProperties             *EventNotificationProperties
+	EventNotificationsApi                   *EventNotificationsApi
+	EventProcessing                         *EventProcessing
+	EventProcessingFactory                  *EventProcessingFactory
+	ExtAud                                  *ExtAud
+	FileCategorizer2                        *FileCategorizer2
+	GroupSync                               *GroupSync
+	HostGroup                               *HostGroup
+	HostMoveRules                           *HostMoveRules
+	HostTagsRulesApi                        *HostTagsRulesApi
+	HostTasks                               *HostTasks
+	HstAccessControl                        *HstAccessControl
+	HWInvStorage                            *HWInvStorage
+	GroupSyncIterator                       *GroupSyncIterator
+	GroupTaskControlApi                     *GroupTaskControlApi
+	InventoryApi                            *InventoryApi
+	InvLicenseProducts                      *InvLicenseProducts
+	IWebSrvSettings                         *IWebSrvSettings
+	KillChain                               *KillChain
+	KsnInternal                             *KsnInternal
+	LicenseInfoSync                         *LicenseInfoSync
+	LicenseKeys                             *LicenseKeys
+	LicensePolicy                           *LicensePolicy
+	Limits                                  *Limits
+	ListTags                                *ListTags
+	MigrationData                           *MigrationData
+	Multitenancy                            *Multitenancy
+	NagCgwHelper                            *NagCgwHelper
+	NagGuiCalls                             *NagGuiCalls
+	NagHstCtl                               *NagHstCtl
+	NagRdu                                  *NagRdu
+	NagRemoteScreen                         *NagRemoteScreen
+	NlaDefinedNetworks                      *NlaDefinedNetworks
+	OsVersion                               *OsVersion
+	PackagesApi                             *PackagesApi
+	Policy                                  *Policy
+	QueriesStorage                          *QueriesStorage
+	QBTNetworkListApi                       *QBTNetworkListApi
+	ReportManager                           *ReportManager
+	RetrFiles                               *RetrFiles
+	ScanDiapasons                           *ScanDiapasons
+	SecurityPolicy                          *SecurityPolicy
+	SecurityPolicy3                         *SecurityPolicy3
+	ServerHierarchy                         *ServerHierarchy
+	ServerTransportSettings                 *ServerTransportSettings
+	Session                                 *Session
+	SmsQueue                                *SmsQueue
+	SmsSenders                              *SmsSenders
+	SrvCloud                                *SrvCloud
+	SrvSsRevision                           *SrvSsRevision
+	SrvView                                 *SrvView
+	SsContents                              *SsContents
+	SubnetMasks                             *SubnetMasks
+	Tasks                                   *Tasks
+	TrafficManager                          *TrafficManager
+	UaControl                               *UaControl
+	Updates                                 *Updates
+	UserDevicesApi                          *UserDevicesApi
+	VapmControlApi                          *VapmControlApi
+	UserName, Password, Server, VServerName string
+	VServers                                *VServers
+	VServers2                               *VServers2
+	WolSender                               *WolSender
+	client                                  *http.Client
+	common                                  service
 }
 
 type service struct {
@@ -140,10 +141,11 @@ func New(cfg Config) *Client {
 	}
 
 	c := &Client{
-		client:   httpClient,
-		Server:   cfg.Server,
-		UserName: cfg.Username,
-		Password: cfg.Password,
+		client:      httpClient,
+		Server:      cfg.Server,
+		UserName:    cfg.Username,
+		Password:    cfg.Password,
+		VServerName: cfg.VServerName,
 	}
 
 	c.common.client = c
@@ -232,14 +234,19 @@ func (c *Client) KSCAuth(ctx context.Context) error {
 	c.UserName = base64.StdEncoding.EncodeToString([]byte(c.UserName))
 	c.Password = base64.StdEncoding.EncodeToString([]byte(c.Password))
 
+	if len(c.VServerName) != 0 {
+		c.VServerName = base64.StdEncoding.EncodeToString([]byte(c.VServerName))
+	} else {
+		c.VServerName = "x"
+	}
+
 	request, err := http.NewRequest("POST", c.Server+"/api/v1.0/login", nil)
 	if err != nil {
 		return err
 	}
 
 	request.Header.Set("Authorization", "KSCBasic user=\""+c.UserName+"\", pass=\""+c.Password+"\"")
-	request.Header.Set("X-KSC-VServer", "x")
-	request.Header.Set("Content-Length", "2")
+	request.Header.Set("X-KSC-VServer", c.VServerName)
 
 	_, err = c.Do(ctx, request, nil)
 	return err

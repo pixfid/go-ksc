@@ -33,6 +33,7 @@ func main() {
     	cfg := kaspersky.Config {
     		Username: "login",
     		Password: "password",
+            //VServerName: "virtual_server_name", for login on.
     		Server: fmt.Sprintf(`https://%s:%s`, "ip", "port"),
     	}
     
