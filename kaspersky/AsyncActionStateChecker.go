@@ -60,6 +60,11 @@ type PStateData struct {
 	KlblagErrorModule  *string `json:"KLBLAG_ERROR_MODULE,omitempty"`
 	KlblagErrorMsg     *string `json:"KLBLAG_ERROR_MSG,omitempty"`
 	KlblagErrorSubcode *int64  `json:"KLBLAG_ERROR_SUBCODE,omitempty"`
+	//
+	KlrptOutputChart  *string            `json:"KLRPT_OUTPUT_CHART,omitempty"`
+	KlrptOutputFile   *string            `json:"KLRPT_OUTPUT_FILE,omitempty"`
+	KlrptOutputFormat *KlrptOutputFormat `json:"KLRPT_OUTPUT_FORMAT,omitempty"`
+	KlrptOutputLogo   *string            `json:"KLRPT_OUTPUT_LOGO,omitempty"`
 }
 
 //Check status of the async action.

@@ -309,14 +309,106 @@ func (rm *ReportManager) RequestStatisticsData(ctx context.Context, params inter
 	return requestID, raw, err
 }
 
+type ExecuteReportParams struct {
+	//report id
+	LReportID *int64 `json:"lReportId,omitempty"`
+
+	//options (see description below)
+	POptions *RPOptions `json:"pOptions,omitempty"`
+}
+
+type RPOptions struct {
+	//Locale identifier
+	RptLOCLocale *int64 `json:"RPT_LOC_LOCALE,omitempty"`
+
+	//If the flag is set, values of datetime fields will be in UTC,
+	//YYYY-MM-DDTHH:mm:ss format. Otherwise, time zone will be taken into account,
+	//long date format.
+	KlrptUseUTC *bool `json:"KLRPT_USE_UTC,omitempty"`
+
+	//Description of report output format
+	KlrptOutputFormat *KlrptOutputFormat `json:"KLRPT_OUTPUT_FORMAT,omitempty"`
+}
+
+type KlrptOutputFormat struct {
+	Type  *string                 `json:"type,omitempty"`
+	Value *KlrptOutputFormatValue `json:"value,omitempty"`
+}
+
+type KlrptOutputFormatValue struct {
+	//Maximum number of records in details table
+	KlrptMaxRecordsDetails *int64 `json:"KLRPT_MAX_RECORDS_DETAILS,omitempty"`
+
+	//Report target format, see Types of report target format
+	//	╔═══════╦══════════╦═════════════╗
+	//	║ Value ║  Alias   ║ Description ║
+	//	╠═══════╬══════════╬═════════════╣
+	//	║     0 ║ RTT_XML  ║ XML         ║
+	//	║     1 ║ RTT_CSV  ║ CSV         ║
+	//	║     2 ║ RTT_JSON ║ JSON        ║
+	//	╚═══════╩══════════╩═════════════╝
+	KlrptTargetType *int64 `json:"KLRPT_TARGET_TYPE,omitempty"`
+
+	//Report target XML format, see Types of report XML target format
+	//	╔═══════╦═════════════╦════════════════════╗
+	//	║ Value ║    Alias    ║    Description     ║
+	//	╠═══════╬═════════════╬════════════════════╣
+	//	║    -1 ║ RTT_UNKNOWN ║ Unknown or not set ║
+	//	║     0 ║ RTT_HTML    ║ HTML               ║
+	//	║     1 ║ RTT_XLS     ║ XLS                ║
+	//	║     2 ║ RTT_PDF     ║ PDF                ║
+	//	╚═══════╩═════════════╩════════════════════╝
+	KlrptXMLTargetType *int64 `json:"KLRPT_XML_TARGET_TYPE,omitempty"`
+
+	//PDF report document orientation
+
+	KlrptPDFLandscape *bool `json:"KLRPT_PDF_LANDSCAPE,omitempty"`
+
+	//Page size for PDF report document, see Sizes of report PDF document
+	//	╔═══════╦═════════════╦═════════════════════╗
+	//	║ Value ║    Alias    ║     Description     ║
+	//	╠═══════╬═════════════╬═════════════════════╣
+	//	║     0 ║ Custom      ║ User-defined format ║
+	//	║     1 ║ Letter      ║ Letter format       ║
+	//	║     2 ║ Note        ║ Note format         ║
+	//	║     3 ║ Legal       ║ Legal format        ║
+	//	║     4 ║ A0          ║ A0 format           ║
+	//	║     5 ║ A1          ║ A1 format           ║
+	//	║     6 ║ A2          ║ A2 format           ║
+	//	║     7 ║ A3          ║ A3 format           ║
+	//	║     8 ║ A4          ║ A4 format           ║
+	//	║     9 ║ A5          ║ A5 format           ║
+	//	║    10 ║ A6          ║ A6 format           ║
+	//	║    11 ║ A7          ║ A7 format           ║
+	//	║    12 ║ A8          ║ A8 format           ║
+	//	║    13 ║ A9          ║ A9 format           ║
+	//	║    14 ║ A10         ║ A10 format          ║
+	//	║    15 ║ B0          ║ B0 format           ║
+	//	║    16 ║ B1          ║ B1 format           ║
+	//	║    17 ║ B2          ║ B2 format           ║
+	//	║    18 ║ B3          ║ B3 format           ║
+	//	║    19 ║ B4          ║ B4 format           ║
+	//	║    20 ║ B5          ║ B5 format           ║
+	//	║    21 ║ ArchE       ║ ArchE format        ║
+	//	║    22 ║ ArchD       ║ ArchD format        ║
+	//	║    23 ║ ArchC       ║ ArchC format        ║
+	//	║    24 ║ ArchB       ║ ArchB format        ║
+	//	║    25 ║ ArchA       ║ ArchA format        ║
+	//	║    26 ║ Flsa        ║ Flsa format         ║
+	//	║    27 ║ HalfLetter  ║ HalfLetter format   ║
+	//	║    28 ║ Letter11x17 ║ 11x17 format        ║
+	//	║    29 ║ Ledger      ║ Ledger format       ║
+	//	╚═══════╩═════════════╩═════════════════════╝
+	KlrptPDFPageSize *int64 `json:"KLRPT_PDF_PAGE_SIZE,omitempty"`
+}
+
 //	Execute report.
 //
 //	Asynchronously executes specified report, creates resulting data in XML and data to chart.
 //	The progress and result of the report generation is reported by the event KLPPT_EventRptExecDone.
 //
 //	Parameters:
-//	- lReportId	(int64) report id
-//	- pOptions	(params) options (see description below)
+//	- params ExecuteReportParams
 //
 //	Return:
 //	- strRequestId	(string) identity of asynchronous operation,
@@ -324,19 +416,21 @@ func (rm *ReportManager) RequestStatisticsData(ctx context.Context, params inter
 //	to get result use AsyncActionStateChecker.CheckActionState,
 //	pStateData contains URL-like links to download report files via HTTP GET request (see description below),
 //	to cancel operation call ReportManager.ExecuteReportAsyncCancel
-func (rm *ReportManager) ExecuteReportAsync(ctx context.Context, params *interface{}) ([]byte, error) {
+func (rm *ReportManager) ExecuteReportAsync(ctx context.Context, params ExecuteReportParams) (*RequestID, []byte,
+	error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	request, err := http.NewRequest("POST", rm.client.Server+"/api/v1.0/ReportManager.ExecuteReportAsync", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	raw, err := rm.client.Do(ctx, request, nil)
-	return raw, err
+	requestID := new(RequestID)
+	raw, err := rm.client.Do(ctx, request, &requestID)
+	return requestID, raw, err
 }
 
 //	Cancel ReportManager.RequestStatisticsData operation.
@@ -373,6 +467,50 @@ func (rm *ReportManager) ExecuteReportAsyncCancel(ctx context.Context, strReques
 	return raw, err
 }
 
+type ReportData struct {
+	PXMLData      *string     `json:"pXmlData,omitempty"`
+	NDataSizeREST *int64      `json:"nDataSizeRest,omitempty"`
+	PChartData    *PChartData `json:"pChartData,omitempty"`
+}
+
+type PChartData struct {
+	KlrptChartData         []KlrptChartDatum `json:"KLRPT_CHART_DATA"`
+	KlrptChartDataDesc     *string           `json:"KLRPT_CHART_DATA_DESC,omitempty"`
+	KlrptChartLgndDesc     *string           `json:"KLRPT_CHART_LGND_DESC,omitempty"`
+	KlrptChartSeries       []string          `json:"KLRPT_CHART_SERIES"`
+	KlrptChartSeriesColors []int64           `json:"KLRPT_CHART_SERIES_COLORS"`
+}
+
+type KlrptChartDatum struct {
+	Type  *string `json:"type,omitempty"`
+	Value *Value  `json:"value,omitempty"`
+}
+
+type Value struct {
+	Data []int64 `json:"data"`
+}
+
+//	Get result of ReportManager::ExecuteReportAsync operation.
+//
+//	Gets result of asynchronous operation ReportManager::ExecuteReportAsync.
+//	If result is not ready pXmlData will be empty.
+//
+//	Deprecated:
+//	Use HTTP GET request instead, see ReportManager::ExecuteReportAsync
+func (rm *ReportManager) ExecuteReportAsyncGetData(ctx context.Context, strRequestId string,
+	nChunkSize int64) (*ReportData, []byte,
+	error) {
+	postData := []byte(fmt.Sprintf(`{"strRequestId" : "%s", "nChunkSize": %d}`, strRequestId, nChunkSize))
+	request, err := http.NewRequest("POST", rm.client.Server+"/api/v1.0/ReportManager.ExecuteReportAsyncGetData", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	reportData := new(ReportData)
+	raw, err := rm.client.Do(ctx, request, &reportData)
+	return reportData, raw, err
+}
+
 //	Cancel waiting for report data from slave servers.
 //
 //	Cancels waiting for report data from slave servers when generating report.
@@ -391,6 +529,33 @@ func (rm *ReportManager) ExecuteReportAsyncCancelWaitingForSlaves(ctx context.Co
 
 	raw, err := rm.client.Do(ctx, request, nil)
 	return raw, err
+}
+
+type ChartDataParams struct {
+	PChartData *PChartData `json:"pChartData,omitempty"`
+	CDPOptions *CDPOptions `json:"pOptions,omitempty"`
+}
+
+type CDPOptions struct {
+	RptChartWidth  *int64 `json:"RPT_CHART_WIDTH,omitempty"`
+	RptChartHeight *int64 `json:"RPT_CHART_HEIGHT,omitempty"`
+}
+
+func (rm *ReportManager) CreateChartPNG(ctx context.Context, params ChartDataParams) (*PPngData, []byte,
+	error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := http.NewRequest("POST", rm.client.Server+"/api/v1.0/ReportManager.CreateChartPNG", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	pPngData := new(PPngData)
+	raw, err := rm.client.Do(ctx, request, &pPngData)
+	return pPngData, raw, err
 }
 
 //TODO ResetStatisticsData

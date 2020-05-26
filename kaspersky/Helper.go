@@ -52,6 +52,12 @@ type PxgValBool struct {
 	Bool bool `json:"PxgRetVal"`
 }
 
+//	pPngData struct
+type PPngData struct {
+	PngData  string    `json:"pPngData"`
+	PxgError *PxgError `json:"PxgError,omitempty"`
+}
+
 //	PxgValArrayOfInt struct
 type PxgValArrayOfInt struct {
 	ArrayInt []int64 `json:"PxgRetVal"`
