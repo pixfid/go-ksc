@@ -27,6 +27,7 @@ package kaspersky
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"net/http"
@@ -45,14 +46,15 @@ type Multitenancy service
 //
 //	Returns:
 //	- (string) tenant id
-func (m *Multitenancy) GetTenantId(ctx context.Context) ([]byte, error) {
+func (m *Multitenancy) GetTenantId(ctx context.Context) (*PxgValStr, []byte, error) {
 	request, err := http.NewRequest("POST", m.client.Server+"/api/v1.0/Multitenancy.GetTenantId", nil)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	raw, err := m.client.Do(ctx, request, nil)
-	return raw, err
+	pxgValStr := new(PxgValStr)
+	raw, err := m.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, raw, err
 }
 
 //	Retrieves multitenancy products available for current tenant.
@@ -73,11 +75,7 @@ func (m *Multitenancy) GetTenantId(ctx context.Context) ([]byte, error) {
 //	| MTNC_PRODUCT_DISP_VERSION | string | display product version |
 //	+---------------------------+--------+-------------------------+
 func (m *Multitenancy) GetProducts(ctx context.Context, strProdName, strProdVersion string) ([]byte, error) {
-	postData := []byte(fmt.Sprintf(`
-	{
-	"strProdName": "%s",
-	"strProdVersion": "%s"
-	}`, strProdName, strProdVersion))
+	postData := []byte(fmt.Sprintf(`{"strProdName": "%s", "strProdVersion": "%s"}`, strProdName, strProdVersion))
 	request, err := http.NewRequest("POST", m.client.Server+"/api/v1.0/Multitenancy.GetProducts", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
@@ -93,8 +91,34 @@ func (m *Multitenancy) GetProducts(ctx context.Context, strProdName, strProdVers
 //	- new token for current tennant
 //
 //	NotWoking on KSC < 12
-func (m *Multitenancy) GetAuthToken(ctx context.Context) ([]byte, error) {
+func (m *Multitenancy) GetAuthToken(ctx context.Context) (*PxgValStr, []byte, error) {
 	request, err := http.NewRequest("POST", m.client.Server+"/api/v1.0/Multitenancy.GetAuthToken", nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	pxgValStr := new(PxgValStr)
+	raw, err := m.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, raw, err
+}
+
+//VerifyTokenParam struct using in CheckAuthToken
+type VerifyTokenParam struct {
+	//tenant identity
+	WstrTenantID *string `json:"wstrTenantId,omitempty"`
+
+	//binary token (see Multitenancy.GetAuthToken)
+	BinToken *string `json:"binToken,omitempty"`
+}
+
+func (m *Multitenancy) CheckAuthToken(ctx context.Context, params VerifyTokenParam) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", m.client.Server+"/api/v1.0/Multitenancy.CheckAuthToken",
+		bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
@@ -102,5 +126,3 @@ func (m *Multitenancy) GetAuthToken(ctx context.Context) ([]byte, error) {
 	raw, err := m.client.Do(ctx, request, nil)
 	return raw, err
 }
-
-//TODO func (m *Multitenancy) CheckAuthToken(ctx context.Context, wstrTenantId string, binToken []byte) ([]byte, error)
