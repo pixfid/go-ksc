@@ -61,7 +61,7 @@ type PEventBody struct {
 //	|- wstrEventType	(string) event type
 //	|- pEventBody	(params) event body, content depends on event type
 //	|- tmBirthTime	(datetime) time when event was published
-func (ts *EventNotificationsApi) PublishEvent(ctx context.Context, params interface{}) ([]byte, error) {
+func (ts *EventNotificationsApi) PublishEvent(ctx context.Context, params EventNotificationParams) ([]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/EventNotificationsApi.PublishEvent", bytes.NewBuffer(postData))
 	if err != nil {

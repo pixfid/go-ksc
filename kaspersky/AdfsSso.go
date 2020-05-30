@@ -40,6 +40,10 @@ import (
 //	List of all members.
 type AdfsSso service
 
+//	Returns a ADFS SSO settings.
+//
+//	Returns:
+//	- (params) ADFS SSO settings; See "ADFS SSO Settings".
 func (as *AdfsSso) GetSettings(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", as.client.Server+"/api/v1.0/AdfsSso.GetSettings", nil)
 	if err != nil {

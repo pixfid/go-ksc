@@ -541,6 +541,15 @@ type CDPOptions struct {
 	RptChartHeight *int64 `json:"RPT_CHART_HEIGHT,omitempty"`
 }
 
+//	Create image with chart.
+//
+//	Creates image in PNG format with chart data
+//
+//	Parameters:
+//	- params ChartDataParams
+//
+//	Return:
+//	-pPngData	(binary) image with chart data, see Chart parameters structure.
 func (rm *ReportManager) CreateChartPNG(ctx context.Context, params ChartDataParams) (*PPngData, []byte,
 	error) {
 	postData, err := json.Marshal(params)
@@ -558,8 +567,30 @@ func (rm *ReportManager) CreateChartPNG(ctx context.Context, params ChartDataPar
 	return pPngData, raw, err
 }
 
-//TODO ResetStatisticsData
+//	Force reset of statistics data.
+//
+//	Force resets statistics data, for example, resets the status
+//	of "Virus attack" or "Failed to perform the administration server task"
+//	after acquaintance with the detailed information.
+//
+//	Parameters:
+//	- pRequestParams	(params) Params with a statuses that need to be "reset",
+//	see List of possible general status reasons to be reset.
+func (rm *ReportManager) ResetStatisticsData(ctx context.Context, params interface{}) (*RequestID, []byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := http.NewRequest("POST", rm.client.Server+"/api/v1.0/ReportManager.ResetStatisticsData", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	requestID := new(RequestID)
+	raw, err := rm.client.Do(ctx, request, &requestID)
+	return requestID, raw, err
+}
+
 //TODO UpdateReport
 //TODO AddReport
-//TODO CreateChartPNG
-//TODO ExecuteReportAsyncGetData

@@ -101,6 +101,42 @@ func (qs *QueriesStorage) GetQueries(ctx context.Context, eType int64) ([]byte, 
 	return raw, err
 }
 
+//QueryParams struct
+type QueryParams struct {
+	QueryParamVal *QueryParamVal `json:"PxgRetVal,omitempty"`
+}
+
+type QueryParamVal struct {
+	KlqrsQueryData *KlqrsQueryData `json:"KLQRS_QUERY_DATA,omitempty"`
+	KlqrsQueryGUID *string         `json:"KLQRS_QUERY_GUID,omitempty"`
+	KlqrsQueryType *int64          `json:"KLQRS_QUERY_TYPE,omitempty"`
+}
+
+type KlqrsQueryData struct {
+	Type  *string              `json:"type,omitempty"`
+	Value *KLQRSQUERYDATAValue `json:"value,omitempty"`
+}
+
+type KLQRSQUERYDATAValue struct {
+	Name                   *string       `json:"Name,omitempty"`
+	PredefinedID           *string       `json:"PredefinedID,omitempty"`
+	NetInfoPageSettings    *PageSettings `json:"NetInfoPageSettings,omitempty"`
+	NetInfoExPageSettings  *PageSettings `json:"NetInfoExPageSettings,omitempty"`
+	ProtectionPageSettings *PageSettings `json:"ProtectionPageSettings,omitempty"`
+	Query                  *string       `json:"Query,omitempty"`
+}
+
+type PageSettings struct {
+	Type  *string            `json:"type,omitempty"`
+	Value *PageSettingsValue `json:"value,omitempty"`
+}
+
+type PageSettingsValue struct {
+	Query          *string `json:"Query,omitempty"`
+	StatusID       *int64  `json:"StatusId,omitempty"`
+	FoundLastNDays *int64  `json:"FoundLastNDays,omitempty"`
+}
+
 //	Acquire query param by id.
 //
 //	Returns data of the query with the specified ID.
@@ -113,15 +149,16 @@ func (qs *QueriesStorage) GetQueries(ctx context.Context, eType int64) ([]byte, 
 //	|- KLQRS_QUERY_DATA, KLPAR::ParamsPtr object, see Query storage data format
 //	|- KLQRS_QUERY_TYPE, int64, value from enum QueryType
 //	|- KLQRS_QUERY_GUID (string), string unique identifier of the query
-func (qs *QueriesStorage) GetQuery(ctx context.Context, nId int64) ([]byte, error) {
+func (qs *QueriesStorage) GetQuery(ctx context.Context, nId int64) (*QueryParams, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nId": %d}`, nId))
 	request, err := http.NewRequest("POST", qs.client.Server+"/api/v1.0/QueriesStorage.GetQuery", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	raw, err := qs.client.Do(ctx, request, nil)
-	return raw, err
+	queryParams := new(QueryParams)
+	raw, err := qs.client.Do(ctx, request, &queryParams)
+	return queryParams, raw, err
 }
 
 //	Acquire array of queries id given type.
