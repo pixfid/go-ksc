@@ -39,7 +39,45 @@ import (
 //	List of all members.
 type GroupSync service
 
-//TODO GetSyncHostsInfo
+//NSyncInfoParams struct using in GroupSync.GetSyncHostsInfo
+type NSyncInfoParams struct {
+	NSync             *int64           `json:"nSync,omitempty"`
+	ArrFieldsToReturn []string         `json:"arrFieldsToReturn"`
+	ArrFieldsToOrder  *[]FieldsToOrder `json:"arrFieldsToOrder,omitempty"`
+	NLifeTime         *int64           `json:"nLifeTime,omitempty"`
+}
+
+//	Acquire group synchronization state at target hosts.
+//
+//	Returns forward iterator to access requested properties of the specified group synchronization at target hosts.
+//
+//	Parameters:
+//	-params NSyncInfoParams
+//	|- nSync	(int64) id of the group synchronization. Can be retrieved from policy attribute KLPOL_GSYN_ID
+//	|- arrFieldsToReturn	(array) array of attribute names to return.
+//	|- arrFieldsToOrder	(array) array of containers each of them containing two attributes :
+//		|- "Name" (paramString) name of List of group synchronization host attributes used for sorting
+//		|- "Asc" (paramBool) ascending if true descending otherwise
+//	|-nLifeTime	(int) timeout in seconds to keep the result-set alive, zero means 'default value'
+//
+//	Returns:
+//	- (string) forward identifier id. Use it in iterator methods of GroupSyncIterator
+func (gs *GroupSync) GetSyncHostsInfo(ctx context.Context, params NSyncInfoParams) (*PxgValStr, []byte, error) {
+	postData, err := json.Marshal(&params)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := http.NewRequest("POST", gs.client.Server+"/api/v1.0/GroupSync.GetSyncHostsInfo",
+		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	pxgValStr := new(PxgValStr)
+	raw, err := gs.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, raw, err
+}
 
 //GroupSyncInfoParams struct
 type GroupSyncInfoParams struct {

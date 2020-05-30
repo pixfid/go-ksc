@@ -74,18 +74,14 @@ func (ca *GroupSyncIterator) ReleaseIterator(ctx context.Context, szwIterator st
 //	- bEOF	(bool) returns false if the returned chunk is the last one,
 //	and there's no need in further calls of this method
 //	- pData	(params) container that has needed elements in the array with name "KLCSP_ITERATOR_ARRAY"
-func (ca *GroupSyncIterator) GetNextItems(ctx context.Context, szwIterator string, nCount int64, v interface{}) (
+func (ca *GroupSyncIterator) GetNextItems(ctx context.Context, szwIterator string, nCount int64, out interface{}) (
 	[]byte, error) {
-	postData := []byte(fmt.Sprintf(`
-	{
-		"szwIterator": "%s",
-		"nCount": %d
-	}`, szwIterator, nCount))
+	postData := []byte(fmt.Sprintf(`{"szwIterator": "%s","nCount": %d}`, szwIterator, nCount))
 	request, err := http.NewRequest("POST", ca.client.Server+"/api/v1.0/GroupSyncIterator.GetNextItems", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := ca.client.Do(ctx, request, &v)
+	raw, err := ca.client.Do(ctx, request, &out)
 	return raw, err
 }

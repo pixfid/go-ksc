@@ -125,8 +125,8 @@ type SubscribeEventResponse struct {
 //		NPeriod   int64 `json:"nPeriod"`
 //		PxgRetVal int64 `json:"PxgRetVal"`
 //	}
-func (ce *ConEvents) Subscribe(ctx context.Context, v interface{}) ([]byte, error) {
-	postData, _ := json.Marshal(v)
+func (ce *ConEvents) Subscribe(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", ce.client.Server+"/api/v1.0/ConEvents.Subscribe", bytes.NewBuffer(postData))
 
 	if err != nil {

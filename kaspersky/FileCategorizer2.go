@@ -161,7 +161,18 @@ func (fc *FileCategorizer2) DeleteCategory(ctx context.Context, nCategoryId int6
 //TODO DoStaticAnalysisAsync2
 //TODO DoTestStaticAnalysisAsync
 //TODO DoTestStaticAnalysisAsync2
-//TODO FinishStaticAnalysis
+
+//	FinishStaticAnalysis
+func (fc *FileCategorizer2) FinishStaticAnalysis(ctx context.Context) ([]byte, error) {
+	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2."+
+		"FinishStaticAnalysis", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := fc.client.Do(ctx, request, nil)
+	return raw, err
+}
 
 //	Force process of automatic update (for autoupdate and silverimage)
 //

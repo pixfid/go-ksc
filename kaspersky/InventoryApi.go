@@ -49,13 +49,13 @@ type InventoryApi service
 //	Parameters:
 //	- ctx context.Context
 //	- szwHostId string
-//	- v interface{} <- "KLEVP_EA_PARAM_1" - list of software applications (paramArray|paramParams)
+//	- out interface{} <- "KLEVP_EA_PARAM_1" - list of software applications (paramArray|paramParams)
 //each element contains attributes from List of attributes of software inventory application.
 //
 //	Returns:
 //(params) contains following attributes:
 //	- raw []byte, err error
-func (ia *InventoryApi) GetHostInvProducts(ctx context.Context, szwHostId string, v interface{}) ([]byte, error) {
+func (ia *InventoryApi) GetHostInvProducts(ctx context.Context, szwHostId string, out interface{}) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`
 	{
 	"szwHostId": "%s"
@@ -65,7 +65,7 @@ func (ia *InventoryApi) GetHostInvProducts(ctx context.Context, szwHostId string
 		return nil, err
 	}
 
-	raw, err := ia.client.Do(ctx, request, &v)
+	raw, err := ia.client.Do(ctx, request, &out)
 	return raw, err
 }
 
@@ -85,7 +85,7 @@ func (ia *InventoryApi) GetHostInvProducts(ctx context.Context, szwHostId string
 //
 //	Returns:
 //	- raw []byte, err error
-func (ia *InventoryApi) GetHostInvPatches(ctx context.Context, szwHostId string, v interface{}) ([]byte, error) {
+func (ia *InventoryApi) GetHostInvPatches(ctx context.Context, szwHostId string, out interface{}) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`
 	{
 	"szwHostId": "%s"
@@ -95,7 +95,7 @@ func (ia *InventoryApi) GetHostInvPatches(ctx context.Context, szwHostId string,
 		return nil, err
 	}
 
-	raw, err := ia.client.Do(ctx, request, &v)
+	raw, err := ia.client.Do(ctx, request, &out)
 	return raw, err
 }
 
@@ -109,13 +109,13 @@ func (ia *InventoryApi) GetHostInvPatches(ctx context.Context, szwHostId string,
 //(params) contains following attributes:
 //"KLEVP_EA_PARAM_1" - list of software application updates (paramArray|paramParams)
 //each element contains attributes from List of attributes of software inventory application update.
-func (ia *InventoryApi) GetInvPatchesList(ctx context.Context, v interface{}) ([]byte, error) {
+func (ia *InventoryApi) GetInvPatchesList(ctx context.Context, out interface{}) ([]byte, error) {
 	request, err := http.NewRequest("POST", ia.client.Server+"/api/v1.0/InventoryApi.GetInvPatchesList", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := ia.client.Do(ctx, request, &v)
+	raw, err := ia.client.Do(ctx, request, &out)
 	return raw, err
 }
 
@@ -207,5 +207,5 @@ func (ia *InventoryApi) GetObservedApps(ctx context.Context, params interface{})
 }
 
 /*
-	TODO -> func (ia *InventoryApi) SetObservedApps(ctx context.Context, v interface{}) ([]byte, error)
+	TODO -> func (ia *InventoryApi) SetObservedApps(ctx context.Context, out interface{}) ([]byte, error)
 */

@@ -254,7 +254,7 @@ func (c *Client) KSCAuth(ctx context.Context) error {
 	return err
 }
 
-func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (dt []byte, err error) {
+func (c *Client) Do(ctx context.Context, req *http.Request, out interface{}) (dt []byte, err error) {
 	if ctx == nil {
 		return nil, errors.New("context must be non-nil")
 	}
@@ -292,8 +292,8 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (dt [
 
 	body, _ := ioutil.ReadAll(reader)
 
-	if v != nil {
-		decErr := json.Unmarshal(body, v)
+	if out != nil {
+		decErr := json.Unmarshal(body, out)
 		if decErr == io.EOF {
 			decErr = nil // ignore EOF errors caused by empty response body
 		}
