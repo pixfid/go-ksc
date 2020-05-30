@@ -46,13 +46,26 @@ type PUserData struct {
 }
 
 type PUser struct {
-	KlsplUserName        *string `json:"KLSPL_USER_NAME"`
-	KlsplUserPwd         *string `json:"KLSPL_USER_PWD"`
-	KlsplUserFullName    *string `json:"KLSPL_USER_FULL_NAME"`
+	//User name
+	KlsplUserName *string `json:"KLSPL_USER_NAME"`
+
+	//Encrypted user password
+	KlsplUserPwdEncrypted *string `json:"KLSPL_USER_PWD_ENCRYPTED,omitempty"`
+
+	//User full name
+	KlsplUserFullName *string `json:"KLSPL_USER_FULL_NAME"`
+
+	//User description
 	KlsplUserDescription *string `json:"KLSPL_USER_DESCRIPTION"`
-	KlsplUserMail        *string `json:"KLSPL_USER_MAIL"`
-	KlsplUserPhone       *string `json:"KLSPL_USER_PHONE"`
-	KlsplUserEnabled     *bool   `json:"KLSPL_USER_ENABLED"`
+
+	//User mail
+	KlsplUserMail *string `json:"KLSPL_USER_MAIL"`
+
+	//User phone
+	KlsplUserPhone *string `json:"KLSPL_USER_PHONE"`
+
+	//User account is enabled if true.
+	KlsplUserEnabled *bool `json:"KLSPL_USER_ENABLED"`
 }
 
 //	Add new user.
@@ -137,7 +150,6 @@ type UserInfoEx struct {
 //	- (bool) true if current user is internal user
 //
 //
-//	TODO: may be use input params???
 func (sp *SecurityPolicy) GetCurrentUserId(ctx context.Context) (*UserInfo, []byte, error) {
 	request, err := http.NewRequest("POST", sp.client.Server+"/api/v1.0/SecurityPolicy.GetCurrentUserId",
 		nil)
@@ -185,14 +197,29 @@ type UsersInfoArray struct {
 }
 
 type UserProperties struct {
+	//User description
 	KlsplUserDescription *string `json:"KLSPL_USER_DESCRIPTION,omitempty"`
-	KlsplUserEnabled     *bool   `json:"KLSPL_USER_ENABLED,omitempty"`
-	KlsplUserFullName    *string `json:"KLSPL_USER_FULL_NAME,omitempty"`
-	KlsplUserID          *int64  `json:"KLSPL_USER_ID,omitempty"`
-	KlsplUserMail        *string `json:"KLSPL_USER_MAIL,omitempty"`
-	KlsplUserName        *string `json:"KLSPL_USER_NAME,omitempty"`
-	KlsplUserPhone       *string `json:"KLSPL_USER_PHONE,omitempty"`
-	KlsplUserUis         *bool   `json:"KLSPL_USER_UIS,omitempty"`
+
+	//User account is enabled if true.
+	KlsplUserEnabled *bool `json:"KLSPL_USER_ENABLED,omitempty"`
+
+	//User full name
+	KlsplUserFullName *string `json:"KLSPL_USER_FULL_NAME,omitempty"`
+
+	//User id
+	KlsplUserID *int64 `json:"KLSPL_USER_ID,omitempty"`
+
+	//User mail
+	KlsplUserMail *string `json:"KLSPL_USER_MAIL,omitempty"`
+
+	//User name
+	KlsplUserName *string `json:"KLSPL_USER_NAME,omitempty"`
+
+	//User phone
+	KlsplUserPhone *string `json:"KLSPL_USER_PHONE,omitempty"`
+
+	//User account is based on UIS. For hosted server only
+	KlsplUserUis *bool `json:"KLSPL_USER_UIS,omitempty"`
 }
 
 //	Acquire existing user properties.
@@ -233,8 +260,74 @@ func (sp *SecurityPolicy) LoadPerUserData(ctx context.Context) ([]byte, error) {
 	return raw, err
 }
 
-//TODO SecurityPolicy.SavePerUserData
-//TODO SecurityPolicy.UpdateTrustee
-func (i *SecurityPolicy) UpdateTrustee(ctx context.Context, params interface{}) ([]byte, error) {
-	return nil, nil
+//	Save or replace current user personal data.
+//
+//	Parameters:
+//	- pUserData	(params) personal current user data.
+func (sp *SecurityPolicy) SavePerUserData(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, _ := json.Marshal(params)
+	request, err := http.NewRequest("POST", sp.client.Server+"/api/v1.0/SecurityPolicy.SavePerUserData",
+		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := sp.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+type TrusteeParam struct {
+	LlTrusteeID  *int64        `json:"llTrusteeId,omitempty"`
+	PTrusteeData *PTrusteeData `json:"pUserData,omitempty"`
+}
+
+type PTrusteeData struct {
+	//User id
+	KlsplUserID *int64 `json:"KLSPL_USER_ID,omitempty"`
+
+	//User name
+	KlsplUserName *string `json:"KLSPL_USER_NAME,omitempty"`
+
+	//Plain text user password. Obsolete
+	KlsplUserPwd *string `json:"KLSPL_USER_PWD,omitempty"`
+
+	//Encrypted user password
+	KlsplUserPwdEncrypted *string `json:"KLSPL_USER_PWD_ENCRYPTED,omitempty"`
+
+	//User full name
+	KlsplUserFullName *string `json:"KLSPL_USER_FULL_NAME,omitempty"`
+
+	//User description
+	KlsplUserDescription *string `json:"KLSPL_USER_DESCRIPTION,omitempty"`
+
+	//User mail
+	KlsplUserMail *string `json:"KLSPL_USER_MAIL,omitempty"`
+
+	//User phone
+	KlsplUserPhone *string `json:"KLSPL_USER_PHONE,omitempty"`
+
+	//User account is enabled if true
+	KlsplUserEnabled *bool `json:"KLSPL_USER_ENABLED,omitempty"`
+
+	//User account is based on UIS. For hosted server only
+	KlsplUserUis *bool `json:"KLSPL_USER_UIS,omitempty"`
+}
+
+//	Modifies properties of the specified user (either internal user or user and group from Active Directory);
+//	for internal groups use SecurityPolicy3.UpdateSecurityGroup;.
+//
+//	Parameters:
+//	- params TrusteeParam
+//	|- llTrusteeId	(int64) unique user or group id; (matches to ul_llTrusteeId, llUserId and llGroupId)
+//	|- pUserData	(params) user info, containing attributes "KLSPL_USER_*" (see List of user attributes).
+func (sp *SecurityPolicy) UpdateTrustee(ctx context.Context, params TrusteeParam) ([]byte, error) {
+	postData, _ := json.Marshal(params)
+	request, err := http.NewRequest("POST", sp.client.Server+"/api/v1.0/SecurityPolicy.UpdateTrustee",
+		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := sp.client.Do(ctx, request, nil)
+	return raw, err
 }
