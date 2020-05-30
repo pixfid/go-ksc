@@ -54,7 +54,7 @@ type PxgValBool struct {
 
 //	pPngData struct
 type PPngData struct {
-	PngData  string    `json:"pPngData"`
+	PngData  *string   `json:"pPngData"`
 	PxgError *PxgError `json:"PxgError,omitempty"`
 }
 
@@ -79,14 +79,14 @@ type PxgValCIFIL struct {
 	PxgRetValCIFIL []PxgRetValCIFIL `json:"PxgRetVal"`
 }
 type PxgRetValCIFIL struct {
-	CIFILValue CIFILValue `json:"value"`
+	CIFILValue *CIFILValue `json:"value"`
 }
 type CIFILValue struct {
-	InifileDetectMsi      string `json:"INIFILE_DETECT_MSI"`
-	InifileDetectRegistry string `json:"INIFILE_DETECT_REGISTRY"`
-	InifileFileName       string `json:"INIFILE_FILE_NAME"`
-	InifileProductName    string `json:"INIFILE_PRODUCT_NAME"`
-	InifileType           string `json:"INIFILE_TYPE"`
+	InifileDetectMsi      *string `json:"INIFILE_DETECT_MSI"`
+	InifileDetectRegistry *string `json:"INIFILE_DETECT_REGISTRY"`
+	InifileFileName       *string `json:"INIFILE_FILE_NAME"`
+	InifileProductName    *string `json:"INIFILE_PRODUCT_NAME"`
+	InifileType           *string `json:"INIFILE_TYPE"`
 }
 
 //	PxgRetError struct
@@ -108,9 +108,9 @@ func (p PxgError) Error() string {
 
 //	AsyncAccessor struct
 type AsyncAccessor struct {
-	StrAccessor       string             `json:"strAccessor,omitempty"`
+	StrAccessor       *string            `json:"strAccessor,omitempty"`
 	PFailedSlavesInfo *PFailedSlavesInfo `json:"pFailedSlavesInfo,omitempty"`
-	PxgRetVal         int64              `json:"PxgRetVal,omitempty"`
+	PxgRetVal         *int64             `json:"PxgRetVal,omitempty"`
 }
 type PFailedSlavesInfo struct {
 	KlgrpFailedSlavesParams []interface{} `json:"KLGRP_FAILED_SLAVES_PARAMS"`
@@ -118,13 +118,13 @@ type PFailedSlavesInfo struct {
 
 //	Accessor struct
 type Accessor struct {
-	StrAccessor string `json:"strAccessor"`
-	PxgRetVal   int64  `json:"PxgRetVal"`
+	StrAccessor *string `json:"strAccessor"`
+	PxgRetVal   *int64  `json:"PxgRetVal"`
 }
 
 //WActionGUID struct
 type WActionGUID struct {
-	WstrActionGUID string `json:"wstrActionGuid"`
+	WstrActionGUID *string `json:"wstrActionGuid"`
 }
 
 const (
@@ -139,30 +139,30 @@ func ParseTime(dt string) string {
 
 //FieldsToOrder struct
 type FieldsToOrder struct {
-	Type       string     `json:"type"`
-	OrderValue OrderValue `json:"value"`
+	Type       *string     `json:"type"`
+	OrderValue *OrderValue `json:"value"`
 }
 
 type OrderValue struct {
-	Name string `json:"Name"`
-	Asc  bool   `json:"Asc"`
+	Name *string `json:"Name"`
+	Asc  *bool   `json:"Asc"`
 }
 
 type WstrIteratorID struct {
-	WstrIteratorID string `json:"wstrIteratorId"`
+	WstrIteratorID *string `json:"wstrIteratorId"`
 }
 
 type StrIteratorId struct {
-	StrIteratorID string `json:"strIteratorId"`
+	StrIteratorID *string `json:"strIteratorId"`
 }
 
 type StrHostIteratorId struct {
-	StrHostIteratorId string `json:"strHostIteratorId"`
+	StrHostIteratorId *string `json:"strHostIteratorId"`
 }
 
 type PFilter struct {
-	KlevpRfc2254Filter         string `json:"KLEVP_RFC2254_FILTER"`
-	KlevpEventRiseTimeLastDays int64  `json:"KLEVP_EVENT_RISE_TIME_LAST_DAYS"`
+	KlevpRfc2254Filter         *string `json:"KLEVP_RFC2254_FILTER"`
+	KlevpEventRiseTimeLastDays *int64  `json:"KLEVP_EVENT_RISE_TIME_LAST_DAYS"`
 }
 
 // Bool is a helper routine that allocates a new bool value
