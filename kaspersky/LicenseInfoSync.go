@@ -27,6 +27,7 @@ package kaspersky
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -38,9 +39,89 @@ import (
 //	List of all members.
 type LicenseInfoSync service
 
-//TODO AcquireKeysForProductOnHost
-//TODO GetKeyDataForHost
-//TODO IsLicForSaasValid2
+func (lis *LicenseInfoSync) AcquireKeysForProductOnHost(ctx context.Context, szwHostName, szwProduct,
+	szwVersion string) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"szwHostName":"%s","szwProduct":"%s","szwVersion":"%s"}`, szwHostName, szwProduct, szwVersion))
+	request, err := http.NewRequest("POST", lis.client.Server+"/api/v1.0/LicenseInfoSync.AcquireKeysForProductOnHost",
+		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := lis.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//	Get host-specific key data.
+//
+//	Parameters:
+//	- szwSerial	(string) License key serial number (
+//	see "KLLIC_SERIAL" attribute of List of license key attributes List of license key attributes), mandatory.
+//	- szwHostName	(string) Host ID (see "KLLICSRV_HOSTNAME" attribute of List of host-specific license attributes
+//	List of host-specific license attributes), mandatory.
+//	- szwProduct	(string) Product ID (see "KLLICSRV_PRODUCT" attribute of List of host-specific license attributes
+//	List of host-specific license attributes), mandatory.
+//	- szwVersion	(string) Version (see "KLLICSRV_VERSION" attribute of List of host-specific license attributes List
+//	of host-specific license attributes), mandatory.
+//
+//Returns:
+//	- (params) container with the requested key attribute values.
+//	See List of license key attributes List of license key attributes for attribute names.
+//
+//Exceptions:
+//	- Throws	exception in case of error.
+func (lis *LicenseInfoSync) GetKeyDataForHost(ctx context.Context, szwSerial, szwHostName, szwProduct,
+	szwVersion string) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"szwSerial":"%s", "szwHostName":"%s", "szwProduct":"%s", "szwVersion":"%s"}`,
+		szwSerial, szwHostName, szwProduct, szwVersion))
+	request, err := http.NewRequest("POST", lis.client.Server+"/api/v1.0/LicenseInfoSync.GetKeyDataForHost",
+		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := lis.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//	SaasKeyParam struct using in
+//
+//	LicenseInfoSync.IsLicForSaasValid2
+//	LicenseInfoSync.TryToInstallLicForSaas2
+type SaasKeyParam2 struct {
+	//License attribute container, mandatory. See List of license key attributes for attribute names.
+	SaasPKeyInfo *SaasPKeyInfo `json:"pKeyInfo,omitempty"`
+
+	//true to check it as an active one, false to check it as a reserved one.
+	BAsCurrent *bool `json:"bAsCurrent,omitempty"`
+}
+
+type SaasPKeyInfo struct {
+	//License key serial number
+	KllicSerial *string `json:"KLLIC_SERIAL,omitempty"`
+}
+
+//	Check if license is suitable for being used by the adm. server.
+//
+//	Parameters:
+//	- params SaasKeyParam2
+//	|- pKeyInfo	(params) License attribute container, mandatory. See List of license key attributes for attribute names.
+//		|- KllicSerial License key serial number
+//	|- bAsCurrent	(boolean) true to check it as an active one, false to check it as a reserved one.
+//
+//	Exceptions:
+//	- Throws	exception in case of error.
+func (lis *LicenseInfoSync) IsLicForSaasValid2(ctx context.Context, params SaasKeyParam2) ([]byte, error) {
+	postData, _ := json.Marshal(params)
+	request, err := http.NewRequest("POST", lis.client.Server+"/api/v1.0/LicenseInfoSync.IsLicForSaasValid2",
+		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := lis.client.Do(ctx, request, nil)
+	return raw, err
+}
 
 //	Check whether the key's product id belongs to the Public Cloud product ids list.
 //
@@ -87,7 +168,27 @@ func (lis *LicenseInfoSync) SynchronizeLicInfo2(ctx context.Context) (*PxgValStr
 	return pxgValStr, raw, err
 }
 
-//TODO TryToInstallLicForSaas2
+//	Install adm. server's license.
+//
+//	Parameters:
+//	- params SaasKeyParam2
+//	|- pKeyInfo	(params) License attribute container, mandatory. See List of license key attributes for attribute names.
+//		|- KllicSerial License key serial number
+//	|- bAsCurrent	(boolean) true to install it as an active one, false to install it as a reserved one.
+//
+//	Exceptions:
+//	- Throws	exception in case of error.
+func (lis *LicenseInfoSync) TryToInstallLicForSaas2(ctx context.Context, params SaasKeyParam2) ([]byte, error) {
+	postData, _ := json.Marshal(params)
+	request, err := http.NewRequest("POST", lis.client.Server+"/api/v1.0/LicenseInfoSync.TryToInstallLicForSaas2",
+		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := lis.client.Do(ctx, request, nil)
+	return raw, err
+}
 
 //	Uninstall adm. server's license.
 //
