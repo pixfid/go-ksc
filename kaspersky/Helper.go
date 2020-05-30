@@ -39,17 +39,17 @@ func withContext(ctx context.Context, req *http.Request) *http.Request {
 
 //	PxgValInt struct
 type PxgValInt struct {
-	Int int64 `json:"PxgRetVal"`
+	Int *int64 `json:"PxgRetVal"`
 }
 
 //	PxgValStr struct
 type PxgValStr struct {
-	Str string `json:"PxgRetVal"`
+	Str *string `json:"PxgRetVal"`
 }
 
 //	PxgValBool struct
 type PxgValBool struct {
-	Bool bool `json:"PxgRetVal"`
+	Bool *bool `json:"PxgRetVal"`
 }
 
 //	pPngData struct
