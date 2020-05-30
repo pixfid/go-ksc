@@ -139,13 +139,13 @@ func ParseTime(dt string) string {
 
 //FieldsToOrder struct
 type FieldsToOrder struct {
-	Type       *string     `json:"type"`
-	OrderValue *OrderValue `json:"value"`
+	Type       string     `json:"type"`
+	OrderValue OrderValue `json:"value"`
 }
 
 type OrderValue struct {
-	Name *string `json:"Name"`
-	Asc  *bool   `json:"Asc"`
+	Name string `json:"Name"`
+	Asc  bool   `json:"Asc"`
 }
 
 type WstrIteratorID struct {
