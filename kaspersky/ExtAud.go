@@ -34,7 +34,7 @@ import (
 
 //	ExtAud Class Reference
 //
-//	Interface for working with ExtAudit subsystem. More...
+//	Interface for working with ExtAudit subsystem.
 //
 //	This interface allow you to get a revision of an object and update description.
 //
@@ -98,12 +98,26 @@ func (ea *ExtAud) UpdateRevisionDesc(ctx context.Context, nObjId, nObjType, nObj
 	return raw, err
 }
 
+type FinalDeleteParams struct {
+	ArrObjects []ArrObject `json:"arrObjects"`
+}
+
+type ArrObject struct {
+	Type  *string  `json:"type,omitempty"`
+	Value *FDValue `json:"value,omitempty"`
+}
+
+type FDValue struct {
+	ObjID   *int64 `json:"nObjId,omitempty"`
+	ObjType *int64 `json:"nObjType,omitempty"`
+}
+
 //	Final delete for deleted objects.
 //
 //	Parameters:
 //	arrObjects	[interface{}] (array) Array of pairs ObjId-ObjType.
 //	Max size of array is 100 elements.
-func (ea *ExtAud) FinalDelete(ctx context.Context, params interface{}) ([]byte, error) {
+func (ea *ExtAud) FinalDelete(ctx context.Context, params FinalDeleteParams) ([]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", ea.client.Server+"/api/v1.0/ExtAud.FinalDelete", bytes.NewBuffer(postData))
 	if err != nil {

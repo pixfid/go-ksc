@@ -26,6 +26,7 @@ package kaspersky
 
 import (
 	"context"
+	"io"
 	"net/http"
 )
 
@@ -33,6 +34,18 @@ type NetUtils service
 
 func (ac *NetUtils) DownloadFile(ctx context.Context, prefix string) ([]byte, error) {
 	request, err := http.NewRequest("GET", ac.client.Server+prefix, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := ac.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//	Prefix:
+//	- FTUR/1b20a383-9ae7-49e3-b0ad-1e5edfe5926d
+func (ac *NetUtils) UploadFile(ctx context.Context, prefix string, data io.Reader) ([]byte, error) {
+	request, err := http.NewRequest("PUT", ac.client.Server+prefix, data)
 	if err != nil {
 		return nil, err
 	}

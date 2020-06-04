@@ -49,6 +49,7 @@ type Client struct {
 	AdfsSso                                 *AdfsSso
 	AdHosts                                 *AdHosts
 	AdmServerSettings                       *AdmServerSettings
+	AdSecManager                            *AdSecManager
 	AppCtrlApi                              *AppCtrlApi
 	AKPatches                               *AKPatches
 	AsyncActionStateChecker                 *AsyncActionStateChecker
@@ -67,6 +68,7 @@ type Client struct {
 	EventProcessingFactory                  *EventProcessingFactory
 	ExtAud                                  *ExtAud
 	FileCategorizer2                        *FileCategorizer2
+	FilesAcceptor                           *FilesAcceptor
 	GroupSync                               *GroupSync
 	HostGroup                               *HostGroup
 	HostMoveRules                           *HostMoveRules
@@ -154,6 +156,7 @@ func New(cfg Config) *Client {
 	c.DatabaseInfo = (*DatabaseInfo)(&c.common)
 	c.AdHosts = (*AdHosts)(&c.common)
 	c.AdmServerSettings = (*AdmServerSettings)(&c.common)
+	c.AdSecManager = (*AdSecManager)(&c.common)
 	c.AKPatches = (*AKPatches)(&c.common)
 	c.AppCtrlApi = (*AppCtrlApi)(&c.common)
 	c.AsyncActionStateChecker = (*AsyncActionStateChecker)(&c.common)
@@ -172,6 +175,7 @@ func New(cfg Config) *Client {
 	c.EventProcessingFactory = (*EventProcessingFactory)(&c.common)
 	c.ExtAud = (*ExtAud)(&c.common)
 	c.FileCategorizer2 = (*FileCategorizer2)(&c.common)
+	c.FilesAcceptor = (*FilesAcceptor)(&c.common)
 	c.GroupSync = (*GroupSync)(&c.common)
 	c.HostGroup = (*HostGroup)(&c.common)
 	c.HostMoveRules = (*HostMoveRules)(&c.common)

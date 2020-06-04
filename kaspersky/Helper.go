@@ -173,6 +173,10 @@ func Bool(v bool) *bool { return &v }
 // to store v and returns a pointer to it.
 func Int64(v int64) *int64 { return &v }
 
+// Int64 is a helper routine that allocates a new int64 value
+// to store v and returns a pointer to it.
+func Float64(v float64) *float64 { return &v }
+
 // Uint64 is a helper routine that allocates a new Uint64 value
 // to store v and returns a pointer to it
 func Uint64(v uint64) *uint64 { return &v }
