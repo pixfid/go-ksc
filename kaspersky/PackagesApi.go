@@ -283,7 +283,30 @@ func (pa *PackagesApi) GetIncompatibleAppsInfo(ctx context.Context, nPackageId i
 	return raw, err
 }
 
-//TODO PackagesApi::GetIntranetFolderForNewPackage
+//	Get intranet folder for a new package.
+//
+//	Parameters:
+//	- wstrProductName	(string) Product name.
+//	- wstrProductVersion	(string) Product version.
+//
+//	Returns:
+//	- (string) Intranet folder path.
+//
+//	Exceptions:
+//	Throws	exception in case of error.
+func (pa *PackagesApi) GetIntranetFolderForNewPackage(ctx context.Context, wstrProductName,
+	wstrProductVersion string) (*PxgValStr, []byte, error) {
+	postData := []byte(fmt.Sprintf(`{"wstrProductName": "%s", "wstrProductVersion": "%s"}`, wstrProductName, wstrProductVersion))
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.GetIntranetFolderForNewPackage", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	pxgValStr := new(PxgValStr)
+	raw, err := pa.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, raw, err
+}
 
 //	Get intranet folder for particular package.
 //
@@ -701,8 +724,85 @@ func (pa *PackagesApi) ReadPkgCfgFile(ctx context.Context, nPackageId int64, wst
 	return pxgValStr, raw, err
 }
 
-//TODO PackagesApi::RecordNewPackage
-//TODO PackagesApi::RecordNewPackage2
+//NewPackage struct using in PackagesApi.RecordNewPackage and PackagesApi.RecordNewPackage2
+type NewPackage struct {
+	WstrPackageName         *string `json:"wstrPackageName,omitempty"`
+	WstrFileID              *string `json:"wstrFileId,omitempty"`
+	WstrFolder              *string `json:"wstrFolder,omitempty"`
+	WstrProductName         *string `json:"wstrProductName,omitempty"`
+	WstrProductVersion      *string `json:"wstrProductVersion,omitempty"`
+	WstrProductDisplName    *string `json:"wstrProductDisplName,omitempty"`
+	WstrProductDisplVersion *string `json:"wstrProductDisplVersion,omitempty"`
+}
+
+//	Creates a package with the default settings based on the product,
+//	overwritten in the folder, the path to which was obtained by calling the PackagesApi.GetIntranetFolderForNewPackage.
+//
+//	Parameters:
+//	- params (NewPackage)
+//	|- wstrPackageName	(string) Package name.
+//	|- wstrFolder	(string) Product folder (obtained by calling the PackagesApi::GetIntranetFolderForNewPackage).
+//	|- wstrProductName	(string) Product name.
+//	|- wstrProductVersion	(string) Product version.
+//	|- wstrProductDisplName	(string) Product display name.
+//	|- wstrProductDisplVersion	(string) Product display version.
+//
+//	Returns:
+//	- (params) Container with package attributes List of package attributes.
+//
+//	Exceptions:
+//	Throws	exception in case of error.
+func (pa *PackagesApi) RecordNewPackage(ctx context.Context, params NewPackage) (*PxgValStr, []byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.RecordNewPackage",
+		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	pxgValStr := new(PxgValStr)
+	raw, err := pa.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, raw, err
+}
+
+//	Creates a package with the default settings based on the product, transfered using FileTransfer.
+//
+//	Parameters:
+//	- params (NewPackage)
+//	|- wstrPackageName	(string) File id.
+//	|- wstrFileId	(string) Package name.
+//	|- wstrFolder	(string) Product folder (obtained by calling the PackagesApi::GetIntranetFolderForNewPackage).
+//	|- wstrProductName	(string) Product name.
+//	|- wstrProductVersion	(string) Product version.
+//	|- wstrProductDisplName	(string) Product display name.
+//	|- wstrProductDisplVersion	(string) Product display version.
+//
+//	Returns:
+//	- (params) Container with package attributes List of package attributes.
+//
+//	Exceptions:
+//	Throws	exception in case of error.
+func (pa *PackagesApi) RecordNewPackage2(ctx context.Context, params *NewPackage) (*PxgValStr, []byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.RecordNewPackage2",
+		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	pxgValStr := new(PxgValStr)
+	raw, err := pa.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, raw, err
+}
+
 //TODO PackagesApi::RecordNewPackage3
 //TODO PackagesApi::RecordNewPackage3Async
 //TODO PackagesApi::RecordNewPackageAsync
@@ -876,5 +976,60 @@ func (pa *PackagesApi) UnpublishMobilePackage(ctx context.Context, wstrProfileId
 }
 
 //TODO PackagesApi::UpdateBasesInPackagesAsync
-//TODO PackagesApi::WriteKpdProfileString
-//TODO PackagesApi::WritePkgCfgFile
+
+//	Write kpd profile string.
+//
+//	Parameters:
+//	- nPackageId	(int64) Package ID.
+//	- wstrSection	(string) Profile storage section.
+//	- wstrKey	(string) Profile storage key.
+//	- wstrValue	(string) Value to be written.
+//
+//	Exceptions:
+//	Throws	exception in case of error.
+func (pa *PackagesApi) WriteKpdProfileString(ctx context.Context, nPackageId int64, wstrSection, wstrKey, wstrValue string) ([]byte,
+	error) {
+	postData := []byte(fmt.Sprintf(`{"nPackageId": %d, "wstrSection": "%s", "wstrKey": "%s", "wstrValue": "%s"}`,
+		nPackageId, wstrSection, wstrKey, wstrValue))
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.WriteKpdProfileString", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := pa.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//PkgCFGFileParams struct using in PackagesApi.WritePkgCfgFile
+type PkgCFGFileParams struct {
+	NPackageID   *int64  `json:"nPackageId,omitempty"`
+	WstrFileName *string `json:"wstrFileName,omitempty"`
+	PData        *string `json:"pData,omitempty"`
+}
+
+//	Write package configuration file.
+//
+//	Parameters:
+//	- params PkgCFGFileParams
+//		|- nPackageId	(int64) Package ID.
+//		|- wstrFileName	(string) File name.
+//		|- pData	(binary base64 encoded string) Contents to be written.
+//
+//	Exceptions:
+//	Throws	exception in case of error.
+func (pa *PackagesApi) WritePkgCfgFile(ctx context.Context, params PkgCFGFileParams) ([]byte,
+	error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.WritePkgCfgFile", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := pa.client.Do(ctx, request, nil)
+	return raw, err
+}
