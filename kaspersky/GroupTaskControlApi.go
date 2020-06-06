@@ -58,18 +58,18 @@ type GroupTaskControlApi service
 //	identifier wstrId not found: either identifier is not correct (check that it identifier string, which was returned by GroupTaskControlApi.ImportTask method), or object lifetime reached limit
 //	- KLERR.Error*	Method must throw KLERR.Error* exception with code KLSTD.STDE_NOMEMORY in case of insufficient
 //	memory for storing required task data
-func (gta *GroupTaskControlApi) CommitImportedTask(ctx context.Context, wstrId string, bCommit bool) (*TaskDescribe,
+func (gtca *GroupTaskControlApi) CommitImportedTask(ctx context.Context, wstrId string, bCommit bool) (*TaskDescribe,
 	[]byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"wstrId": "%s", "bCommit": %v}`, wstrId, bCommit))
-	request, err := http.NewRequest("POST", gta.client.Server+"/api/v1.0/GroupTaskControlApi.CommitImportedTask",
+	request, err := http.NewRequest("POST", gtca.client.Server+"/api/v1.0/GroupTaskControlApi.CommitImportedTask",
 		bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, nil, err
 	}
 
 	taskDescribe := new(TaskDescribe)
-	raw, err := gta.client.Do(ctx, request, &taskDescribe)
+	raw, err := gtca.client.Do(ctx, request, &taskDescribe)
 	return taskDescribe, raw, err
 }
 
@@ -92,18 +92,18 @@ type TasksIDSParams struct {
 //
 //	Note:
 //	- to get task ids you can use Tasks.GetAllTasksOfHost
-func (gta *GroupTaskControlApi) RequestStatistics(ctx context.Context, params TasksIDSParams) ([]byte, error) {
+func (gtca *GroupTaskControlApi) RequestStatistics(ctx context.Context, params TasksIDSParams) ([]byte, error) {
 	postData, err := json.Marshal(&params)
 	if err != nil {
 		return nil, err
 	}
 
-	request, err := http.NewRequest("POST", gta.client.Server+"/api/v1.0/GroupTaskControlApi.RequestStatistics", bytes.NewBuffer(postData))
+	request, err := http.NewRequest("POST", gtca.client.Server+"/api/v1.0/GroupTaskControlApi.RequestStatistics", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := gta.client.Do(ctx, request, nil)
+	raw, err := gtca.client.Do(ctx, request, nil)
 	return raw, err
 }
 
@@ -122,16 +122,16 @@ func (gta *GroupTaskControlApi) RequestStatistics(ctx context.Context, params Ta
 //
 //	Returns:
 //	- (binary) Pointer to memory chunk with exported task data
-func (gta *GroupTaskControlApi) ExportTask(ctx context.Context, wstrTaskId string) (*PxgValStr, []byte, error) {
+func (gtca *GroupTaskControlApi) ExportTask(ctx context.Context, wstrTaskId string) (*PxgValStr, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrTaskId": "%s"}`, wstrTaskId))
-	request, err := http.NewRequest("POST", gta.client.Server+"/api/v1.0/GroupTaskControlApi.ExportTask",
+	request, err := http.NewRequest("POST", gtca.client.Server+"/api/v1.0/GroupTaskControlApi.ExportTask",
 		bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, nil, err
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := gta.client.Do(ctx, request, &pxgValStr)
+	raw, err := gtca.client.Do(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -258,17 +258,17 @@ type TaskschFirstExecutionTime struct {
 //
 //	Returns:
 //	- (params) describing the task, see Task settings format
-func (gta *GroupTaskControlApi) GetTaskByRevision(ctx context.Context, nObjId, nRevision int64) (*TaskDescribe, []byte,
+func (gtca *GroupTaskControlApi) GetTaskByRevision(ctx context.Context, nObjId, nRevision int64) (*TaskDescribe, []byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"nObjId": %d, "nRevision": %d}`, nObjId, nRevision))
-	request, err := http.NewRequest("POST", gta.client.Server+"/api/v1.0/GroupTaskControlApi.GetTaskByRevision",
+	request, err := http.NewRequest("POST", gtca.client.Server+"/api/v1.0/GroupTaskControlApi.GetTaskByRevision",
 		bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, nil, err
 	}
 
 	taskDescribe := new(TaskDescribe)
-	raw, err := gta.client.Do(ctx, request, &taskDescribe)
+	raw, err := gtca.client.Do(ctx, request, &taskDescribe)
 	return taskDescribe, raw, err
 }
 
@@ -282,19 +282,54 @@ func (gta *GroupTaskControlApi) GetTaskByRevision(ctx context.Context, nObjId, n
 //
 //	Note:
 //	ExtAud interface allow you to get a revision of an object and update description.
-func (gta *GroupTaskControlApi) RestoreTaskFromRevision(ctx context.Context, nObjId, nRevision int64) (*TaskDescribe, []byte,
+func (gtca *GroupTaskControlApi) RestoreTaskFromRevision(ctx context.Context, nObjId, nRevision int64) (*TaskDescribe, []byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"nObjId": %d, "nRevision": %d}`, nObjId, nRevision))
-	request, err := http.NewRequest("POST", gta.client.Server+"/api/v1.0/GroupTaskControlApi.RestoreTaskFromRevision",
+	request, err := http.NewRequest("POST", gtca.client.Server+"/api/v1.0/GroupTaskControlApi.RestoreTaskFromRevision",
 		bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, nil, err
 	}
 
 	taskDescribe := new(TaskDescribe)
-	raw, err := gta.client.Do(ctx, request, &taskDescribe)
+	raw, err := gtca.client.Do(ctx, request, &taskDescribe)
 	return taskDescribe, raw, err
 }
 
 //TODO ImportTask
-//TODO ResetTasksIteratorForCluster
+
+type ResetIterForClusterParams struct {
+	SzwClusterID     *string `json:"szwClusterId,omitempty"`
+	SzwProductName   *string `json:"szwProductName,omitempty"`
+	SzwVersion       *string `json:"szwVersion,omitempty"`
+	SzwComponentName *string `json:"szwComponentName,omitempty"`
+	SzwInstanceID    *string `json:"szwInstanceId,omitempty"`
+	SzwTaskName      *string `json:"szwTaskName,omitempty"`
+}
+
+//	Reset task iterator for a cluster.
+//
+//	Parameters:
+//	- szwClusterId	(string) - cluster ID
+//	- szwProductName	(string) - productName
+//	- szwVersion	(string) - version
+//	- szwComponentName	(string) - componentName
+//	- szwInstanceId	(string) - instanceId
+//	- szwTaskName	(string) - task type name
+//
+//	Returns:
+//	- (string) iterator identifier
+func (gtca *GroupTaskControlApi) ResetTasksIteratorForCluster(ctx context.Context, params ResetIterForClusterParams) ([]byte, error) {
+	postData, err := json.Marshal(&params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", gtca.client.Server+"/api/v1.0/GroupTaskControlApi.ResetTasksIteratorForCluster", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := gtca.client.Do(ctx, request, nil)
+	return raw, err
+}
