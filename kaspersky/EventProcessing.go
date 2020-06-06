@@ -27,6 +27,7 @@ package kaspersky
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -47,15 +48,15 @@ type EventProcessing service
 //
 //	Returns:
 //	- (int64) number of elements contained in the specified result-set.
-func (ts *EventProcessing) GetRecordCount(ctx context.Context, strIteratorId string) (*PxgValInt, []byte, error) {
+func (ep *EventProcessing) GetRecordCount(ctx context.Context, strIteratorId string) (*PxgValInt, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strIteratorId": "%s"}`, strIteratorId))
-	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/EventProcessing.GetRecordCount", bytes.NewBuffer(postData))
+	request, err := http.NewRequest("POST", ep.client.Server+"/api/v1.0/EventProcessing.GetRecordCount", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, nil, err
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := ts.client.Do(ctx, request, &pxgValInt)
+	raw, err := ep.client.Do(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -70,15 +71,15 @@ func (ts *EventProcessing) GetRecordCount(ctx context.Context, strIteratorId str
 //
 //	Return:
 //	pParamsEvents	(params) - container that has needed elements in the array with name "KLEVP_EVENT_RANGE_ARRAY".
-func (ts *EventProcessing) GetRecordRange(ctx context.Context, strIteratorId string, nStart, nEnd int64) ([]byte,
+func (ep *EventProcessing) GetRecordRange(ctx context.Context, strIteratorId string, nStart, nEnd int64) ([]byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"strIteratorId": "%s", "nStart": %d, "nEnd": %d}`, strIteratorId, nStart, nEnd))
-	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/EventProcessing.GetRecordRange", bytes.NewBuffer(postData))
+	request, err := http.NewRequest("POST", ep.client.Server+"/api/v1.0/EventProcessing.GetRecordRange", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := ts.client.Do(ctx, request, nil)
+	raw, err := ep.client.Do(ctx, request, nil)
 	return raw, err
 }
 
@@ -89,20 +90,18 @@ func (ts *EventProcessing) GetRecordRange(ctx context.Context, strIteratorId str
 //	Parameters:
 //	- strIteratorId	(string) result-set ID,
 //	identifier of the server-side ordered collection of found data records.
-func (ts *EventProcessing) ReleaseIterator(ctx context.Context, strIteratorId string) (*PxgValInt, []byte, error) {
+func (ep *EventProcessing) ReleaseIterator(ctx context.Context, strIteratorId string) (*PxgValInt, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strIteratorId": "%s"}`, strIteratorId))
-	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/EventProcessing.ReleaseIterator", bytes.NewBuffer(postData))
+	request, err := http.NewRequest("POST", ep.client.Server+"/api/v1.0/EventProcessing.ReleaseIterator", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, nil, err
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := ts.client.Do(ctx, request, &pxgValInt)
+	raw, err := ep.client.Do(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
-//	TODO Initiate delete events in the result-set.
-//
 //	Initiates mass delete of the events specified by pSettings in the result-set.
 //
 //	Parameters:
@@ -118,12 +117,22 @@ func (ts *EventProcessing) ReleaseIterator(ctx context.Context, strIteratorId st
 //    +---1 // paramParams
 //        ...
 //    ...
-func (ts *EventProcessing) InitiateDelete(ctx context.Context, params interface{}) ([]byte, error) {
-	return nil, nil
+func (ep *EventProcessing) InitiateDelete(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", ep.client.Server+"/api/v1.0/EventProcessing.InitiateDelete",
+		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := ep.client.Do(ctx, request, nil)
+	return raw, err
 }
 
-//	TODO Cancel delete events in the result-set.
-//
 //	Cancels mass delete of the events specified by pSettings in the result-set.
 //
 //	Parameters:
@@ -141,6 +150,18 @@ func (ts *EventProcessing) InitiateDelete(ctx context.Context, params interface{
 //        ...
 //    ...
 //
-func (ts *EventProcessing) CancelDelete(ctx context.Context, params interface{}) ([]byte, error) {
-	return nil, nil
+func (ep *EventProcessing) CancelDelete(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", ep.client.Server+"/api/v1.0/EventProcessing.CancelDelete",
+		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := ep.client.Do(ctx, request, nil)
+	return raw, err
 }
