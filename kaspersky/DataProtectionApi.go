@@ -27,6 +27,7 @@ package kaspersky
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -66,16 +67,25 @@ type DataProtectionApi service
 //
 //	Exceptions:
 //	- KLSTD.STDE_NOFUNC	the password does not comply with the password policy
-func (dp *DataProtectionApi) CheckPasswordSplPpc(ctx context.Context, szwPassword string) (*PxgValBool, []byte, error) {
+func (dpa *DataProtectionApi) CheckPasswordSplPpc(ctx context.Context, szwPassword string) (*PxgValBool, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"szwPassword": "%s"}`, szwPassword))
-	request, err := http.NewRequest("POST", dp.client.Server+"/api/v1.0/DataProtectionApi.CheckPasswordSplPpc", bytes.NewBuffer(postData))
+	request, err := http.NewRequest("POST", dpa.client.Server+"/api/v1.0/DataProtectionApi.CheckPasswordSplPpc", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, nil, err
 	}
 
 	pxgValBool := new(PxgValBool)
-	raw, err := dp.client.Do(ctx, request, &pxgValBool)
+	raw, err := dpa.client.Do(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
+}
+
+type ToProtectData struct {
+	SzwHostID *string `json:"szwHostId,omitempty"`
+	PData     *string `json:"pData,omitempty"`
+}
+
+type ProtectedData struct {
+	PDataProtected *string `json:"pDataProtected,omitempty"`
 }
 
 //	Protects sensitive data to store in SettingsStorage or local task.
@@ -91,16 +101,33 @@ func (dp *DataProtectionApi) CheckPasswordSplPpc(ctx context.Context, szwPasswor
 //	possibly it doesn't support data protection or nagent isn't installed
 //	there or host belongs to other virtual server)
 //	- KLSTD.STDE_NOFUNC	server doesn't support data protection
-//TODO func (dp *DataProtectionApi) ProtectDataForHost(ctx context.Context, szwHostId string, pData []byte) ([]byte,
-//error)
+func (dpa *DataProtectionApi) ProtectDataForHost(ctx context.Context, params ToProtectData) (*ProtectedData, []byte, error) {
+	postData, _ := json.Marshal(params)
+	request, err := http.NewRequest("POST", dpa.client.Server+"/api/v1.0/DataProtectionApi.ProtectDataForHost", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+	protectedData := new(ProtectedData)
+	raw, err := dpa.client.Do(ctx, request, &protectedData)
+	return protectedData, raw, err
+}
 
 //	Protects sensitive data to store in policy or global/group task.
 //
 //	Parameters:
 //	- pData pointer to data
 //	- pDataProtected pointer to protected data block.
-//TODO func (dp *DataProtectionApi) ProtectDataForHost(ctx context.Context, szwHostId string, pData []byte) ([]byte,
-//error)
+func (dpa *DataProtectionApi) ProtectDataGlobally(ctx context.Context, params ToProtectData) (*ProtectedData, []byte, error) {
+	postData, _ := json.Marshal(params)
+	request, err := http.NewRequest("POST", dpa.client.Server+"/api/v1.0/DataProtectionApi.ProtectDataGlobally", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	protectedData := new(ProtectedData)
+	raw, err := dpa.client.Do(ctx, request, &protectedData)
+	return protectedData, raw, err
+}
 
 //	Protects sensitive data for the specified host (to store in its local settings or a local task)
 //
@@ -112,15 +139,15 @@ func (dp *DataProtectionApi) CheckPasswordSplPpc(ctx context.Context, szwPasswor
 //
 //	Returns:
 //	- Ciphertext
-func (dp *DataProtectionApi) ProtectUtf16StringForHost(ctx context.Context, szwHostId, szwPlainText string) ([]byte,
+func (dpa *DataProtectionApi) ProtectUtf16StringForHost(ctx context.Context, szwHostId, szwPlainText string) ([]byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"szwPassword" : "%s", "szwPlainText" : "%s"}`, szwHostId, szwPlainText))
-	request, err := http.NewRequest("POST", dp.client.Server+"/api/v1.0/DataProtectionApi.ProtectUtf16StringForHost", bytes.NewBuffer(postData))
+	request, err := http.NewRequest("POST", dpa.client.Server+"/api/v1.0/DataProtectionApi.ProtectUtf16StringForHost", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := dp.client.Do(ctx, request, nil)
+	raw, err := dpa.client.Do(ctx, request, nil)
 	return raw, err
 }
 
@@ -137,15 +164,15 @@ func (dp *DataProtectionApi) ProtectUtf16StringForHost(ctx context.Context, szwH
 //
 //Returns:
 //	- Ciphertext
-func (dp *DataProtectionApi) ProtectUtf16StringGlobally(ctx context.Context, szwPlainText string) ([]byte,
+func (dpa *DataProtectionApi) ProtectUtf16StringGlobally(ctx context.Context, szwPlainText string) ([]byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"szwPlainText" : "%s"}`, szwPlainText))
-	request, err := http.NewRequest("POST", dp.client.Server+"/api/v1.0/DataProtectionApi.ProtectUtf16StringGlobally", bytes.NewBuffer(postData))
+	request, err := http.NewRequest("POST", dpa.client.Server+"/api/v1.0/DataProtectionApi.ProtectUtf16StringGlobally", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := dp.client.Do(ctx, request, nil)
+	raw, err := dpa.client.Do(ctx, request, nil)
 	return raw, err
 }
 
@@ -161,15 +188,15 @@ func (dp *DataProtectionApi) ProtectUtf16StringGlobally(ctx context.Context, szw
 //
 //Returns:
 //	- Ciphertext
-func (dp *DataProtectionApi) ProtectUtf8StringForHost(ctx context.Context, szwHostId, szwPlainText string) ([]byte,
+func (dpa *DataProtectionApi) ProtectUtf8StringForHost(ctx context.Context, szwHostId, szwPlainText string) ([]byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"szwPassword" : "%s", "szwPlainText" : "%s"}`, szwHostId, szwPlainText))
-	request, err := http.NewRequest("POST", dp.client.Server+"/api/v1.0/DataProtectionApi.ProtectUtf8StringForHost", bytes.NewBuffer(postData))
+	request, err := http.NewRequest("POST", dpa.client.Server+"/api/v1.0/DataProtectionApi.ProtectUtf8StringForHost", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := dp.client.Do(ctx, request, nil)
+	raw, err := dpa.client.Do(ctx, request, nil)
 	return raw, err
 }
 
@@ -184,14 +211,14 @@ func (dp *DataProtectionApi) ProtectUtf8StringForHost(ctx context.Context, szwHo
 //
 //	Returns:
 //	- Ciphertext
-func (dp *DataProtectionApi) ProtectUtf8StringGlobally(ctx context.Context, szwPlainText string) ([]byte,
+func (dpa *DataProtectionApi) ProtectUtf8StringGlobally(ctx context.Context, szwPlainText string) ([]byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"szwPlainText" : "%s"}`, szwPlainText))
-	request, err := http.NewRequest("POST", dp.client.Server+"/api/v1.0/DataProtectionApi.ProtectUtf8StringGlobally", bytes.NewBuffer(postData))
+	request, err := http.NewRequest("POST", dpa.client.Server+"/api/v1.0/DataProtectionApi.ProtectUtf8StringGlobally", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := dp.client.Do(ctx, request, nil)
+	raw, err := dpa.client.Do(ctx, request, nil)
 	return raw, err
 }
