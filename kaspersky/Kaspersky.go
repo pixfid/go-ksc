@@ -69,6 +69,7 @@ type Client struct {
 	ExtAud                                  *ExtAud
 	FileCategorizer2                        *FileCategorizer2
 	FilesAcceptor                           *FilesAcceptor
+	GatewayConnection                       *GatewayConnection
 	GroupSync                               *GroupSync
 	HostGroup                               *HostGroup
 	HostMoveRules                           *HostMoveRules
@@ -176,6 +177,7 @@ func New(cfg Config) *Client {
 	c.ExtAud = (*ExtAud)(&c.common)
 	c.FileCategorizer2 = (*FileCategorizer2)(&c.common)
 	c.FilesAcceptor = (*FilesAcceptor)(&c.common)
+	c.GatewayConnection = (*GatewayConnection)(&c.common)
 	c.GroupSync = (*GroupSync)(&c.common)
 	c.HostGroup = (*HostGroup)(&c.common)
 	c.HostMoveRules = (*HostMoveRules)(&c.common)
@@ -258,6 +260,42 @@ func (c *Client) KSCAuth(ctx context.Context) error {
 	return err
 }
 
+func (c *Client) KSCGWAuth(ctx context.Context, kscgw string) error {
+	request, err := http.NewRequest("POST", c.Server+"/api/v1.0/login", nil)
+	if err != nil {
+		return err
+	}
+
+	request.Header.Set("Authorization", "KSCGW "+kscgw)
+
+	_, err = c.Do(ctx, request, nil)
+	return err
+}
+
+func (c *Client) KSCWTAuth(ctx context.Context, kscwt string) error {
+	request, err := http.NewRequest("POST", c.Server+"/api/v1.0/login", nil)
+	if err != nil {
+		return err
+	}
+
+	request.Header.Set("Authorization", "KSCWT "+kscwt)
+
+	_, err = c.Do(ctx, request, nil)
+	return err
+}
+
+func (c *Client) KSCTAuth(ctx context.Context, ksct string) error {
+	request, err := http.NewRequest("POST", c.Server+"/api/v1.0/login", nil)
+	if err != nil {
+		return err
+	}
+
+	request.Header.Set("Authorization", "KSCT "+ksct)
+
+	_, err = c.Do(ctx, request, nil)
+	return err
+}
+
 func (c *Client) Do(ctx context.Context, req *http.Request, out interface{}) (dt []byte, err error) {
 	if ctx == nil {
 		return nil, errors.New("context must be non-nil")
@@ -294,7 +332,17 @@ func (c *Client) Do(ctx context.Context, req *http.Request, out interface{}) (dt
 		reader = resp.Body
 	}
 
-	body, _ := ioutil.ReadAll(reader)
+	body, err := ioutil.ReadAll(reader)
+
+	if err != nil {
+		return body, err
+	}
+
+	err = CheckResponse(&body)
+
+	if err != nil {
+		return body, err
+	}
 
 	if out != nil {
 		decErr := json.Unmarshal(body, out)
@@ -307,4 +355,25 @@ func (c *Client) Do(ctx context.Context, req *http.Request, out interface{}) (dt
 	}
 
 	return body, err
+}
+
+//CheckResponse check KSC Response error
+func CheckResponse(body *[]byte) (err error) {
+
+	pre := new(PxgRetError)
+
+	decErr := json.Unmarshal(*body, &pre)
+
+	if decErr == io.EOF {
+		decErr = nil // ignore EOF errors caused by empty response body
+	}
+	if decErr != nil {
+		err = decErr
+	}
+
+	if pre.Error != nil {
+		err = pre.Error
+	}
+
+	return err
 }

@@ -54,8 +54,7 @@ type PxgValBool struct {
 
 //	pPngData struct
 type PPngData struct {
-	PngData  *string   `json:"pPngData"`
-	PxgError *PxgError `json:"PxgError,omitempty"`
+	PngData *string `json:"pPngData"`
 }
 
 //	PxgValArrayOfInt struct
@@ -70,8 +69,7 @@ type PxgValArrayOfString struct {
 
 //	RequestID struct
 type RequestID struct {
-	PxgError     *PxgError `json:"PxgError,omitempty"`
-	StrRequestID *string   `json:"strRequestId,omitempty"`
+	StrRequestID *string `json:"strRequestId,omitempty"`
 }
 
 //	PxgValCIFIL struct
@@ -91,10 +89,10 @@ type CIFILValue struct {
 
 //	PxgRetError struct
 type PxgRetError struct {
-	PxgError *PxgError `json:"PxgError,omitempty"`
+	Error *Error `json:"PxgError,omitempty"`
 }
 
-type PxgError struct {
+type Error struct {
 	Code    *int64  `json:"code,omitempty"`
 	File    *string `json:"file,omitempty"`
 	Line    *int64  `json:"line,omitempty"`
@@ -102,8 +100,8 @@ type PxgError struct {
 	Module  *string `json:"module,omitempty"`
 }
 
-func (p PxgError) Error() string {
-	return fmt.Sprintf("Module: %s, Code: %d, Message: %s", *p.Module, *p.Code, *p.Message)
+func (e Error) Error() string {
+	return fmt.Sprintf(`Module: %s, Code: %d, Message: %s`, *e.Module, *e.Code, *e.Message)
 }
 
 //	AsyncAccessor struct
@@ -194,4 +192,13 @@ func ToJson(a interface{}) string {
 		return string(jsn)
 	}
 	return ""
+}
+
+func jsonEscape(i string) string {
+	b, err := json.Marshal(i)
+	if err != nil {
+		panic(err)
+	}
+	s := string(b)
+	return s[1 : len(s)-1]
 }
