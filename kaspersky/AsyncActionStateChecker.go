@@ -67,6 +67,13 @@ type PStateData struct {
 	KlrptOutputLogo   *string            `json:"KLRPT_OUTPUT_LOGO,omitempty"`
 	//
 	LastActionResult *string `json:"LastActionResult,omitempty"`
+	//
+	EventLogs        []string          `json:"EventLogs"`
+	HostDN           *string           `json:"HostDN,omitempty"`
+	InstallationLogs *InstallationLogs `json:"InstallationLogs,omitempty"`
+	Products         *Products         `json:"Products,omitempty"`
+	WuaLogs          []string          `json:"WuaLogs"`
+	WuaLogsWin10     []string          `json:"WuaLogs_Win10"`
 }
 
 //Check status of the async action.
