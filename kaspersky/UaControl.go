@@ -70,7 +70,27 @@ func (uc *UaControl) GetDefaultUpdateAgentRegistrationInfo(ctx context.Context) 
 	return raw, err
 }
 
-//TODO func (uc *UaControl) GetUpdateAgentInfo(ctx context.Context)  ([]byte, error) {}
+//	Get Update agent info.
+//
+//	Parameters:
+//	- wstrUaHostId	UA host id
+//
+//	Return:
+//	- pUaInfo	UA info, see Update agent settings for description
+//
+//	Exceptions:
+//	Throws	exception if host is not an Update agent or any other error occurs
+func (uc *UaControl) GetUpdateAgentInfo(ctx context.Context, wstrUaHostId string) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"wstrUaHostId": "%s"}`, wstrUaHostId))
+	request, err := http.NewRequest("POST", uc.client.Server+"/api/v1.0/UaControl.GetUpdateAgentInfo",
+		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := uc.client.Do(ctx, request, nil)
+	return raw, err
+}
 
 //	Returns list of Update agents assigned to specified host.
 //
