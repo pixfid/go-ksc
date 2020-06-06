@@ -40,10 +40,10 @@ type EventProcessingFactory service
 
 //EventPFP struct
 type EventPFP struct {
-	PFilter           *PFilter    `json:"pFilter"`
-	VecFieldsToOrder  interface{} `json:"vecFieldsToOrder"`
-	VecFieldsToReturn []string    `json:"vecFieldsToReturn"`
-	LifetimeSEC       int64       `json:"lifetimeSec"`
+	PFilter           *PFilter       `json:"pFilter"`
+	VecFieldsToOrder  *FieldsToOrder `json:"vecFieldsToOrder"`
+	VecFieldsToReturn []string       `json:"vecFieldsToReturn"`
+	LifetimeSEC       int64          `json:"lifetimeSec"`
 }
 
 //	Create event processing iterator.
@@ -69,15 +69,13 @@ type EventPFP struct {
 //	Return:
 //	- strIteratorId	(string) result-set ID, identifier of the server-side ordered collection of found data records.
 //	The result-set is destroyed and associated memory is freed in following cases:
-//
-//	Passed lifetimeSec seconds after last access to the result-set (by methods EventProcessing. GetRecordCount
-//
-//	and EventProcessing.GetRecordRange).
+//	Passed lifetimeSec seconds after last access to the result-set
+//	(by methods EventProcessing. GetRecordCount and EventProcessing.GetRecordRange).
 //
 //	Session to the Administration Server has been closed.
 //
 //	EventProcessing.ReleaseIterator has been called.
-func (epf *EventProcessingFactory) CreateEventProcessing(ctx context.Context, params interface{}) (*StrIteratorId,
+func (epf *EventProcessingFactory) CreateEventProcessing(ctx context.Context, params EventPFP) (*StrIteratorId,
 	[]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", epf.client.Server+"/api/v1.0/EventProcessingFactory.CreateEventProcessing",
@@ -127,7 +125,7 @@ func (epf *EventProcessingFactory) CreateEventProcessing(ctx context.Context, pa
 //	Session to the Administration Server has been closed.
 //
 //	EventProcessing.ReleaseIterator has been called.
-func (epf *EventProcessingFactory) CreateEventProcessing2(ctx context.Context, params interface{}) (*StrIteratorId,
+func (epf *EventProcessingFactory) CreateEventProcessing2(ctx context.Context, params EventPFP) (*StrIteratorId,
 	[]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", epf.client.Server+"/api/v1.0/EventProcessingFactory.CreateEventProcessing2",
@@ -143,14 +141,14 @@ func (epf *EventProcessingFactory) CreateEventProcessing2(ctx context.Context, p
 
 //EventPFH struct
 type EventPFH struct {
-	StrDomainName     string           `json:"strDomainName"`
-	StrHostName       string           `json:"strHostName"`
-	StrProduct        string           `json:"strProduct"`
-	StrVersion        string           `json:"strVersion"`
-	PFilter           *PFilter         `json:"pFilter"`
-	VecFieldsToReturn []string         `json:"vecFieldsToReturn"`
-	VecFieldsToOrder  *[]FieldsToOrder `json:"vecFieldsToOrder"`
-	LifetimeSEC       int64            `json:"lifetimeSec"`
+	StrDomainName     string          `json:"strDomainName"`
+	StrHostName       string          `json:"strHostName"`
+	StrProduct        string          `json:"strProduct"`
+	StrVersion        string          `json:"strVersion"`
+	PFilter           *PFilter        `json:"pFilter"`
+	VecFieldsToReturn []string        `json:"vecFieldsToReturn"`
+	VecFieldsToOrder  []FieldsToOrder `json:"vecFieldsToOrder"`
+	LifetimeSEC       int64           `json:"lifetimeSec"`
 }
 
 //	Create event processing iterator for host.
@@ -193,7 +191,7 @@ type EventPFH struct {
 //	(by methods EventProcessing.GetRecordCount and EventProcessing.GetRecordRange).
 //	Session to the Administration Server has been closed.
 //	EventProcessing.ReleaseIterator has been called.
-func (epf *EventProcessingFactory) CreateEventProcessingForHost(ctx context.Context, params interface{}) (*StrIteratorId,
+func (epf *EventProcessingFactory) CreateEventProcessingForHost(ctx context.Context, params EventPFH) (*StrIteratorId,
 	[]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", epf.client.Server+"/api/v1.0/EventProcessingFactory.CreateEventProcessingForHost",
@@ -249,7 +247,7 @@ func (epf *EventProcessingFactory) CreateEventProcessingForHost(ctx context.Cont
 //	(by methods EventProcessing.GetRecordCount and EventProcessing.GetRecordRange).
 //	Session to the Administration Server has been closed.
 //	EventProcessing.ReleaseIterator has been called.
-func (epf *EventProcessingFactory) CreateEventProcessingForHost2(ctx context.Context, params interface{}) (*StrIteratorId,
+func (epf *EventProcessingFactory) CreateEventProcessingForHost2(ctx context.Context, params EventPFH) (*StrIteratorId,
 	[]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", epf.client.Server+"/api/v1.0/EventProcessingFactory.CreateEventProcessingForHost2",
