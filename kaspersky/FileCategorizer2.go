@@ -44,7 +44,33 @@ import (
 //	List of all members.
 type FileCategorizer2 service
 
-//TODO AddExpressions
+//	Add some expressions to category.
+//
+//	Parameters:
+//	- nCategoryId	(int64) Category id
+//	- arrNewExpressions	(array) Array of new expressions. Max size is 100 elements. See Custom category format.
+//	- bInclusions	(bool) If true then add to inclusions. Otherwise add to exclusions.
+//
+//	Return:
+//	- wstrAsyncId	(string) Id of async operation.
+//
+//	See also:
+//	AsyncActionStateChecker
+func (fc *FileCategorizer2) AddExpressions(ctx context.Context, params interface{}) (*PxgValStr, []byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.AddExpressions", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	pxgValStr := new(PxgValStr)
+	raw, err := fc.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, raw, err
+}
 
 //	Cancel file metadata operations.
 //
@@ -77,7 +103,7 @@ func (fc *FileCategorizer2) CancelFileUpload(ctx context.Context) (*PxgValInt, [
 	return pxgValInt, raw, err
 }
 
-//CategoryParams struct <- TODO Correct this... working but, need all fields
+//CategoryParams struct
 type CategoryParams struct {
 	PCategory *PCategory `json:"pCategory,omitempty"`
 }
@@ -121,7 +147,7 @@ type InclusionValue struct {
 //	Exceptions:
 //	- KLSTD.STDE_OBJ_EXISTS	- name or UUID is not unique
 func (fc *FileCategorizer2) CreateCategory(ctx context.Context, params CategoryParams) (*PxgValStr, []byte, error) {
-	postData, err := json.Marshal(&params)
+	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -156,11 +182,101 @@ func (fc *FileCategorizer2) DeleteCategory(ctx context.Context, nCategoryId int6
 	return raw, err
 }
 
-//TODO DeleteExpression
-//TODO DoStaticAnalysisAsync
-//TODO DoStaticAnalysisAsync2
-//TODO DoTestStaticAnalysisAsync
-//TODO DoTestStaticAnalysisAsync2
+//ExpressionParams struct using in FileCategorizer2.DeleteExpression
+type ExpressionParams struct {
+	NCategoryID *int64  `json:"nCategoryId,omitempty"`
+	ArrIDS      []int64 `json:"arrIds"`
+	BInclusions *bool   `json:"bInclusions,omitempty"`
+}
+
+//	Delete some expressions from category.
+//
+//	Parameters:
+//	- nCategoryId	(int64) Category id
+//	- arrIds	(array) Array of identifiers (int). Max size is 100 elements.
+//	- bInclusions	(bool) If true then delete from inclusions. Otherwise delete from exclusions.
+//
+//	Return:
+//	- wstrAsyncId	(string) Id of async operation.
+//
+//	See also:
+//	AsyncActionStateChecker
+func (fc *FileCategorizer2) DeleteExpression(ctx context.Context, params ExpressionParams) (*PxgValStr, []byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.DeleteExpression", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	pxgValStr := new(PxgValStr)
+	raw, err := fc.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, raw, err
+}
+
+//	Start static analysis.
+//
+//	Deprecated:
+//	for using in OpenAPI. Use FileCategorizer2.DoStaticAnalysisAsync2 instead.
+//
+//	Parameters:
+//	- wstrRequestId	(string) Async id
+//	- nPolicyId	(int64) Policy id
+//
+//	Exceptions:
+//	KLSTD::STDE_NOACCESS	- access denied
+func (fc *FileCategorizer2) DoStaticAnalysisAsync(ctx context.Context, wstrRequestId string, nPolicyId int64) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"wstrRequestId": "%s", "nPolicyId": %d}`, wstrRequestId, nPolicyId))
+	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.DoStaticAnalysisAsync",
+		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := fc.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//AsyncID struct
+type AsyncID struct {
+	WstrAsyncID *string `json:"wstrAsyncId,omitempty"`
+}
+
+//	Start static analysis.
+//
+//	Parameters:
+//	- nPolicyId	(int64) Policy id
+//
+//	Return:
+//	- wstrAsyncId	(string) Id of async operation.
+//	To get status use AsyncActionStateChecker.CheckActionState, lStateCode "0" means OK.
+//
+//	Result of operation is placed into views:
+//
+//	Srvview results of static analysis - common information per category (count of executable files)
+//	Srvview results of static analysis with exefiles info - list of executable files
+//
+//	See also:
+//	AsyncActionStateChecker
+//	Static analysis of application categories
+func (fc *FileCategorizer2) DoStaticAnalysisAsync2(ctx context.Context, nPolicyId int64) (*AsyncID, []byte, error) {
+	postData := []byte(fmt.Sprintf(`{"nPolicyId": %d}`, nPolicyId))
+	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.DoStaticAnalysisAsync2",
+		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	asyncID := new(AsyncID)
+	raw, err := fc.client.Do(ctx, request, &asyncID)
+	return asyncID, raw, err
+}
+
+//TODO FileCategorizer2::DoTestStaticAnalysisAsync
+//TODO FileCategorizer2::DoTestStaticAnalysisAsync2
 
 //	FinishStaticAnalysis
 func (fc *FileCategorizer2) FinishStaticAnalysis(ctx context.Context) ([]byte, error) {
@@ -445,6 +561,80 @@ func (fc *FileCategorizer2) GetSyncId(ctx context.Context) (*PxgValInt, []byte, 
 	return pxgValInt, raw, err
 }
 
-//TODO InitFileUpload
-//TODO UpdateCategory
-//TODO UpdateExpressions
+type UploadParams struct {
+	WstrUploadURL *string `json:"wstrUploadUrl,omitempty"`
+}
+
+//	Initialize file upload for file categorizer subsystem.
+//
+//	Return:
+//	- wstrUploadUrl	(string) Upload url. See Files upload.
+//
+//	Only one upload url is allowed for connection.
+func (fc *FileCategorizer2) InitFileUpload(ctx context.Context) (*UploadParams, []byte, error) {
+	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.InitFileUpload", nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	uploadParams := new(UploadParams)
+	raw, err := fc.client.Do(ctx, request, &uploadParams)
+	return uploadParams, raw, err
+}
+
+//	Update category.
+//
+//	Parameters:
+//	- nCategoryId	(int64) Category id
+//	- pCategory	(params) New category body (see Custom category format)
+//
+//	Exceptions:
+//	KLSTD::STDE_NOTFOUND	- category not found
+//	KLSTD::STDE_BADFORMAT	- format of category is wrong
+//	KLSTD::STDE_NOTPERM	- can't change attribute
+func (fc *FileCategorizer2) UpdateCategory(ctx context.Context, params interface{}) (*PxgValStr, []byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.UpdateCategory", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	pxgValStr := new(PxgValStr)
+	raw, err := fc.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, raw, err
+}
+
+//	Update some expressions in category.
+//
+//	Parameters:
+//	- nCategoryId	(int64) Category id
+//	- arrIdAndExpression	(array) Array of params.
+//	Each element contains 2 attributes: "id" (int) - expression id,	"body" (params) - expression body.
+//	Max size is 100 elements. See Custom category format.
+//
+//	- bInclusions	(boolean) If true then update inclusions. Otherwise update exclusions.
+//
+//	Return:
+//	wstrAsyncId	 (string) Id of async operation.
+//
+//	See also:
+//	AsyncActionStateChecker
+func (fc *FileCategorizer2) UpdateExpressions(ctx context.Context, params interface{}) (*PxgValStr, []byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.UpdateExpressions", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	pxgValStr := new(PxgValStr)
+	raw, err := fc.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, raw, err
+}
