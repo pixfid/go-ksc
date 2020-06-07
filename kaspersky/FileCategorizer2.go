@@ -109,15 +109,15 @@ type CategoryParams struct {
 }
 
 type PCategory struct {
-	CategoryType                *int64       `json:"CategoryType,omitempty"`
-	CustomCategoryCipCompatible *bool        `json:"CustomCategoryCipCompatible,omitempty"`
-	Md5WithoutSha256Exists      *bool        `json:"Md5WithoutSha256Exists,omitempty"`
+	CategoryType                int64        `json:"CategoryType,omitempty"`
+	CustomCategoryCipCompatible bool         `json:"CustomCategoryCipCompatible,omitempty"`
+	Md5WithoutSha256Exists      bool         `json:"Md5WithoutSha256Exists,omitempty"`
 	Exclusions                  []Exclusions `json:"exclusions"`
-	FromMaster                  *bool        `json:"fromMaster,omitempty"`
+	FromMaster                  bool         `json:"fromMaster,omitempty"`
 	Inclusions                  []Inclusion  `json:"inclusions"`
-	Name                        *string      `json:"name,omitempty"`
-	Descr                       *string      `json:"descr,omitempty"`
-	Version                     *int64       `json:"version,omitempty"`
+	Name                        string       `json:"name,omitempty"`
+	Descr                       string       `json:"descr,omitempty"`
+	Version                     int64        `json:"version,omitempty"`
 }
 
 type Exclusions struct {
@@ -125,14 +125,14 @@ type Exclusions struct {
 }
 
 type Inclusion struct {
-	Type           *string         `json:"type,omitempty"`
+	Type           string          `json:"type,omitempty"`
 	InclusionValue *InclusionValue `json:"value,omitempty"`
 }
 
 type InclusionValue struct {
-	ExType *int64  `json:"ex_type,omitempty"`
-	Str    *string `json:"str,omitempty"`
-	StrOp  *int64  `json:"str_op,omitempty"`
+	ExType int64  `json:"ex_type,omitempty"`
+	Str    string `json:"str,omitempty"`
+	StrOp  int64  `json:"str_op,omitempty"`
 	//TODO Body fields
 }
 
@@ -184,9 +184,9 @@ func (fc *FileCategorizer2) DeleteCategory(ctx context.Context, nCategoryId int6
 
 //ExpressionParams struct using in FileCategorizer2.DeleteExpression
 type ExpressionParams struct {
-	NCategoryID *int64  `json:"nCategoryId,omitempty"`
+	NCategoryID int64   `json:"nCategoryId,omitempty"`
 	ArrIDS      []int64 `json:"arrIds"`
-	BInclusions *bool   `json:"bInclusions,omitempty"`
+	BInclusions bool    `json:"bInclusions,omitempty"`
 }
 
 //	Delete some expressions from category.
@@ -242,7 +242,7 @@ func (fc *FileCategorizer2) DoStaticAnalysisAsync(ctx context.Context, wstrReque
 
 //AsyncID struct
 type AsyncID struct {
-	WstrAsyncID *string `json:"wstrAsyncId,omitempty"`
+	WstrAsyncID string `json:"wstrAsyncId,omitempty"`
 }
 
 //	Start static analysis.
@@ -461,18 +461,18 @@ type PPolicies struct {
 }
 
 type RefPolicy struct {
-	Type           *string         `json:"type,omitempty"`
+	Type           string          `json:"type,omitempty"`
 	RefPolicyValue *RefPolicyValue `json:"value,omitempty"`
 }
 
 type RefPolicyValue struct {
-	FromMaster  *bool   `json:"FromMaster,omitempty"`
-	GroupID     *int64  `json:"GroupId,omitempty"`
-	GroupName   *string `json:"GroupName,omitempty"`
-	PolID       *int64  `json:"PolId,omitempty"`
-	PolName     *string `json:"PolName,omitempty"`
-	VServerID   *int64  `json:"VServerId,omitempty"`
-	VServerName *string `json:"VServerName,omitempty"`
+	FromMaster  bool   `json:"FromMaster,omitempty"`
+	GroupID     int64  `json:"GroupId,omitempty"`
+	GroupName   string `json:"GroupName,omitempty"`
+	PolID       int64  `json:"PolId,omitempty"`
+	PolName     string `json:"PolName,omitempty"`
+	VServerID   int64  `json:"VServerId,omitempty"`
+	VServerName string `json:"VServerName,omitempty"`
 }
 
 //	Returns array of policies with references to specified category.
@@ -562,7 +562,7 @@ func (fc *FileCategorizer2) GetSyncId(ctx context.Context) (*PxgValInt, []byte, 
 }
 
 type UploadParams struct {
-	WstrUploadURL *string `json:"wstrUploadUrl,omitempty"`
+	WstrUploadURL string `json:"wstrUploadUrl,omitempty"`
 }
 
 //	Initialize file upload for file categorizer subsystem.

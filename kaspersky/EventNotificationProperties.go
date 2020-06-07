@@ -54,22 +54,22 @@ type DefaultSettings struct {
 //Events notification settings
 type DefaultSettingsVal struct {
 	//Number of days to store events in KSC server DB
-	KlevpNdDaysToStoreEvent *int64 `json:"KLEVP_ND_DAYS_TO_STORE_EVENT,omitempty"`
+	KlevpNdDaysToStoreEvent int64 `json:"KLEVP_ND_DAYS_TO_STORE_EVENT,omitempty"`
 
 	//List of email recipients separated by comma
-	KlevpNdEmail *string `json:"KLEVP_ND_EMAIL,omitempty"`
+	KlevpNdEmail string `json:"KLEVP_ND_EMAIL,omitempty"`
 
 	//Account name to be used for authorization on SMTP server
-	KlevpNdEmailEsmtpUser *string `json:"KLEVP_ND_EMAIL_ESMTP_USER,omitempty"`
+	KlevpNdEmailEsmtpUser string `json:"KLEVP_ND_EMAIL_ESMTP_USER,omitempty"`
 
 	//Sender address
-	KlevpNdEmailFrom *string `json:"KLEVP_ND_EMAIL_FROM,omitempty"`
+	KlevpNdEmailFrom string `json:"KLEVP_ND_EMAIL_FROM,omitempty"`
 
 	//Email subject
-	KlevpNdEmailSubject *string `json:"KLEVP_ND_EMAIL_SUBJECT,omitempty"`
+	KlevpNdEmailSubject string `json:"KLEVP_ND_EMAIL_SUBJECT,omitempty"`
 
 	//Event type (e.g., "GNRL_EV_VIRUS_FOUND" or "KLPRCI_TaskState")
-	KlevpNdEvetnType *string `json:"KLEVP_ND_EVETN_TYPE,omitempty"`
+	KlevpNdEvetnType string `json:"KLEVP_ND_EVETN_TYPE,omitempty"`
 
 	//Template of the message to be sent as email;
 	//to see the lis of available tamplate substitutions, see Events templates
@@ -81,45 +81,45 @@ type DefaultSettingsVal struct {
 	//	║ EVENT    ║ string ║ Event type        ║
 	//	║ DESCR    ║ string ║ Event description ║
 	//	╚══════════╩════════╩═══════════════════╝
-	KlevpNdMessageTemplate *string `json:"KLEVP_ND_MESSAGE_TEMPLATE,omitempty"`
+	KlevpNdMessageTemplate string `json:"KLEVP_ND_MESSAGE_TEMPLATE,omitempty"`
 
 	//Obsolete parameter - must be empty or not present
-	KlevpNdNetSend *string `json:"KLEVP_ND_NET_SEND,omitempty"`
+	KlevpNdNetSend string `json:"KLEVP_ND_NET_SEND,omitempty"`
 
 	//Use MX record lookup when email notification is enabled
 	//(meaningful only in case if KLEVP_ND_USE_EMAIL is set to true);
 	//When enabled, KLEVP_ND_SMTP_SERVER is interpreted as a domain name which is to be resolved
-	KlevpNdResolveMX *bool `json:"KLEVP_ND_RESOLVE_MX,omitempty"`
+	KlevpNdResolveMX bool `json:"KLEVP_ND_RESOLVE_MX,omitempty"`
 
 	//Script to be run as event notification
-	KlevpNdScript *string `json:"KLEVP_ND_SCRIPT,omitempty"`
+	KlevpNdScript string `json:"KLEVP_ND_SCRIPT,omitempty"`
 
 	//Account name to be used for authorization on SMTP SMS gateway
-	KlevpNdSMSEmailEsmtpUser *string `json:"KLEVP_ND_SMS_EMAIL_ESMTP_USER,omitempty"`
+	KlevpNdSMSEmailEsmtpUser string `json:"KLEVP_ND_SMS_EMAIL_ESMTP_USER,omitempty"`
 
 	//Sender address to be used for SMTP SMS gateway
-	KlevpNdSMSEmailFrom *string `json:"KLEVP_ND_SMS_EMAIL_FROM,omitempty"`
+	KlevpNdSMSEmailFrom string `json:"KLEVP_ND_SMS_EMAIL_FROM,omitempty"`
 
 	//Email subject for SMTP messages to be sent to SMTP SMS gateway
-	KlevpNdSMSEmailSubject *string `json:"KLEVP_ND_SMS_EMAIL_SUBJECT,omitempty"`
+	KlevpNdSMSEmailSubject string `json:"KLEVP_ND_SMS_EMAIL_SUBJECT,omitempty"`
 
 	//Recipient address to be used for SMTP SMS gateway
-	KlevpNdSMSEmailTo *string `json:"KLEVP_ND_SMS_EMAIL_TO,omitempty"`
+	KlevpNdSMSEmailTo string `json:"KLEVP_ND_SMS_EMAIL_TO,omitempty"`
 
 	//Limitation on the number of SMS notifications
-	KlevpNdSMSLimit *int64 `json:"KLEVP_ND_SMS_LIMIT,omitempty"`
+	KlevpNdSMSLimit int64 `json:"KLEVP_ND_SMS_LIMIT,omitempty"`
 
 	//SMS recipients list
-	KlevpNdSMSRecipients *string `json:"KLEVP_ND_SMS_RECIPIENTS,omitempty"`
+	KlevpNdSMSRecipients string `json:"KLEVP_ND_SMS_RECIPIENTS,omitempty"`
 
 	//Unsupported, must be empty
-	KlevpNdSMSServiceID *string `json:"KLEVP_ND_SMS_SERVICE_ID,omitempty"`
+	KlevpNdSMSServiceID string `json:"KLEVP_ND_SMS_SERVICE_ID,omitempty"`
 
 	//SMTP SMS gateway server port to be used for SMS notifications
-	KlevpNdSMSSMTPPort *int64 `json:"KLEVP_ND_SMS_SMTP_PORT,omitempty"`
+	KlevpNdSMSSMTPPort int64 `json:"KLEVP_ND_SMS_SMTP_PORT,omitempty"`
 
 	//SMTP SMS gateway server address to be used for SMS notifications
-	KlevpNdSMSSMTPServer *string `json:"KLEVP_ND_SMS_SMTP_SERVER,omitempty"`
+	KlevpNdSMSSMTPServer string `json:"KLEVP_ND_SMS_SMTP_SERVER,omitempty"`
 
 	//SMS message template;
 	//to see the list of available tamplate substitutions, see Events templates
@@ -131,48 +131,48 @@ type DefaultSettingsVal struct {
 	//	║ EVENT    ║ string ║ Event type        ║
 	//	║ DESCR    ║ string ║ Event description ║
 	//	╚══════════╩════════╩═══════════════════╝
-	KlevpNdSMSTemplate *string `json:"KLEVP_ND_SMS_TEMPLATE,omitempty"`
+	KlevpNdSMSTemplate string `json:"KLEVP_ND_SMS_TEMPLATE,omitempty"`
 
 	//SMS notification type:
 	//
 	//	0 - Undefined
 	//	1 - SMTP SMS gateway
 	//	2 - SMS service
-	KlevpNdSMSType *int64 `json:"KLEVP_ND_SMS_TYPE,omitempty"`
+	KlevpNdSMSType int64 `json:"KLEVP_ND_SMS_TYPE,omitempty"`
 
 	//SMTP server port
-	KlevpNdSMTPPort *int64 `json:"KLEVP_ND_SMTP_PORT,omitempty"`
+	KlevpNdSMTPPort int64 `json:"KLEVP_ND_SMTP_PORT,omitempty"`
 
 	//SMTP server address to be used for email notifications
-	KlevpNdSMTPServer *string `json:"KLEVP_ND_SMTP_SERVER,omitempty"`
+	KlevpNdSMTPServer string `json:"KLEVP_ND_SMTP_SERVER,omitempty"`
 
 	//Store events in Kaspersky Event Log on client computer
-	KlevpNdStoreAtClientLog *bool `json:"KLEVP_ND_STORE_AT_CLIENT_LOG,omitempty"`
+	KlevpNdStoreAtClientLog bool `json:"KLEVP_ND_STORE_AT_CLIENT_LOG,omitempty"`
 
 	//Obsolete parameter - must be set to false or not present
-	KlevpNdStoreAtClientPres *bool `json:"KLEVP_ND_STORE_AT_CLIENT_PRES,omitempty"`
+	KlevpNdStoreAtClientPres bool `json:"KLEVP_ND_STORE_AT_CLIENT_PRES,omitempty"`
 
 	//Store events in Kaspersky Event Log on KSC server computer
-	KlevpNdStoreAtServerLog *bool `json:"KLEVP_ND_STORE_AT_SERVER_LOG,omitempty"`
+	KlevpNdStoreAtServerLog bool `json:"KLEVP_ND_STORE_AT_SERVER_LOG,omitempty"`
 
 	//Using emails for notifications; must be false for default settings
-	KlevpNdUseEmail *bool `json:"KLEVP_ND_USE_EMAIL,omitempty"`
+	KlevpNdUseEmail bool `json:"KLEVP_ND_USE_EMAIL,omitempty"`
 
 	//Obsolete parameter - must be set to false or not present
-	KlevpNdUseNetSend *bool `json:"KLEVP_ND_USE_NET_SEND,omitempty"`
+	KlevpNdUseNetSend bool `json:"KLEVP_ND_USE_NET_SEND,omitempty"`
 
 	//Notify on event by running the script. The script itself (KLEVP_ND_SCRIPT)
 	//can be set in the same params, otherwise default parameters for server are used
-	KlevpNdUseScript *bool `json:"KLEVP_ND_USE_SCRIPT,omitempty"`
+	KlevpNdUseScript bool `json:"KLEVP_ND_USE_SCRIPT,omitempty"`
 
 	//Using SMS for notifications; must be false for default settings
-	KlevpNdUseSMS *bool `json:"KLEVP_ND_USE_SMS,omitempty"`
+	KlevpNdUseSMS bool `json:"KLEVP_ND_USE_SMS,omitempty"`
 
 	//Notify on events by SNMP
-	KlevpNdUseSNMP *bool `json:"KLEVP_ND_USE_SNMP,omitempty"`
+	KlevpNdUseSNMP bool `json:"KLEVP_ND_USE_SNMP,omitempty"`
 
 	//Notify on events by exporting to SysLog
-	KlevpNdUseSyslog *bool `json:"KLEVP_ND_USE_SYSLOG,omitempty"`
+	KlevpNdUseSyslog bool `json:"KLEVP_ND_USE_SYSLOG,omitempty"`
 
 	//KLEVP_ND_BODY_FILTER interface ???
 }
@@ -206,14 +206,14 @@ type ENLimitsParams struct {
 }
 
 type NLimits struct {
-	KlevpMaxEventsToSendPerPeriod   *int64 `json:"KLEVP_MAX_EVENTS_TO_SEND_PER_PERIOD,omitempty"`
-	KlevpMaxVirusEventsForOutbreak  *int64 `json:"KLEVP_MAX_VIRUS_EVENTS_FOR_OUTBREAK,omitempty"`
-	KlevpMaxVirusEventsForOutbreakE *int64 `json:"KLEVP_MAX_VIRUS_EVENTS_FOR_OUTBREAK_E,omitempty"`
-	KlevpMaxVirusEventsForOutbreakP *int64 `json:"KLEVP_MAX_VIRUS_EVENTS_FOR_OUTBREAK_P,omitempty"`
-	KlevpTestPeriodToOutbreak       *int64 `json:"KLEVP_TEST_PERIOD_TO_OUTBREAK,omitempty"`
-	KlevpTestPeriodToOutbreakE      *int64 `json:"KLEVP_TEST_PERIOD_TO_OUTBREAK_E,omitempty"`
-	KlevpTestPeriodToOutbreakP      *int64 `json:"KLEVP_TEST_PERIOD_TO_OUTBREAK_P,omitempty"`
-	KlevpTestPeriodToSendEvents     *int64 `json:"KLEVP_TEST_PERIOD_TO_SEND_EVENTS,omitempty"`
+	KlevpMaxEventsToSendPerPeriod   int64 `json:"KLEVP_MAX_EVENTS_TO_SEND_PER_PERIOD,omitempty"`
+	KlevpMaxVirusEventsForOutbreak  int64 `json:"KLEVP_MAX_VIRUS_EVENTS_FOR_OUTBREAK,omitempty"`
+	KlevpMaxVirusEventsForOutbreakE int64 `json:"KLEVP_MAX_VIRUS_EVENTS_FOR_OUTBREAK_E,omitempty"`
+	KlevpMaxVirusEventsForOutbreakP int64 `json:"KLEVP_MAX_VIRUS_EVENTS_FOR_OUTBREAK_P,omitempty"`
+	KlevpTestPeriodToOutbreak       int64 `json:"KLEVP_TEST_PERIOD_TO_OUTBREAK,omitempty"`
+	KlevpTestPeriodToOutbreakE      int64 `json:"KLEVP_TEST_PERIOD_TO_OUTBREAK_E,omitempty"`
+	KlevpTestPeriodToOutbreakP      int64 `json:"KLEVP_TEST_PERIOD_TO_OUTBREAK_P,omitempty"`
+	KlevpTestPeriodToSendEvents     int64 `json:"KLEVP_TEST_PERIOD_TO_SEND_EVENTS,omitempty"`
 }
 
 //	Reads the notification limits.

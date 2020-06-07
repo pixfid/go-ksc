@@ -187,7 +187,7 @@ func (pa *PackagesApi) DeleteExecutablePkg(ctx context.Context, nPackageId int64
 }
 
 type EULA struct {
-	WstrEULAText *string `json:"wstrEulaText,omitempty"`
+	WstrEULAText string `json:"wstrEulaText,omitempty"`
 }
 
 //	Requests EULA text.
@@ -490,7 +490,7 @@ type PackageStruct struct {
 	KlpkgNpiSize                KlpkgNpiSize       `json:"KLPKG_NPI_SIZE"`
 	KlpkgNpiSsDescr             string             `json:"KLPKG_NPI_SS_DESCR"`
 	KlpkgNpiAVBasesUpdateTime   *KlpkgNpiTime      `json:"KLPKG_NPI_AV_BASES_UPDATE_TIME,omitempty"`
-	KlpkgNpiAVBasesUpdSupported *bool              `json:"KLPKG_NPI_AV_BASES_UPD_SUPPORTED,omitempty"`
+	KlpkgNpiAVBasesUpdSupported bool               `json:"KLPKG_NPI_AV_BASES_UPD_SUPPORTED,omitempty"`
 	KlpkgNpiExtraData           *KlpkgNpiExtraData `json:"KLPKG_NPI_EXTRA_DATA,omitempty"`
 }
 
@@ -507,22 +507,22 @@ type KlpkgNpiSize struct {
 type KlpkgNpiExtraData struct {
 	KlpggVapmDistribGlbid *KlpkgNpiSize `json:"KLPGG_VAPM_DISTRIB_GLBID,omitempty"`
 	KlpkgEULAUid          *Klpkg        `json:"KLPKG_EULA_UID,omitempty"`
-	KlpkgFormat           *int64        `json:"KLPKG_FORMAT,omitempty"`
-	KlpkgIsMSI            *bool         `json:"KLPKG_IS_MSI,omitempty"`
-	KlpkgLangTag          *string       `json:"KLPKG_LANG_TAG,omitempty"`
-	KlpkgParentID         *int64        `json:"KLPKG_PARENT_ID,omitempty"`
-	KlpkgPkgMan           *int64        `json:"KLPKG_PKG_MAN,omitempty"`
-	KlpkgPlatform         *int64        `json:"KLPKG_PLATFORM,omitempty"`
-	KlpkgPrdType          *int64        `json:"KLPKG_PRD_TYPE,omitempty"`
-	KlpkgType             *int64        `json:"KLPKG_TYPE,omitempty"`
-	BPkgPrereqAllowed     *bool         `json:"bPkgPrereqAllowed,omitempty"`
+	KlpkgFormat           int64         `json:"KLPKG_FORMAT,omitempty"`
+	KlpkgIsMSI            bool          `json:"KLPKG_IS_MSI,omitempty"`
+	KlpkgLangTag          string        `json:"KLPKG_LANG_TAG,omitempty"`
+	KlpkgParentID         int64         `json:"KLPKG_PARENT_ID,omitempty"`
+	KlpkgPkgMan           int64         `json:"KLPKG_PKG_MAN,omitempty"`
+	KlpkgPlatform         int64         `json:"KLPKG_PLATFORM,omitempty"`
+	KlpkgPrdType          int64         `json:"KLPKG_PRD_TYPE,omitempty"`
+	KlpkgType             int64         `json:"KLPKG_TYPE,omitempty"`
+	BPkgPrereqAllowed     bool          `json:"bPkgPrereqAllowed,omitempty"`
 	NPatchGlbID           *KlpkgNpiSize `json:"nPatchGlbId,omitempty"`
-	NPatchLcid            *int64        `json:"nPatchLcid,omitempty"`
+	NPatchLcid            int64         `json:"nPatchLcid,omitempty"`
 }
 
 type Klpkg struct {
-	Type  *string `json:"type,omitempty"`
-	Value *string `json:"value,omitempty"`
+	Type  string `json:"type,omitempty"`
+	Value string `json:"value,omitempty"`
 }
 
 //	Get packages information.
@@ -567,10 +567,10 @@ type RebootOptionsEx struct {
 }
 
 type OptionsEx struct {
-	KlpkgRoptsAskForRebootPeriodMin *int64  `json:"KLPKG_ROPTS_ASK_FOR_REBOOT_PERIOD_MIN,omitempty"`
-	KlpkgRoptsAskRebootMsgtext      *string `json:"KLPKG_ROPTS_ASK_REBOOT_MSGTEXT,omitempty"`
-	KlpkgRoptsForceAppsClosed       *bool   `json:"KLPKG_ROPTS_FORCE_APPS_CLOSED,omitempty"`
-	KlpkgRoptsForceRebootTimeMin    *int64  `json:"KLPKG_ROPTS_FORCE_REBOOT_TIME_MIN,omitempty"`
+	KlpkgRoptsAskForRebootPeriodMin int64  `json:"KLPKG_ROPTS_ASK_FOR_REBOOT_PERIOD_MIN,omitempty"`
+	KlpkgRoptsAskRebootMsgtext      string `json:"KLPKG_ROPTS_ASK_REBOOT_MSGTEXT,omitempty"`
+	KlpkgRoptsForceAppsClosed       bool   `json:"KLPKG_ROPTS_FORCE_APPS_CLOSED,omitempty"`
+	KlpkgRoptsForceRebootTimeMin    int64  `json:"KLPKG_ROPTS_FORCE_REBOOT_TIME_MIN,omitempty"`
 }
 
 //	Get reboot options.
@@ -605,23 +605,23 @@ type UserEULAS struct {
 }
 
 type UserEULA struct {
-	Type          *string        `json:"type,omitempty"`
+	Type          string         `json:"type,omitempty"`
 	UserEULAValue *UserEULAValue `json:"value,omitempty"`
 }
 
 type UserEULAValue struct {
 	KlpkgEULATextParams *KlpkgEULA `json:"KLPKG_EULA_TEXT_PARAMS,omitempty"`
 	KlpkgEULAUid        *KlpkgEULA `json:"KLPKG_EULA_UID,omitempty"`
-	KlpkgLangTag        *string    `json:"KLPKG_LANG_TAG,omitempty"`
-	BEULAAccepted       *bool      `json:"bEulaAccepted,omitempty"`
-	NAgreementType      *int64     `json:"nAgreementType,omitempty"`
-	NEULADBID           *int64     `json:"nEulaDbId,omitempty"`
-	NLCID               *int64     `json:"nLCID,omitempty"`
+	KlpkgLangTag        string     `json:"KLPKG_LANG_TAG,omitempty"`
+	BEULAAccepted       bool       `json:"bEulaAccepted,omitempty"`
+	NAgreementType      int64      `json:"nAgreementType,omitempty"`
+	NEULADBID           int64      `json:"nEulaDbId,omitempty"`
+	NLCID               int64      `json:"nLCID,omitempty"`
 }
 
 type KlpkgEULA struct {
-	Type  *string `json:"type,omitempty"`
-	Value *string `json:"value,omitempty"`
+	Type  string `json:"type,omitempty"`
+	Value string `json:"value,omitempty"`
 }
 
 //	Request user agreements related to user packages, registered on current VS.
@@ -726,13 +726,13 @@ func (pa *PackagesApi) ReadPkgCfgFile(ctx context.Context, nPackageId int64, wst
 
 //NewPackage struct using in PackagesApi.RecordNewPackage and PackagesApi.RecordNewPackage2
 type NewPackage struct {
-	WstrPackageName         *string `json:"wstrPackageName,omitempty"`
-	WstrFileID              *string `json:"wstrFileId,omitempty"`
-	WstrFolder              *string `json:"wstrFolder,omitempty"`
-	WstrProductName         *string `json:"wstrProductName,omitempty"`
-	WstrProductVersion      *string `json:"wstrProductVersion,omitempty"`
-	WstrProductDisplName    *string `json:"wstrProductDisplName,omitempty"`
-	WstrProductDisplVersion *string `json:"wstrProductDisplVersion,omitempty"`
+	WstrPackageName         string `json:"wstrPackageName,omitempty"`
+	WstrFileID              string `json:"wstrFileId,omitempty"`
+	WstrFolder              string `json:"wstrFolder,omitempty"`
+	WstrProductName         string `json:"wstrProductName,omitempty"`
+	WstrProductVersion      string `json:"wstrProductVersion,omitempty"`
+	WstrProductDisplName    string `json:"wstrProductDisplName,omitempty"`
+	WstrProductDisplVersion string `json:"wstrProductDisplVersion,omitempty"`
 }
 
 //	Creates a package with the default settings based on the product,
@@ -829,7 +829,7 @@ func (pa *PackagesApi) RemovePackage(ctx context.Context, nPackageId int64) ([]b
 
 //RemovePackageResult struct using in PackagesApi.RemovePackage2
 type RemovePackageResult struct {
-	BResult *bool       `json:"bResult,omitempty"`
+	BResult bool        `json:"bResult,omitempty"`
 	PTasks  interface{} `json:"pTasks"` //TODO?
 }
 
@@ -1003,9 +1003,9 @@ func (pa *PackagesApi) WriteKpdProfileString(ctx context.Context, nPackageId int
 
 //PkgCFGFileParams struct using in PackagesApi.WritePkgCfgFile
 type PkgCFGFileParams struct {
-	NPackageID   *int64  `json:"nPackageId,omitempty"`
-	WstrFileName *string `json:"wstrFileName,omitempty"`
-	PData        *string `json:"pData,omitempty"`
+	NPackageID   int64  `json:"nPackageId,omitempty"`
+	WstrFileName string `json:"wstrFileName,omitempty"`
+	PData        string `json:"pData,omitempty"`
 }
 
 //	Write package configuration file.

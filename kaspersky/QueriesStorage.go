@@ -108,33 +108,33 @@ type QueryParams struct {
 
 type QueryParamVal struct {
 	KlqrsQueryData *KlqrsQueryData `json:"KLQRS_QUERY_DATA,omitempty"`
-	KlqrsQueryGUID *string         `json:"KLQRS_QUERY_GUID,omitempty"`
-	KlqrsQueryType *int64          `json:"KLQRS_QUERY_TYPE,omitempty"`
+	KlqrsQueryGUID string          `json:"KLQRS_QUERY_GUID,omitempty"`
+	KlqrsQueryType int64           `json:"KLQRS_QUERY_TYPE,omitempty"`
 }
 
 type KlqrsQueryData struct {
-	Type  *string              `json:"type,omitempty"`
+	Type  string               `json:"type,omitempty"`
 	Value *KLQRSQUERYDATAValue `json:"value,omitempty"`
 }
 
 type KLQRSQUERYDATAValue struct {
-	Name                   *string       `json:"Name,omitempty"`
-	PredefinedID           *string       `json:"PredefinedID,omitempty"`
+	Name                   string        `json:"Name,omitempty"`
+	PredefinedID           string        `json:"PredefinedID,omitempty"`
 	NetInfoPageSettings    *PageSettings `json:"NetInfoPageSettings,omitempty"`
 	NetInfoExPageSettings  *PageSettings `json:"NetInfoExPageSettings,omitempty"`
 	ProtectionPageSettings *PageSettings `json:"ProtectionPageSettings,omitempty"`
-	Query                  *string       `json:"Query,omitempty"`
+	Query                  string        `json:"Query,omitempty"`
 }
 
 type PageSettings struct {
-	Type  *string            `json:"type,omitempty"`
+	Type  string             `json:"type,omitempty"`
 	Value *PageSettingsValue `json:"value,omitempty"`
 }
 
 type PageSettingsValue struct {
-	Query          *string `json:"Query,omitempty"`
-	StatusID       *int64  `json:"StatusId,omitempty"`
-	FoundLastNDays *int64  `json:"FoundLastNDays,omitempty"`
+	Query          string `json:"Query,omitempty"`
+	StatusID       int64  `json:"StatusId,omitempty"`
+	FoundLastNDays int64  `json:"FoundLastNDays,omitempty"`
 }
 
 //	Acquire query param by id.

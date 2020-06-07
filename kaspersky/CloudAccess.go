@@ -49,7 +49,7 @@ type Credentials struct {
 	//	║    2 ║ Microsoft Azure     ║
 	//	║    3 ║ Non cloud host      ║
 	//	╚══════╩═════════════════════╝
-	EnCloudType *int64 `json:"enCloudType,omitempty"`
+	EnCloudType int64 `json:"enCloudType,omitempty"`
 
 	//PKeyPair Cloud authentication credentials. (paramParams, mandatory)
 	//AWS: Not supported Azure:
@@ -58,21 +58,21 @@ type Credentials struct {
 
 type PKeyPair struct {
 	//Subscription ID (paramString, mandatory if there is "AZURE_APP_ID")
-	ClientID *string `json:"CLIENT_ID,omitempty"`
+	ClientID string `json:"CLIENT_ID,omitempty"`
 
 	//Application ID (paramString, mandatory if there is "CLIENT_SECRET")
-	AzureAppID *string `json:"AZURE_APP_ID,omitempty"`
+	AzureAppID string `json:"AZURE_APP_ID,omitempty"`
 
 	//UTF-8 encoded Application authentication key string encrypted with KLCSPWD::ProtectDataGlobally
 	//(or KLCSPWD::ProtectDataLocally), (paramBinary, optional)
-	ClientSecret *string `json:"CLIENT_SECRET,omitempty"`
+	ClientSecret string `json:"CLIENT_SECRET,omitempty"`
 
 	//Storage account name (paramString, mandatory if there is "AZURE_STORAGE_KEY")
-	AzureStorageName *string `json:"AZURE_STORAGE_NAME,omitempty"`
+	AzureStorageName string `json:"AZURE_STORAGE_NAME,omitempty"`
 
 	//UTF-8 encoded Storage account key string encrypted with KLCSPWD::ProtectDataGlobally
 	//(or KLCSPWD::ProtectDataLocally), (paramBinary, optional)
-	AzureStorageKey *string `json:"AZURE_STORAGE_KEY,omitempty"`
+	AzureStorageKey string `json:"AZURE_STORAGE_KEY,omitempty"`
 }
 
 //	Verify credentials.
@@ -101,10 +101,10 @@ func (ca *CloudAccess) VerifyCredentials(ctx context.Context, params Credentials
 //KeyPairAccess struct
 type KeyPairAccess struct {
 	//Access for pcloud device discovery
-	BAllowScanning *bool `json:"bAllowScanning,omitempty"`
+	BAllowScanning bool `json:"bAllowScanning,omitempty"`
 
 	//Access for remote deployment
-	BAllowDeployment *bool `json:"bAllowDeployment,omitempty"`
+	BAllowDeployment bool `json:"bAllowDeployment,omitempty"`
 }
 
 //	Check key-pair access

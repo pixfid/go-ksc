@@ -305,9 +305,9 @@ func (pl *Policy) ExportPolicy(ctx context.Context, lPolicy int64) (*PxgValStr, 
 
 //PolicyBlob struct
 type PolicyBlob struct {
-	LGroup *int64 `json:"lGroup,omitempty"`
+	LGroup int64 `json:"lGroup,omitempty"`
 	//	PData raw []byte data of policy base64 encoded
-	PData *string `json:"pData,omitempty"`
+	PData string `json:"pData,omitempty"`
 }
 
 //	Import policy from blob.

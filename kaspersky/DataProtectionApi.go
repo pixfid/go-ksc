@@ -80,12 +80,12 @@ func (dpa *DataProtectionApi) CheckPasswordSplPpc(ctx context.Context, szwPasswo
 }
 
 type ToProtectData struct {
-	SzwHostID *string `json:"szwHostId,omitempty"`
-	PData     *string `json:"pData,omitempty"`
+	SzwHostID string `json:"szwHostId,omitempty"`
+	PData     string `json:"pData,omitempty"`
 }
 
 type ProtectedData struct {
-	PDataProtected *string `json:"pDataProtected,omitempty"`
+	PDataProtected string `json:"pDataProtected,omitempty"`
 }
 
 //	Protects sensitive data to store in SettingsStorage or local task.

@@ -66,16 +66,16 @@ type TrafficRestrictions struct {
 }
 
 type TrafficPRestrictions struct {
-	TrfmRestrFromHour  int64   `json:"TRFM_RESTR_FROM_HOUR"`
-	TrfmRestrFromMin   int64   `json:"TRFM_RESTR_FROM_MIN"`
-	TrfmRestrIp4High   *string `json:"TRFM_RESTR_IP4_HIGH"`
-	TrfmRestrIp4Low    *string `json:"TRFM_RESTR_IP4_LOW"`
-	TrfmRestrIp4Mask   *string `json:"TRFM_RESTR_IP4_MASK,omitempty"`
-	TrfmRestrIp4Subnet *string `json:"TRFM_RESTR_IP4_SUBNET,omitempty"`
-	TrfmRestrLimit     int64   `json:"TRFM_RESTR_LIMIT"`
-	TrfmRestrTimeLimit int64   `json:"TRFM_RESTR_TIME_LIMIT"`
-	TrfmRestrToHour    int64   `json:"TRFM_RESTR_TO_HOUR"`
-	TrfmRestrToMin     int64   `json:"TRFM_RESTR_TO_MIN"`
+	TrfmRestrFromHour  int64  `json:"TRFM_RESTR_FROM_HOUR"`
+	TrfmRestrFromMin   int64  `json:"TRFM_RESTR_FROM_MIN"`
+	TrfmRestrIp4High   string `json:"TRFM_RESTR_IP4_HIGH"`
+	TrfmRestrIp4Low    string `json:"TRFM_RESTR_IP4_LOW"`
+	TrfmRestrIp4Mask   string `json:"TRFM_RESTR_IP4_MASK,omitempty"`
+	TrfmRestrIp4Subnet string `json:"TRFM_RESTR_IP4_SUBNET,omitempty"`
+	TrfmRestrLimit     int64  `json:"TRFM_RESTR_LIMIT"`
+	TrfmRestrTimeLimit int64  `json:"TRFM_RESTR_TIME_LIMIT"`
+	TrfmRestrToHour    int64  `json:"TRFM_RESTR_TO_HOUR"`
+	TrfmRestrToMin     int64  `json:"TRFM_RESTR_TO_MIN"`
 }
 
 //

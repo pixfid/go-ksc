@@ -40,7 +40,7 @@ import (
 type SmsQueue service
 
 type SQParams struct {
-	WstrBody    *string  `json:"wstrBody,omitempty"`
+	WstrBody    string   `json:"wstrBody,omitempty"`
 	PRecipients []string `json:"pRecipients"`
 }
 
@@ -83,7 +83,7 @@ func (sq *SmsQueue) Clear(ctx context.Context) ([]byte, error) {
 
 //	SQCParams struct
 type SQCParams struct {
-	NRequestID  *int64   `json:"nRequestId,omitempty"`
+	NRequestID  int64    `json:"nRequestId,omitempty"`
 	PRecipients []string `json:"pRecipients"`
 }
 

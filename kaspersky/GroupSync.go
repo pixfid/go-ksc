@@ -41,10 +41,10 @@ type GroupSync service
 
 //NSyncInfoParams struct using in GroupSync.GetSyncHostsInfo
 type NSyncInfoParams struct {
-	NSync             *int64           `json:"nSync,omitempty"`
+	NSync             int64            `json:"nSync,omitempty"`
 	ArrFieldsToReturn []string         `json:"arrFieldsToReturn"`
 	ArrFieldsToOrder  *[]FieldsToOrder `json:"arrFieldsToOrder,omitempty"`
-	NLifeTime         *int64           `json:"nLifeTime,omitempty"`
+	NLifeTime         int64            `json:"nLifeTime,omitempty"`
 }
 
 //	Acquire group synchronization state at target hosts.
@@ -81,7 +81,7 @@ func (gs *GroupSync) GetSyncHostsInfo(ctx context.Context, params NSyncInfoParam
 
 //GroupSyncInfoParams struct
 type GroupSyncInfoParams struct {
-	NSync             *int64   `json:"nSync,omitempty"`
+	NSync             int64    `json:"nSync,omitempty"`
 	ArrFieldsToReturn []string `json:"arrFieldsToReturn"`
 }
 
@@ -91,11 +91,11 @@ type GroupSyncInfo struct {
 }
 
 type SyncInfo struct {
-	GsynCntFailed    *int64 `json:"gsyn_cnt_Failed,omitempty"`
-	GsynCntFinished  *int64 `json:"gsyn_cnt_Finished,omitempty"`
-	GsynCntRunning   *int64 `json:"gsyn_cnt_Running,omitempty"`
-	GsynCntScheduled *int64 `json:"gsyn_cnt_Scheduled,omitempty"`
-	GsynCntFullCount *int64 `json:"gsyn_cnt_FullCount,omitempty"`
+	GsynCntFailed    int64 `json:"gsyn_cnt_Failed,omitempty"`
+	GsynCntFinished  int64 `json:"gsyn_cnt_Finished,omitempty"`
+	GsynCntRunning   int64 `json:"gsyn_cnt_Running,omitempty"`
+	GsynCntScheduled int64 `json:"gsyn_cnt_Scheduled,omitempty"`
+	GsynCntFullCount int64 `json:"gsyn_cnt_FullCount,omitempty"`
 }
 
 //	Acquire group synchronization properties.

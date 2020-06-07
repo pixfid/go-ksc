@@ -49,14 +49,14 @@ type NetworkListFileInfo struct {
 //PPInfo (params) container
 type PPInfo struct {
 	//Host name. (see "strHostName" attribute from Quarantine, Backup, TIF lists)
-	StrHostName *string `json:"strHostName,omitempty"`
+	StrHostName string `json:"strHostName,omitempty"`
 
 	//Name of the network list.
-	StrID *string `json:"strId,omitempty"`
+	StrID string `json:"strId,omitempty"`
 
 	//Id of an item on the host.
 	//(see "strId" attribute from Quarantine, Backup, TIF lists)
-	StrListName *string `json:"strListName,omitempty"`
+	StrListName string `json:"strListName,omitempty"`
 }
 
 //	Acquire info about specified file from specified network list.

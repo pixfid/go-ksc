@@ -45,19 +45,19 @@ type VServerStatistic struct {
 
 type VSStatistic struct {
 	KlvsrvCreated   *Klvsrv       `json:"KLVSRV_CREATED,omitempty"`
-	KlvsrvGroups    *int64        `json:"KLVSRV_GROUPS,omitempty"`
-	KlvsrvHosts     *int64        `json:"KLVSRV_HOSTS,omitempty"`
+	KlvsrvGroups    int64         `json:"KLVSRV_GROUPS,omitempty"`
+	KlvsrvHosts     int64         `json:"KLVSRV_HOSTS,omitempty"`
 	KlvsrvLicenses  []interface{} `json:"KLVSRV_LICENSES"`
-	KlvsrvMdmios    *int64        `json:"KLVSRV_MDMIOS,omitempty"`
-	KlvsrvMobilies  *int64        `json:"KLVSRV_MOBILIES,omitempty"`
+	KlvsrvMdmios    int64         `json:"KLVSRV_MDMIOS,omitempty"`
+	KlvsrvMobilies  int64         `json:"KLVSRV_MOBILIES,omitempty"`
 	KlvsrvProducts  *Klvsrv       `json:"KLVSRV_PRODUCTS,omitempty"`
 	KlvsrvProducts2 *Klvsrv       `json:"KLVSRV_PRODUCTS_2,omitempty"`
-	KlvsrvUsers     *int64        `json:"KLVSRV_USERS,omitempty"`
+	KlvsrvUsers     int64         `json:"KLVSRV_USERS,omitempty"`
 }
 
 type Klvsrv struct {
-	Type  *string `json:"type,omitempty"`
-	Value *string `json:"value"`
+	Type  string `json:"type,omitempty"`
+	Value string `json:"value"`
 }
 
 //Acquire info on virtual server.

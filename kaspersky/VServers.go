@@ -70,47 +70,47 @@ type VServer struct {
 	KlvsrvCreated *KlvsrvCreated `json:"KLVSRV_CREATED,omitempty"`
 
 	//Virtual server display name.
-	KlvsrvDN *string `json:"KLVSRV_DN,omitempty"`
+	KlvsrvDN string `json:"KLVSRV_DN,omitempty"`
 
 	//If the specified virtual server is enabled.
-	KlvsrvEnabled *bool `json:"KLVSRV_ENABLED,omitempty"`
+	KlvsrvEnabled bool `json:"KLVSRV_ENABLED,omitempty"`
 
 	//Id of virtual server's group "Managed computers".
-	KlvsrvGroups *int64 `json:"KLVSRV_GROUPS,omitempty"`
+	KlvsrvGroups int64 `json:"KLVSRV_GROUPS,omitempty"`
 
 	//Id of parent group
-	KlvsrvGrp *int64 `json:"KLVSRV_GRP,omitempty"`
+	KlvsrvGrp int64 `json:"KLVSRV_GRP,omitempty"`
 
 	//Host name of the virtual server (See KLHST_WKS_HOSTNAME attribute )
-	KlvsrvHstUid *string `json:"KLVSRV_HST_UID,omitempty"`
+	KlvsrvHstUid string `json:"KLVSRV_HST_UID,omitempty"`
 
 	//Virtual server ID
-	KlvsrvID *int64 `json:"KLVSRV_ID,omitempty"`
+	KlvsrvID int64 `json:"KLVSRV_ID,omitempty"`
 
 	//Allow automatic deployment of license keys from the virtual Server to its devices.
-	KlvsrvLicEnabled *bool `json:"KLVSRV_LIC_ENABLED,omitempty"`
+	KlvsrvLicEnabled bool `json:"KLVSRV_LIC_ENABLED,omitempty"`
 
 	//New managed hosts cannot be added to the VS due to the limitation violation
 	//(see LP_VS_MaxCountOfHosts), read-only attribute.
-	KlvsrvNewHostsProhibited *bool `json:"KLVSRV_NEW_HOSTS_PROHIBITED,omitempty"`
+	KlvsrvNewHostsProhibited bool `json:"KLVSRV_NEW_HOSTS_PROHIBITED,omitempty"`
 
 	//Id of virtual server's group "Master server".
-	KlvsrvSuper *int64 `json:"KLVSRV_SUPER,omitempty"`
+	KlvsrvSuper int64 `json:"KLVSRV_SUPER,omitempty"`
 
 	//Number of managed hosts connected to a VS has already reached 10% of the limit
 	//(see LP_VS_MaxCountOfHosts) , read-only attribute.
-	KlvsrvTooMuchHosts *bool `json:"KLVSRV_TOO_MUCH_HOSTS,omitempty"`
+	KlvsrvTooMuchHosts bool `json:"KLVSRV_TOO_MUCH_HOSTS,omitempty"`
 
 	//Virtual server name - a globally unique string
-	KlvsrvUid *string `json:"KLVSRV_UID,omitempty"`
+	KlvsrvUid string `json:"KLVSRV_UID,omitempty"`
 
 	//Id of virtual server's group "Unassigned computers".
-	KlvsrvUnassigned *int64 `json:"KLVSRV_UNASSIGNED,omitempty"`
+	KlvsrvUnassigned int64 `json:"KLVSRV_UNASSIGNED,omitempty"`
 }
 
 type KlvsrvCreated struct {
-	Type  *string `json:"type,omitempty"`
-	Value *string `json:"value,omitempty"`
+	Type  string `json:"type,omitempty"`
+	Value string `json:"value,omitempty"`
 }
 
 //	Register new virtual server.
@@ -246,34 +246,34 @@ func (vs *VServers) RecallCertAndCloseConnections(ctx context.Context, lVServer 
 
 //UpdateVServerInfoParams struct
 type UpdateVServerInfoParams struct {
-	LVServer *int64  `json:"lVServer,omitempty"`
+	LVServer int64   `json:"lVServer,omitempty"`
 	VSInfo   *VSInfo `json:"pInfo,omitempty"`
 }
 
 //VSInfo struct
 type VSInfo struct {
 	//Virtual server display name.
-	KlvsrvDN *string `json:"KLVSRV_DN,omitempty"`
+	KlvsrvDN string `json:"KLVSRV_DN,omitempty"`
 
 	//If the specified virtual server is enabled.
-	KlvsrvEnabled *bool `json:"KLVSRV_ENABLED,omitempty"`
+	KlvsrvEnabled bool `json:"KLVSRV_ENABLED,omitempty"`
 
 	//Allow automatic deployment of license keys from the virtual Server to its devices.
-	KlvsrvLicEnabled *bool `json:"KLVSRV_LIC_ENABLED,omitempty"`
+	KlvsrvLicEnabled bool `json:"KLVSRV_LIC_ENABLED,omitempty"`
 
 	//Creation time.
 	KlvsrvCreated *KlvsrvCreated `json:"KLVSRV_CREATED,omitempty"`
 
 	//Custom info XML.
-	KlvsrvCustomInfo *string `json:"KLVSRV_CUSTOM_INFO,omitempty"`
+	KlvsrvCustomInfo string `json:"KLVSRV_CUSTOM_INFO,omitempty"`
 
 	//New managed hosts cannot be added to the VS due to the limitation violation
 	//(see LP_VS_MaxCountOfHosts), read-only attribute.
-	KlvsrvNewHostsProhibited *bool `json:"KLVSRV_NEW_HOSTS_PROHIBITED,omitempty"`
+	KlvsrvNewHostsProhibited bool `json:"KLVSRV_NEW_HOSTS_PROHIBITED,omitempty"`
 
 	//Number of managed hosts connected to a VS has already reached 10% of the limit
 	//(see LP_VS_MaxCountOfHosts) , read-only attribute.
-	KlvsrvTooMuchHosts *bool `json:"KLVSRV_TOO_MUCH_HOSTS,omitempty"`
+	KlvsrvTooMuchHosts bool `json:"KLVSRV_TOO_MUCH_HOSTS,omitempty"`
 }
 
 //	Modify virtual server attributes.

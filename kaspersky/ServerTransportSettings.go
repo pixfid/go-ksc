@@ -138,21 +138,21 @@ type CCSettings struct {
 	CERTPub *CERTPub `json:"CERT_PUB,omitempty"`
 
 	//actual endpoint FQDN (from certificate)
-	TrspSettingsFQDN *string `json:"TRSP_SETTINGS_FQDN,omitempty"`
+	TrspSettingsFQDN string `json:"TRSP_SETTINGS_FQDN,omitempty"`
 
 	//is default certificate used ?
-	TrspSettingsIsdefcertused *bool `json:"TRSP_SETTINGS_ISDEFCERTUSED,omitempty"`
+	TrspSettingsIsdefcertused bool `json:"TRSP_SETTINGS_ISDEFCERTUSED,omitempty"`
 
 	//true if port should be opened, false otherwise.
-	TrspSettingsOpenPort *bool `json:"TRSP_SETTINGS_OPEN_PORT,omitempty"`
+	TrspSettingsOpenPort bool `json:"TRSP_SETTINGS_OPEN_PORT,omitempty"`
 
 	//actual enpoint port
-	TrspSettingsPort *int64 `json:"TRSP_SETTINGS_PORT,omitempty"`
+	TrspSettingsPort int64 `json:"TRSP_SETTINGS_PORT,omitempty"`
 }
 
 type CERTPub struct {
-	Type  *string `json:"type,omitempty"`
-	Value *string `json:"value,omitempty"`
+	Type  string `json:"type,omitempty"`
+	Value string `json:"value,omitempty"`
 }
 
 //	GetCurrentConnectionSettings. Returns current connection settings.

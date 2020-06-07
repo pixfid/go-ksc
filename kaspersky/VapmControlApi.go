@@ -184,8 +184,8 @@ type PEULAParams struct {
 }
 
 type PEULAParam struct {
-	StrEULAURL *string `json:"strEULAUrl,omitempty"`
-	StrEULA    *string `json:"strEULA,omitempty"`
+	StrEULAURL string `json:"strEULAUrl,omitempty"`
+	StrEULA    string `json:"strEULA,omitempty"`
 }
 
 //	Requests EULA params.

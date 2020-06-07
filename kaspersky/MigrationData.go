@@ -47,14 +47,14 @@ type KnownProducts struct {
 }
 
 type KnownProductsVal struct {
-	Type            *string          `json:"type,omitempty"`
+	Type            string           `json:"type,omitempty"`
 	KnownProductVal *KnownProductVal `json:"value,omitempty"`
 }
 
 type KnownProductVal struct {
-	KlmigrProductInfoDN      *string `json:"KLMIGR_PRODUCT_INFO_DN,omitempty"`
-	KlmigrProductInfoName    *string `json:"KLMIGR_PRODUCT_INFO_NAME,omitempty"`
-	KlmigrProductInfoVersion *string `json:"KLMIGR_PRODUCT_INFO_VERSION,omitempty"`
+	KlmigrProductInfoDN      string `json:"KLMIGR_PRODUCT_INFO_DN,omitempty"`
+	KlmigrProductInfoName    string `json:"KLMIGR_PRODUCT_INFO_NAME,omitempty"`
+	KlmigrProductInfoVersion string `json:"KLMIGR_PRODUCT_INFO_VERSION,omitempty"`
 }
 
 //	Acquire list of known products for migration.
@@ -108,7 +108,7 @@ type MDExportParams struct {
 //MDPOptions struct
 type MDPOptions struct {
 	//Root group identifier
-	KlmigrRootGroupID *int64 `json:"KLMIGR_ROOT_GROUP_ID,omitempty"`
+	KlmigrRootGroupID int64 `json:"KLMIGR_ROOT_GROUP_ID,omitempty"`
 
 	//Identifiers of report templates
 	KlmigrArrIDReports []int64 `json:"KLMIGR_ARR_ID_REPORTS"`
@@ -123,26 +123,26 @@ type MDPOptions struct {
 	KlmigrArrProductsInfo []KlmigrArrProductsInfo `json:"KLMIGR_ARR_PRODUCTS_INFO"`
 
 	//Skip import of custom roles
-	KlmigrSkipCustomRoles *bool `json:"KLMIGR_SKIP_CUSTOM_ROLES,omitempty"`
+	KlmigrSkipCustomRoles bool `json:"KLMIGR_SKIP_CUSTOM_ROLES,omitempty"`
 
 	//Skip import of internal users and security groups
-	KlmigrSkipUsersGroups *bool `json:"KLMIGR_SKIP_USERS_GROUPS,omitempty"`
+	KlmigrSkipUsersGroups bool `json:"KLMIGR_SKIP_USERS_GROUPS,omitempty"`
 
 	//Skip import of custom application categories
-	KlmigrSkipCustomAppCategories *bool `json:"KLMIGR_SKIP_CUSTOM_APP_CATEGORIES,omitempty"`
+	KlmigrSkipCustomAppCategories bool `json:"KLMIGR_SKIP_CUSTOM_APP_CATEGORIES,omitempty"`
 }
 
 type KlmigrArrProductsInfo struct {
-	Type              *string           `json:"Type,omitempty"`
+	Type              string            `json:"Type,omitempty"`
 	ProductsInfoValue ProductsInfoValue `json:"Value"`
 }
 
 type ProductsInfoValue struct {
 	//Name of product, for which tasks and policies should be exported
-	KlmigrProductInfoName *string `json:"KLMIGR_PRODUCT_INFO_NAME,omitempty"`
+	KlmigrProductInfoName string `json:"KLMIGR_PRODUCT_INFO_NAME,omitempty"`
 
 	//Version of product, for which tasks and policies should be exported
-	KlmigrProductInfoVersion *string `json:"KLMIGR_PRODUCT_INFO_VERSION,omitempty"`
+	KlmigrProductInfoVersion string `json:"KLMIGR_PRODUCT_INFO_VERSION,omitempty"`
 }
 
 //	TODO Fix Request params...

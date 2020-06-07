@@ -87,16 +87,16 @@ type LicenseKeyParams struct {
 }
 
 type PLicKeyData struct {
-	KlinvlicKeyName            *string      `json:"KLINVLIC_KEY_NAME,omitempty"`
-	KlinvlicKeyLiccount        *int64       `json:"KLINVLIC_KEY_LICCOUNT,omitempty"`
+	KlinvlicKeyName            string       `json:"KLINVLIC_KEY_NAME,omitempty"`
+	KlinvlicKeyLiccount        int64        `json:"KLINVLIC_KEY_LICCOUNT,omitempty"`
 	KlinvlicKeyCreation        *KlinvlicKey `json:"KLINVLIC_KEY_CREATION,omitempty"`
 	KlinvlicKeyExpirationlimit *KlinvlicKey `json:"KLINVLIC_KEY_EXPIRATIONLIMIT,omitempty"`
-	KlinvlicKeyInfo            *string      `json:"KLINVLIC_KEY_INFO,omitempty"`
+	KlinvlicKeyInfo            string       `json:"KLINVLIC_KEY_INFO,omitempty"`
 }
 
 type KlinvlicKey struct {
-	Type  *string `json:"type,omitempty"`
-	Value *string `json:"value,omitempty"`
+	Type  string `json:"type,omitempty"`
+	Value string `json:"value,omitempty"`
 }
 
 //	Add a new License Key.
@@ -143,24 +143,24 @@ type LicenseProductParams struct {
 }
 
 type PLicProdData struct {
-	KlinvlicActive *bool           `json:"KLINVLIC_ACTIVE,omitempty"`
-	KlinvlicDesc   *string         `json:"KLINVLIC_DESC,omitempty"`
+	KlinvlicActive bool            `json:"KLINVLIC_ACTIVE,omitempty"`
+	KlinvlicDesc   string          `json:"KLINVLIC_DESC,omitempty"`
 	KlinvlicLikeys []int64         `json:"KLINVLIC_LIKEYS"`
 	KlinvlicMasks  []KlinvlicMasks `json:"KLINVLIC_MASKS,omitempty"`
-	KlinvlicName   *string         `json:"KLINVLIC_NAME,omitempty"`
-	KlinvlicType   *int64          `json:"KLINVLIC_TYPE,omitempty"`
+	KlinvlicName   string          `json:"KLINVLIC_NAME,omitempty"`
+	KlinvlicType   int64           `json:"KLINVLIC_TYPE,omitempty"`
 }
 
 type KlinvlicMasks struct {
-	Type               *string            `json:"type,omitempty"`
+	Type               string             `json:"type,omitempty"`
 	KlinvlicMasksValue KlinvlicMasksValue `json:"value"`
 }
 
 type KlinvlicMasksValue struct {
-	KlinvlicMaskProdDispNameFilter  *string `json:"KLINVLIC_MASK_PROD_DISP_NAME_FILTER,omitempty"`
-	KlinvlicMaskProdDispVerFilter   *string `json:"KLINVLIC_MASK_PROD_DISP_VER_FILTER,omitempty"`
-	KlinvlicMaskProdPublisherFilter *string `json:"KLINVLIC_MASK_PROD_PUBLISHER_FILTER,omitempty"`
-	KlinvlicMaskProdTagValue        *string `json:"KLINVLIC_MASK_PROD_TAG_VALUE,omitempty"`
+	KlinvlicMaskProdDispNameFilter  string `json:"KLINVLIC_MASK_PROD_DISP_NAME_FILTER,omitempty"`
+	KlinvlicMaskProdDispVerFilter   string `json:"KLINVLIC_MASK_PROD_DISP_VER_FILTER,omitempty"`
+	KlinvlicMaskProdPublisherFilter string `json:"KLINVLIC_MASK_PROD_PUBLISHER_FILTER,omitempty"`
+	KlinvlicMaskProdTagValue        string `json:"KLINVLIC_MASK_PROD_TAG_VALUE,omitempty"`
 }
 
 //	Add a new License Product.

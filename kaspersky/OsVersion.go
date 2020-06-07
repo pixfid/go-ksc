@@ -51,18 +51,18 @@ type OSAttributes struct {
 }
 
 type OSAttribute struct {
-	Type             *string           `json:"type,omitempty"`
+	Type             string            `json:"type,omitempty"`
 	OSAttributeValue *OSAttributeValue `json:"value,omitempty"`
 }
 
 type OSAttributeValue struct {
-	KlhstWksCtype         *int64  `json:"KLHST_WKS_CTYPE,omitempty"`
-	KlhstWksOSBuildNumber *int64  `json:"KLHST_WKS_OS_BUILD_NUMBER,omitempty"`
-	KlhstWksOSName        *string `json:"KLHST_WKS_OS_NAME,omitempty"`
-	KlhstWksOSVerMajor    *int64  `json:"KLHST_WKS_OS_VER_MAJOR,omitempty"`
-	KlhstWksOSVerMinor    *int64  `json:"KLHST_WKS_OS_VER_MINOR,omitempty"`
-	KlhstWksPtype         *int64  `json:"KLHST_WKS_PTYPE,omitempty"`
-	KlwnfOSIsServer       *bool   `json:"KLWNF_OS_IS_SERVER,omitempty"`
+	KlhstWksCtype         int64  `json:"KLHST_WKS_CTYPE,omitempty"`
+	KlhstWksOSBuildNumber int64  `json:"KLHST_WKS_OS_BUILD_NUMBER,omitempty"`
+	KlhstWksOSName        string `json:"KLHST_WKS_OS_NAME,omitempty"`
+	KlhstWksOSVerMajor    int64  `json:"KLHST_WKS_OS_VER_MAJOR,omitempty"`
+	KlhstWksOSVerMinor    int64  `json:"KLHST_WKS_OS_VER_MINOR,omitempty"`
+	KlhstWksPtype         int64  `json:"KLHST_WKS_PTYPE,omitempty"`
+	KlwnfOSIsServer       bool   `json:"KLWNF_OS_IS_SERVER,omitempty"`
 }
 
 //	Acquire attributes for specified operating systems.
@@ -104,14 +104,14 @@ type OSRetValS struct {
 }
 
 type OSRetVal struct {
-	Type    *string  `json:"type,omitempty"`
+	Type    string   `json:"type,omitempty"`
 	OSValue *OSValue `json:"value,omitempty"`
 }
 
 type OSValue struct {
-	KlhstWksOSName  *string `json:"KLHST_WKS_OS_NAME,omitempty"`
-	KlwnfOSID       *int64  `json:"KLWNF_OS_ID,omitempty"`
-	KlwnfOSIsServer *bool   `json:"KLWNF_OS_IS_SERVER,omitempty"`
+	KlhstWksOSName  string `json:"KLHST_WKS_OS_NAME,omitempty"`
+	KlwnfOSID       int64  `json:"KLWNF_OS_ID,omitempty"`
+	KlwnfOSIsServer bool   `json:"KLWNF_OS_IS_SERVER,omitempty"`
 }
 
 //	Determine operating system by specified attributes.

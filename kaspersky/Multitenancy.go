@@ -105,10 +105,10 @@ func (m *Multitenancy) GetAuthToken(ctx context.Context) (*PxgValStr, []byte, er
 //VerifyTokenParam struct using in CheckAuthToken
 type VerifyTokenParam struct {
 	//tenant identity
-	WstrTenantID *string `json:"wstrTenantId,omitempty"`
+	WstrTenantID string `json:"wstrTenantId,omitempty"`
 
 	//binary token (see Multitenancy.GetAuthToken)
-	BinToken *string `json:"binToken,omitempty"`
+	BinToken string `json:"binToken,omitempty"`
 }
 
 func (m *Multitenancy) CheckAuthToken(ctx context.Context, params VerifyTokenParam) ([]byte, error) {

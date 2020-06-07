@@ -85,12 +85,12 @@ type KsnSettings struct {
 }
 
 type PSettings struct {
-	KsnproxyEnable                 *bool  `json:"KSNPROXY_ENABLE,omitempty"`
-	KsnproxyEnablePatchManStat     *bool  `json:"KSNPROXY_ENABLE_PATCH_MAN_STAT,omitempty"`
-	KsnproxyKsnType                *int64 `json:"KSNPROXY_KSN_TYPE,omitempty"`
-	KsnproxyTCPPort                *int64 `json:"KSNPROXY_TCP_PORT,omitempty"`
-	KsnproxyUDPPort                *int64 `json:"KSNPROXY_UDP_PORT,omitempty"`
-	KsnproxyUseMasterKsnproxyAsKsn *bool  `json:"KSNPROXY_USE_MASTER_KSNPROXY_AS_KSN,omitempty"`
+	KsnproxyEnable                 bool  `json:"KSNPROXY_ENABLE,omitempty"`
+	KsnproxyEnablePatchManStat     bool  `json:"KSNPROXY_ENABLE_PATCH_MAN_STAT,omitempty"`
+	KsnproxyKsnType                int64 `json:"KSNPROXY_KSN_TYPE,omitempty"`
+	KsnproxyTCPPort                int64 `json:"KSNPROXY_TCP_PORT,omitempty"`
+	KsnproxyUDPPort                int64 `json:"KSNPROXY_UDP_PORT,omitempty"`
+	KsnproxyUseMasterKsnproxyAsKsn bool  `json:"KSNPROXY_USE_MASTER_KSNPROXY_AS_KSN,omitempty"`
 }
 
 //	Returns settings of KsnProxy. May be used on virtual server.

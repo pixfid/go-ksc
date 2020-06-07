@@ -54,22 +54,22 @@ type ActionStateResult struct {
 }
 
 type PStateData struct {
-	KlblagErrorCode    *int64  `json:"KLBLAG_ERROR_CODE,omitempty"`
-	KlblagErrorFname   *string `json:"KLBLAG_ERROR_FNAME,omitempty"`
-	KlblagErrorLnumber *int64  `json:"KLBLAG_ERROR_LNUMBER,omitempty"`
-	KlblagErrorModule  *string `json:"KLBLAG_ERROR_MODULE,omitempty"`
-	KlblagErrorMsg     *string `json:"KLBLAG_ERROR_MSG,omitempty"`
-	KlblagErrorSubcode *int64  `json:"KLBLAG_ERROR_SUBCODE,omitempty"`
+	KlblagErrorCode    int64  `json:"KLBLAG_ERROR_CODE,omitempty"`
+	KlblagErrorFname   string `json:"KLBLAG_ERROR_FNAME,omitempty"`
+	KlblagErrorLnumber int64  `json:"KLBLAG_ERROR_LNUMBER,omitempty"`
+	KlblagErrorModule  string `json:"KLBLAG_ERROR_MODULE,omitempty"`
+	KlblagErrorMsg     string `json:"KLBLAG_ERROR_MSG,omitempty"`
+	KlblagErrorSubcode int64  `json:"KLBLAG_ERROR_SUBCODE,omitempty"`
 	//
-	KlrptOutputChart  *string            `json:"KLRPT_OUTPUT_CHART,omitempty"`
-	KlrptOutputFile   *string            `json:"KLRPT_OUTPUT_FILE,omitempty"`
+	KlrptOutputChart  string             `json:"KLRPT_OUTPUT_CHART,omitempty"`
+	KlrptOutputFile   string             `json:"KLRPT_OUTPUT_FILE,omitempty"`
 	KlrptOutputFormat *KlrptOutputFormat `json:"KLRPT_OUTPUT_FORMAT,omitempty"`
-	KlrptOutputLogo   *string            `json:"KLRPT_OUTPUT_LOGO,omitempty"`
+	KlrptOutputLogo   string             `json:"KLRPT_OUTPUT_LOGO,omitempty"`
 	//
-	LastActionResult *string `json:"LastActionResult,omitempty"`
+	LastActionResult string `json:"LastActionResult,omitempty"`
 	//
 	EventLogs        []string          `json:"EventLogs"`
-	HostDN           *string           `json:"HostDN,omitempty"`
+	HostDN           string            `json:"HostDN,omitempty"`
 	InstallationLogs *InstallationLogs `json:"InstallationLogs,omitempty"`
 	Products         *Products         `json:"Products,omitempty"`
 	WuaLogs          []string          `json:"WuaLogs"`

@@ -82,13 +82,13 @@ type PNetworkInfo struct {
 
 type PNetwork struct {
 	//Enable automatic Update agents assignment to this network flag
-	NlantwkEnableAutoua *bool `json:"NLANTWK_ENABLE_AUTOUA,omitempty"`
+	NlantwkEnableAutoua bool `json:"NLANTWK_ENABLE_AUTOUA,omitempty"`
 
 	//Network id
-	NlantwkNetworkID *int64 `json:"NLANTWK_NETWORK_ID,omitempty"`
+	NlantwkNetworkID int64 `json:"NLANTWK_NETWORK_ID,omitempty"`
 
 	//Human-readable network name
-	NlantwkNetworkName *string `json:"NLANTWK_NETWORK_NAME,omitempty"`
+	NlantwkNetworkName string `json:"NLANTWK_NETWORK_NAME,omitempty"`
 }
 
 //	Get NLA-defined network info.
@@ -119,7 +119,7 @@ type PNetworkList struct {
 
 //PNetworks struct
 type PNetworks struct {
-	Type  *string   `json:"type,omitempty"`
+	Type  string    `json:"type,omitempty"`
 	Value *PNetwork `json:"value,omitempty"`
 }
 
@@ -143,7 +143,6 @@ func (ndn *NlaDefinedNetworks) GetNetworksList(ctx context.Context) (*PNetworkLi
 //
 //	Parameters:
 //	- pNetwork	Network definition, see NLA-defined networks for values description.
-//TODO params
 func (ndn *NlaDefinedNetworks) SetNetworkInfo(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

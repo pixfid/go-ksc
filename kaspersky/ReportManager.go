@@ -311,7 +311,7 @@ func (rm *ReportManager) RequestStatisticsData(ctx context.Context, params inter
 
 type ExecuteReportParams struct {
 	//report id
-	LReportID *int64 `json:"lReportId,omitempty"`
+	LReportID int64 `json:"lReportId,omitempty"`
 
 	//options (see description below)
 	POptions *RPOptions `json:"pOptions,omitempty"`
@@ -319,25 +319,25 @@ type ExecuteReportParams struct {
 
 type RPOptions struct {
 	//Locale identifier
-	RptLOCLocale *int64 `json:"RPT_LOC_LOCALE,omitempty"`
+	RptLOCLocale int64 `json:"RPT_LOC_LOCALE,omitempty"`
 
 	//If the flag is set, values of datetime fields will be in UTC,
 	//YYYY-MM-DDTHH:mm:ss format. Otherwise, time zone will be taken into account,
 	//long date format.
-	KlrptUseUTC *bool `json:"KLRPT_USE_UTC,omitempty"`
+	KlrptUseUTC bool `json:"KLRPT_USE_UTC,omitempty"`
 
 	//Description of report output format
 	KlrptOutputFormat *KlrptOutputFormat `json:"KLRPT_OUTPUT_FORMAT,omitempty"`
 }
 
 type KlrptOutputFormat struct {
-	Type  *string                 `json:"type,omitempty"`
+	Type  string                  `json:"type,omitempty"`
 	Value *KlrptOutputFormatValue `json:"value,omitempty"`
 }
 
 type KlrptOutputFormatValue struct {
 	//Maximum number of records in details table
-	KlrptMaxRecordsDetails *int64 `json:"KLRPT_MAX_RECORDS_DETAILS,omitempty"`
+	KlrptMaxRecordsDetails int64 `json:"KLRPT_MAX_RECORDS_DETAILS,omitempty"`
 
 	//Report target format, see Types of report target format
 	//	╔═══════╦══════════╦═════════════╗
@@ -347,7 +347,7 @@ type KlrptOutputFormatValue struct {
 	//	║     1 ║ RTT_CSV  ║ CSV         ║
 	//	║     2 ║ RTT_JSON ║ JSON        ║
 	//	╚═══════╩══════════╩═════════════╝
-	KlrptTargetType *int64 `json:"KLRPT_TARGET_TYPE,omitempty"`
+	KlrptTargetType int64 `json:"KLRPT_TARGET_TYPE,omitempty"`
 
 	//Report target XML format, see Types of report XML target format
 	//	╔═══════╦═════════════╦════════════════════╗
@@ -358,11 +358,11 @@ type KlrptOutputFormatValue struct {
 	//	║     1 ║ RTT_XLS     ║ XLS                ║
 	//	║     2 ║ RTT_PDF     ║ PDF                ║
 	//	╚═══════╩═════════════╩════════════════════╝
-	KlrptXMLTargetType *int64 `json:"KLRPT_XML_TARGET_TYPE,omitempty"`
+	KlrptXMLTargetType int64 `json:"KLRPT_XML_TARGET_TYPE,omitempty"`
 
 	//PDF report document orientation
 
-	KlrptPDFLandscape *bool `json:"KLRPT_PDF_LANDSCAPE,omitempty"`
+	KlrptPDFLandscape bool `json:"KLRPT_PDF_LANDSCAPE,omitempty"`
 
 	//Page size for PDF report document, see Sizes of report PDF document
 	//	╔═══════╦═════════════╦═════════════════════╗
@@ -399,7 +399,7 @@ type KlrptOutputFormatValue struct {
 	//	║    28 ║ Letter11x17 ║ 11x17 format        ║
 	//	║    29 ║ Ledger      ║ Ledger format       ║
 	//	╚═══════╩═════════════╩═════════════════════╝
-	KlrptPDFPageSize *int64 `json:"KLRPT_PDF_PAGE_SIZE,omitempty"`
+	KlrptPDFPageSize int64 `json:"KLRPT_PDF_PAGE_SIZE,omitempty"`
 }
 
 //	Execute report.
@@ -468,22 +468,22 @@ func (rm *ReportManager) ExecuteReportAsyncCancel(ctx context.Context, strReques
 }
 
 type ReportData struct {
-	PXMLData      *string     `json:"pXmlData,omitempty"`
-	NDataSizeREST *int64      `json:"nDataSizeRest,omitempty"`
+	PXMLData      string      `json:"pXmlData,omitempty"`
+	NDataSizeREST int64       `json:"nDataSizeRest,omitempty"`
 	PChartData    *PChartData `json:"pChartData,omitempty"`
 }
 
 type PChartData struct {
 	KlrptChartData         []KlrptChartDatum `json:"KLRPT_CHART_DATA"`
-	KlrptChartDataDesc     *string           `json:"KLRPT_CHART_DATA_DESC,omitempty"`
-	KlrptChartLgndDesc     *string           `json:"KLRPT_CHART_LGND_DESC,omitempty"`
+	KlrptChartDataDesc     string            `json:"KLRPT_CHART_DATA_DESC,omitempty"`
+	KlrptChartLgndDesc     string            `json:"KLRPT_CHART_LGND_DESC,omitempty"`
 	KlrptChartSeries       []string          `json:"KLRPT_CHART_SERIES"`
 	KlrptChartSeriesColors []int64           `json:"KLRPT_CHART_SERIES_COLORS"`
 }
 
 type KlrptChartDatum struct {
-	Type  *string `json:"type,omitempty"`
-	Value *Value  `json:"value,omitempty"`
+	Type  string `json:"type,omitempty"`
+	Value *Value `json:"value,omitempty"`
 }
 
 type Value struct {
@@ -537,8 +537,8 @@ type ChartDataParams struct {
 }
 
 type CDPOptions struct {
-	RptChartWidth  *int64 `json:"RPT_CHART_WIDTH,omitempty"`
-	RptChartHeight *int64 `json:"RPT_CHART_HEIGHT,omitempty"`
+	RptChartWidth  int64 `json:"RPT_CHART_WIDTH,omitempty"`
+	RptChartHeight int64 `json:"RPT_CHART_HEIGHT,omitempty"`
 }
 
 //	Create image with chart.

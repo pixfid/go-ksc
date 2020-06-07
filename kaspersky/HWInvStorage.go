@@ -199,13 +199,13 @@ func (hw *HWInvStorage) GetHWInvObject(ctx context.Context, nObjId int64) ([]byt
 //HWInvStorageResponse struct
 type HWInvStorageResponse struct {
 	//Data chunk
-	PChunk *string `json:"pChunk,omitempty"`
+	PChunk string `json:"pChunk,omitempty"`
 
 	//Actual size of retrieved data
-	NGotDataSize *int64 `json:"nGotDataSize,omitempty"`
+	NGotDataSize int64 `json:"nGotDataSize,omitempty"`
 
 	//Size of not retrieved data
-	NDataSizeREST *int64 `json:"nDataSizeRest,omitempty"`
+	NDataSizeREST int64 `json:"nDataSizeRest,omitempty"`
 }
 
 //	Get exported data. Call this method until nDataSizeRest is not zero.

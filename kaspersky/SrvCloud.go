@@ -68,6 +68,16 @@ func (sc *SrvCloud) GetCloudsInfo(ctx context.Context, params Null) ([]byte, err
 	return raw, err
 }
 
+type CloudHostInfoParams struct {
+	//Internal id of the cloud host (see KLHST_CLOUD_HOST_BINID).
+	PCloudHostBinID string `json:"pCloudHostBinId,omitempty"`
+
+	//collection of cloud host attribute names that need to return see List of server cloud host attributes..
+	PFields []string `json:"pFields"`
+	//For additional options. Reserved.
+	PParams Null `json:"pParams"`
+}
+
 //	Returns properties of the cloud host.
 //
 //	Parameters:
@@ -88,4 +98,17 @@ func (sc *SrvCloud) GetCloudsInfo(ctx context.Context, params Null) ([]byte, err
 //	List of server cloud host attributes.
 //	SrvView List of server cloud hosts
 //	SrvView List of server cloud containers
-//TODO func (sc *SrvCloud) GetCloudHostInfo(ctx context.Context, params Params, params Params, params Null})
+func (sc *SrvCloud) GetCloudHostInfo(ctx context.Context, params CloudHostInfoParams) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", sc.client.Server+"/api/v1.0/SrvCloud.GetCloudHostInfo", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := sc.client.Do(ctx, request, nil)
+	return raw, err
+}

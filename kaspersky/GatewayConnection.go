@@ -40,17 +40,17 @@ type GatewayConnection service
 
 type GCParams struct {
 	PLocations        []PLocation `json:"pLocations"`
-	SzwTargetHostName *string     `json:"szwTargetHostName,omitempty"`
-	NTargetPort       *int64      `json:"nTargetPort,omitempty"`
+	SzwTargetHostName string      `json:"szwTargetHostName,omitempty"`
+	NTargetPort       int64       `json:"nTargetPort,omitempty"`
 }
 
 type PLocation struct {
-	Type           *string      `json:"type,omitempty"`
+	Type           string       `json:"type,omitempty"`
 	PLocationValue *NagLocation `json:"value,omitempty"`
 }
 
 type AuthKey struct {
-	WstrAuthKey *string `json:"wstrAuthKey,omitempty"`
+	WstrAuthKey string `json:"wstrAuthKey,omitempty"`
 }
 
 //	Create gateway connection.

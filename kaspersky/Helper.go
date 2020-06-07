@@ -39,22 +39,22 @@ func withContext(ctx context.Context, req *http.Request) *http.Request {
 
 //	PxgValInt struct
 type PxgValInt struct {
-	Int *int64 `json:"PxgRetVal"`
+	Int int64 `json:"PxgRetVal"`
 }
 
 //	PxgValStr struct
 type PxgValStr struct {
-	Str *string `json:"PxgRetVal"`
+	Str string `json:"PxgRetVal"`
 }
 
 //	PxgValBool struct
 type PxgValBool struct {
-	Bool *bool `json:"PxgRetVal"`
+	Bool bool `json:"PxgRetVal"`
 }
 
 //	pPngData struct
 type PPngData struct {
-	PngData *string `json:"pPngData"`
+	PngData string `json:"pPngData"`
 }
 
 //	PxgValArrayOfInt struct
@@ -69,7 +69,7 @@ type PxgValArrayOfString struct {
 
 //	RequestID struct
 type RequestID struct {
-	StrRequestID *string `json:"strRequestId,omitempty"`
+	StrRequestID string `json:"strRequestId,omitempty"`
 }
 
 //	PxgValCIFIL struct
@@ -80,11 +80,11 @@ type PxgRetValCIFIL struct {
 	CIFILValue *CIFILValue `json:"value"`
 }
 type CIFILValue struct {
-	InifileDetectMsi      *string `json:"INIFILE_DETECT_MSI"`
-	InifileDetectRegistry *string `json:"INIFILE_DETECT_REGISTRY"`
-	InifileFileName       *string `json:"INIFILE_FILE_NAME"`
-	InifileProductName    *string `json:"INIFILE_PRODUCT_NAME"`
-	InifileType           *string `json:"INIFILE_TYPE"`
+	InifileDetectMsi      string `json:"INIFILE_DETECT_MSI"`
+	InifileDetectRegistry string `json:"INIFILE_DETECT_REGISTRY"`
+	InifileFileName       string `json:"INIFILE_FILE_NAME"`
+	InifileProductName    string `json:"INIFILE_PRODUCT_NAME"`
+	InifileType           string `json:"INIFILE_TYPE"`
 }
 
 //	PxgRetError struct
@@ -93,22 +93,22 @@ type PxgRetError struct {
 }
 
 type Error struct {
-	Code    *int64  `json:"code,omitempty"`
-	File    *string `json:"file,omitempty"`
-	Line    *int64  `json:"line,omitempty"`
-	Message *string `json:"message,omitempty"`
-	Module  *string `json:"module,omitempty"`
+	Code    int64  `json:"code,omitempty"`
+	File    string `json:"file,omitempty"`
+	Line    int64  `json:"line,omitempty"`
+	Message string `json:"message,omitempty"`
+	Module  string `json:"module,omitempty"`
 }
 
 func (e Error) Error() string {
-	return fmt.Sprintf(`Module: %s, Code: %d, Message: %s`, *e.Module, *e.Code, *e.Message)
+	return fmt.Sprintf(`Module: %s, Code: %d, Message: %s`, e.Module, e.Code, e.Message)
 }
 
 //	AsyncAccessor struct
 type AsyncAccessor struct {
-	StrAccessor       *string            `json:"strAccessor,omitempty"`
+	StrAccessor       string             `json:"strAccessor,omitempty"`
 	PFailedSlavesInfo *PFailedSlavesInfo `json:"pFailedSlavesInfo,omitempty"`
-	PxgRetVal         *int64             `json:"PxgRetVal,omitempty"`
+	PxgRetVal         int64              `json:"PxgRetVal,omitempty"`
 }
 type PFailedSlavesInfo struct {
 	KlgrpFailedSlavesParams []interface{} `json:"KLGRP_FAILED_SLAVES_PARAMS"`
@@ -116,13 +116,13 @@ type PFailedSlavesInfo struct {
 
 //	Accessor struct
 type Accessor struct {
-	StrAccessor *string `json:"strAccessor"`
-	PxgRetVal   *int64  `json:"PxgRetVal"`
+	StrAccessor string `json:"strAccessor"`
+	PxgRetVal   int64  `json:"PxgRetVal"`
 }
 
 //WActionGUID struct
 type WActionGUID struct {
-	WstrActionGUID *string `json:"wstrActionGuid"`
+	WstrActionGUID string `json:"wstrActionGuid"`
 }
 
 const (
@@ -147,20 +147,20 @@ type OrderValue struct {
 }
 
 type WstrIteratorID struct {
-	WstrIteratorID *string `json:"wstrIteratorId"`
+	WstrIteratorID string `json:"wstrIteratorId"`
 }
 
 type StrIteratorId struct {
-	StrIteratorID *string `json:"strIteratorId"`
+	StrIteratorID string `json:"strIteratorId"`
 }
 
 type StrHostIteratorId struct {
-	StrHostIteratorId *string `json:"strHostIteratorId"`
+	StrHostIteratorId string `json:"strHostIteratorId"`
 }
 
 type PFilter struct {
-	KlevpRfc2254Filter         *string `json:"KLEVP_RFC2254_FILTER"`
-	KlevpEventRiseTimeLastDays *int64  `json:"KLEVP_EVENT_RISE_TIME_LAST_DAYS"`
+	KlevpRfc2254Filter         string `json:"KLEVP_RFC2254_FILTER"`
+	KlevpEventRiseTimeLastDays int64  `json:"KLEVP_EVENT_RISE_TIME_LAST_DAYS"`
 }
 
 // Bool is a helper routine that allocates a new bool value

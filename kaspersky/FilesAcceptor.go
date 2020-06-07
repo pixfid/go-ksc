@@ -57,8 +57,8 @@ func (di *FilesAcceptor) CancelFileUpload(ctx context.Context, wstrFileId string
 }
 
 type FileUploadParams struct {
-	WstrFileID    *string `json:"wstrFileId,omitempty"`
-	WstrUploadURL *string `json:"wstrUploadURL,omitempty"`
+	WstrFileID    string `json:"wstrFileId,omitempty"`
+	WstrUploadURL string `json:"wstrUploadURL,omitempty"`
 }
 
 //	Prepare server to accept file.

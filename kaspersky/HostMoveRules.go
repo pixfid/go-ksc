@@ -91,7 +91,7 @@ func (hmr *HostMoveRules) DeleteRule(ctx context.Context, nRule int64) ([]byte, 
 //ExecuteRulesParams struct using in HostMoveRules.ExecuteRulesNow
 type ExecuteRulesParams struct {
 	//group to launch rules for
-	NGroupID *int64 `json:"nGroupId,omitempty"`
+	NGroupID int64 `json:"nGroupId,omitempty"`
 
 	//array of rule ids(int64)
 	PRules []int64 `json:"pRules"`
@@ -99,7 +99,7 @@ type ExecuteRulesParams struct {
 	//		|- nOptions	(int64) possible values:
 	//			- 0 - rule is processed for hosts that need it
 	//			- 1 - execute even if rule has been already executed
-	NOptions *string `json:"nOptions,omitempty"`
+	NOptions string `json:"nOptions,omitempty"`
 }
 
 //	Execute rules now.
@@ -134,41 +134,41 @@ type HMoveRule struct {
 }
 
 type HMRule struct {
-	KLHSTMRAutoDelete *bool           `json:"KLHST_MR_AutoDelete,omitempty"`
+	KLHSTMRAutoDelete bool            `json:"KLHST_MR_AutoDelete,omitempty"`
 	KLHSTMRCustom     *KLHSTMRCustom  `json:"KLHST_MR_Custom,omitempty"`
-	KlhstMrDN         *string         `json:"KLHST_MR_DN,omitempty"`
-	KLHSTMREnabled    *bool           `json:"KLHST_MR_Enabled,omitempty"`
-	KLHSTMRGroup      *int64          `json:"KLHST_MR_Group,omitempty"`
-	KLHSTMROptions    *int64          `json:"KLHST_MR_Options,omitempty"`
-	KLHSTMRQuery      *string         `json:"KLHST_MR_Query,omitempty"`
+	KlhstMrDN         string          `json:"KLHST_MR_DN,omitempty"`
+	KLHSTMREnabled    bool            `json:"KLHST_MR_Enabled,omitempty"`
+	KLHSTMRGroup      int64           `json:"KLHST_MR_Group,omitempty"`
+	KLHSTMROptions    int64           `json:"KLHST_MR_Options,omitempty"`
+	KLHSTMRQuery      string          `json:"KLHST_MR_Query,omitempty"`
 	KlhstMrSpecial    *KlhstMrSpecial `json:"KLHST_MR_SPECIAL,omitempty"`
-	KLHSTMRType       *int64          `json:"KLHST_MR_Type,omitempty"`
+	KLHSTMRType       int64           `json:"KLHST_MR_Type,omitempty"`
 }
 
 type KLHSTMRCustom struct {
-	Type  *string             `json:"type,omitempty"`
+	Type  string              `json:"type,omitempty"`
 	Value *KLHSTMRCustomValue `json:"value,omitempty"`
 }
 
 type KLHSTMRCustomValue struct {
-	HruleFromUnassigned    *bool   `json:"HRULE_FROM_UNASSIGNED,omitempty"`
-	HruleIncludeChildOu    *bool   `json:"HRULE_INCLUDE_CHILD_OU,omitempty"`
-	HruleNagentStatus      *int64  `json:"HRULE_NAGENT_STATUS,omitempty"`
+	HruleFromUnassigned    bool    `json:"HRULE_FROM_UNASSIGNED,omitempty"`
+	HruleIncludeChildOu    bool    `json:"HRULE_INCLUDE_CHILD_OU,omitempty"`
+	HruleNagentStatus      int64   `json:"HRULE_NAGENT_STATUS,omitempty"`
 	HruleOSVersions        []int64 `json:"HRULE_OS_VERSIONS"`
-	HruleQueryPart1        *string `json:"HRULE_QUERY_PART1,omitempty"`
-	HruleQueryPart3        *string `json:"HRULE_QUERY_PART3,omitempty"`
-	HruleQueryPart4        *string `json:"HRULE_QUERY_PART4,omitempty"`
-	HruleUserCERTInstalled *int64  `json:"HRULE_USER_CERT_INSTALLED,omitempty"`
-	KlhstAdGroup           *int64  `json:"KLHST_AD_GROUP,omitempty"`
-	KlhstAdOrgunit         *int64  `json:"KLHST_AD_ORGUNIT,omitempty"`
-	OSBuild                *int64  `json:"OsBuild,omitempty"`
-	OSBuildCond            *int64  `json:"OsBuildCond,omitempty"`
-	OSRelease              *int64  `json:"OsRelease,omitempty"`
-	OSReleaseCond          *int64  `json:"OsReleaseCond,omitempty"`
+	HruleQueryPart1        string  `json:"HRULE_QUERY_PART1,omitempty"`
+	HruleQueryPart3        string  `json:"HRULE_QUERY_PART3,omitempty"`
+	HruleQueryPart4        string  `json:"HRULE_QUERY_PART4,omitempty"`
+	HruleUserCERTInstalled int64   `json:"HRULE_USER_CERT_INSTALLED,omitempty"`
+	KlhstAdGroup           int64   `json:"KLHST_AD_GROUP,omitempty"`
+	KlhstAdOrgunit         int64   `json:"KLHST_AD_ORGUNIT,omitempty"`
+	OSBuild                int64   `json:"OsBuild,omitempty"`
+	OSBuildCond            int64   `json:"OsBuildCond,omitempty"`
+	OSRelease              int64   `json:"OsRelease,omitempty"`
+	OSReleaseCond          int64   `json:"OsReleaseCond,omitempty"`
 }
 
 type KlhstMrSpecial struct {
-	Type  *string              `json:"type,omitempty"`
+	Type  string               `json:"type,omitempty"`
 	Value *KLHSTMRSPECIALValue `json:"value,omitempty"`
 }
 
@@ -177,15 +177,15 @@ type KLHSTMRSPECIALValue struct {
 }
 
 type KlhstMrSpecialAd struct {
-	Type  *string                `json:"type,omitempty"`
+	Type  string                 `json:"type,omitempty"`
 	Value *KLHSTMRSPECIALADValue `json:"value,omitempty"`
 }
 
 type KLHSTMRSPECIALADValue struct {
-	KlhstMrSpecialAdCreateSubgroups *bool  `json:"KLHST_MR_SPECIAL_AD_CREATE_SUBGROUPS,omitempty"`
-	KlhstMrSpecialAdDeleteSubgroups *bool  `json:"KLHST_MR_SPECIAL_AD_DELETE_SUBGROUPS,omitempty"`
-	KlhstMrSpecialAdMoveToSubgroups *bool  `json:"KLHST_MR_SPECIAL_AD_MOVE_TO_SUBGROUPS,omitempty"`
-	KlhstMrSpecialAdOuid            *int64 `json:"KLHST_MR_SPECIAL_AD_OUID,omitempty"`
+	KlhstMrSpecialAdCreateSubgroups bool  `json:"KLHST_MR_SPECIAL_AD_CREATE_SUBGROUPS,omitempty"`
+	KlhstMrSpecialAdDeleteSubgroups bool  `json:"KLHST_MR_SPECIAL_AD_DELETE_SUBGROUPS,omitempty"`
+	KlhstMrSpecialAdMoveToSubgroups bool  `json:"KLHST_MR_SPECIAL_AD_MOVE_TO_SUBGROUPS,omitempty"`
+	KlhstMrSpecialAdOuid            int64 `json:"KLHST_MR_SPECIAL_AD_OUID,omitempty"`
 }
 
 type HMoveRules struct {
@@ -193,7 +193,7 @@ type HMoveRules struct {
 }
 
 type HMRules struct {
-	Type   *string `json:"type,omitempty"`
+	Type   string  `json:"type,omitempty"`
 	HMRule *HMRule `json:"value,omitempty"`
 }
 

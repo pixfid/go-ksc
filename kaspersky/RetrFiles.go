@@ -51,13 +51,13 @@ type FilesRequestElement struct {
 
 type FilesRequestValue struct {
 	//primary index relative path in lowercase, e.g. "index/u1313g.xml";
-	Index *string `json:"Index,omitempty"`
+	Index string `json:"Index,omitempty"`
 
 	//updatable file component id in UPPERCASE, e.g. "KSC";
-	CompID *string `json:"CompId,omitempty"`
+	CompID string `json:"CompId,omitempty"`
 
 	//file name without path in lowercase, e.g. "kscdat.zip".
-	FileName *string `json:"FileName,omitempty"`
+	FileName string `json:"FileName,omitempty"`
 }
 
 //	Synchronously requests information about some retranslated files.

@@ -39,14 +39,14 @@ import (
 type AppCtrlApi service
 
 type ExeFileInfoParams struct {
-	SzwHostID  *string     `json:"szwHostId,omitempty"`
-	LFileID    *int64      `json:"lFileId,omitempty"`
+	SzwHostID  string      `json:"szwHostId,omitempty"`
+	LFileID    int64       `json:"lFileId,omitempty"`
 	ExePFilter *ExePFilter `json:"pFilter,omitempty"`
 }
 
 type ExePFilter struct {
-	FileID   *string `json:"FILE_ID,omitempty"`
-	FileName *string `json:"FILE_NAME,omitempty"`
+	FileID   string `json:"FILE_ID,omitempty"`
+	FileName string `json:"FILE_NAME,omitempty"`
 }
 
 //	Get data about instances of the execution file on the host.

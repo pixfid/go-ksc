@@ -165,16 +165,16 @@ type AddIncidentsParams struct {
 
 //	PData struct
 type PData struct {
-	KlincdtSeverity  *int64    `json:"KLINCDT_SEVERITY"`
+	KlincdtSeverity  int64     `json:"KLINCDT_SEVERITY"`
 	KlincdtAdded     *DateTime `json:"KLINCDT_ADDED"`
-	KlincdtBody      *string   `json:"KLINCDT_BODY"`
-	KlhstWksHostname *string   `json:"KLHST_WKS_HOSTNAME"`
-	KlhstuserID      *int64    `json:"KLHSTUSER_ID"`
+	KlincdtBody      string    `json:"KLINCDT_BODY"`
+	KlhstWksHostname string    `json:"KLHST_WKS_HOSTNAME"`
+	KlhstuserID      int64     `json:"KLHSTUSER_ID"`
 }
 
 type DateTime struct {
-	Type  *string `json:"type"`
-	Value *string `json:"value"`
+	Type  string `json:"type"`
+	Value string `json:"value"`
 }
 
 func (hg *HostGroup) AddIncident(ctx context.Context, params AddIncidentsParams) (*PxgValStr, []byte, error) {
@@ -399,10 +399,10 @@ func (hg *HostGroup) FindHostsAsyncGetAccessor(ctx context.Context, strRequestId
 }
 
 type FindIncidentsParams struct {
-	StrFilter       *string          `json:"strFilter,omitempty"`
+	StrFilter       string           `json:"strFilter,omitempty"`
 	PFieldsToReturn *[]string        `json:"pFieldsToReturn,omitempty"`
 	PFieldsToOrder  *[]FieldsToOrder `json:"pFieldsToOrder,omitempty"`
-	LMaxLifeTime    *int64           `json:"lMaxLifeTime,omitempty"`
+	LMaxLifeTime    int64            `json:"lMaxLifeTime,omitempty"`
 }
 
 //	Find incident by filter string.
@@ -555,25 +555,25 @@ type ProductComponents struct {
 }
 
 type ProductComponentsArray struct {
-	Type             *string           `json:"type,omitempty"`
+	Type             string            `json:"type,omitempty"`
 	ProductComponent *ProductComponent `json:"value,omitempty"`
 }
 
 type ProductComponent struct {
-	KlhstPrcstComponentDN      *string                     `json:"KLHST_PRCST_COMPONENT_DN,omitempty"`
+	KlhstPrcstComponentDN      string                      `json:"KLHST_PRCST_COMPONENT_DN,omitempty"`
 	KlhstPrcstComponentID      *KlhstPrcstComponentID      `json:"KLHST_PRCST_COMPONENT_ID,omitempty"`
-	KlhstPrcstComponentStatus  *int64                      `json:"KLHST_PRCST_COMPONENT_STATUS,omitempty"`
+	KlhstPrcstComponentStatus  int64                       `json:"KLHST_PRCST_COMPONENT_STATUS,omitempty"`
 	KlhstPrcstComponentVersion *KlhstPrcstComponentVersion `json:"KLHST_PRCST_COMPONENT_VERSION,omitempty"`
 }
 
 type KlhstPrcstComponentID struct {
-	Type  *string `json:"type,omitempty"`
-	Value *string `json:"value,omitempty"`
+	Type  string `json:"type,omitempty"`
+	Value string `json:"value,omitempty"`
 }
 
 type KlhstPrcstComponentVersion struct {
-	Type  *string `json:"type,omitempty"`
-	Value *int64  `json:"value,omitempty"`
+	Type  string `json:"type,omitempty"`
+	Value int64  `json:"value,omitempty"`
 }
 
 //	Return array of product components for specified host and product.

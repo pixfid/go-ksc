@@ -47,25 +47,25 @@ type PUserData struct {
 
 type PUser struct {
 	//User name
-	KlsplUserName *string `json:"KLSPL_USER_NAME"`
+	KlsplUserName string `json:"KLSPL_USER_NAME"`
 
 	//Encrypted user password
-	KlsplUserPwdEncrypted *string `json:"KLSPL_USER_PWD_ENCRYPTED,omitempty"`
+	KlsplUserPwdEncrypted string `json:"KLSPL_USER_PWD_ENCRYPTED,omitempty"`
 
 	//User full name
-	KlsplUserFullName *string `json:"KLSPL_USER_FULL_NAME"`
+	KlsplUserFullName string `json:"KLSPL_USER_FULL_NAME"`
 
 	//User description
-	KlsplUserDescription *string `json:"KLSPL_USER_DESCRIPTION"`
+	KlsplUserDescription string `json:"KLSPL_USER_DESCRIPTION"`
 
 	//User mail
-	KlsplUserMail *string `json:"KLSPL_USER_MAIL"`
+	KlsplUserMail string `json:"KLSPL_USER_MAIL"`
 
 	//User phone
-	KlsplUserPhone *string `json:"KLSPL_USER_PHONE"`
+	KlsplUserPhone string `json:"KLSPL_USER_PHONE"`
 
 	//User account is enabled if true.
-	KlsplUserEnabled *bool `json:"KLSPL_USER_ENABLED"`
+	KlsplUserEnabled bool `json:"KLSPL_USER_ENABLED"`
 }
 
 //	Add new user.
@@ -130,15 +130,15 @@ func (sp *SecurityPolicy) UpdateUser(ctx context.Context, lUserId int, params PU
 
 //UserExInfo struct
 type UserInfo struct {
-	LUserID   *int64 `json:"lUserId,omitempty"`
-	PxgRetVal *bool  `json:"PxgRetVal,omitempty"`
+	LUserID   int64 `json:"lUserId,omitempty"`
+	PxgRetVal bool  `json:"PxgRetVal,omitempty"`
 }
 
 type UserInfoEx struct {
-	LUserID         *int64      `json:"lUserId,omitempty"`
-	NType           *int64      `json:"nType,omitempty"`
+	LUserID         int64       `json:"lUserId,omitempty"`
+	NType           int64       `json:"nType,omitempty"`
 	BinSystemID     interface{} `json:"binSystemId"`
-	WstrDisplayName *string     `json:"wstrDisplayName,omitempty"`
+	WstrDisplayName string      `json:"wstrDisplayName,omitempty"`
 }
 
 //	Acquire current internal user id.
@@ -192,34 +192,34 @@ type UsersInfo struct {
 }
 
 type UsersInfoArray struct {
-	Type           *string         `json:"type,omitempty"`
+	Type           string          `json:"type,omitempty"`
 	UserProperties *UserProperties `json:"value,omitempty"`
 }
 
 type UserProperties struct {
 	//User description
-	KlsplUserDescription *string `json:"KLSPL_USER_DESCRIPTION,omitempty"`
+	KlsplUserDescription string `json:"KLSPL_USER_DESCRIPTION,omitempty"`
 
 	//User account is enabled if true.
-	KlsplUserEnabled *bool `json:"KLSPL_USER_ENABLED,omitempty"`
+	KlsplUserEnabled bool `json:"KLSPL_USER_ENABLED,omitempty"`
 
 	//User full name
-	KlsplUserFullName *string `json:"KLSPL_USER_FULL_NAME,omitempty"`
+	KlsplUserFullName string `json:"KLSPL_USER_FULL_NAME,omitempty"`
 
 	//User id
-	KlsplUserID *int64 `json:"KLSPL_USER_ID,omitempty"`
+	KlsplUserID int64 `json:"KLSPL_USER_ID,omitempty"`
 
 	//User mail
-	KlsplUserMail *string `json:"KLSPL_USER_MAIL,omitempty"`
+	KlsplUserMail string `json:"KLSPL_USER_MAIL,omitempty"`
 
 	//User name
-	KlsplUserName *string `json:"KLSPL_USER_NAME,omitempty"`
+	KlsplUserName string `json:"KLSPL_USER_NAME,omitempty"`
 
 	//User phone
-	KlsplUserPhone *string `json:"KLSPL_USER_PHONE,omitempty"`
+	KlsplUserPhone string `json:"KLSPL_USER_PHONE,omitempty"`
 
 	//User account is based on UIS. For hosted server only
-	KlsplUserUis *bool `json:"KLSPL_USER_UIS,omitempty"`
+	KlsplUserUis bool `json:"KLSPL_USER_UIS,omitempty"`
 }
 
 //	Acquire existing user properties.
@@ -277,40 +277,40 @@ func (sp *SecurityPolicy) SavePerUserData(ctx context.Context, params interface{
 }
 
 type TrusteeParam struct {
-	LlTrusteeID  *int64        `json:"llTrusteeId,omitempty"`
+	LlTrusteeID  int64         `json:"llTrusteeId,omitempty"`
 	PTrusteeData *PTrusteeData `json:"pUserData,omitempty"`
 }
 
 type PTrusteeData struct {
 	//User id
-	KlsplUserID *int64 `json:"KLSPL_USER_ID,omitempty"`
+	KlsplUserID int64 `json:"KLSPL_USER_ID,omitempty"`
 
 	//User name
-	KlsplUserName *string `json:"KLSPL_USER_NAME,omitempty"`
+	KlsplUserName string `json:"KLSPL_USER_NAME,omitempty"`
 
 	//Plain text user password. Obsolete
-	KlsplUserPwd *string `json:"KLSPL_USER_PWD,omitempty"`
+	KlsplUserPwd string `json:"KLSPL_USER_PWD,omitempty"`
 
 	//Encrypted user password
-	KlsplUserPwdEncrypted *string `json:"KLSPL_USER_PWD_ENCRYPTED,omitempty"`
+	KlsplUserPwdEncrypted string `json:"KLSPL_USER_PWD_ENCRYPTED,omitempty"`
 
 	//User full name
-	KlsplUserFullName *string `json:"KLSPL_USER_FULL_NAME,omitempty"`
+	KlsplUserFullName string `json:"KLSPL_USER_FULL_NAME,omitempty"`
 
 	//User description
-	KlsplUserDescription *string `json:"KLSPL_USER_DESCRIPTION,omitempty"`
+	KlsplUserDescription string `json:"KLSPL_USER_DESCRIPTION,omitempty"`
 
 	//User mail
-	KlsplUserMail *string `json:"KLSPL_USER_MAIL,omitempty"`
+	KlsplUserMail string `json:"KLSPL_USER_MAIL,omitempty"`
 
 	//User phone
-	KlsplUserPhone *string `json:"KLSPL_USER_PHONE,omitempty"`
+	KlsplUserPhone string `json:"KLSPL_USER_PHONE,omitempty"`
 
 	//User account is enabled if true
-	KlsplUserEnabled *bool `json:"KLSPL_USER_ENABLED,omitempty"`
+	KlsplUserEnabled bool `json:"KLSPL_USER_ENABLED,omitempty"`
 
 	//User account is based on UIS. For hosted server only
-	KlsplUserUis *bool `json:"KLSPL_USER_UIS,omitempty"`
+	KlsplUserUis bool `json:"KLSPL_USER_UIS,omitempty"`
 }
 
 //	Modifies properties of the specified user (either internal user or user and group from Active Directory);

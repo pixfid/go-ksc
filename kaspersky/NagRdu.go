@@ -162,16 +162,16 @@ type CurrentHostState struct {
 
 type CHState struct {
 	EventLogs        []string          `json:"EventLogs"`
-	HostDN           *string           `json:"HostDN,omitempty"`
+	HostDN           string            `json:"HostDN,omitempty"`
 	InstallationLogs *InstallationLogs `json:"InstallationLogs,omitempty"`
-	LastActionResult *string           `json:"LastActionResult,omitempty"`
+	LastActionResult string            `json:"LastActionResult,omitempty"`
 	Products         *Products         `json:"Products,omitempty"`
 	WuaLogs          []string          `json:"WuaLogs"`
 	WuaLogsWin10     []string          `json:"WuaLogs_Win10"`
 }
 
 type InstallationLogs struct {
-	Type  *string                `json:"type,omitempty"`
+	Type  string                 `json:"type,omitempty"`
 	Value *InstallationLogsValue `json:"value,omitempty"`
 }
 
@@ -181,41 +181,41 @@ type InstallationLogsValue struct {
 }
 
 type Products struct {
-	Type  *string                  `json:"type,omitempty"`
+	Type  string                   `json:"type,omitempty"`
 	Value map[string]ProductsValue `json:"value,omitempty"`
 }
 
 type ProductsValue struct {
-	Type  *string          `json:"type,omitempty"`
+	Type  string           `json:"type,omitempty"`
 	Value *ValueValueClass `json:"value,omitempty"`
 }
 
 type ValueValueClass struct {
-	ComponentName          *string       `json:"ComponentName,omitempty"`
-	DiagLog                *string       `json:"DiagLog,omitempty"`
-	DiagTrace              *string       `json:"DiagTrace,omitempty"`
-	InstallPath            *string       `json:"InstallPath,omitempty"`
+	ComponentName          string        `json:"ComponentName,omitempty"`
+	DiagLog                string        `json:"DiagLog,omitempty"`
+	DiagTrace              string        `json:"DiagTrace,omitempty"`
+	InstallPath            string        `json:"InstallPath,omitempty"`
 	ProdDumps              []interface{} `json:"ProdDumps"`
-	ProdProps              *int64        `json:"ProdProps,omitempty"`
-	ProductBuild           *string       `json:"ProductBuild,omitempty"`
-	ProductDN              *string       `json:"ProductDN,omitempty"`
-	ProductName            *string       `json:"ProductName,omitempty"`
-	ProductRunning         *bool         `json:"ProductRunning,omitempty"`
-	ProductVersion         *string       `json:"ProductVersion,omitempty"`
+	ProdProps              int64         `json:"ProdProps,omitempty"`
+	ProductBuild           string        `json:"ProductBuild,omitempty"`
+	ProductDN              string        `json:"ProductDN,omitempty"`
+	ProductName            string        `json:"ProductName,omitempty"`
+	ProductRunning         bool          `json:"ProductRunning,omitempty"`
+	ProductVersion         string        `json:"ProductVersion,omitempty"`
 	TraceFile              []string      `json:"TraceFile"`
-	TraceLevel             *int64        `json:"TraceLevel,omitempty"`
-	TraceLimitDef          *int64        `json:"TraceLimitDef,omitempty"`
-	TraceLimitMax          *int64        `json:"TraceLimitMax,omitempty"`
-	TraceLimitMin          *int64        `json:"TraceLimitMin,omitempty"`
-	TraceRotatedEnable     *int64        `json:"TraceRotatedEnable,omitempty"`
-	TraceRotatedFileCount  *int64        `json:"TraceRotatedFileCount,omitempty"`
-	TraceRotatedFileSizeMB *int64        `json:"TraceRotatedFileSizeMb,omitempty"`
-	TraceRotatedLevel      *int64        `json:"TraceRotatedLevel,omitempty"`
+	TraceLevel             int64         `json:"TraceLevel,omitempty"`
+	TraceLimitDef          int64         `json:"TraceLimitDef,omitempty"`
+	TraceLimitMax          int64         `json:"TraceLimitMax,omitempty"`
+	TraceLimitMin          int64         `json:"TraceLimitMin,omitempty"`
+	TraceRotatedEnable     int64         `json:"TraceRotatedEnable,omitempty"`
+	TraceRotatedFileCount  int64         `json:"TraceRotatedFileCount,omitempty"`
+	TraceRotatedFileSizeMB int64         `json:"TraceRotatedFileSizeMb,omitempty"`
+	TraceRotatedLevel      int64         `json:"TraceRotatedLevel,omitempty"`
 	XperfTraceFile         []interface{} `json:"XperfTraceFile"`
-	XperfTraceLevel        *int64        `json:"XperfTraceLevel,omitempty"`
-	XperfTraceSize         *int64        `json:"XperfTraceSize,omitempty"`
-	XperfTraceState        *int64        `json:"XperfTraceState,omitempty"`
-	XperfTraceType         *int64        `json:"XperfTraceType,omitempty"`
+	XperfTraceLevel        int64         `json:"XperfTraceLevel,omitempty"`
+	XperfTraceSize         int64         `json:"XperfTraceSize,omitempty"`
+	XperfTraceState        int64         `json:"XperfTraceState,omitempty"`
+	XperfTraceType         int64         `json:"XperfTraceType,omitempty"`
 }
 
 //	Asynchronously create and download dump for specific process

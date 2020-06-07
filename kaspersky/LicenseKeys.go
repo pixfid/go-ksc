@@ -270,11 +270,11 @@ type AdjustKeyParams struct {
 //	PKData struct
 type PKData struct {
 	// KllicsrvAutokey License serial number (mandatory)
-	KllicsrvAutokey *bool `json:"KLLICSRV_AUTOKEY,omitempty"`
+	KllicsrvAutokey bool `json:"KLLICSRV_AUTOKEY,omitempty"`
 
 	// KllicSerial true if license can be deployed automatically,
 	// false otherwise (string, mandatory)
-	KllicSerial *string `json:"KLLIC_SERIAL,omitempty"`
+	KllicSerial string `json:"KLLIC_SERIAL,omitempty"`
 }
 
 //	Adjust adm. server's license attributes.
@@ -308,13 +308,13 @@ type SaasKeyParam struct {
 
 	//true if license should be installed in place of active one,
 	//false to install it as a reserved one.
-	BAsCurrent *bool `json:"bAsCurrent,omitempty"`
+	BAsCurrent bool `json:"bAsCurrent,omitempty"`
 }
 
 type SaasKeyPInData struct {
 	//serial number of the license being checked, mandatory (paramString).
 	//The license must be placed in the license store before installing (see InstallKey).
-	KllicSerial *string `json:"KLLIC_SERIAL,omitempty"`
+	KllicSerial string `json:"KLLIC_SERIAL,omitempty"`
 }
 
 //	Install an adm. server's license.

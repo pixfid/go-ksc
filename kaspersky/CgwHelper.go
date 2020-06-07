@@ -63,12 +63,12 @@ type NagentLocation struct {
 }
 
 type NagLocation struct {
-	GwLOCHostID          *string `json:"GwLocHostId,omitempty"`
-	GwLOCIndirect        *bool   `json:"GwLocIndirect,omitempty"`
-	GwLOCLocation        *string `json:"GwLocLocation,omitempty"`
-	GwLOCSignUDP         *bool   `json:"GwLocSignUdp,omitempty"`
-	GwLOCTargetComponent *string `json:"GwLocTargetComponent,omitempty"`
-	GwLOCUseCompression  *bool   `json:"GwLocUseCompression,omitempty"`
+	GwLOCHostID          string `json:"GwLocHostId,omitempty"`
+	GwLOCIndirect        bool   `json:"GwLocIndirect,omitempty"`
+	GwLOCLocation        string `json:"GwLocLocation,omitempty"`
+	GwLOCSignUDP         bool   `json:"GwLocSignUdp,omitempty"`
+	GwLOCTargetComponent string `json:"GwLocTargetComponent,omitempty"`
+	GwLOCUseCompression  bool   `json:"GwLocUseCompression,omitempty"`
 }
 
 //	Retrieves Nagent Location by host name.

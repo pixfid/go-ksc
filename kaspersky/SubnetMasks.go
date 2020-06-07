@@ -47,21 +47,21 @@ type PSubnetSettings struct {
 
 type PSubnetSettingsClass struct {
 	// NIPAddress - Subnet IP
-	NIPAddress *int64 `json:"nIpAddress,omitempty"`
+	NIPAddress int64 `json:"nIpAddress,omitempty"`
 	// NMask - Subnet mask
-	NMask *int64 `json:"nMask,omitempty"`
+	NMask int64 `json:"nMask,omitempty"`
 	//	WstrSubnetName - Subnet name (not empty, maximum 100 unicode symbols)
-	WstrSubnetName *string `json:"wstrSubnetName,omitempty"`
+	WstrSubnetName string `json:"wstrSubnetName,omitempty"`
 	//	WstrComment - Subnet description
-	WstrComment *string `json:"wstrComment,omitempty"`
+	WstrComment string `json:"wstrComment,omitempty"`
 }
 
 //PSubnetSettings struct - Subnet parameters
 type PSubnetUpdateSettings struct {
 	// NIPAddress - Subnet IP
-	NIPAddress *int64 `json:"nIpAddress,omitempty"`
+	NIPAddress int64 `json:"nIpAddress,omitempty"`
 	// NMask - Subnet mask
-	NMask *int64 `json:"nMask,omitempty"`
+	NMask int64 `json:"nMask,omitempty"`
 	//	PSubnetSettings - new subnet parameters (params).
 	//	If parameters not exist - it will be ignored
 	PSubnetUpdateSettingsClass *PSubnetUpdateSettingsClass `json:"pSubnetSettings,omitempty"`
@@ -69,9 +69,9 @@ type PSubnetUpdateSettings struct {
 
 type PSubnetUpdateSettingsClass struct {
 	//	WstrSubnetName - Subnet name (not empty, maximum 100 unicode symbols)
-	WstrSubnetName *string `json:"wstrSubnetName,omitempty"`
+	WstrSubnetName string `json:"wstrSubnetName,omitempty"`
 	//	WstrComment - Subnet description
-	WstrComment *string `json:"wstrComment,omitempty"`
+	WstrComment string `json:"wstrComment,omitempty"`
 }
 
 //	Create subnet for current server with specific parameters

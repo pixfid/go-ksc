@@ -93,12 +93,12 @@ type SaasKeyParam2 struct {
 	SaasPKeyInfo *SaasPKeyInfo `json:"pKeyInfo,omitempty"`
 
 	//true to check it as an active one, false to check it as a reserved one.
-	BAsCurrent *bool `json:"bAsCurrent,omitempty"`
+	BAsCurrent bool `json:"bAsCurrent,omitempty"`
 }
 
 type SaasPKeyInfo struct {
 	//License key serial number
-	KllicSerial *string `json:"KLLIC_SERIAL,omitempty"`
+	KllicSerial string `json:"KLLIC_SERIAL,omitempty"`
 }
 
 //	Check if license is suitable for being used by the adm. server.

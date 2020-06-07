@@ -333,7 +333,7 @@ func (ah *AdHosts) GetOU(ctx context.Context, params OUAttributesParams) (*OUAtt
 //UpdateOUParams struct
 type UpdateOUParams struct {
 	//Id of organization unit
-	IDOU *int64 `json:"idOU,omitempty"`
+	IDOU int64 `json:"idOU,omitempty"`
 
 	//Params
 	OUPData *OUPData `json:"pData,omitempty"`
@@ -342,7 +342,7 @@ type UpdateOUParams struct {
 //OUPData struct
 type OUPData struct {
 	//If scanning of this OU is allowed
-	AdhstEnableAdScan *bool `json:"adhst_enable_ad_scan,omitempty"`
+	AdhstEnableAdScan bool `json:"adhst_enable_ad_scan,omitempty"`
 }
 
 //	Updates OU properties.

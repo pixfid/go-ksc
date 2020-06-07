@@ -103,13 +103,13 @@ type FinalDeleteParams struct {
 }
 
 type ArrObject struct {
-	Type  *string  `json:"type,omitempty"`
+	Type  string   `json:"type,omitempty"`
 	Value *FDValue `json:"value,omitempty"`
 }
 
 type FDValue struct {
-	ObjID   *int64 `json:"nObjId,omitempty"`
-	ObjType *int64 `json:"nObjType,omitempty"`
+	ObjID   int64 `json:"nObjId,omitempty"`
+	ObjType int64 `json:"nObjType,omitempty"`
 }
 
 //	Final delete for deleted objects.
