@@ -135,6 +135,14 @@ func ParseTime(dt string) string {
 	return t.Format(RUS)
 }
 
+type PFindParams struct {
+	StrFilter       string          `json:"strFilter,omitempty"`
+	PFieldsToReturn []string        `json:"pFieldsToReturn"`
+	PFieldsToOrder  []FieldsToOrder `json:"pFieldsToOrder,omitempty"`
+	PParams         PParams         `json:"pParams,omitempty"`
+	LMaxLifeTime    int64           `json:"lMaxLifeTime,omitempty"`
+}
+
 //FieldsToOrder struct
 type FieldsToOrder struct {
 	Type       string     `json:"type"`
@@ -201,4 +209,9 @@ func jsonEscape(i string) string {
 	}
 	s := string(b)
 	return s[1 : len(s)-1]
+}
+
+type DateTime struct {
+	Type  string `json:"type"`
+	Value string `json:"value"`
 }
