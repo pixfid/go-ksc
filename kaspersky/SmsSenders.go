@@ -25,7 +25,9 @@
 package kaspersky
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 
 	"net/http"
 )
@@ -42,7 +44,7 @@ type SmsSenders service
 //	Returns:
 //	- (bool) true if server has devices allowed to send SMS, false otherwise
 func (ss *SmsSenders) HasAllowedSenders(ctx context.Context) (*PxgValBool, []byte, error) {
-	request, err := http.NewRequest("POST", ss.client.Server+"/api/v1.0/SmsSenders.Clear", nil)
+	request, err := http.NewRequest("POST", ss.client.Server+"/api/v1.0/SmsSenders.HasAllowedSenders", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -52,4 +54,38 @@ func (ss *SmsSenders) HasAllowedSenders(ctx context.Context) (*PxgValBool, []byt
 	return pxgValBool, raw, err
 }
 
-//TODO func (ss *SmsSenders) AllowSenders(ctx context.Context, params interface{}) ([]byte, error) {
+//TODO test AllowSenders params WRONG ???
+type PNewStatuses struct {
+	PNewStatus PNewStatus `json:"pNewStatuses,omitempty"`
+}
+
+type PNewStatus struct {
+	Type            string          `json:"type,omitempty"`
+	PNewStatusValue PNewStatusValue `json:"value,omitempty"`
+}
+
+type PNewStatusValue struct {
+	Name              string `json:"name,omitempty"`
+	BMayUseSMSSending bool   `json:"bMayUseSmsSending,omitempty"`
+}
+
+//change bMayUseSmsSending parameter for mobile devices
+//
+//Parameters:
+//	- pNewStatuses	(params) Container with list of devices to change SMS sender status.
+//	Each container value has a name - host id and value of type paramBool meaning allow or disallow SMS sending.
+func (ss *SmsSenders) AllowSenders(ctx context.Context, params PNewStatuses) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", ss.client.Server+"/api/v1.0/SmsSenders.AllowSenders",
+		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := ss.client.Do(ctx, request, nil)
+	return raw, err
+}
