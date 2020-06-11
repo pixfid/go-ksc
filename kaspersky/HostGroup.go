@@ -156,7 +156,39 @@ func (hg *HostGroup) AddHost(ctx context.Context, params interface{}) (*PxgValSt
 	return pxgValStr, raw, err
 }
 
-//TODO AddHostsForSync
+//HostsForSyncParams struct using in HostGroup.AddHostsForSync
+type HostsForSyncParams struct {
+	//array of host names
+	PHostNames []string `json:"pHostNames"`
+
+	//setting storage identity (empty string means synchronization of all setting storages)
+	StrSSType string `json:"strSSType,omitempty"`
+}
+
+//	Performs synchronization of settings between server and host.
+//
+//	Parameters:
+//	- pHostNames	(array) array of host names
+//	- strSSType	(string) setting storage identity (empty string means synchronization of all setting storages)
+//
+//	Return:
+//	- strActionGuid	(string) id of asynchronous operation, to get status use AsyncActionStateChecker.
+//CheckActionState, lStateCode "1" means OK and "0" means fail
+func (hg *HostGroup) AddHostsForSync(ctx context.Context, params HostsForSyncParams) (*WActionGUID, []byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.AddHostsForSync", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	wActionGUID := new(WActionGUID)
+	raw, err := hg.client.Do(ctx, request, &wActionGUID)
+	return wActionGUID, raw, err
+}
 
 //	AddIncidentsParams struct
 type AddIncidentsParams struct {
@@ -170,11 +202,6 @@ type PData struct {
 	KlincdtBody      string    `json:"KLINCDT_BODY"`
 	KlhstWksHostname string    `json:"KLHST_WKS_HOSTNAME"`
 	KlhstuserID      int64     `json:"KLHSTUSER_ID"`
-}
-
-type DateTime struct {
-	Type  string `json:"type"`
-	Value string `json:"value"`
 }
 
 func (hg *HostGroup) AddIncident(ctx context.Context, params AddIncidentsParams) (*PxgValStr, []byte, error) {
@@ -399,10 +426,10 @@ func (hg *HostGroup) FindHostsAsyncGetAccessor(ctx context.Context, strRequestId
 }
 
 type FindIncidentsParams struct {
-	StrFilter       string           `json:"strFilter,omitempty"`
-	PFieldsToReturn *[]string        `json:"pFieldsToReturn,omitempty"`
-	PFieldsToOrder  *[]FieldsToOrder `json:"pFieldsToOrder,omitempty"`
-	LMaxLifeTime    int64            `json:"lMaxLifeTime,omitempty"`
+	StrFilter       string          `json:"strFilter,omitempty"`
+	PFieldsToReturn []string        `json:"pFieldsToReturn,omitempty"`
+	PFieldsToOrder  []FieldsToOrder `json:"pFieldsToOrder,omitempty"`
+	LMaxLifeTime    int64           `json:"lMaxLifeTime,omitempty"`
 }
 
 //	Find incident by filter string.
@@ -484,13 +511,6 @@ func (hg *HostGroup) FindIncidents(ctx context.Context, params FindIncidentsPara
 	return accessor, raw, err
 }
 
-type UHGParams struct {
-	StrFilter       string   `json:"strFilter"`
-	PFieldsToReturn []string `json:"pFieldsToReturn"`
-	PParams         PParams  `json:"pParams"`
-	LMaxLifeTime    int64    `json:"lMaxLifeTime"`
-}
-
 //	Finds existing users.
 //
 //	Finds users that satisfy conditions from filter string strFilter.
@@ -510,7 +530,7 @@ type UHGParams struct {
 //	Session to the Administration Server has been closed.
 //	ChunkAccessor.Release has been called.
 //	- (int64) number of records found
-func (hg *HostGroup) FindUsers(ctx context.Context, params UHGParams) (*Accessor, []byte, error) {
+func (hg *HostGroup) FindUsers(ctx context.Context, params PFindParams) (*Accessor, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, nil, err
@@ -1272,9 +1292,122 @@ func (hg *HostGroup) RestartNetworkScanning(ctx context.Context, nType int64) (*
 	return pxgRetError, raw, err
 }
 
-//TODO SetLocInfo
-//TODO SS_CreateSection
-//TODO SS_DeleteSection
+//	Allows to set server localization information.
+//
+//	Parameters:
+//	- pData	(params) localization data with attributes:
+//		|- KLADMSRV_LOC_RTP // (paramParams)
+//	 <GlobalRptState> = value // (string) - rtp state display name.
+//	 	|- KLADMSRV_LOC_PRODUCTS // (paramParams)
+//	 <ProductName> // (paramParams) - product internal name
+//	 	- <ProductVersion> // (paramParams) - product internal version
+//	 	- KLHST_WKS_PRODUCT_NAME // (string) - product display name
+//	 	- KLADMSRV_LOC_EV // (paramParams)
+//	 		- <Severity> = value // (paramParams)
+//	 		- <EventType> = value // (string) - event type display name KLADMSRV_LOC_TSK // (paramArray|paramParams)
+//	 	- event_type // (string) - event type (internal name), up to 50 symbols
+//	 	- GNRL_EA_SEVERITY // (int64) - event severity value published by product, one of:
+//	 		- KLEVP_EVENT_SEVERITY_INFO = 1,
+//	 		- KLEVP_EVENT_SEVERITY_WARNING = 2,
+//	 		- KLEVP_EVENT_SEVERITY_ERROR = 3,
+//	 		- KLEVP_EVENT_SEVERITY_CRITICAL = 4
+//	 	- task_new_state // (int64) - attribute added by administration system, new task state
+//	 	- task_old_state // (int64) - attribute added by administration system,old task state
+//	 	- event_type_display_name (string) - event type display name, localized by product, up to 100 symbols
+func (hg *HostGroup) SetLocInfo(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.SetLocInfo", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := hg.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//SectionParams struct using in HostGroup.SS_CreateSection | HostGroup.SS_DeleteSection
+type SectionParams struct {
+	//host name (unique server-generated string)
+	StrHostName string `json:"strHostName,omitempty"`
+
+	//type of storage (for example: "SS_SETTINGS")
+	StrType string `json:"strType,omitempty"`
+
+	//product name string, non-empty string, not longer than 31 character, and cannot contain characters /\:*?"<>.
+	StrProduct string `json:"strProduct,omitempty"`
+
+	//version string, non-empty string, not longer than 31 character, and cannot contain characters /\:*?"<>.
+	StrVersion string `json:"strVersion,omitempty"`
+
+	//section name string, non-empty string, not longer than 31 character, and cannot contain characters /\:*?"<>.
+	StrSection string `json:"strSection,omitempty"`
+
+	//write option, values:
+	//	1 - "Update", updates existing variables in the specified section. If a variable does not exist an error occurs.
+	//	2 - "Add", adds new variables to the specified section. If a variable already exists an error occurs.
+	//	3 - "Replace", replaces variables in the specified section. If a variable already exists it will be updates, if a variable does not exist it will be added.
+	//	4 - "Delete", deletes variables specified in pData from the specified section.
+	//	7 - "Clear", replaces existing section contents with pData, i.e. existing section contents will deleted and variables from pData will be written to the section.
+	NOption   int64       `json:"nOption,omitempty"`
+	PSettings interface{} `json:"pSettings,omitempty"`
+}
+
+func (hg *HostGroup) SS_CreateSection(ctx context.Context, params SectionParams) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.SS_CreateSection", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := hg.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//	Write data to host settings storage.
+//
+//	Parameters:
+//	- strHostName	(wstring) host name (unique server-generated string)
+//	- strType	(wstring) type of storage (for example: "SS_SETTINGS")
+//	- strProduct	(wstring) product name string, non-empty string, not longer than 31 character,
+//	and cannot contain characters /\:*?"<>.
+//	- strVersion	(wstring) version string, non-empty string, not longer than 31 character,
+//	and cannot contain characters /\:*?"<>.
+//	- strSection	(wstring) section name string, non-empty string, not longer than 31 character,
+//	and cannot contain characters /\:*?"<>.
+//	- nOption	(int) write option, values:
+//	|- 1 - "Update", updates existing variables in the specified section. If a variable does not exist an error occurs.
+//	|- 2 - "Add", adds new variables to the specified section. If a variable already exists an error occurs.
+//	|- 3 - "Replace", replaces variables in the specified section. If a variable already exists it will be updates,
+//	if a variable does not exist it will be added.
+//	|- 4 - "Delete", deletes variables specified in pData from the specified section.
+//	|- 7 - "Clear", replaces existing section contents with pData,
+//	i.e. existing section contents will deleted and variables from pData will be written to the section.
+//	- pSettings	(params) host settings
+//
+//	See also:
+//	Local settings and policy format for some products
+func (hg *HostGroup) SS_Write(ctx context.Context, params SectionParams) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.SS_Write", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := hg.client.Do(ctx, request, nil)
+	return raw, err
+}
 
 //	Get section names from host settings storage.
 //
@@ -1303,19 +1436,20 @@ func (hg *HostGroup) RestartNetworkScanning(ctx context.Context, nType int64) (*
 //
 //	See also:
 //	Local settings and policy format for some products
-func (hg *HostGroup) SS_GetNames(ctx context.Context, params interface{}) ([]byte, error) {
+func (hg *HostGroup) SS_GetNames(ctx context.Context, params SectionParams) (*PxgValArrayOfString, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.SS_GetNames", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	raw, err := hg.client.Do(ctx, request, nil)
-	return raw, err
+	pxgValArrayOfString := new(PxgValArrayOfString)
+	raw, err := hg.client.Do(ctx, request, &pxgValArrayOfString)
+	return pxgValArrayOfString, raw, err
 }
 
 //	Read data from host settings storage.
@@ -1348,7 +1482,7 @@ func (hg *HostGroup) SS_GetNames(ctx context.Context, params interface{}) ([]byt
 //	See also:
 //	- Local settings and policy format for some products
 //	- Contents of host SS_PRODINFO storage
-func (hg *HostGroup) SS_Read(ctx context.Context, params interface{}) ([]byte, error) {
+func (hg *HostGroup) SS_Read(ctx context.Context, params SectionParams) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
@@ -1362,8 +1496,6 @@ func (hg *HostGroup) SS_Read(ctx context.Context, params interface{}) ([]byte, e
 	raw, err := hg.client.Do(ctx, request, nil)
 	return raw, err
 }
-
-//TODO SS_Write
 
 //	Change attributes of existing administration group.
 //
@@ -1387,30 +1519,86 @@ func (hg *HostGroup) UpdateGroup(ctx context.Context, params interface{}) (*PxgV
 	return pxgValStr, raw, err
 }
 
-//	Change attributes of existing administration group.
+//	Modify specified attributes for host.
 //
 //	Parameters:
-//	- nGroup	(int) id of the group
-//	- pInfo	(params) container with group attributes.
-//	May contain non-readonly attributes from the List of group attributes
-func (hg *HostGroup) UpdateHost(ctx context.Context, params interface{}) (*Accessor, []byte, error) {
+//	- strHostName	(string) host name, a unique server-generated string (see KLHST_WKS_HOSTNAME attribute).
+//	It is NOT the same as computer network name (DNS-, FQDN-, NetBIOS-name)
+//	- pInfo	(params) container with host attributes to be modified. See List of host attributes
+func (hg *HostGroup) UpdateHost(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.UpdateHost", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
-	accessor := new(Accessor)
-	raw, err := hg.client.Do(ctx, request, &accessor)
-	return accessor, raw, err
+	raw, err := hg.client.Do(ctx, request, nil)
+	return raw, err
 }
 
-//TODO UpdateHostsMultiple
-//TODO UpdateIncident
+//	Update attributes of multiple computers.
+//
+//	Parameters:
+//	 -pArrHostIds	(array) Array of up to 100 strings. Each entry is a host name,
+//	 a unique server-generated string (see KLHST_WKS_HOSTNAME attribute). It is NOT the same as computer network name (DNS-, FQDN-, NetBIOS-name)
+//	- pProperties	(params) container with host attributes to be modified. See List of host attributes.
+//	Following properties can be specified.
+//KLHST_MANAGED_OTHER_SERVER
+//
+//	Returns:
+//	- (array) Array of failed identifiers. If Administration Server failed to change host attributes it puts host
+//	identifier into this array.
+func (hg *HostGroup) UpdateHostsMultiple(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.UpdateHostsMultiple", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := hg.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//UpdateIncidentParams struct using in HostGroup.UpdateIncident
+type UpdateIncidentParams struct {
+	NID   int64          `json:"nId,omitempty"`
+	PData *PIncidentData `json:"pData,omitempty"`
+}
+
+type PIncidentData struct {
+	KlhstWksHostname string `json:"KLHST_WKS_HOSTNAME"`
+	//Incident body
+	KlincdtBody string `json:"KLINCDT_BODY,omitempty"`
+	//Incident severity
+	KlincdtSeverity int64 `json:"KLINCDT_SEVERITY,omitempty"`
+	//Time of incident entry creation
+	KlincdtAdded *DateTime `json:"KLINCDT_ADDED,omitempty"`
+	//"IsHandled" flag. True - if incident marked as "Handled", otherwise false
+	KlincdtIsHandled bool `json:"KLINCDT_IS_HANDLED,omitempty"`
+}
+
+func (hg *HostGroup) UpdateIncident(ctx context.Context, params UpdateIncidentParams) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.UpdateIncident", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := hg.client.Do(ctx, request, nil)
+	return raw, err
+}
 
 //Zero virus count for hosts in group and all subgroups.
 //
