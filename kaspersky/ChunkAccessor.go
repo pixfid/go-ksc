@@ -70,7 +70,7 @@ func (ca *ChunkAccessor) Release(ctx context.Context, accessor string) bool {
 //Returns:
 //	- (data.PxgValInt) number of elements contained in the specified result-set
 func (ca *ChunkAccessor) GetItemsCount(ctx context.Context, accessor string) (*PxgValInt, []byte, error) {
-	postData := []byte(fmt.Sprintf(`	{"strAccessor": "%s"}`, accessor))
+	postData := []byte(fmt.Sprintf(`{"strAccessor": "%s"}`, accessor))
 	request, err := http.NewRequest("POST", ca.client.Server+"/api/v1.0/ChunkAccessor.GetItemsCount", bytes.NewBuffer(postData))
 	if err != nil {
 		panic(err)
