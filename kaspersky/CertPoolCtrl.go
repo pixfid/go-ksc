@@ -27,6 +27,7 @@ package kaspersky
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -48,16 +49,37 @@ type CertPoolCtrl service
 //	Returns:
 //	- (params) If certificate present then it returns params
 //	with "CPublic" (paramBinary) field only.
-func (cp *CertPoolCtrl) GetCertificateInfo(ctx context.Context, nVServerId, nFunction int64) ([]byte, error) {
+func (cpc *CertPoolCtrl) GetCertificateInfo(ctx context.Context, nVServerId, nFunction int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nVServerId": %d, "nFunction" : %d }`, nVServerId, nFunction))
-	request, err := http.NewRequest("POST", cp.client.Server+"/api/v1.0/CertPoolCtrl.GetCertificateInfo",
+	request, err := http.NewRequest("POST", cpc.client.Server+"/api/v1.0/CertPoolCtrl.GetCertificateInfo",
 		bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := cp.client.Do(ctx, request, nil)
+	raw, err := cpc.client.Do(ctx, request, nil)
 	return raw, err
 }
 
-//TODO CertPoolCtrl::SetCertificate
+//	Sets certificate of a given function for a given virtual server.
+//
+//	Parameters:
+//	- params interface{}
+//	|- nVServerId	(int64) Virtual server id (-1 for current, 0 for main server)
+//	|- nFunction	(int64) Certificate function (see "KLCERTP.CertificateFunction enum values")
+//	|- pCertData	Params with certificate data (see Common format for certificate params).
+//	If pCertData is empty or NULL, then certificate will be deleted.
+func (cpc *CertPoolCtrl) SetCertificate(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", cpc.client.Server+"/api/v1.0/CertPoolCtrl.SetCertificate", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := cpc.client.Do(ctx, request, nil)
+	return raw, err
+}
