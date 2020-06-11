@@ -146,9 +146,156 @@ func (hac *HstAccessControl) DeleteScVServerAcl(ctx context.Context, nId int64) 
 	return raw, err
 }
 
-//TODO FindRoles
-//TODO FindTrustees
-//TODO GetAccessibleFuncAreas
+//Roles attributes to use in the HstAccessControl.FindRoles method.
+type RolesAttributes struct {
+	RolesPChunk *RolesPChunk `json:"pChunk,omitempty"`
+	PxgRetVal   *int64       `json:"PxgRetVal,omitempty"`
+}
+
+type RolesPChunk struct {
+	RolesIteratorArray []RolesIteratorArray `json:"KLCSP_ITERATOR_ARRAY"`
+}
+
+type RolesIteratorArray struct {
+	Type      *string    `json:"type,omitempty"`
+	RoleValue *RoleValue `json:"value,omitempty"`
+}
+
+type RoleValue struct {
+	KlhstACLRoleBuiltIn   *bool   `json:"KLHST_ACL_ROLE_BUILT_IN,omitempty"`
+	KlhstACLRoleDN        *string `json:"KLHST_ACL_ROLE_DN,omitempty"`
+	KlhstACLRoleID        *int64  `json:"KLHST_ACL_ROLE_ID,omitempty"`
+	KlhstACLRoleInherited *bool   `json:"KLHST_ACL_ROLE_INHERITED,omitempty"`
+	KlhstACLRoleName      *string `json:"KLHST_ACL_ROLE_NAME,omitempty"`
+	KlhstACLTrusteeID     *int64  `json:"KLHST_ACL_TRUSTEE_ID,omitempty"`
+	DN                    *string `json:"dn,omitempty"`
+	ObjectGUID            *string `json:"objectGUID,omitempty"`
+	UserPrincipalName     *string `json:"userPrincipalName,omitempty"`
+}
+
+func (hac *HstAccessControl) FindRoles(ctx context.Context, params PFindParams) (*Accessor, []byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := http.NewRequest("POST", hac.client.Server+"/api/v1.0/HstAccessControl.FindRoles", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	accessor := new(Accessor)
+	raw, err := hac.client.Do(ctx, request, &accessor)
+	return accessor, raw, err
+}
+
+//Trustee struct
+type Trustees struct {
+	TrusteePChunk *TrusteePChunk `json:"pChunk,omitempty"`
+	PxgRetVal     *int64         `json:"PxgRetVal,omitempty"`
+}
+
+type TrusteePChunk struct {
+	TrusteeIteratorArray []TrusteeIteratorArray `json:"KLCSP_ITERATOR_ARRAY"`
+}
+
+type TrusteeIteratorArray struct {
+	Type         *string       `json:"type,omitempty"`
+	TrusteeValue *TrusteeValue `json:"value,omitempty"`
+}
+
+type TrusteeValue struct {
+	KlhstACLTrusteeID  *int64              `json:"KLHST_ACL_TRUSTEE_ID,omitempty"`
+	KlhstACLTrusteeSid *KlhstACLTrusteeSid `json:"KLHST_ACL_TRUSTEE_SID,omitempty"`
+	DN                 *string             `json:"dn,omitempty"`
+	ObjectGUID         *string             `json:"objectGUID,omitempty"`
+	UserPrincipalName  *string             `json:"userPrincipalName,omitempty"`
+	KscInternalUserID  *int64              `json:"kscInternalUserId,omitempty"`
+}
+
+type KlhstACLTrusteeSid struct {
+	Type  *string `json:"type,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+//	Searches for trustees meeting specified criteria.
+//
+//	Parameters:
+//	- strFilter	(string) search filter, see Search filter syntax, following values may be used in the filter string:
+//		+ KLHST_ACL_TRUSTEE_ID (int64) // trustee id
+//		+ kscInternalUserId (int64) // Id of KSC internal user (optional)
+//		+ dn (string) // account display name, as user-friendly string for account, for example,
+//	"LocalSystem" or "MYCOMPUTER\sidorov" or "sidorov@avp.ru" and so on
+//		+ userPrincipalName (string) // AD userPrincipalName attribute
+//		+ objectGUID (paramBinary) // AD objectGUID attribute, this attribute is mandatory for non-builtin AD accounts
+//	- pFieldsToReturn	(array) names of attributes to return, following attributes are possible
+//		+ KLHST_ACL_TRUSTEE_ID (int64) // trustee id
+//		+ KLHST_ACL_TRUSTEE_SID (paramBinary) // trustee SID
+//		+ kscInternalUserId (int64) // Id of KSC internal user (optional)
+//		+ dn (string) // account display name, as user-friendly string for account, for example,
+//	"LocalSystem" or "MYCOMPUTER\sidorov" or "sidorov@avp.ru" and so on
+//		+ userPrincipalName (string) // AD userPrincipalName attribute
+//		+ objectGUID (paramBinary) // AD objectGUID attribute, this attribute is mandatory for non-builtin AD accounts
+//	- pFieldsToOrder	(array) array of containers each of them containing two attributes:
+//		+ "Name" of type (string), name of attribute used for sorting
+//		+ "Asc" of type (paramBool), ascending if true descending otherwise
+//	- lMaxLifeTime	(int) max lifetime of accessor (sec)
+//
+//	Return:
+//	- strAccessor	(string) result-set ID, identifier of the server-side ordered collection of found roles.
+//	- number of records found
+//	The result-set is destroyed and associated memory is freed in following cases:
+//	Passed lMaxLifeTime seconds after last access to the result-set (by methods ChunkAccessor.GetItemsCount and ChunkAccessor.GetItemsChunk
+//	Session to the Administration Server has been closed.
+//	ChunkAccessor.Release has been called.
+func (hac *HstAccessControl) FindTrustees(ctx context.Context, params PFindParams) (*Accessor, []byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := http.NewRequest("POST", hac.client.Server+"/api/v1.0/HstAccessControl.FindTrustees", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	accessor := new(Accessor)
+	raw, err := hac.client.Do(ctx, request, &accessor)
+	return accessor, raw, err
+}
+
+//FuncAreas struct using in HstAccessControl.GetAccessibleFuncAreas
+type FuncAreas struct {
+	//	array of functionality areas.
+	//	Each element of the array is a string: "<product>|<version>|<functional area>".
+	// See Functional areas.
+	PFuncAreasArray []string `json:"pFuncAreasArray"`
+}
+
+//	Returns accessible functional areas.
+//
+//	Parameters:
+//	- lGroupId	(int64) id of the group
+//	- dwAccessMask	(int64) access mask, see Access rights Access rights
+//	- szwProduct	(string) product, see Functional areas
+//	- szwVersion	(string) version of product, see Functional areas
+//	- bInvert	(bool) if true then access mask is inverted
+func (hac *HstAccessControl) GetAccessibleFuncAreas(ctx context.Context, lGroupId, dwAccessMask int64, szwProduct,
+	szwVersion string, bInvert bool) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"lGroupId" : %d, "dwAccessMask": %d, "szwProduct": "%s", "szwVersion": "%s", 
+	"bInvert" : %v}`,
+		lGroupId, dwAccessMask, szwProduct, szwVersion, bInvert))
+
+	request, err := http.NewRequest("POST", hac.client.Server+"/api/v1.0/HstAccessControl.GetAccessibleFuncAreas",
+		bytes.NewBuffer(postData))
+
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := hac.client.Do(ctx, request, nil)
+	return raw, err
+}
 
 //	Returns mapping functional area to policies.
 //
@@ -160,7 +307,7 @@ func (hac *HstAccessControl) DeleteScVServerAcl(ctx context.Context, nId int64) 
 //	- (params) mapping of functional areas to settings
 //        +--- (paramParams)
 //            +---<functional area> (paramArray)
-//            |   +---0 = (paramString)"\<policy name\>"
+//            |   +---0 = (string)"\<policy name\>"
 func (hac *HstAccessControl) GetMappingFuncAreaToPolicies(ctx context.Context, szwProduct, szwVersion string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"szwProduct": "%s","szwVersion": "%s"}`, szwProduct, szwVersion))
 	request, err := http.NewRequest("POST", hac.client.Server+"/api/v1.0/HstAccessControl.GetMappingFuncAreaToPolicies",
@@ -184,7 +331,7 @@ func (hac *HstAccessControl) GetMappingFuncAreaToPolicies(ctx context.Context, s
 //	- (params) mapping of functional areas to reports
 //        +--- (paramParams)
 //            +---<functional area> (paramArray)
-//            |   +---0 = (paramInt)<report template id>
+//            |   +---0 = (int64)<report template id>
 //
 func (hac *HstAccessControl) GetMappingFuncAreaToReports(ctx context.Context, szwProduct, szwVersion string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"szwProduct": "%s","szwVersion": "%s"}`, szwProduct, szwVersion))
@@ -209,7 +356,7 @@ func (hac *HstAccessControl) GetMappingFuncAreaToReports(ctx context.Context, sz
 //	- (params) mapping of functional areas to settings
 //        +--- (paramParams)
 //            +---<functional area> (paramArray)
-//            |   +---0 = (paramString)"\<setting name\>"
+//            |   +---0 = (string)"\<setting name\>"
 //
 func (hac *HstAccessControl) GetMappingFuncAreaToSettings(ctx context.Context, szwProduct, szwVersion string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"szwProduct": "%s","szwVersion": "%s"}`, szwProduct, szwVersion))
@@ -234,7 +381,7 @@ func (hac *HstAccessControl) GetMappingFuncAreaToSettings(ctx context.Context, s
 //	- (params) mapping of functional areas to tasks
 //        +--- (paramParams)
 //            +---<functional area> (paramArray)
-//            |   +---0 = (paramString)"\<task name\>"
+//            |   +---0 = (string)"\<task name\>"
 //
 func (hac *HstAccessControl) GetMappingFuncAreaToTasks(ctx context.Context, szwProduct, szwVersion string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"szwProduct": "%s","szwVersion": "%s"}`, szwProduct, szwVersion))
@@ -250,7 +397,37 @@ func (hac *HstAccessControl) GetMappingFuncAreaToTasks(ctx context.Context, szwP
 }
 
 //TODO GetPolicyReadonlyNodes
-//TODO GetRole
+
+//	Return parameters of a role.
+//
+//	Parameters:
+//	- nId	(int) id of a role
+//	- pFieldsToReturn	(array) array of strings with attribute names, see Role. May contain attributes:
+//		|- KLHST_ACL_ROLE_DN
+//		|- KLHST_ACL_ROLE_NAME
+//		|- KLHST_ACL_ROLE_ID
+//		|- KLHST_ACL_ROLE_BUILT_IN
+//		|- KLHST_ACL_ROLE_INHERITED
+//		|- KLHST_ACL_ROLE_READ_ONLY
+//		|- role_products
+//
+//	Returns:
+//	- (params) requested parameters
+func (hac *HstAccessControl) GetRole(ctx context.Context, params TRParams) (*Trustee, []byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := http.NewRequest("POST", hac.client.Server+"/api/v1.0/HstAccessControl.GetRole", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	trustee := new(Trustee)
+	raw, err := hac.client.Do(ctx, request, &trustee)
+	return trustee, raw, err
+}
 
 //	Returns ACL for the specified object.
 //
@@ -291,7 +468,53 @@ func (hac *HstAccessControl) GetScVServerAcl(ctx context.Context, nId int64) ([]
 }
 
 //TODO GetSettingsReadonlyNodes
-//TODO GetTrustee
+
+//TrusteeParams struct using in HstAccessControl.GetTrustee
+type TRParams struct {
+	//id of trustee\role
+	NID int64 `json:"nId,omitempty"`
+
+	//(array) array of strings with attribute names
+	PFieldsToReturn []string `json:"pFieldsToReturn"`
+}
+
+//Trustee struct using in HstAccessControl.GetTrustee
+type Trustee struct {
+	Trustee *TrusteeValue `json:"PxgRetVal,omitempty"`
+}
+
+//	Get trustee data.
+//
+//	Returns trustee's data.
+//
+//	Parameters:
+//	- nId	(int64) trustee id
+//	- pFieldsToReturn	(array) array of strings with attribute names, following attrs are possible:
+//	+ KLHST_ACL_TRUSTEE_ID (int64) // trustee id
+//	+ KLHST_ACL_TRUSTEE_SID (binary) // trustee SID
+//	+ id (string) // account id
+//	+ dn (string) // account display name, as user-friendly string for account, for example,
+//	"LocalSystem" or "MYCOMPUTER\sidorov" or "sidorov@avp.ru" and so on
+//	+ userPrincipalName (string) // AD userPrincipalName attribute
+//	+ objectGUID (binary) // AD objectGUID attribute, this attribute is mandatory for non-builtin AD accounts
+//
+//	Returns:
+//	Trustee (params) trustee's data
+func (hac *HstAccessControl) GetTrustee(ctx context.Context, params TRParams) (*Trustee, []byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := http.NewRequest("POST", hac.client.Server+"/api/v1.0/HstAccessControl.GetTrustee", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	trustee := new(Trustee)
+	raw, err := hac.client.Do(ctx, request, &trustee)
+	return trustee, raw, err
+}
 
 //	Returns descriptions of visual view for access rights in KSC.
 //
@@ -308,10 +531,10 @@ func (hac *HstAccessControl) GetScVServerAcl(ctx context.Context, nId int64) ([]
 //                    +---KLCONN_ACE_PRODUCT = "<product>" // see Functional areas
 //                    +---KLCONN_ACE_VERSION = "<version>"
 //                    +---<functional area> (paramParams) // group of functional areas
-//                        +--KLCONN_FUNC_AREA_DISP_NAME = (paramString)"<display name>"
+//                        +--KLCONN_FUNC_AREA_DISP_NAME = (string)"<display name>"
 //                        +---<functional area> (paramParams) // see Functional areas
-//                            +---KLCONN_FUNC_AREA_DISP_NAME = (paramString)"<display name>"
-//                            +---KLCONN_ACE_OPERATION_MASK = (paramInt)<access mask> see Access rights
+//                            +---KLCONN_FUNC_AREA_DISP_NAME = (string)"<display name>"
+//                            +---KLCONN_ACE_OPERATION_MASK = (int64)<access mask> see Access rights
 func (hac *HstAccessControl) GetVisualViewForAccessRights(ctx context.Context, wstrLangCode string, nObjId, nObjType int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrLangCode": "%s","nObjId": %d,"nObjType": %d}`, wstrLangCode, nObjId, nObjType))
 	request, err := http.NewRequest("POST", hac.client.Server+"/api/v1.0/HstAccessControl.GetVisualViewForAccessRights",
