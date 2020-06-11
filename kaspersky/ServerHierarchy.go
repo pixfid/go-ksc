@@ -148,3 +148,44 @@ func (sh *ServerHierarchy) GetChildServers(ctx context.Context, nGroupId int64) 
 	raw, _ := sh.client.Do(ctx, request, nil)
 	return raw, err
 }
+
+//	Searches for slave servers meeting specified criteria.
+//
+//	Parameters:
+//	- wstrFilter	filter string, see search filter syntax. Following search fields are supported:
+//	|- "KLSRVH_SRV_GROUPID_GP" (paramInt) - parent group id
+//	|- "KLHST_WKS_CREATED" (paramDateTime) - time of host record creation.
+//	As well as following slave server attributes:
+//	|- "KLSRVH_SRV_ID"
+//	|- "KLSRVH_SRV_DN"
+//	|- "KLSRVH_SRV_GROUPID"
+//	|- "KLSRVH_SRV_STATUS"
+//	- pFieldsToReturn	names of attributes to return. Following attributes are supported:
+//	|- "name" (paramString) - administration group name where slave server located
+//	|- "KLHST_WKS_CREATED" (paramDateTime) - time of host record creation
+//As well as following slave server attributes:
+//	|- "KLSRVH_SRV_ID"
+//	|- "KLSRVH_SRV_DN"
+//	|- "KLSRVH_SRV_GROUPID"
+//	|- "KLSRVH_SRV_STATUS"
+//	- pFieldsToOrder	names of columns to sort by, must be a subset of pFieldsToReturn parameter
+//	- lMaxLifeTime	max lifetime of accessor (sec)
+//	- pParams	reserved for future use, use empty paramParams container
+//
+//	Return:
+//	- wstrIterator	result-set id, use ChunkAccessor interface to iterate over found slave server parameters
+//	- number of records found
+func (sh *ServerHierarchy) FindSlaveServers(ctx context.Context, params PFindParams) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", sh.client.Server+"/api/v1.0/ServerHierarchy.FindSlaveServers", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := sh.client.Do(ctx, request, nil)
+	return raw, nil
+}
