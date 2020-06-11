@@ -105,35 +105,57 @@ func (fc *FileCategorizer2) CancelFileUpload(ctx context.Context) (*PxgValInt, [
 
 //CategoryParams struct
 type CategoryParams struct {
-	PCategory *PCategory `json:"pCategory,omitempty"`
+	Category *Category `json:"pCategory,omitempty"`
 }
 
-type PCategory struct {
-	CategoryType                int64        `json:"CategoryType,omitempty"`
-	CustomCategoryCipCompatible bool         `json:"CustomCategoryCipCompatible,omitempty"`
-	Md5WithoutSha256Exists      bool         `json:"Md5WithoutSha256Exists,omitempty"`
+type Category struct {
+	CategoryType                int64        `json:"CategoryType"`
+	CustomCategoryCipCompatible bool         `json:"CustomCategoryCipCompatible"`
+	Md5WithoutSha256Exists      bool         `json:"Md5WithoutSha256Exists"`
 	Exclusions                  []Exclusions `json:"exclusions"`
-	FromMaster                  bool         `json:"fromMaster,omitempty"`
+	FromMaster                  bool         `json:"fromMaster"`
 	Inclusions                  []Inclusion  `json:"inclusions"`
-	Name                        string       `json:"name,omitempty"`
-	Descr                       string       `json:"descr,omitempty"`
-	Version                     int64        `json:"version,omitempty"`
+	Name                        string       `json:"name"`
+	Descr                       string       `json:"descr"`
+	Version                     int64        `json:"version"`
 }
 
 type Exclusions struct {
-	//TODO Body fields
+	Type            string     `json:"type,omitempty"`
+	ExclusionsValue *Exclusion `json:"value,omitempty"`
 }
 
 type Inclusion struct {
-	Type           string          `json:"type,omitempty"`
-	InclusionValue *InclusionValue `json:"value,omitempty"`
+	Type           string     `json:"type,omitempty"`
+	InclusionValue *Exclusion `json:"value,omitempty"`
 }
 
-type InclusionValue struct {
-	ExType int64  `json:"ex_type,omitempty"`
-	Str    string `json:"str,omitempty"`
-	StrOp  int64  `json:"str_op,omitempty"`
-	//TODO Body fields
+type Exclusion struct {
+	ExType      int64  `json:"ex_type,omitempty"`
+	Str         string `json:"str,omitempty"`
+	Str2        string `json:"str2,omitempty"`
+	StrOp       int64  `json:"str_op,omitempty"`
+	VerMajor    int64  `json:"ver_major,omitempty"`
+	VerMinor    int64  `json:"ver_minor,omitempty"`
+	VerBuild    int64  `json:"ver_build,omitempty"`
+	VerRevision int64  `json:"ver_revision,omitempty"`
+	VerSuffix   string `json:"ver_suffix,omitempty"`
+	VerRaw      string `json:"ver_raw,omitempty"`
+	VerOp       int64  `json:"ver_op,omitempty"`
+	//uuid
+	MediaType int64 `json:"media_type,omitempty"`
+	//l_expr
+	//r_expr
+	//expr
+	//Certificate CertificateParams `json:"certificate,omitempty"`
+}
+
+type CertificateParams struct {
+	Type        string       `json:"type,omitempty"`
+	Certificate *Certificate `json:"value,omitempty"`
+}
+
+type Certificate struct {
 }
 
 //	Create category (simple, autoupdate or silverimage)
