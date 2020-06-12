@@ -31,13 +31,24 @@ import (
 func main() {        
         ctx := context.Background()
     	cfg := kaspersky.Config {
-    		Username: "login",
+
+    	    //user login name
+    		UserName: "login",
+
+    		//password
     		Password: "password",
-            //VServerName: "virtual_server_name", for login on.
+
+            //VServerName: "virtual_server_name", for login on virtual server.
     		Server: fmt.Sprintf(`https://%s:%s`, "ip", "port"),
+
+    		//true using XKscSession tokens (false on default, session token expired time 3 minutes)
+    		XKscSession: false,
     	}
-    
+
+        //Construct a new KSC client
     	client := kaspersky.New(cfg)
+
+    	//Auth on KSC server
     	client.KSCAuth(ctx)
 
         //Get List of Windows domain in the network.
