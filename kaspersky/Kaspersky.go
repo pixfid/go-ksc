@@ -108,6 +108,7 @@ type Client struct {
 	NlaDefinedNetworks                                        *NlaDefinedNetworks
 	OsVersion                                                 *OsVersion
 	PackagesApi                                               *PackagesApi
+	PatchParameters                                           *PatchParameters
 	Policy                                                    *Policy
 	QueriesStorage                                            *QueriesStorage
 	QBTNetworkListApi                                         *QBTNetworkListApi
@@ -225,6 +226,7 @@ func New(cfg Config) *Client {
 	c.NlaDefinedNetworks = (*NlaDefinedNetworks)(&c.common)
 	c.OsVersion = (*OsVersion)(&c.common)
 	c.PackagesApi = (*PackagesApi)(&c.common)
+	c.PatchParameters = (*PatchParameters)(&c.common)
 	c.Policy = (*Policy)(&c.common)
 	c.QueriesStorage = (*QueriesStorage)(&c.common)
 	c.QBTNetworkListApi = (*QBTNetworkListApi)(&c.common)
