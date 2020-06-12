@@ -110,6 +110,7 @@ type Client struct {
 	PackagesApi                                               *PackagesApi
 	PatchParameters                                           *PatchParameters
 	Policy                                                    *Policy
+	PolicyProfiles                                            *PolicyProfiles
 	QueriesStorage                                            *QueriesStorage
 	QBTNetworkListApi                                         *QBTNetworkListApi
 	ReportManager                                             *ReportManager
@@ -229,6 +230,7 @@ func New(cfg Config) *Client {
 	c.PackagesApi = (*PackagesApi)(&c.common)
 	c.PatchParameters = (*PatchParameters)(&c.common)
 	c.Policy = (*Policy)(&c.common)
+	c.PolicyProfiles = (*PolicyProfiles)(&c.common)
 	c.QueriesStorage = (*QueriesStorage)(&c.common)
 	c.QBTNetworkListApi = (*QBTNetworkListApi)(&c.common)
 	c.ReportManager = (*ReportManager)(&c.common)
