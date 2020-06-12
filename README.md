@@ -28,7 +28,7 @@ import (
 	"github.com/pixfid/go-ksc/kaspersky"
 )
 
-func main() {        
+func main() {
         ctx := context.Background()
     	cfg := kaspersky.Config {
 
@@ -140,7 +140,7 @@ products, err := client.HostGroup.GetHostProducts(ctx, "8910f900-3807-4b97-8a97-
 }
 ```
 
-###### Get Lists tasks on Host: 
+###### Get Lists tasks on Host:
 
 ```go
 tastList, raw, err := client.Tasks.GetAllTasksOfHost(ctx, "", "c2b22f83-307c-45aa-8533-5ffffbcc6bf1")
@@ -164,7 +164,7 @@ tastList, raw, err := client.Tasks.GetAllTasksOfHost(ctx, "", "c2b22f83-307c-45a
 }
 ```
 
-###### Find srvview data by filter string. A removable device's collection. 
+###### Find srvview data by filter string. A removable device's collection.
 
 ```go
 	srvVParams := &kaspersky.SrvViewParams{
@@ -226,14 +226,110 @@ tastList, raw, err := client.Tasks.GetAllTasksOfHost(ctx, "", "c2b22f83-307c-45a
 }
 ```
 
+##TODO
 
-**NOTE**: Using the [context](https://godoc.org/context) package, one can easily
+| Status   | Implement in go-ksc            | KSC Classes                 | Description
+|----------|--------------------------------|-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+|    ✔️    | AdfsSso.go                     | AdfsSso                     | Interface for working with ADFS SSO                                                                                                                     |
+|    ✔️    | AdHosts.go                     | AdHosts                     | Scanned active directory OU structure                                                                                                                   |
+|    ✔️    | AdmServerSettings.go           | AdmServerSettings           | AdmServerSettings interface                                                                                                                             |
+|    ✔️    | AdSecManager.go                | AdSecManager                | Adaptive Security managing                                                                                                                              |
+|    ✔️    | AKPatches.go                   | AKPatches                   | Interface to manage system of autoupdating by patch.exe patches                                                                                         |
+|    ✔️    | AppCtrlApi.go                  | AppCtrlApi                  | Interface to get info about execution files                                                                                                             |
+|    ✔️    | AsyncActionStateChecker.go     | AsyncActionStateChecker     | Interface to monitor state of async action                                                                                                              |
+|    ✔️    | CertPoolCtrl.go                | CertPoolCtrl                | Interface to manage the pool of certificates used by the Kaspersky Security Center Server                                                               |
+|    ✔️    | CertPoolCtrl2.go               | CertPoolCtrl2               | 2nd interface to manage the pool of certificates used by the Kaspersky Security Center Server                                                           |
+|    ✔️    | CgwHelper.go                   | CgwHelper                   | CgwHelper (Connection Gateway) helper proxy class                                                                                                       |
+|    ✔️    | ChunkAccessor.go               | ChunkAccessor               | Working with host result-set                                                                                                                            |
+|    ✔️    | CloudAccess.go                 | CloudAccess                 | Interface to check access of public clouds                                                                                                              |
+|    ✔️    | ConEvents.go                   | ConEvents                   | Interface to server events                                                                                                                              |
+|    ✔️    | DatabaseInfo.go                | DatabaseInfo                | Database processing                                                                                                                                     |
+|    ✔️    | DataProtectionApi.go           | DataProtectionApi           | Allows to protect sensitive data in policies, tasks, and/or on specified host                                                                           |
+|    ✔️    | DpeKeyService.go               | DpeKeyService               | Interface for working with encrypted devices                                                                                                            |
+|    ✔️    | EventNotificationProperties.go | EventNotificationProperties | Notification properties                                                                                                                                 |
+|    ✔️    | EventNotificationsApi.go       | EventNotificationsApi       | Publish event                                                                                                                                           |
+|    ✔️    | EventProcessing.go             | EventProcessing             | Interface implements the functionality for viewing and deleting events                                                                                  |
+|    ✔️    | EventProcessingFactory.go      | EventProcessingFactory      | Interface to create event processing iterators                                                                                                          |
+|    ✔️    | ExtAud.go                      | ExtAud                      | Interface for working with ExtAudit subsystem                                                                                                           |
+|    ✔️    | FileCategorizer2.go            | FileCategorizer2            | Interface for working with FileCategorizer subsystem                                                                                                    |
+|    ✔️    | FilesAcceptor.go               | FilesAcceptor               | Upload files to server                                                                                                                                  |
+|    ✔️    | GatewayConnection.go           | GatewayConnection           | Interface for creating gateway connections                                                                                                              |
+|    ✔️    | GroupSync.go                   | GroupSync                   | Access to group synchronization objects                                                                                                                 |
+|    ✔️    | GroupSyncIterator.go           | GroupSyncIterator           | Access to the group synchronization forward iterator for the result-set                                                                                 |
+|    ✔️    | GroupTaskControlApi.go         | GroupTaskControlApi         | Interface to perform some management actions over group tasks                                                                                           |
+|    ✔️    | HostGroup.go                   | HostGroup                   | Hosts and management groups processing                                                                                                                  |
+|    ✔️    | HostMoveRules.go               | HostMoveRules               | Modify and acquire move rules to hosts                                                                                                                  |
+|    ✔️    | HostTagsApi.go                 | HostTagsApi                 | Interface allows to acquire and manage tags for hosts. It is additional interface for common ListTags                                                   |
+|    ✔️    | HostTagsRulesApi.go            | HostTagsRulesApi            | Interface allows to acquire and manage host automatic tagging rules                                                                                     |
+|    ✔️    | HostTasks.go                   | HostTasks                   | Basic management operations with host tasks                                                                                                             |
+|    ✔️    | HstAccessControl.go            | HstAccessControl            | Security policy Allows to specify permissions for administrration groups and non-group objects                                                          |
+|    ✔️    | HWInvStorage.go                | HWInvStorage                | Interface for working with Hardware storage subsystem                                                                                                   |
+|    ✔️    | InventoryApi.go                | InventoryApi                | Interface for working with Software Inventory subsystem                                                                                                 |
+|    ✔️    | InvLicenseProducts.go          | InvLicenseProducts          | Interface to manage License Management (third party) Functionality                                                                                      |
+|    ✔️    | IWebSrvSettings.go             | IWebSrvSettings             | Web server settings proxy class                                                                                                                         |
+|    ✘    |                                | IWebUsersSrv                | Send an email to multiple recipients.                                                                                                                   |
+|    ✘    |                                | IWebUsersSrv2               | Operating with emails from GUI                                                                                                                          |
+|    ✘    |                                | KeyService                  | Interface for working with KeyService subsystem                                                                                                         |
+|    ✘    |                                | KeyService2                 | Additional interface for working with KeyService subsystem                                                                                              |
+|    ✔️    | KillChain.go                   | KillChain                   | KillChain info from host                                                                                                                                |
+|    ✔️    | KLEVerControl.go               | KLEVerControl               | Controls the possibility to download and automatically create installation packages                                                                     |
+|    ✔️    | KsnInternal.go                 | KsnInternal                 | Interface for working with KsnProxy subsystem                                                                                                           |
+|    ✔️    | LicenseInfoSync.go             | LicenseInfoSync             | Operating with licenses                                                                                                                                 |
+|    ✔️    | LicenseKeys.go                 | LicenseKeys                 | Operating with keys                                                                                                                                     |
+|    ✔️    | LicensePolicy.go               | LicensePolicy               | License policy                                                                                                                                          |
+|    ✔️    | Limits.go                      | Limits                      | Interface for working with Limits subsystem                                                                                                             |
+|    ✔️    | ListTags.go                    | ListTags                    | Interface allows to acquire and manage tags to various KSC objects                                                                                      |
+|    ✔️    | MigrationData.go               | MigrationData               | Migration of data between KSC On-Premise and KSCHosted                                                                                                  |
+|    ✔️    | Multitenancy.go                | Multitenancy                | Multitenancy product managing                                                                                                                           |
+|    ✔️    | NagCgwHelper.go                | NagCgwHelper                | Nagent CGW (Connection Gateway) API                                                                                                                     |
+|    ✔️    | NagGuiCalls.go                 | NagGuiCalls                 | Remote host caller                                                                                                                                      |
+|    ✔️    | NagHstCtl.go                   | NagHstCtl                   | Manage nagent on host                                                                                                                                   |
+|    ✘    |                                | NagNetworkListApi           | Nagent OpenAPI to work with network lists                                                                                                               |
+|    ✔️    | NagRdu.go                      | NagRdu                      | Remote diagnostics on host                                                                                                                              |
+|    ✔️    | NagRemoteScreen.go             | NagRemoteScreen             | Interface for remote screen session management                                                                                                          |
+|    ✔️    | NlaDefinedNetworks.go          | NlaDefinedNetworks          | Network location awareness (NLA) defined networks. Used as a scope for Update agents. Each NLA-defined network is defined by list of NLA locations      |
+|    ✔️    | OsVersion.go                   | OsVersion                   | Operating systems dictionary access                                                                                                                     |
+|    ✔️    | PackagesApi.go                 | PackagesApi                 | Operating with packages                                                                                                                                 |
+|    ✘    |                                | PatchParameters             | Patch parameters processing                                                                                                                             |
+|    ✘    |                                | PLCDevApi                   | Interface allows to acquire and manage PLC devices registry                                                                                             |
+|    ✔️    | Policy.go                      | Policy                      | Policies processing                                                                                                                                     |
+|    ✘    |                                | PolicyProfiles              | Policy profiles processing                                                                                                                              |
+|    ✔️    | QBTNetworkListApi.go           | QBTNetworkListApi           | Interface to working with Quarantine, Backup and TIF network lists                                                                                      |
+|    ✔️    | QueriesStorage.go              | QueriesStorage              | QueriesStorage interface                                                                                                                                |
+|    ✔️    | ReportManager.go               | ReportManager               | Reports managing                                                                                                                                        |
+|    ✔️    | RetrFiles.go                   | RetrFiles                   | Class provides means to get retranslated files info                                                                                                     |
+|    ✔️    | ScanDiapasons.go               | ScanDiapasons               | Network subnets processing                                                                                                                              |
+|    ✔️    | SecurityPolicy.go              | SecurityPolicy              | Allows to manage users and permissions.                                                                                                                 |
+|    ✔️    | SecurityPolicy3.go             | SecurityPolicy3             | Allows to manage security groups of internal users. Use srvview SplUserGroupSrvViewName to get information about relationship between users and groups  |
+|    ✔️    | ServerHierarchy.go             | ServerHierarchy             | Server hierarchy management interface                                                                                                                   |
+|    ✔️    | ServerTransportSettings.go     | ServerTransportSettings     | Server transport settings proxy class                                                                                                                   |
+|    ✔️    | Session.go                     | Session                     | Session management interface                                                                                                                            |
+|    ✔️    | SmsQueue.go                    | SmsQueue                    | Manage SMS message queue                                                                                                                                |
+|    ✔️    | SmsSenders.go                  | SmsSenders                  | Configure mobile devices as SMS senders                                                                                                                 |
+|    ✔️    | SrvCloud.go                    | SrvCloud                    | Interface to acquire info about public clouds                                                                                                           |
+|    ✔️    | SrvSsRevision.go               | SrvSsRevision               | Access to virtual server settings storage revisions                                                                                                     |
+|    ✔️    | SrvView.go                     | SrvView                     | Interface to get plain-queries from SC-server                                                                                                           |
+|    ✔️    | SsContents.go                  | SsContents                  | Access to settings storage                                                                                                                              |
+|    ✔️    | SubnetMasks.go                 | SubnetMasks                 | Subnets provider                                                                                                                                        |
+|    ✔️    | Tasks.go                       | Tasks                       | Group tasks                                                                                                                                             |
+|    ✔️    | TrafficManager.go              | TrafficManager              | Traffic manager interface                                                                                                                               |
+|    ✔️    | UaControl.go                   | UaControl                   | Update agents and Connection gateways management                                                                                                        |
+|    ✔️    | Updates.go                     | Updates                     | Updates processing                                                                                                                                      |
+|    ✘    |                                | UpdComps                    | Class provides means to manage updatable components (bases)                                                                                             |
+|    ✔️    | UserDevicesApi.go              | UserDevicesApi              | Interface to unified mobile device management                                                                                                           |
+|    ✔️    | VapmControlApi.go              | VapmControlApi              | VAPM                                                                                                                                                    |
+|    ✔️    | VServers.go                    | VServers                    | Virtual servers processing                                                                                                                              |
+|    ✔️    | VServers2.go                   | VServers2                   | Virtual servers processing                                                                                                                              |
+|    ✔️    | WolSender.go                   | WolSender                   | Wake-On-LAN signal sender                                                                                                                               |
+
+## NOTE
+Using the [context](https://godoc.org/context) package, one can easily
 pass cancelation signals and deadlines to various services of the client for
 handling a request. In case there is no context available, then `context.Background()`
 can be used as a starting point.
 
 
-## License ##
+## License
 
 This library is distributed under the  MIT LICENSE found in the [LICENSE](./LICENSE)
 file.
