@@ -85,6 +85,7 @@ type Client struct {
 	InvLicenseProducts                                        *InvLicenseProducts
 	IWebSrvSettings                                           *IWebSrvSettings
 	IWebUsersSrv                                              *IWebUsersSrv
+	IWebUsersSrv2                                             *IWebUsersSrv2
 	KillChain                                                 *KillChain
 	KLEVerControl                                             *KLEVerControl
 	KsnInternal                                               *KsnInternal
@@ -199,6 +200,7 @@ func New(cfg Config) *Client {
 	c.InvLicenseProducts = (*InvLicenseProducts)(&c.common)
 	c.IWebSrvSettings = (*IWebSrvSettings)(&c.common)
 	c.IWebUsersSrv = (*IWebUsersSrv)(&c.common)
+	c.IWebUsersSrv2 = (*IWebUsersSrv2)(&c.common)
 	c.KillChain = (*KillChain)(&c.common)
 	c.KLEVerControl = (*KLEVerControl)(&c.common)
 	c.KsnInternal = (*KsnInternal)(&c.common)
