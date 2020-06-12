@@ -70,8 +70,96 @@ type Klpol struct {
 	Value string `json:"value"`
 }
 
-//TODO AddPolicy
-//TODO CopyOrMovePolicy
+//	Create new policy.
+//
+//	Creates a new policy with the specified attributes
+//
+//	Parameters:
+//	- pPolicyData	(params) contains following attributes for policy creation
+//
+//	Mandatory:
+//	- KLPOL_DN
+//	- KLPOL_PRODUCT
+//	- KLPOL_VERSION
+//	- KLPOL_GROUP_ID
+//
+//	Optional:
+//	- KLPOL_ACTIVE (false by default)
+//	- KLPOL_ROAMING (false by default)
+//	- KLPOL_ACCEPT_PARENT (true by default)
+//	- KLPOL_FORCE_DISTRIB2CHILDREN (false by default)
+//	- KLPOL_HIDE_ON_SLAVES (false by default)
+//
+//	Returns:
+//	(int64) Id of the created policy (see KLPOL_ID)
+//
+//	See also:
+//	List of policy attributes
+func (pl *Policy) AddPolicy(ctx context.Context, params interface{}) (*PxgValInt, []byte, error) {
+	postData, err := json.Marshal(&params)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.AddPolicy", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	pxgValInt := new(PxgValInt)
+	raw, err := pl.client.Do(ctx, request, &pxgValInt)
+	return pxgValInt, raw, err
+}
+
+type PExtraData struct {
+	NPolicy       int64           `json:"nPolicy"`
+	NNewGroupID   int64           `json:"nNewGroupId"`
+	BDeleteOrigin bool            `json:"bDeleteOrigin"`
+	PExtraData    PExtraDataValue `json:"pExtraData"`
+}
+
+type PExtraDataClass struct {
+	Type            string          `json:"type"`
+	PExtraDataValue PExtraDataValue `json:"value"`
+}
+
+type PExtraDataValue struct {
+	KlpolDN     string `json:"KLPOL_DN"`
+	KlpolActive bool   `json:"KLPOL_ACTIVE"`
+}
+
+//	Copy or move policy.
+//
+//	Copies the specified policy and optionally deletes it.
+//
+//	Parameters:
+//	- nPolicy	(int) source policy id
+//	- nNewGroupId	(int) id of the AdmGroup (see HostGroup) to place the resulting policy
+//	- bDeleteOrigin	(boolean) if server must delete nPolicy after copying
+//	- pExtraData	(params) optional container with extra attributes, may contain following data:
+//		|- KLPOL_DN
+//		|- KLPOL_ACTIVE
+//
+//	Returns:
+//	- (int64) id of the new policy
+//
+//	See also:
+//	List of policy attributes
+func (pl *Policy) CopyOrMovePolicy(ctx context.Context, params PExtraData) (*PxgValInt, []byte, error) {
+	postData, err := json.Marshal(&params)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.CopyOrMovePolicy", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	pxgValInt := new(PxgValInt)
+	raw, err := pl.client.Do(ctx, request, &pxgValInt)
+	return pxgValInt, raw, err
+}
 
 //	Delete policy.
 //
@@ -276,8 +364,87 @@ func (pl *Policy) RevertPolicyToRevision(ctx context.Context, nPolicy, nRevision
 	return pxgValPolicy, raw, err
 }
 
-//TODO SetOutbreakPolicies
-//TODO UpdatePolicyData
+//	Specify array of outbreak policies.
+//
+//	Sets the array of outbreak policies
+//
+//	Parameters:
+//	- pData	(params) contains attribute KLPOL_POL_OUTBREAK of type paramArray,
+//	each entry contains two attributes KLPOL_ID (integer) and KLPOL_OUTBREAK_MASK (integer)
+//
+//	See also:
+//	Policy outbreak attributes
+func (pl *Policy) SetOutbreakPolicies(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(&params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.SetOutbreakPolicies", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := pl.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//PolicyDataUpdateParams struct using in Policy.UpdatePolicyData
+type PolicyDataUpdateParams struct {
+	// identifier of the policy to update
+	NPolicy int64 `json:"nPolicy"`
+
+	// contains attributes to modify
+	PPolicyData PPolicyData `json:"pPolicyData"`
+}
+
+//pPolicyData, following attributes can be changed:
+type PPolicyData struct {
+	//Policy display name
+	KlpolDN string `json:"KLPOL_DN"`
+
+	//True if policy is active
+	KlpolActive bool `json:"KLPOL_ACTIVE"`
+
+	//True if policy is roaming
+	KlpolRoaming bool `json:"KLPOL_ROAMING"`
+
+	//True if policy must be modified by parent policy (supported by Administration Server 7.0 or higher)
+	KlpolAcceptParent bool `json:"KLPOL_ACCEPT_PARENT"`
+
+	//True if policy must modify child policies (supported by Administration Server 7.0 or higher)
+	KlpolForceDistrib2Children bool `json:"KLPOL_FORCE_DISTRIB2CHILDREN"`
+}
+
+//	Update policy attributes.
+//
+//	Updates specified policy attributes.
+//
+//	Parameters:
+//	- nPolicy	(int64) identifier of the policy to update
+//	- pPolicyData	(params) contains attributes to modify, following attributes can be changed:
+//		|- KLPOL_DN
+//		|- KLPOL_ACTIVE
+//		|- KLPOL_ROAMING
+//		|- KLPOL_ACCEPT_PARENT
+//		|- KLPOL_FORCE_DISTRIB2CHILDREN
+//
+//	See also:
+//	List of policy attributes
+func (pl *Policy) UpdatePolicyData(ctx context.Context, params PolicyDataUpdateParams) ([]byte, error) {
+	postData, err := json.Marshal(&params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.UpdatePolicyData", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := pl.client.Do(ctx, request, nil)
+	return raw, err
+}
 
 //	Export policy to a blob.
 //
