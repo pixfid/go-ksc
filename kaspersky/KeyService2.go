@@ -44,14 +44,14 @@ type KeyService2 service
 //
 //	Return:
 //	- pEncryptedKeysData	(binary base64 string) Earlier exported keys data
-func (ks *KeyService2) ImportDpeKeys(ctx context.Context, pProtectedPass string) ([]byte, error) {
+func (ks2 *KeyService2) ImportDpeKeys(ctx context.Context, pProtectedPass string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"pProtectedPass": "%s"}`, pProtectedPass))
-	request, err := http.NewRequest("POST", ks.client.Server+"/api/v1.0/KeyService2.ImportDpeKeys", bytes.NewBuffer(postData))
+	request, err := http.NewRequest("POST", ks2.client.Server+"/api/v1.0/KeyService2.ImportDpeKeys", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := ks.client.Do(ctx, request, nil)
+	raw, err := ks2.client.Do(ctx, request, nil)
 	return raw, err
 }
 
@@ -62,13 +62,13 @@ func (ks *KeyService2) ImportDpeKeys(ctx context.Context, pProtectedPass string)
 //
 //	Return:
 //	- pEncryptedKeysData	(binary base64 string) Serialized binary data
-func (ks *KeyService2) ExportDpeKeys(ctx context.Context, pProtectedPass string) ([]byte, error) {
+func (ks2 *KeyService2) ExportDpeKeys(ctx context.Context, pProtectedPass string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"pProtectedPass": "%s"}`, pProtectedPass))
-	request, err := http.NewRequest("POST", ks.client.Server+"/api/v1.0/KeyService2.ExportDpeKeys", bytes.NewBuffer(postData))
+	request, err := http.NewRequest("POST", ks2.client.Server+"/api/v1.0/KeyService2.ExportDpeKeys", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := ks.client.Do(ctx, request, nil)
+	raw, err := ks2.client.Do(ctx, request, nil)
 	return raw, err
 }
