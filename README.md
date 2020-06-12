@@ -31,13 +31,24 @@ import (
 func main() {        
         ctx := context.Background()
     	cfg := kaspersky.Config {
-    		Username: "login",
+
+    	    //user login name
+    		UserName: "login",
+
+    		//password
     		Password: "password",
-            //VServerName: "virtual_server_name", for login on.
+
+            //VServerName: "virtual_server_name", for login on virtual server.
     		Server: fmt.Sprintf(`https://%s:%s`, "ip", "port"),
+
+    		//true using XKscSession tokens (false on default, session token expired time 3 minutes)
+    		XKscSession: false,
     	}
-    
+
+        //Construct a new KSC client
     	client := kaspersky.New(cfg)
+
+    	//Auth on KSC server
     	client.KSCAuth(ctx)
 
         //Get List of Windows domain in the network.
@@ -45,9 +56,9 @@ func main() {
         println(string(raw))
 }
 ```
-Examples:
+# Examples:
 
-Find online hosts:
+###### Find online hosts:
 
 ```go
 func Online(ctx context.Context, client *kaspersky.Client) *FullHostsInfo {
@@ -80,13 +91,13 @@ func Online(ctx context.Context, client *kaspersky.Client) *FullHostsInfo {
 }
 ```
 
-Get installed products on host by HostId:
+###### Get installed products on host by HostId:
 
 ```go
 products, err := client.HostGroup.GetHostProducts(ctx, "8910f900-3807-4b97-8a97-d49e73ec5ab1")
 ```
 
-Response:
+###### Response:
 
 ```json
 {
@@ -129,13 +140,13 @@ Response:
 }
 ```
 
-Get Lists tasks on Host: 
+###### Get Lists tasks on Host: 
 
 ```go
 tastList, raw, err := client.Tasks.GetAllTasksOfHost(ctx, "", "c2b22f83-307c-45aa-8533-5ffffbcc6bf1")
 ```
 
-Response:
+###### Response:
 
 ```json
 {
@@ -152,7 +163,8 @@ Response:
   ]
 }
 ```
-Find srvview data by filter string. A removable device's collection. 
+
+###### Find srvview data by filter string. A removable device's collection. 
 
 ```go
 	srvVParams := &kaspersky.SrvViewParams{
@@ -187,7 +199,7 @@ Find srvview data by filter string. A removable device's collection.
 	_, _ = client.SrvView.ReleaseIterator(ctx, *iterator.WstrIteratorID) //release iterator set on server
 ```
 
-Response:
+###### Response:
 
 ```json
 {
@@ -215,7 +227,7 @@ Response:
 ```
 
 
-NOTE: Using the [context](https://godoc.org/context) package, one can easily
+**NOTE**: Using the [context](https://godoc.org/context) package, one can easily
 pass cancelation signals and deadlines to various services of the client for
 handling a request. In case there is no context available, then `context.Background()`
 can be used as a starting point.
