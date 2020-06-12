@@ -324,7 +324,7 @@ tastList, raw, err := client.Tasks.GetAllTasksOfHost(ctx, "", "c2b22f83-307c-45a
 
 ## NOTE
 Using the [context](https://godoc.org/context) package, one can easily
-pass cancelation signals and deadlines to various services of the client for
+pass cancellation signals and deadlines to various services of the client for
 handling a request. In case there is no context available, then `context.Background()`
 can be used as a starting point.
 
