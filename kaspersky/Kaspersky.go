@@ -131,6 +131,7 @@ type Client struct {
 	TrafficManager                                            *TrafficManager
 	UaControl                                                 *UaControl
 	Updates                                                   *Updates
+	UpdComps                                                  *UpdComps
 	UserDevicesApi                                            *UserDevicesApi
 	VapmControlApi                                            *VapmControlApi
 	UserName, Password, Server, VServerName, XKscSessionToken string
@@ -249,6 +250,7 @@ func New(cfg Config) *Client {
 	c.TrafficManager = (*TrafficManager)(&c.common)
 	c.UaControl = (*UaControl)(&c.common)
 	c.Updates = (*Updates)(&c.common)
+	c.UpdComps = (*UpdComps)(&c.common)
 	c.UserDevicesApi = (*UserDevicesApi)(&c.common)
 	c.VapmControlApi = (*VapmControlApi)(&c.common)
 	c.VServers = (*VServers)(&c.common)
