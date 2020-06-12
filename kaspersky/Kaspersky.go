@@ -84,6 +84,7 @@ type Client struct {
 	InventoryApi                                              *InventoryApi
 	InvLicenseProducts                                        *InvLicenseProducts
 	IWebSrvSettings                                           *IWebSrvSettings
+	IWebUsersSrv                                              *IWebUsersSrv
 	KillChain                                                 *KillChain
 	KLEVerControl                                             *KLEVerControl
 	KsnInternal                                               *KsnInternal
@@ -197,6 +198,7 @@ func New(cfg Config) *Client {
 	c.InventoryApi = (*InventoryApi)(&c.common)
 	c.InvLicenseProducts = (*InvLicenseProducts)(&c.common)
 	c.IWebSrvSettings = (*IWebSrvSettings)(&c.common)
+	c.IWebUsersSrv = (*IWebUsersSrv)(&c.common)
 	c.KillChain = (*KillChain)(&c.common)
 	c.KLEVerControl = (*KLEVerControl)(&c.common)
 	c.KsnInternal = (*KsnInternal)(&c.common)
