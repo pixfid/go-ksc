@@ -32,8 +32,6 @@ import (
 	"net/http"
 )
 
-//TODO Response struct and examples
-
 //	QueriesStorage Class Reference
 //
 //	QueriesStorage interface.
