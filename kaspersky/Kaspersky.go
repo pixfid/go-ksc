@@ -97,6 +97,7 @@ type Client struct {
 	NagCgwHelper                                              *NagCgwHelper
 	NagGuiCalls                                               *NagGuiCalls
 	NagHstCtl                                                 *NagHstCtl
+	NagNetworkListApi                                         *NagNetworkListApi
 	NagRdu                                                    *NagRdu
 	NagRemoteScreen                                           *NagRemoteScreen
 	NetUtils                                                  *NetUtils
@@ -209,6 +210,7 @@ func New(cfg Config) *Client {
 	c.NagCgwHelper = (*NagCgwHelper)(&c.common)
 	c.NagGuiCalls = (*NagGuiCalls)(&c.common)
 	c.NagHstCtl = (*NagHstCtl)(&c.common)
+	c.NagNetworkListApi = (*NagNetworkListApi)(&c.common)
 	c.NagRdu = (*NagRdu)(&c.common)
 	c.NagRemoteScreen = (*NagRemoteScreen)(&c.common)
 	c.NetUtils = (*NetUtils)(&c.common)
