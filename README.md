@@ -226,7 +226,7 @@ tastList, raw, err := client.Tasks.GetAllTasksOfHost(ctx, "", "c2b22f83-307c-45a
 }
 ```
 
-## Classes
+#### Table of Classes:
 
 | Status  | Implement in go-ksc            | KSC Classes                 | Description
 |---------|--------------------------------|-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -329,14 +329,14 @@ tastList, raw, err := client.Tasks.GetAllTasksOfHost(ctx, "", "c2b22f83-307c-45a
 * [ ] Examples
 * [ ] Write Documentstion
 
-##### NOTE
+#### NOTE
 Using the [context](https://godoc.org/context) package, one can easily
 pass cancellation signals and deadlines to various services of the client for
 handling a request. In case there is no context available, then `context.Background()`
 can be used as a starting point.
 
 
-##### License
+#### License
 
 This library is distributed under the  MIT LICENSE found in the [LICENSE](./LICENSE)
 file.
