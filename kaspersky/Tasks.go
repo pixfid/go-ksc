@@ -655,8 +655,6 @@ func (ts *Tasks) GetHostStatusRecordRange(ctx context.Context, strHostIteratorId
 	return raw, err
 }
 
-//TODO ResolveTaskId
-
 //	Get task id by PRTS task id.
 //
 //	Parameters:
@@ -674,8 +672,6 @@ func (ts *Tasks) ResolveTaskId(ctx context.Context, strPrtsTaskId string) ([]byt
 	raw, err := ts.client.Do(ctx, request, nil)
 	return raw, err
 }
-
-//TODO - GetNextTask
 
 //	Sequentially get task data.
 //
@@ -698,8 +694,6 @@ func (ts *Tasks) GetNextTask(ctx context.Context, strTaskIteratorId string) ([]b
 	return raw, err
 }
 
-//TODO - GetNextHostStatus
-
 //	Sequentially get result of operation ResetHostIteratorForTaskStatus or ResetHostIteratorForTaskStatusEx.
 //
 //	Sequentially gets result of operation Tasks.ResetHostIteratorForTaskStatus or Tasks.ResetHostIteratorForTaskStatusEx
@@ -709,8 +703,9 @@ func (ts *Tasks) GetNextTask(ctx context.Context, strTaskIteratorId string) ([]b
 //	Tasks.ResetHostIteratorForTaskStatus or Tasks.ResetHostIteratorForTaskStatusEx
 //	- nCount	(int) requested number of records
 //
-//	- [out]	nActual	(int) actual count of received records
-//	- [out]	pHostStatus	(params) container that has requested elements in the array with name "statuses",
+//	Return:
+//	- nActual	(int) actual count of received records
+//	- pHostStatus	(params) container that has requested elements in the array with name "statuses",
 //	each item of array contains attributes from Host task state attributes
 //
 //	Returns:
@@ -726,4 +721,23 @@ func (ts *Tasks) GetNextHostStatus(ctx context.Context, strTaskIteratorId string
 	return raw, err
 }
 
-//TODO func (ts *Tasks) AddTask(ctx context.Context, params interface{}) ([]byte, error)
+//	Create new task.
+//
+//	Creates new task.
+//
+//	Parameters:
+//	- pData	(params) task settings, see Task settings format
+//
+//	Returns:
+//	- (string) task id in digital representation, like "1" or "45" and etc.
+func (ts *Tasks) AddTask(ctx context.Context, params interface{}) (*PxgValInt, []byte, error) {
+	postData, _ := json.Marshal(params)
+	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/Tasks.AddTask", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	pxgValInt := new(PxgValInt)
+	raw, err := ts.client.Do(ctx, request, &pxgValInt)
+	return pxgValInt, raw, err
+}
