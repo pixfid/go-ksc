@@ -109,6 +109,7 @@ type Client struct {
 	OsVersion                                                 *OsVersion
 	PackagesApi                                               *PackagesApi
 	PatchParameters                                           *PatchParameters
+	PLCDevApi                                                 *PLCDevApi
 	Policy                                                    *Policy
 	PolicyProfiles                                            *PolicyProfiles
 	QueriesStorage                                            *QueriesStorage
@@ -229,6 +230,7 @@ func New(cfg Config) *Client {
 	c.OsVersion = (*OsVersion)(&c.common)
 	c.PackagesApi = (*PackagesApi)(&c.common)
 	c.PatchParameters = (*PatchParameters)(&c.common)
+	c.PLCDevApi = (*PLCDevApi)(&c.common)
 	c.Policy = (*Policy)(&c.common)
 	c.PolicyProfiles = (*PolicyProfiles)(&c.common)
 	c.QueriesStorage = (*QueriesStorage)(&c.common)
