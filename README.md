@@ -226,10 +226,10 @@ tastList, raw, err := client.Tasks.GetAllTasksOfHost(ctx, "", "c2b22f83-307c-45a
 }
 ```
 
-##TODO
+## TODO
 
-| Status   | Implement in go-ksc            | KSC Classes                 | Description
-|----------|--------------------------------|-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Status  | Implement in go-ksc            | KSC Classes                 | Description
+|---------|--------------------------------|-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
 |    ✔️    | AdfsSso.go                     | AdfsSso                     | Interface for working with ADFS SSO                                                                                                                     |
 |    ✔️    | AdHosts.go                     | AdHosts                     | Scanned active directory OU structure                                                                                                                   |
 |    ✔️    | AdmServerSettings.go           | AdmServerSettings           | AdmServerSettings interface                                                                                                                             |
