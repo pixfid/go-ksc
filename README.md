@@ -327,7 +327,7 @@ tastList, raw, err := client.Tasks.GetAllTasksOfHost(ctx, "", "c2b22f83-307c-45a
 * [ ] Implements all Methods
 * [ ] Write Tests
 * [ ] Examples
-* [ ] Write Documentstion
+* [ ] Write Documentation
 
 #### NOTE
 Using the [context](https://godoc.org/context) package, one can easily
