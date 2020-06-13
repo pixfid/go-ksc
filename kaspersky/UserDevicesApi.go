@@ -27,6 +27,7 @@ package kaspersky
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"net/http"
@@ -39,7 +40,8 @@ import (
 //	List of all members:
 type UserDevicesApi service
 
-//	Delete a command previously posted to the specified device.
+//UserDevicesApi.DeleteCommand
+//Delete a command previously posted to the specified device.
 //
 //	Parameters:
 //	- c_wstrCommandGuid	(string) globally unique command instance id
@@ -59,7 +61,8 @@ func (uda *UserDevicesApi) DeleteCommand(ctx context.Context, c_wstrCommandGuid 
 	return raw, err
 }
 
-//	Delete device.
+//UserDevicesApi.DeleteDevice
+//Delete device.
 //
 //	Parameters:
 //	- lDeviceId	(int64) device id
@@ -75,7 +78,8 @@ func (uda *UserDevicesApi) DeleteDevice(ctx context.Context, lDeviceId int64) ([
 	return raw, err
 }
 
-//	Delete enrollment package.
+//UserDevicesApi.DeleteEnrollmentPackage
+//Delete enrollment package.
 //
 //	Parameters:
 //	- lEnrPkgId	(int64) enrollment package id
@@ -91,9 +95,10 @@ func (uda *UserDevicesApi) DeleteEnrollmentPackage(ctx context.Context, lEnrPkgI
 	return raw, err
 }
 
-//	Generates QR code.
+//UserDevicesApi.GenerateQRCode
+//Generates QR code.
 //
-//	Generates QR code from any string
+//Generates QR code from any string
 //
 //	Parameters:
 //	- strInputData	(string) input data
@@ -116,7 +121,8 @@ func (uda *UserDevicesApi) GenerateQRCode(ctx context.Context, strInputData stri
 	return raw, err
 }
 
-//	Acquire states of all commands posted to the specified device.
+//UserDevicesApi.GetCommands
+//Acquire states of all commands posted to the specified device.
 //
 //	Parameters:
 //	- lDeviceId	(int64) device id
@@ -157,9 +163,10 @@ func (uda *UserDevicesApi) GetCommands(ctx context.Context, lDeviceId int64) ([]
 	return raw, err
 }
 
-//	Acquire library of all available commands.
+//UserDevicesApi.GetCommandsLibrary
+//Acquire library of all available commands.
 //
-//	Acquires list contains commands info reqired to display and launch commands
+//Acquires list contains commands info reqired to display and launch commands
 //
 //	Returns:
 //	- (array) array, each element is a container describes the command (see Device commands library)
@@ -181,9 +188,36 @@ func (uda *UserDevicesApi) GetCommandsLibrary(ctx context.Context) ([]byte, erro
 	return raw, err
 }
 
-//TODO GetDecipheredCommandList
+//UserDevicesApi.GetDecipheredCommandList
+//Calculate commands array according to bit mask of supported commands.
+//
+//Makes commands array according to bit mask of commands supported by device
+//
+//	Parameters:
+//	- llCommandFlags	(int64) bit mask of commands supported by device
+//	- pCommandsLibrary	(array) array of commands from the commands library,
+//	each element is a container (paramParams) describing the command (see Device commands library).
+//
+//	Returns:
+//	- (array) array calculated according llCommandFlags,
+//	each element is a container (paramParams) describing the command (see Device commands library).
+func (uda *UserDevicesApi) GetDecipheredCommandList(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
 
-//	Acquire properties of the specified user device.
+	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GetDecipheredCommandList", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := uda.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//UserDevicesApi.GetDevice
+//Acquire properties of the specified user device.
 //
 //	Parameters:
 //	- lDeviceId	(int64) device id
@@ -202,10 +236,56 @@ func (uda *UserDevicesApi) GetDevice(ctx context.Context, lDeviceId int64) ([]by
 	return raw, err
 }
 
-//TODO GetDevices
-//TODO GetDevicesExtraData
+//UserDevicesApi.GetDevices
+//Acquire properties of all registered devices owned by specified user.
+//
+//	Parameters:
+//	- pUserId	(binary) user identifier, binary data as array of bytes; empty means current user
+//
+//	Returns:
+//	- (array) array, each element is a container params contains attributes from List of device attributes
+func (uda *UserDevicesApi) GetDevices(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
 
-//	Get the info of enrollment package created for the device.
+	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GetDevices", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := uda.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//UserDevicesApi.GetDevicesExtraData
+//Gets additional data from devices such as installed applications, profiles, certificates and etc. !
+//
+//	Parameters:
+//	- pDeviceIds	(array) array of devices integer identity
+//	- pCategories	(array) array of categories such as installed applications, profiles,
+//	certificates (see Extra Data Categories)
+//
+//	Returns:
+//	- (array) contains additional data from devices like this: Extra Data Example
+func (uda *UserDevicesApi) GetDevicesExtraData(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GetDevicesExtraData", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := uda.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//UserDevicesApi.GetEnrollmentPackage
+//Get the info of enrollment package created for the device.
 //
 //	Parameters:
 //	- llEnrPkgId	(int64) enrollment package id
@@ -223,6 +303,17 @@ func (uda *UserDevicesApi) GetEnrollmentPackage(ctx context.Context, llEnrPkgId 
 	return raw, err
 }
 
+//UserDevicesApi.GetEnrollmentPackageFileData
+//Get enrollment package file data.
+//
+//	Parameters:
+//	- c_wstrPackageId		(string) enrollment package id extruded from HTTP request
+//	- c_wstrPackageFileType	(string) enrollment package file type, example: "iOS4", "iOS5", "Andr4", "WPhone2"
+//	- lBuffOffset			(int64) start position
+//	- lBuffSize				(int64) number of bytes to read
+//
+//	Returns:
+//	- (binary) contains requested data chunk of enrollment package file
 func (uda *UserDevicesApi) GetEnrollmentPackageFileData(ctx context.Context, c_wstrPackageId,
 	c_wstrPackageFileType string, lBuffOffset, lBuffSize int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`
@@ -242,7 +333,8 @@ func (uda *UserDevicesApi) GetEnrollmentPackageFileData(ctx context.Context, c_w
 	return raw, err
 }
 
-//	Get enrollment package file data.
+//UserDevicesApi.GetEnrollmentPackageFileInfo
+//Get enrollment package file data.
 //
 //	Parameters:
 //	- c_wstrPackageId	(string) enrollment package id extruded from HTTP request
@@ -270,9 +362,31 @@ func (uda *UserDevicesApi) GetEnrollmentPackageFileInfo(ctx context.Context, c_w
 	return raw, err
 }
 
-//TODO GetEnrollmentPackages
+//UserDevicesApi.GetEnrollmentPackages
+//Get the list of enrollment packages created for a device.
+//
+//	Parameters:
+//	- pUserId	(binary) user identifier, binary data as array of bytes; empty means current user
+//
+//	Returns:
+//	- (array) array of containers Params with enrollment packages info (see Device enrollment packages info)
+func (uda *UserDevicesApi) GetEnrollmentPackages(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
 
-//	Returns command result for specific journal record.
+	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GetEnrollmentPackages", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := uda.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//UserDevicesApi.GetJournalCommandResult
+//Returns command result for specific journal record.
 //
 //	Parameters:
 //	- llJrnlId	(int64) journal record id
@@ -291,9 +405,10 @@ func (uda *UserDevicesApi) GetJournalCommandResult(ctx context.Context, llJrnlId
 	return raw, err
 }
 
-//	Acquire records from journal.
+//UserDevicesApi.GetJournalRecords
+//Acquire records from journal.
 //
-//	Acquire records from journal about completed or failed commands posted to device
+//Acquire records from journal about completed or failed commands posted to device
 //
 //	Parameters:
 //	- lDeviceId	(int64) device id
@@ -312,10 +427,11 @@ func (uda *UserDevicesApi) GetJournalRecords(ctx context.Context, lDeviceId int6
 	return raw, err
 }
 
-//	Acquire records from journal without command result.
+//UserDevicesApi.GetJournalRecords2
+//Acquire records from journal without command result.
 //
-//	Acquires records from journal about completed or failed commands posted to device without command result.
-//	To get command result for specific record you can use UserDevicesApi.GetJournalCommandResult
+//Acquires records from journal about completed or failed commands posted to device without command result.
+//To get command result for specific record you can use UserDevicesApi.GetJournalCommandResult
 //
 //	Parameters:
 //	- lDeviceId	(int64) device id
@@ -334,7 +450,8 @@ func (uda *UserDevicesApi) GetJournalRecords2(ctx context.Context, lDeviceId int
 	return raw, err
 }
 
-//	Acquire latest device activity date.
+//UserDevicesApi.GetLatestDeviceActivityDate
+//Acquire latest device activity date.
 //
 //	Parameters:
 //	- lDeviceId	(int64) device id
@@ -353,7 +470,8 @@ func (uda *UserDevicesApi) GetLatestDeviceActivityDate(ctx context.Context, lDev
 	return raw, err
 }
 
-//	Get mobile agent setting storage data.
+//UserDevicesApi.GetMobileAgentSettingStorageData
+//Get mobile agent setting storage data.
 //
 //	Parameters:
 //	- lDeviceId	(int64) device id
@@ -373,7 +491,8 @@ func (uda *UserDevicesApi) GetMobileAgentSettingStorageData(ctx context.Context,
 	return raw, err
 }
 
-//	Retrieves multitenancy server settings.
+//UserDevicesApi.GetMultitenancyServerSettings
+//Retrieves multitenancy server settings.
 //
 //	Parameters:
 //	- c_wstrMtncServerId	(string) string id of multitenancy server which can be retrieved from method
@@ -396,7 +515,8 @@ func (uda *UserDevicesApi) GetMultitenancyServerSettings(ctx context.Context, c_
 	return raw, err
 }
 
-//	Retrieves multitenancy servers list.
+//UserDevicesApi.GetMultitenancyServersInfo
+//Retrieves multitenancy servers list.
 //
 //	Parameters:
 //	- nProtocolIds	(int) bit mask means which multitenancy server protocols required
@@ -416,7 +536,8 @@ func (uda *UserDevicesApi) GetMultitenancyServersInfo(ctx context.Context, nProt
 	return raw, err
 }
 
-//	Returns flag which means install or don't install SafeBrowser automatically when device connects first time.
+//UserDevicesApi.GetSafeBrowserAutoinstallFlag
+//Returns flag which means install or don't install SafeBrowser automatically when device connects first time.
 //
 //	Returns:
 //	- (bool) flag which means install or don't install SafeBrowser automatically
@@ -433,9 +554,36 @@ func (uda *UserDevicesApi) GetSafeBrowserAutoinstallFlag(ctx context.Context) (*
 	return pxgValBool, raw, err
 }
 
-//TODO GetSyncInfo
+//UserDevicesApi.GetSyncInfo
+//Retrieves group synchronization info for UMDM policy.
+//
+//	Parameters:
+//	- nGroupId	(int64) Group identifier.
+//	- nGSyncId	[int64] Synchronization identifier.
+//	- pFields	(array) array of requested attributes
+//
+//	Returns:
+//	- (params) Group synchronization info for requested attributes
+//
+//	Exceptions:
+//	- STDE_NOTFOUND	if group with requested attributes was not found
+func (uda *UserDevicesApi) GetSyncInfo(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
 
-//	Glue information on a device got from different sources
+	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GetSyncInfo", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := uda.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//UserDevicesApi.GlueDevices
+//Glue information on a device got from different sources
 //
 //	Parameters:
 //	- lDevice1Id	(int64) first device id
@@ -455,9 +603,36 @@ func (uda *UserDevicesApi) GlueDevices(ctx context.Context, lDevice1Id, lDevice2
 	return raw, err
 }
 
-//TODO PostCommand
+//UserDevicesApi.PostCommand
+//Post a command to the specified device.
+//
+//Note, you can't sent more then one command with same type to the specified device
+//while command with same type is not completed, instead you may call method RecallCommand
+//
+//	Parameters:
+//	- lDeviceId			(int64) device id
+//	- c_wstrCommandGuid	(string) globally unique command instance id.
+//	- c_wstrCommandType	(string) command type, you can retrieve it by calling GetCommandsLibrary
+//	- pArguments		(params) command arguments
+//	- lMdmProtocols		(int64) bit mask means which protocols will be used to process command (DEPRECATED, just set 0)
+//	- lProcessFlags		(int64) command process flags mean algorithm to process command (DEPRECATED, just set 0)
+func (uda *UserDevicesApi) PostCommand(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
 
-//	Recall command previously posted to the specified device.
+	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.PostCommand", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := uda.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//UserDevicesApi.RecallCommand
+//Recall command previously posted to the specified device.
 //
 //	Parameters:
 //	- c_wstrCommandGuid	(string) globally unique command instance id
@@ -477,9 +652,32 @@ func (uda *UserDevicesApi) RecallCommand(ctx context.Context, c_wstrCommandGuid 
 	return raw, err
 }
 
-//TODO SetMultitenancyServerSettings
+//UserDevicesApi.SetMultitenancyServerSettings
+//Set multitenancy server settings.
+//
+//	Parameters:
+//	- c_wstrMtncServerId	(string) string id of multitenancy server which can be retrieved from method
+//	GetMultitenancyServersInfo(value c_szwMtncSrvInfoStrId),
+//	if c_wstrMtncServerId is empty then settings will be retrieved from the first available multitenancy server
+//	- pSettings	(params) contains settings to multitenancy server,
+//	now settings available only for KLUMDM::MDMProtocol_IOSMDM (see MDM4IOS multitenancy server settings)
+func (uda *UserDevicesApi) SetMultitenancyServerSettings(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
 
-//	Set flag which means install or don't install SafeBrowser automatically when device connects first time.
+	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.SetMultitenancyServerSettings", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := uda.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//UserDevicesApi.SetSafeBrowserAutoinstallFlag
+//Set flag which means install or don't install SafeBrowser automatically when device connects first time.
 //
 //	Parameters:
 //	- bInstall	(bool) flag means install or don't install SafeBrowser automatically
@@ -496,7 +694,8 @@ func (uda *UserDevicesApi) SetSafeBrowserAutoinstallFlag(ctx context.Context, bI
 	return raw, err
 }
 
-//	Check user permission to login to SSP.
+//UserDevicesApi.SspLoginAllowed
+//Check user permission to login to SSP.
 //
 //	Exceptions:
 //	- STDE_NOACCESS	if login to SSP is not allowed
@@ -512,4 +711,23 @@ func (uda *UserDevicesApi) SspLoginAllowed(ctx context.Context) ([]byte,
 	return raw, err
 }
 
-//TODO UpdateDevice
+//UserDevicesApi.UpdateDevice
+//Modify properties of the specified user device.
+//
+//	Parameters:
+//	- lDeviceId	(int64) device id
+//	- pDevice	(params) device info, container Params contains attributes: List of device attributes
+func (uda *UserDevicesApi) UpdateDevice(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.UpdateDevice", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := uda.client.Do(ctx, request, nil)
+	return raw, err
+}
