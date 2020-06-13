@@ -38,7 +38,7 @@ import (
 //List of all members.
 type DpeKeyService service
 
-//DpeKeyService.GetDeviceKeys3
+//GetDeviceKeys3
 //Returns information about host and key for chosen encrypted device.
 //
 //	Parameters:

@@ -75,7 +75,7 @@ type PKeyPair struct {
 	AzureStorageKey string `json:"AZURE_STORAGE_KEY,omitempty"`
 }
 
-//CloudAccess.VerifyCredentials
+//VerifyCredentials
 //Verify credentials.
 //
 //	Parameters:
@@ -108,7 +108,7 @@ type KeyPairAccess struct {
 	BAllowDeployment bool `json:"bAllowDeployment,omitempty"`
 }
 
-//CloudAccess.AcquireAccessForKeyPair
+//AcquireAccessForKeyPair
 //Check key-pair access
 //
 //	Parameters:

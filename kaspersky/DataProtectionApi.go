@@ -39,7 +39,7 @@ import (
 //List of all members.
 type DataProtectionApi service
 
-//DataProtectionApi.CheckPasswordSplPpc
+//CheckPasswordSplPpc
 //Checks if Spl password policy compliance is enabled for the specified Administration Server
 //and checks the specified password for compliance to the password policy.
 //
@@ -89,7 +89,7 @@ type ProtectedData struct {
 	PDataProtected string `json:"pDataProtected,omitempty"`
 }
 
-//DataProtectionApi.ProtectDataForHost
+//ProtectDataForHost
 //Protects sensitive data to store in SettingsStorage or local task.
 //
 //	Parameters:
@@ -114,7 +114,7 @@ func (dpa *DataProtectionApi) ProtectDataForHost(ctx context.Context, params ToP
 	return protectedData, raw, err
 }
 
-//DataProtectionApi.ProtectDataGlobally
+//ProtectDataGlobally
 //Protects sensitive data to store in policy or global/group task.
 //
 //	Parameters:
@@ -132,7 +132,7 @@ func (dpa *DataProtectionApi) ProtectDataGlobally(ctx context.Context, params To
 	return protectedData, raw, err
 }
 
-//DataProtectionApi.ProtectUtf16StringForHost
+//ProtectUtf16StringForHost
 //Protects sensitive data for the specified host (to store in its local settings or a local task)
 //
 //Protects the specified text as UTF16 string encrypted with the key of the specified host.
@@ -155,7 +155,7 @@ func (dpa *DataProtectionApi) ProtectUtf16StringForHost(ctx context.Context, szw
 	return raw, err
 }
 
-//DataProtectionApi.ProtectUtf16StringGlobally
+//ProtectUtf16StringGlobally
 //Protects sensitive data to store in policy, global/group task, Administration Server settings.
 //
 //Protects the specified text as UTF16 string encrypted with the key of the Administration Server.
@@ -179,7 +179,7 @@ func (dpa *DataProtectionApi) ProtectUtf16StringGlobally(ctx context.Context, sz
 	return raw, err
 }
 
-//DataProtectionApi.ProtectUtf8StringForHost
+//ProtectUtf8StringForHost
 //Protects sensitive data for the specified host (to store in its local settings or a local task)
 //
 //Protects the specified text as UTF8 string encrypted with the key of the specified host.
@@ -202,7 +202,7 @@ func (dpa *DataProtectionApi) ProtectUtf8StringForHost(ctx context.Context, szwH
 	return raw, err
 }
 
-//DataProtectionApi.ProtectUtf8StringGlobally
+//ProtectUtf8StringGlobally
 //Protects sensitive data to store in policy, global/group task,
 //Administration Server settings.
 //

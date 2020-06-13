@@ -38,7 +38,7 @@ import (
 //Public Member Functions
 type CgwHelper service
 
-//CgwHelper.GetSlaveServerLocation
+//GetSlaveServerLocation
 //Retrieves Slave Server Location.
 //
 //	Parameters:
@@ -72,7 +72,7 @@ type NagLocation struct {
 	GwLOCUseCompression  bool   `json:"GwLocUseCompression,omitempty"`
 }
 
-//CgwHelper.GetNagentLocation
+//GetNagentLocation
 //Retrieves Nagent Location by host name.
 //
 //	Parameters:

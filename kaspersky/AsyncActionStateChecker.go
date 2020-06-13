@@ -76,7 +76,7 @@ type PStateData struct {
 	WuaLogsWin10     []string          `json:"WuaLogs_Win10"`
 }
 
-//AsyncActionStateChecker.CheckActionState
+//CheckActionState
 //Check status of the async action.
 //
 //Preconditions:

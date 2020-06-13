@@ -40,7 +40,7 @@ import (
 //Public Member Functions
 type CertPoolCtrl service
 
-//CertPoolCtrl.GetCertificateInfo
+//GetCertificateInfo
 //Returns information about certificate from server's certificates pool.
 //
 //	Parameters:
@@ -62,7 +62,7 @@ func (cpc *CertPoolCtrl) GetCertificateInfo(ctx context.Context, nVServerId, nFu
 	return raw, err
 }
 
-//CertPoolCtrl.SetCertificate
+//SetCertificate
 //Sets certificate of a given function for a given virtual server.
 //
 //	Parameters:

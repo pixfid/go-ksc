@@ -45,7 +45,7 @@ import (
 //List of all members.
 type FileCategorizer2 service
 
-//FileCategorizer2.AddExpressions
+//AddExpressions
 //Add some expressions to category.
 //
 //	Parameters:
@@ -74,7 +74,7 @@ func (fc *FileCategorizer2) AddExpressions(ctx context.Context, params interface
 	return pxgValStr, raw, err
 }
 
-//FileCategorizer2.CancelFileMetadataOperations
+//CancelFileMetadataOperations
 //Cancel file metadata operations.
 //
 //Method cancels operation (GetFileMetadata, GetFilesMetadata, GetFilesMetadataFromMSI) initialized using current connection.
@@ -89,7 +89,7 @@ func (fc *FileCategorizer2) CancelFileMetadataOperations(ctx context.Context) (*
 	return pxgValInt, raw, err
 }
 
-//FileCategorizer2.CancelFileUpload
+//CancelFileUpload
 //Cancel file upload for file categorizer subsystem.
 //
 //This methode cancels file upload.
@@ -160,7 +160,7 @@ type CertificateParams struct {
 type Certificate struct {
 }
 
-//FileCategorizer2.CreateCategory
+//CreateCategory
 //Create category (simple, autoupdate or silverimage)
 //
 //	Parameters:
@@ -187,7 +187,7 @@ func (fc *FileCategorizer2) CreateCategory(ctx context.Context, params CategoryP
 	return pxgValStr, raw, err
 }
 
-//FileCategorizer2.DeleteCategory
+//DeleteCategory
 //Delete category.
 //
 //	Parameters:
@@ -215,7 +215,7 @@ type ExpressionParams struct {
 	BInclusions bool    `json:"bInclusions,omitempty"`
 }
 
-//FileCategorizer2.DeleteExpression
+//DeleteExpression
 //Delete some expressions from category.
 //
 //	Parameters:
@@ -244,7 +244,7 @@ func (fc *FileCategorizer2) DeleteExpression(ctx context.Context, params Express
 	return pxgValStr, raw, err
 }
 
-//FileCategorizer2.DoStaticAnalysisAsync
+//DoStaticAnalysisAsync
 //Start static analysis.
 //
 //	Deprecated:
@@ -273,7 +273,7 @@ type AsyncID struct {
 	WstrAsyncID string `json:"wstrAsyncId,omitempty"`
 }
 
-//FileCategorizer2.DoStaticAnalysisAsync2
+//DoStaticAnalysisAsync2
 //Start static analysis.
 //
 //	Parameters:
@@ -305,7 +305,7 @@ func (fc *FileCategorizer2) DoStaticAnalysisAsync2(ctx context.Context, nPolicyI
 	return asyncID, raw, err
 }
 
-//FileCategorizer2.DoTestStaticAnalysisAsync
+//DoTestStaticAnalysisAsync
 //Start static analysis for test ACL.
 //
 //	Deprecated:
@@ -330,7 +330,7 @@ func (fc *FileCategorizer2) DoTestStaticAnalysisAsync(ctx context.Context, param
 	return raw, err
 }
 
-//FileCategorizer2.DoTestStaticAnalysisAsync2
+//DoTestStaticAnalysisAsync2
 //Start static analysis for test ACL.
 //
 //	Parameters:
@@ -361,7 +361,7 @@ func (fc *FileCategorizer2) DoTestStaticAnalysisAsync2(ctx context.Context, para
 	return wActionGUID, raw, err
 }
 
-//FileCategorizer2.FinishStaticAnalysis
+//FinishStaticAnalysis
 func (fc *FileCategorizer2) FinishStaticAnalysis(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.FinishStaticAnalysis", nil)
 	if err != nil {
@@ -372,7 +372,7 @@ func (fc *FileCategorizer2) FinishStaticAnalysis(ctx context.Context) ([]byte, e
 	return raw, err
 }
 
-//FileCategorizer2.ForceCategoryUpdate
+//ForceCategoryUpdate
 //Force process of automatic update (for autoupdate and silverimage)
 //
 //	Parameters:
@@ -392,7 +392,7 @@ func (fc *FileCategorizer2) ForceCategoryUpdate(ctx context.Context, nCategoryId
 	return raw, err
 }
 
-//FileCategorizer2.GetCategoriesModificationCounter
+//GetCategoriesModificationCounter
 //Returns modification counter. It increments on every category change.
 //
 //	Returns:
@@ -408,7 +408,7 @@ func (fc *FileCategorizer2) GetCategoriesModificationCounter(ctx context.Context
 	return pxgValInt, raw, err
 }
 
-//FileCategorizer2.GetCategory
+//GetCategory
 //Get category by id.
 //
 //	Parameters:
@@ -432,7 +432,7 @@ func (fc *FileCategorizer2) GetCategory(ctx context.Context, nCategoryId int64) 
 	return raw, err
 }
 
-//FileCategorizer2.GetCategoryByUUID
+//GetCategoryByUUID
 //Get category by uuid.
 //
 //	Parameters:
@@ -455,7 +455,7 @@ func (fc *FileCategorizer2) GetCategoryByUUID(ctx context.Context, pCategoryUUID
 	return raw, err
 }
 
-//FileCategorizer2.GetFileMetadata
+//GetFileMetadata
 //Get file metadata.
 //
 //	Parameters:
@@ -482,7 +482,7 @@ func (fc *FileCategorizer2) GetFileMetadata(ctx context.Context, ulFlag int64) (
 	return raw, err
 }
 
-//FileCategorizer2.GetFilesMetadata
+//GetFilesMetadata
 //Get files metadata from zip-archive.
 //
 //	Parameters:
@@ -511,7 +511,7 @@ func (fc *FileCategorizer2) GetFilesMetadata(ctx context.Context, ulFlag int64) 
 	return raw, err
 }
 
-//FileCategorizer2.GetFilesMetadataFromMSI
+//GetFilesMetadataFromMSI
 //Get files metadata from MSI.
 //
 //	Parameters:
@@ -563,7 +563,7 @@ type RefPolicyValue struct {
 	VServerName string `json:"VServerName,omitempty"`
 }
 
-//FileCategorizer2.GetRefPolicies
+//GetRefPolicies
 //Returns array of policies with references to specified category.
 //
 //	Parameters:
@@ -587,7 +587,7 @@ func (fc *FileCategorizer2) GetRefPolicies(ctx context.Context, nCatId int64) (*
 	return refPolicies, raw, err
 }
 
-//FileCategorizer2.GetSerializedCategoryBody
+//GetSerializedCategoryBody
 //Returns serialized category body for plugin.
 //
 //	Warning:
@@ -610,7 +610,7 @@ func (fc *FileCategorizer2) GetSerializedCategoryBody(ctx context.Context, nCate
 	return raw, err
 }
 
-//FileCategorizer2.GetSerializedCategoryBody2
+//GetSerializedCategoryBody2
 //Returns serialized category body for plugin.
 //
 //	Parameters:
@@ -633,7 +633,7 @@ func (fc *FileCategorizer2) GetSerializedCategoryBody2(ctx context.Context, nCat
 	return raw, err
 }
 
-//FileCategorizer2.GetSyncId
+//GetSyncId
 //Returns categories synchronization id.
 //
 //	Returns:
@@ -656,7 +656,7 @@ type UploadParams struct {
 	WstrUploadURL string `json:"wstrUploadUrl,omitempty"`
 }
 
-//FileCategorizer2.InitFileUpload
+//InitFileUpload
 //Initialize file upload for file categorizer subsystem.
 //
 //	Return:
@@ -674,7 +674,7 @@ func (fc *FileCategorizer2) InitFileUpload(ctx context.Context) (*UploadParams, 
 	return uploadParams, raw, err
 }
 
-//FileCategorizer2.UpdateCategory
+//UpdateCategory
 //Update category.
 //
 //	Parameters:
@@ -701,7 +701,7 @@ func (fc *FileCategorizer2) UpdateCategory(ctx context.Context, params interface
 	return pxgValStr, raw, err
 }
 
-//FileCategorizer2.UpdateExpressions
+//UpdateExpressions
 //Update some expressions in category.
 //
 //	Parameters:

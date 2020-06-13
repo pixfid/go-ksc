@@ -41,7 +41,7 @@ import (
 //List of all members.
 type ChunkAccessor service
 
-//ChunkAccessor.Release
+//Release
 //Release result-set.
 //
 //Releases the specified result-set and frees associated memory
@@ -62,7 +62,7 @@ func (ca *ChunkAccessor) Release(ctx context.Context, accessor string) bool {
 	return false
 }
 
-//ChunkAccessor.GetItemsCount
+//GetItemsCount
 //Acquire count of result-set elements.
 //
 //Returns number of elements contained in the specified result-set.
@@ -89,7 +89,7 @@ type ItemsChunkParams struct {
 	NCount      int64  `json:"nCount,omitempty"`
 }
 
-//ChunkAccessor.GetItemsChunk
+//GetItemsChunk
 //Acquire subset of result-set elements by range.
 //
 //Returns specified nCount elements contained in the specified result-set beginning from position nStart.

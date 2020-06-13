@@ -39,7 +39,7 @@ import (
 //List of all members.
 type DatabaseInfo service
 
-//DatabaseInfo.GetDBSize
+//GetDBSize
 //Get database's files size.
 //
 //Returns size of files of database
@@ -57,7 +57,7 @@ func (di *DatabaseInfo) GetDBSize(ctx context.Context) (*PxgValInt, []byte, erro
 	return pxgValInt, raw, err
 }
 
-//DatabaseInfo.GetDBDataSize
+//GetDBDataSize
 //Get database's data size.
 //
 //Returns size of data of database
@@ -75,7 +75,7 @@ func (di *DatabaseInfo) GetDBDataSize(ctx context.Context) (*PxgValInt, []byte, 
 	return pxgValInt, raw, err
 }
 
-//DatabaseInfo.GetDBEventsCount
+//GetDBEventsCount
 //Get database's events count.
 //
 //Returns count of events of database
@@ -93,7 +93,7 @@ func (di *DatabaseInfo) GetDBEventsCount(ctx context.Context) (*PxgValInt, []byt
 	return pxgValInt, raw, err
 }
 
-//DatabaseInfo.IsCloudSQL
+//IsCloudSQL
 //Check is current SQL server in cloud (Amazon RDS or Azure SQL)
 //
 //	Parameters:
@@ -113,7 +113,7 @@ func (di *DatabaseInfo) IsCloudSQL(ctx context.Context, nCloudType int64) (*PxgV
 	return pxgValBool, raw, err
 }
 
-//DatabaseInfo.CheckBackupPath
+//CheckBackupPath
 //Check the server administration and SQL-server permissions to read and write files along path.
 //
 //	Parameters:
@@ -132,7 +132,7 @@ func (di *DatabaseInfo) CheckBackupPath(ctx context.Context, szwPath string) (*P
 	return pxgValBool, raw, err
 }
 
-//DatabaseInfo.CheckBackupPath2
+//CheckBackupPath2
 //Check the server administration and SQL-server permissions to read and write files along path.
 //
 //	Parameters:
@@ -153,7 +153,7 @@ func (di *DatabaseInfo) CheckBackupPath2(ctx context.Context, szwWinPath, szwLin
 	return pxgValBool, raw, err
 }
 
-//DatabaseInfo.IsLinuxSQL
+//IsLinuxSQL
 //Check is current SQL server in on Linux.
 //
 //	Returns:

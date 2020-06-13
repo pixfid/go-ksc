@@ -49,7 +49,7 @@ type ExePFilter struct {
 	FileName string `json:"FILE_NAME,omitempty"`
 }
 
-//AppCtrlApi.GetExeFileInfo
+//GetExeFileInfo
 //Get data about instances of the execution file on the host.
 //
 //	Parameters:

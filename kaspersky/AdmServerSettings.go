@@ -38,7 +38,7 @@ import (
 //List of all members:
 type AdmServerSettings service
 
-//AdmServerSettings.GetSharedFolder
+//GetSharedFolder
 //Acquire shared folder.
 //
 //	Returns:
@@ -54,7 +54,7 @@ func (as *AdmServerSettings) GetSharedFolder(ctx context.Context) (*PxgValStr, [
 	return pxgValStr, raw, err
 }
 
-//AdmServerSettings.ChangeSharedFolder
+//ChangeSharedFolder
 //Change shared folder.
 //
 //	Parameters:

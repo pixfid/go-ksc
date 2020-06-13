@@ -40,7 +40,7 @@ import (
 //List of all members.
 type AdSecManager service
 
-//AdSecManager.ApproveDetect
+//ApproveDetect
 //Approves detection results provided by Adaptive Security component.
 //
 //	Parameters:
@@ -65,7 +65,7 @@ func (asm *AdSecManager) ApproveDetect(ctx context.Context, params interface{}) 
 	return raw, err
 }
 
-//AdSecManager.DisproveDetect
+//DisproveDetect
 //Disapprove detection results provided by Adaptive Security component.
 //
 //	Parameters:

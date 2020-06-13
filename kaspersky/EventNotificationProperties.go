@@ -173,7 +173,7 @@ type DefaultSettingsVal struct {
 	//KLEVP_ND_BODY_FILTER interface ???
 }
 
-//EventNotificationProperties.GetDefaultSettings
+//GetDefaultSettings
 //Reads the default notification settings.
 //
 //Reads the default notification settings, such as SMTP server properties, etc.
@@ -213,7 +213,7 @@ type NLimits struct {
 	KlevpTestPeriodToSendEvents     int64 `json:"KLEVP_TEST_PERIOD_TO_SEND_EVENTS,omitempty"`
 }
 
-//EventNotificationProperties.GetNotificationLimits
+//GetNotificationLimits
 //Reads the notification limits.
 //
 //	Returns:
@@ -229,7 +229,7 @@ func (enp *EventNotificationProperties) GetNotificationLimits(ctx context.Contex
 	return enLimits, raw, err
 }
 
-//EventNotificationProperties.TestNotification
+//TestNotification
 //Tests the notification settings.
 //
 //Allows to test the notification settings, such as SMTP server properties,
@@ -254,7 +254,7 @@ func (enp *EventNotificationProperties) TestNotification(ctx context.Context, eT
 	return raw, err
 }
 
-//EventNotificationProperties.SetNotificationLimits
+//SetNotificationLimits
 //Sets up the notification limits.
 //
 //Allows to setup notification limits.
@@ -276,7 +276,7 @@ func (enp *EventNotificationProperties) SetNotificationLimits(ctx context.Contex
 	return raw, err
 }
 
-//EventNotificationProperties.SetDefaultSettings
+//SetDefaultSettings
 //Sets up the default notification settings.
 //
 //Allows to setup the default notification settings, such as SMTP server properties, etc.

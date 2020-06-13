@@ -39,7 +39,7 @@ import (
 //Public Member Functions
 type CertPoolCtrl2 service
 
-//CertPoolCtrl2.GetCertificateInfoDetails
+//GetCertificateInfoDetails
 //Returns information about certificate from server's certificates pool.
 //
 //	Parameters:

@@ -52,7 +52,7 @@ type PEventBody struct {
 	GnrlEaParam8 int64  `json:"GNRL_EA_PARAM_8"`
 }
 
-//EventNotificationsApi.PublishEvent
+//PublishEvent
 //Publish event.
 //
 //Publishes event with Administration Server as publisher

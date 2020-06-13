@@ -39,7 +39,7 @@ import (
 //List of all members.
 type EventProcessing service
 
-//EventProcessing.GetRecordCount
+//GetRecordCount
 //Get record count in the result-set.
 //
 //Returns number of elements contained in the specified result-set.
@@ -61,7 +61,7 @@ func (ep *EventProcessing) GetRecordCount(ctx context.Context, strIteratorId str
 	return pxgValInt, raw, err
 }
 
-//EventProcessing.GetRecordRange
+//GetRecordRange
 //Acquire subset of result-set elements by range.
 //
 //Returns elements contained in the specified result-set in the diapason from position nStart to position nEnd.
@@ -85,7 +85,7 @@ func (ep *EventProcessing) GetRecordRange(ctx context.Context, strIteratorId str
 	return raw, err
 }
 
-//EventProcessing.ReleaseIterator
+//ReleaseIterator
 //Release result-set.
 //
 //Releases the specified result-set and frees associated memory.
@@ -105,7 +105,7 @@ func (ep *EventProcessing) ReleaseIterator(ctx context.Context, strIteratorId st
 	return pxgValInt, raw, err
 }
 
-//EventProcessing.InitiateDelete
+//InitiateDelete
 //Initiates mass delete of the events specified by pSettings in the result-set.
 //
 //	Parameters:
@@ -137,7 +137,7 @@ func (ep *EventProcessing) InitiateDelete(ctx context.Context, params interface{
 	return raw, err
 }
 
-//EventProcessing.CancelDelete
+//CancelDelete
 //Cancels mass delete of the events specified by pSettings in the result-set.
 //
 //	Parameters:

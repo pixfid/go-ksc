@@ -40,7 +40,7 @@ import (
 //List of all members.
 type ExtAud service
 
-//ExtAud.GetRevision
+//GetRevision
 //Get object revision.
 //	╔════╦══════════════════════╗
 //	║ ID ║     Description      ║
@@ -67,7 +67,7 @@ func (ea *ExtAud) GetRevision(ctx context.Context, nObjId, nObjType, nObjRevisio
 	return raw, err
 }
 
-//ExtAud.UpdateRevisionDesc
+//UpdateRevisionDesc
 //Update revision description.
 //	╔════╦══════════════════════╗
 //	║ ID ║     Description      ║
@@ -111,7 +111,7 @@ type FDValue struct {
 	ObjType int64 `json:"nObjType,omitempty"`
 }
 
-//ExtAud.FinalDelete"
+//FinalDelete"
 //Final delete for deleted objects.
 //
 //	Parameters:

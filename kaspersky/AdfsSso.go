@@ -40,7 +40,7 @@ import (
 //List of all members.
 type AdfsSso service
 
-//AdfsSso.GetSettings
+//GetSettings
 //Returns a ADFS SSO settings.
 //
 //	Returns:
@@ -55,7 +55,7 @@ func (as *AdfsSso) GetSettings(ctx context.Context) ([]byte, error) {
 	return raw, err
 }
 
-//AdfsSso.SetSettings
+//SetSettings
 //Set a ADFS SSO settings.
 //
 //	Parameters:

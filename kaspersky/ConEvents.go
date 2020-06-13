@@ -41,7 +41,7 @@ import (
 //Public Member Functions
 type ConEvents service
 
-//ConEvents.Retrieve
+//Retrieve
 //Retrieve.
 //
 //Use this method to retrieve events.
@@ -87,7 +87,7 @@ type SubscribeEventResponse struct {
 	PxgRetVal int64 `json:"PxgRetVal"`
 }
 
-//ConEvents.Subscribe
+//Subscribe
 //Subscribe on event.
 //
 //Use this method to subscribe on events. Method returns period of polling.
@@ -139,7 +139,7 @@ func (ce *ConEvents) Subscribe(ctx context.Context, params interface{}) ([]byte,
 	return raw, err
 }
 
-//ConEvents.UnSubscribe
+//UnSubscribe
 //UnSubscribe from event.
 //
 //Use this method to unsubscribe from an event.

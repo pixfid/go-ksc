@@ -51,7 +51,7 @@ type PatchValue struct {
 	NeedBackupServer bool `json:"NeedBackupServer"`
 }
 
-//AKPatches.ApprovePatch
+//ApprovePatch
 //Give approval to the patch on start installation.
 //
 //This command is applicable to patches which have no right
@@ -94,7 +94,7 @@ func (akp *AKPatches) ApprovePatch(ctx context.Context, params interface{}) ([]b
 	return raw, err
 }
 
-//AKPatches.ForbidPatch
+//ForbidPatch
 //Forbid installation of the patch.
 //
 //After this forbidden will be no more notifications that this patch expecting approval on installation

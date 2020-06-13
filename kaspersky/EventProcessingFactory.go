@@ -46,7 +46,7 @@ type EventPFP struct {
 	LifetimeSEC       int64          `json:"lifetimeSec"`
 }
 
-//EventProcessingFactory.CreateEventProcessing
+//CreateEventProcessing
 //Create event processing iterator.
 //
 //	Parameters:
@@ -90,7 +90,7 @@ func (epf *EventProcessingFactory) CreateEventProcessing(ctx context.Context, pa
 	return strIteratorId, raw, err
 }
 
-//EventProcessingFactory.CreateEventProcessing2
+//CreateEventProcessing2
 //Create event processing iterator with filter.
 //
 //	Parameters:
@@ -153,7 +153,7 @@ type EventPFH struct {
 	LifetimeSEC       int64           `json:"lifetimeSec"`
 }
 
-//EventProcessingFactory.CreateEventProcessingForHost
+//CreateEventProcessingForHost
 //Create event processing iterator for host.
 //
 //	Parameters:
@@ -208,7 +208,7 @@ func (epf *EventProcessingFactory) CreateEventProcessingForHost(ctx context.Cont
 	return strIteratorId, raw, err
 }
 
-//EventProcessingFactory.CreateEventProcessingForHost2
+//CreateEventProcessingForHost2
 //Create event processing iterator with filter for host.
 //
 //	Parameters:
