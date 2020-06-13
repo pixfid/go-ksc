@@ -324,7 +324,7 @@ tastList, raw, err := client.Tasks.GetAllTasksOfHost(ctx, "", "c2b22f83-307c-45a
 
 #### TODO
 * [x] Implement all classes
-* [ ] Implements all Methods
+* [x] Implements all Methods
 * [ ] Write Tests
 * [ ] Examples
 * [ ] Write Documentation
