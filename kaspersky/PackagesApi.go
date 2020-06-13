@@ -769,7 +769,7 @@ func (pa *PackagesApi) RecordNewPackage(ctx context.Context, params NewPackage) 
 	return pxgValStr, raw, err
 }
 
-//	Creates a package with the default settings based on the product, transfered using FileTransfer.
+//	Creates a package with the default settings based on the product, transferred using FileTransfer.
 //
 //	Parameters:
 //	- params (NewPackage)

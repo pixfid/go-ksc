@@ -357,7 +357,7 @@ func (lk *LicenseKeys) SaasTryToInstall(ctx context.Context, params SaasKeyParam
 //
 //	Exceptions:
 //	- KLSTD::STDE_NOTPERM	license is not valid, see Some error definitions.
-//	- KLERR::Error*	if an error occured during the checking process.
+//	- KLERR::Error*	if an error occurred during the checking process.
 func (lk *LicenseKeys) CheckIfSaasLicenseIsValid(ctx context.Context, params SaasKeyParam) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

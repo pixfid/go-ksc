@@ -38,8 +38,8 @@ import (
 //
 //	There are 3 types of categories: simple, autoupdate and silverimage.
 //	- Simple category can be created by user manually.
-//	- Autoupdate category is working on server side and calculating hashes of files from choosen directory.
-//	- SilverImage category type accumulates hashes of files from choosen hosts.
+//	- Autoupdate category is working on server side and calculating hashes of files from chosen directory.
+//	- SilverImage category type accumulates hashes of files from chosen hosts.
 //
 //	List of all members.
 type FileCategorizer2 service
@@ -74,7 +74,7 @@ func (fc *FileCategorizer2) AddExpressions(ctx context.Context, params interface
 
 //	Cancel file metadata operations.
 //
-//	Method canceles operation (GetFileMetadata, GetFilesMetadata, GetFilesMetadataFromMSI) initialized using current connection.
+//	Method cancels operation (GetFileMetadata, GetFilesMetadata, GetFilesMetadataFromMSI) initialized using current connection.
 func (fc *FileCategorizer2) CancelFileMetadataOperations(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2."+
 		"CancelFileMetadataOperations", nil)
@@ -89,7 +89,7 @@ func (fc *FileCategorizer2) CancelFileMetadataOperations(ctx context.Context) (*
 
 //	Cancel file upload for file categorizer subsystem.
 //
-//	This methode canceles file upload.
+//	This methode cancels file upload.
 //	Call FileCategorizer2.InitFileUpload to start new upload.
 func (fc *FileCategorizer2) CancelFileUpload(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2."+

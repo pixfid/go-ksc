@@ -54,7 +54,7 @@ type NagGuiCalls service
 //
 //	Remarks:
 //	Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's
-//	finalized. If the operation succedes then AsyncActionStateChecker.CheckActionState returns call-results in pStateData. Otherwise, a call to AsyncActionStateChecker.CheckActionState returns error in pStateData.
+//	finalized. If the operation succeeds then AsyncActionStateChecker.CheckActionState returns call-results in pStateData. Otherwise, a call to AsyncActionStateChecker.CheckActionState returns error in pStateData.
 //
 //	Exceptions:
 //	Throws	exception in case of error, see Some error definitions

@@ -228,7 +228,7 @@ type ValueValueClass struct {
 //
 //	Remarks:
 //	Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
-//	If the operation succedes then AsyncActionStateChecker.CheckActionState returns URL-path in pStateData.
+//	If the operation succeeds then AsyncActionStateChecker.CheckActionState returns URL-path in pStateData.
 //	Otherwise, a call to AsyncActionStateChecker::CheckActionState returns error in pStateData.
 //
 //	Exceptions:
@@ -307,7 +307,7 @@ func (nr *NagRdu) DeleteFiles(ctx context.Context, params RemoteFilesParams) (*C
 //
 //	Remarks:
 //	Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
-//	If the operation succedes then AsyncActionStateChecker.CheckActionState returns URL-path in pStateData.
+//	If the operation succeeds then AsyncActionStateChecker.CheckActionState returns URL-path in pStateData.
 //	Otherwise, a call to AsyncActionStateChecker::CheckActionState returns error in pStateData.
 //
 //	Exceptions:
@@ -333,7 +333,7 @@ func (nr *NagRdu) DownloadCommonDataAsync(ctx context.Context) (*PxgValStr, []by
 //
 //	Remarks:
 //	Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
-//	If the operation succedes then AsyncActionStateChecker.CheckActionState returns URL-path in pStateData.
+//	If the operation succeeds then AsyncActionStateChecker.CheckActionState returns URL-path in pStateData.
 //	Otherwise, a call to AsyncActionStateChecker::CheckActionState returns error in pStateData.
 //
 //	Exceptions:
@@ -369,7 +369,7 @@ func (nr *NagRdu) DownloadEventlogAsync(ctx context.Context, szwEventLog string)
 //
 //	Remarks:
 //	Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
-//	If the operation succedes then AsyncActionStateChecker.CheckActionState returns URL-path in pStateData.
+//	If the operation succeeds then AsyncActionStateChecker.CheckActionState returns URL-path in pStateData.
 //	Otherwise, a call to AsyncActionStateChecker::CheckActionState returns error in pStateData.
 //
 //	Exceptions:
@@ -393,7 +393,7 @@ func (nr *NagRdu) ExecuteFileAsync(ctx context.Context, szwURL, szwShortExecName
 //
 //	Remarks:
 //	Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
-//	If the operation succedes then AsyncActionStateChecker.CheckActionState returns URL-path in pStateData.
+//	If the operation succeeds then AsyncActionStateChecker.CheckActionState returns URL-path in pStateData.
 //	Otherwise, a call to AsyncActionStateChecker.CheckActionState returns error in pStateData.
 //
 //	Exceptions:
@@ -485,7 +485,7 @@ func (nr *NagRdu) GetUrlToUploadFileToHost(ctx context.Context) (*PxgValStr, []b
 //	Remarks:
 //
 //	Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
-//	If the operation succedes then AsyncActionStateChecker.CheckActionState returns current host state in pStateData.
+//	If the operation succeeds then AsyncActionStateChecker.CheckActionState returns current host state in pStateData.
 //	Otherwise, a call to AsyncActionStateChecker::CheckActionState returns error in pStateData.
 //
 //	Exceptions:
@@ -514,7 +514,7 @@ func (nr *NagRdu) RunKlnagchkAsync(ctx context.Context, szwProductID string) (*P
 //
 //	Remarks:
 //	Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
-//	If the operation succedes then AsyncActionStateChecker.CheckActionState returns current host state in pStateData.
+//	If the operation succeeds then AsyncActionStateChecker.CheckActionState returns current host state in pStateData.
 //	Otherwise, a call to AsyncActionStateChecker::CheckActionState returns error in pStateData.
 //
 //Exceptions:

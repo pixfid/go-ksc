@@ -667,7 +667,7 @@ func (hac *HstAccessControl) IsTaskTypeReadonly(ctx context.Context, lGroupId in
 //HstAccessControl.ModifyScObjectAcl
 //Modify ACL for the specified object.
 //
-//Method updates only Accounts, permissions and roles wich presented in pAclParams. To delete Ace from Acl, it must be added to 'delete' list.
+//Method updates only Accounts, permissions and roles which presented in pAclParams. To delete Ace from Acl, it must be added to 'delete' list.
 //
 //	Parameters:
 //	- nObjId				(int64) object id

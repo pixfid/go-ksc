@@ -71,7 +71,7 @@ type FilesRequestValue struct {
 //
 //	Returns:
 //	- paramArray(paramArray(paramParams)) Array of found files info, correspondingly to incoming request-array,
-//	cell-by-cell. Each ouput cell is paramArray(paramParams), that is list of matched files data, where every file-info is params:
+//	cell-by-cell. Each output cell is paramArray(paramParams), that is list of matched files data, where every file-info is params:
 //	KLUPD_RecentRelativeSrvPath ("RelativeSrvPath"): file's relative path inside retranslation folder, e.g. "updates/ksc/".
 //	If nothing is found for given in-cell, then corresponding out-cell is NULL.
 //	Null/empty in-params results in null out-array.

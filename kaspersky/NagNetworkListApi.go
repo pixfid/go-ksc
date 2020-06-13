@@ -45,7 +45,7 @@ type NetworkListParams struct {
 	ItemID string `json:"itemId"`
 
 	//if true than will be get info about packed content of the file.
-	//It is usefull if file is the virus and it is needed to load it.
+	//It is useful if file is the virus and it is needed to load it.
 	BNeedPacked bool `json:"bNeedPacked"`
 
 	//start position of the chunk
@@ -95,7 +95,7 @@ func (nnla *NagNetworkListApi) GetListItemFileInfo(ctx context.Context, params N
 //	- listName	Network list name
 //	- itemId	Network list item identifier
 //	- bNeedPacked	if true than will be get info about packed content of the file.
-//	It is usefull if file is the virus and it is needed to load it.
+//	It is useful if file is the virus and it is needed to load it.
 //	- ulStartPos	start position of the chunk
 //	- lBytesToRead	number of bytes to read
 //

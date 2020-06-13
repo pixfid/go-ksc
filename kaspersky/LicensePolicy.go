@@ -52,8 +52,8 @@ type LicensePolicy service
 //	+---------------+----------------------------------------------------------+
 //	| Functionality |                       Description                        |
 //	+---------------+----------------------------------------------------------+
-//	|             1 | system managment                                         |
-//	|             2 | mobile device managment                                  |
+//	|             1 | system management                                         |
+//	|             2 | mobile device management                                  |
 //	|             4 | PCLOUD is available via KL license                       |
 //	|             5 | PCLOUD is available via Pay-per-use (Paid AMI) licensing |
 //	+---------------+----------------------------------------------------------+
@@ -82,8 +82,8 @@ func (lp *LicensePolicy) GetFreeLicenseCount(ctx context.Context, nFunctionality
 //	+---------------+----------------------------------------------------------+
 //	| Functionality |                       Description                        |
 //	+---------------+----------------------------------------------------------+
-//	|             1 | system managment                                         |
-//	|             2 | mobile device managment                                  |
+//	|             1 | system management                                         |
+//	|             2 | mobile device management                                  |
 //	|             4 | PCLOUD is available via KL license                       |
 //	|             5 | PCLOUD is available via Pay-per-use (Paid AMI) licensing |
 //	+---------------+----------------------------------------------------------+
@@ -113,8 +113,8 @@ func (lp *LicensePolicy) GetTotalLicenseCount(ctx context.Context, nFunctionalit
 //	+---------------+----------------------------------------------------------+
 //	| Functionality |                       Description                        |
 //	+---------------+----------------------------------------------------------+
-//	|             1 | system managment                                         |
-//	|             2 | mobile device managment                                  |
+//	|             1 | system management                                         |
+//	|             2 | mobile device management                                  |
 //	|             4 | PCLOUD is available via KL license                       |
 //	|             5 | PCLOUD is available via Pay-per-use (Paid AMI) licensing |
 //	+---------------+----------------------------------------------------------+
@@ -142,8 +142,8 @@ func (lp *LicensePolicy) IsLimitedMode(ctx context.Context, nFunctionality int64
 //	+---------------+----------------------------------------------------------+
 //	| Functionality |                       Description                        |
 //	+---------------+----------------------------------------------------------+
-//	|             1 | system managment                                         |
-//	|             2 | mobile device managment                                  |
+//	|             1 | system management                                         |
+//	|             2 | mobile device management                                  |
 //	|             4 | PCLOUD is available via KL license                       |
 //	|             5 | PCLOUD is available via Pay-per-use (Paid AMI) licensing |
 //	+---------------+----------------------------------------------------------+
@@ -170,8 +170,8 @@ func (lp *LicensePolicy) SetLimitedModeTest(ctx context.Context, bLimited bool, 
 //	+---------------+----------------------------------------------------------+
 //	| Functionality |                       Description                        |
 //	+---------------+----------------------------------------------------------+
-//	|             1 | system managment                                         |
-//	|             2 | mobile device managment                                  |
+//	|             1 | system management                                         |
+//	|             2 | mobile device management                                  |
 //	|             4 | PCLOUD is available via KL license                       |
 //	|             5 | PCLOUD is available via Pay-per-use (Paid AMI) licensing |
 //	+---------------+----------------------------------------------------------+
@@ -199,8 +199,8 @@ func (lp *LicensePolicy) SetTotalLicenseCountTest(ctx context.Context, eFunction
 //	+---------------+----------------------------------------------------------+
 //	| Functionality |                       Description                        |
 //	+---------------+----------------------------------------------------------+
-//	|             1 | system managment                                         |
-//	|             2 | mobile device managment                                  |
+//	|             1 | system management                                         |
+//	|             2 | mobile device management                                  |
 //	|             4 | PCLOUD is available via KL license                       |
 //	|             5 | PCLOUD is available via Pay-per-use (Paid AMI) licensing |
 //	+---------------+----------------------------------------------------------+
