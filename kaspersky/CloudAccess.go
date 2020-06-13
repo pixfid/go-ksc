@@ -31,11 +31,11 @@ import (
 	"net/http"
 )
 
-//	CloudAccess Class Reference
+//CloudAccess Class Reference
 //
-//	Interface to check access of public clouds.
+//Interface to check access of public clouds.
 //
-//	List of all members.
+//List of all members.
 type CloudAccess service
 
 type Credentials struct {
@@ -75,7 +75,8 @@ type PKeyPair struct {
 	AzureStorageKey string `json:"AZURE_STORAGE_KEY,omitempty"`
 }
 
-//	Verify credentials.
+//CloudAccess.VerifyCredentials
+//Verify credentials.
 //
 //	Parameters:
 //	- params Credentials
@@ -107,7 +108,8 @@ type KeyPairAccess struct {
 	BAllowDeployment bool `json:"bAllowDeployment,omitempty"`
 }
 
-//	Check key-pair access
+//CloudAccess.AcquireAccessForKeyPair
+//Check key-pair access
 //
 //	Parameters:
 //	- params	Credentials

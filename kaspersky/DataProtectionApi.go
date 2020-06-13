@@ -32,32 +32,33 @@ import (
 	"net/http"
 )
 
-//	DataProtectionApi Class Reference
+//DataProtectionApi Class Reference
 //
-//	Allows to protect sensitive data in policies, tasks, and/or on specified host.
+//Allows to protect sensitive data in policies, tasks, and/or on specified host.
 //
-//	List of all members.
+//List of all members.
 type DataProtectionApi service
 
-//	Checks if Spl password policy compliance is enabled for the specified Administration Server
-//	and checks the specified password for compliance to the password policy.
+//DataProtectionApi.CheckPasswordSplPpc
+//Checks if Spl password policy compliance is enabled for the specified Administration Server
+//and checks the specified password for compliance to the password policy.
 //
-//	Password Policy is specified below
+//Password Policy is specified below
 //
-//	Characters allowed:
+//Characters allowed:
 //
-//	A – Z
-//	a – z
-//	0 – 9
-//	@ # $ % ^ & * - _ ! + = [ ] { } | \ : ‘ , . ? / ` ~ “ ( ) ;
+//A – Z
+//a – z
+//0 – 9
+//@ # $ % ^ & * - _ ! + = [ ] { } | \ : ‘ , . ? / ` ~ “ ( ) ;
 //
-//	Characters disallowed:
+//Characters disallowed:
 //
-//	- Unicode characters
-//	- spaces
-//	- Cannot contain a dot character '.' immediately preceding the '@' symbol
+//	Unicode characters
+//	spaces
+//	Cannot contain a dot character '.' immediately preceding the '@' symbol
 //
-//	Password restrictions:
+//Password restrictions:
 //
 //	- 8 characters minimum and 16 characters maximum
 //	- Must contain characters at least from any 3 of 4 groups mentioned in the section "Characters allowed"
@@ -88,7 +89,8 @@ type ProtectedData struct {
 	PDataProtected string `json:"pDataProtected,omitempty"`
 }
 
-//	Protects sensitive data to store in SettingsStorage or local task.
+//DataProtectionApi.ProtectDataForHost
+//Protects sensitive data to store in SettingsStorage or local task.
 //
 //	Parameters:
 //	- szwHostId host name
@@ -96,7 +98,7 @@ type ProtectedData struct {
 //
 //	- pDataProtected pointer to protected data block.
 //
-//Exceptions:
+//	Exceptions:
 //	- KLSTD.STDE_NOTPERM	host has no public key (
 //	possibly it doesn't support data protection or nagent isn't installed
 //	there or host belongs to other virtual server)
@@ -112,7 +114,8 @@ func (dpa *DataProtectionApi) ProtectDataForHost(ctx context.Context, params ToP
 	return protectedData, raw, err
 }
 
-//	Protects sensitive data to store in policy or global/group task.
+//DataProtectionApi.ProtectDataGlobally
+//Protects sensitive data to store in policy or global/group task.
 //
 //	Parameters:
 //	- pData pointer to data
@@ -129,9 +132,10 @@ func (dpa *DataProtectionApi) ProtectDataGlobally(ctx context.Context, params To
 	return protectedData, raw, err
 }
 
-//	Protects sensitive data for the specified host (to store in its local settings or a local task)
+//DataProtectionApi.ProtectUtf16StringForHost
+//Protects sensitive data for the specified host (to store in its local settings or a local task)
 //
-//	Protects the specified text as UTF16 string encrypted with the key of the specified host.
+//Protects the specified text as UTF16 string encrypted with the key of the specified host.
 //
 //	Parameters:
 //	- szwHostId host name
@@ -151,18 +155,17 @@ func (dpa *DataProtectionApi) ProtectUtf16StringForHost(ctx context.Context, szw
 	return raw, err
 }
 
-//	Protects sensitive data to store in policy, global/group task,
-//	Administration Server settings.
+//DataProtectionApi.ProtectUtf16StringGlobally
+//Protects sensitive data to store in policy, global/group task, Administration Server settings.
 //
-//	Protects the specified text as UTF16 string encrypted with the key
-//	of the Administration Server.
+//Protects the specified text as UTF16 string encrypted with the key of the Administration Server.
 //
-//	The same as Tasks.ProtectPassword
+//The same as Tasks.ProtectPassword
 //
 //	Parameters:
 //	- szwPlainText plainText
 //
-//Returns:
+//	Returns:
 //	- Ciphertext
 func (dpa *DataProtectionApi) ProtectUtf16StringGlobally(ctx context.Context, szwPlainText string) ([]byte,
 	error) {
@@ -176,17 +179,16 @@ func (dpa *DataProtectionApi) ProtectUtf16StringGlobally(ctx context.Context, sz
 	return raw, err
 }
 
-//	Protects sensitive data for the specified host
-//	(to store in its local settings or a local task)
+//DataProtectionApi.ProtectUtf8StringForHost
+//Protects sensitive data for the specified host (to store in its local settings or a local task)
 //
-//	Protects the specified text as UTF8 string encrypted with the key
-//	of the specified host.
+//Protects the specified text as UTF8 string encrypted with the key of the specified host.
 //
 //	Parameters:
 //	- szwHostId host name
 //	- szwPlainText plainText
 //
-//Returns:
+//	Returns:
 //	- Ciphertext
 func (dpa *DataProtectionApi) ProtectUtf8StringForHost(ctx context.Context, szwHostId, szwPlainText string) ([]byte,
 	error) {
@@ -200,11 +202,12 @@ func (dpa *DataProtectionApi) ProtectUtf8StringForHost(ctx context.Context, szwH
 	return raw, err
 }
 
-//	Protects sensitive data to store in policy, global/group task,
-//	Administration Server settings.
+//DataProtectionApi.ProtectUtf8StringGlobally
+//Protects sensitive data to store in policy, global/group task,
+//Administration Server settings.
 //
-//	Protects the specified text as UTF8 string encrypted with the key
-//	of the Administration Server.
+//Protects the specified text as UTF8 string encrypted with the key
+//of the Administration Server.
 //
 //	Parameters:
 //	- szwPlainText plainText

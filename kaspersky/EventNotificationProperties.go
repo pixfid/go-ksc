@@ -32,18 +32,14 @@ import (
 	"net/http"
 )
 
-//	EventNotificationProperties Class Reference
+//EventNotificationProperties Class Reference
 //
-//	Notification properties.
+//Notification properties.
 //
-//	Detailed Description
+//Allows to setup SMTP server address, port and authentication parameters
+//to send notifications via SMTP and/or SMTP SMS gateway, etc.
 //
-//	Notification properties.
-//
-//	Allows to setup SMTP server address, port and authentication parameters
-//	to send notifications via SMTP and/or SMTP SMS gateway, etc.
-//
-//	List of all members.
+//List of all members.
 type EventNotificationProperties service
 
 //DefaultSettings struct using in GetDefaultSettings
@@ -177,9 +173,10 @@ type DefaultSettingsVal struct {
 	//KLEVP_ND_BODY_FILTER interface ???
 }
 
-//	Reads the default notification settings.
+//EventNotificationProperties.GetDefaultSettings
+//Reads the default notification settings.
 //
-//	Reads the default notification settings, such as SMTP server properties, etc.
+//Reads the default notification settings, such as SMTP server properties, etc.
 //
 //	Returns:
 //	- (params) object containing the current notification settings
@@ -216,8 +213,8 @@ type NLimits struct {
 	KlevpTestPeriodToSendEvents     int64 `json:"KLEVP_TEST_PERIOD_TO_SEND_EVENTS,omitempty"`
 }
 
-//	Reads the notification limits.
-//
+//EventNotificationProperties.GetNotificationLimits
+//Reads the notification limits.
 //
 //	Returns:
 //	- (params) object containing the current notification limits (see Events notification settings).
@@ -232,10 +229,11 @@ func (enp *EventNotificationProperties) GetNotificationLimits(ctx context.Contex
 	return enLimits, raw, err
 }
 
-//	Tests the notification settings.
+//EventNotificationProperties.TestNotification
+//Tests the notification settings.
 //
-//	Allows to test the notification settings, such as SMTP server properties,
-//	etc. by sending a test notification using the provided notification settings.
+//Allows to test the notification settings, such as SMTP server properties,
+//etc. by sending a test notification using the provided notification settings.
 //
 //	Parameters:
 //	eType	(EventNT) type of the notification to be tested (see Events notification types).
@@ -256,9 +254,10 @@ func (enp *EventNotificationProperties) TestNotification(ctx context.Context, eT
 	return raw, err
 }
 
-//	Sets up the notification limits.
+//EventNotificationProperties.SetNotificationLimits
+//Sets up the notification limits.
 //
-//	Allows to setup notification limits.
+//Allows to setup notification limits.
 //
 //Parameters:
 //	- pSettings	(params) object containing the notification limits to be set (see Events notification limits).
@@ -277,9 +276,10 @@ func (enp *EventNotificationProperties) SetNotificationLimits(ctx context.Contex
 	return raw, err
 }
 
-//	Sets up the default notification settings.
+//EventNotificationProperties.SetDefaultSettings
+//Sets up the default notification settings.
 //
-//	Allows to setup the default notification settings, such as SMTP server properties, etc.
+//Allows to setup the default notification settings, such as SMTP server properties, etc.
 //
 //	Parameters:
 //	- pSettings	(params) object containing the notification settings to be set (see Events notification settings).

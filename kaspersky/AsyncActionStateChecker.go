@@ -31,18 +31,18 @@ import (
 	"net/http"
 )
 
-//	AsyncActionStateChecker Class Reference
+//AsyncActionStateChecker Class Reference
 //
-//	Interface to monitor state of async action
+//Interface to monitor state of async action
 //
-//	It is supposed that client of the AsyncActionStateChecker
-//	has added async action and this action has identifier wstrActionGuid.
-//	After that client should wait while CheckActionState will return bFinalized
-//	for this action or should cancel this action.
-//	If the count of finalized actions is reach some
-//	limit then client connection will be closed automatically.
+//It is supposed that client of the AsyncActionStateChecker
+//has added async action and this action has identifier wstrActionGuid.
+//After that client should wait while CheckActionState will return bFinalized
+//for this action or should cancel this action.
+//If the count of finalized actions is reach some
+//limit then client connection will be closed automatically.
 //
-//	List of all members.
+//List of all members.
 type AsyncActionStateChecker service
 
 type ActionStateResult struct {
@@ -76,6 +76,7 @@ type PStateData struct {
 	WuaLogsWin10     []string          `json:"WuaLogs_Win10"`
 }
 
+//AsyncActionStateChecker.CheckActionState
 //Check status of the async action.
 //
 //Preconditions:

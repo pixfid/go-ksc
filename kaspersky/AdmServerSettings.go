@@ -31,14 +31,15 @@ import (
 	"net/http"
 )
 
-//	AdmServerSettings interface.
+//AdmServerSettings interface.
 //
-//	Interface to manage server settings.
+//Interface to manage server settings.
 //
-//	List of all members:
+//List of all members:
 type AdmServerSettings service
 
-//	Acquire shared folder.
+//AdmServerSettings.GetSharedFolder
+//Acquire shared folder.
 //
 //	Returns:
 //	- (string) shared folder
@@ -53,7 +54,8 @@ func (as *AdmServerSettings) GetSharedFolder(ctx context.Context) (*PxgValStr, [
 	return pxgValStr, raw, err
 }
 
-//	Change shared folder.
+//AdmServerSettings.ChangeSharedFolder
+//Change shared folder.
 //
 //	Parameters:
 //	- wstrNetworkPath	(string) network path to shared folder

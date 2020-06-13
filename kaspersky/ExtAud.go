@@ -32,17 +32,16 @@ import (
 	"net/http"
 )
 
-//	ExtAud Class Reference
+//ExtAud Class Reference
 //
-//	Interface for working with ExtAudit subsystem.
+//Interface for working with ExtAudit subsystem.
+//This interface allow you to get a revision of an object and update description.
 //
-//	This interface allow you to get a revision of an object and update description.
-//
-//	List of all members.
+//List of all members.
 type ExtAud service
 
-//
-//	Get object revision.
+//ExtAud.GetRevision
+//Get object revision.
 //	╔════╦══════════════════════╗
 //	║ ID ║     Description      ║
 //	╠════╬══════════════════════╣
@@ -68,8 +67,8 @@ func (ea *ExtAud) GetRevision(ctx context.Context, nObjId, nObjType, nObjRevisio
 	return raw, err
 }
 
-//
-//	Update revision description.
+//ExtAud.UpdateRevisionDesc
+//Update revision description.
 //	╔════╦══════════════════════╗
 //	║ ID ║     Description      ║
 //	╠════╬══════════════════════╣
@@ -112,10 +111,11 @@ type FDValue struct {
 	ObjType int64 `json:"nObjType,omitempty"`
 }
 
-//	Final delete for deleted objects.
+//ExtAud.FinalDelete"
+//Final delete for deleted objects.
 //
 //	Parameters:
-//	arrObjects	[interface{}] (array) Array of pairs ObjId-ObjType.
+//	- arrObjects	[params] (array) Array of pairs ObjId-ObjType.
 //	Max size of array is 100 elements.
 func (ea *ExtAud) FinalDelete(ctx context.Context, params FinalDeleteParams) ([]byte, error) {
 	postData, _ := json.Marshal(params)

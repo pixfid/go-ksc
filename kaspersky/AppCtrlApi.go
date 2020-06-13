@@ -31,11 +31,11 @@ import (
 	"net/http"
 )
 
-//	AppCtrlApi Class Reference
+//AppCtrlApi Class Reference
 //
-//	Interface to get info about execution files.
+//Interface to get info about execution files.
 //
-//	Public Member Functions
+//Public Member Functions
 type AppCtrlApi service
 
 type ExeFileInfoParams struct {
@@ -49,7 +49,8 @@ type ExePFilter struct {
 	FileName string `json:"FILE_NAME,omitempty"`
 }
 
-//	Get data about instances of the execution file on the host.
+//AppCtrlApi.GetExeFileInfo
+//Get data about instances of the execution file on the host.
 //
 //	Parameters:
 //	- szwHostId	(string) host name, a unique server-generated string (see KLHST_WKS_HOSTNAME attribute).

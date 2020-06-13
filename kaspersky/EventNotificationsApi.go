@@ -31,11 +31,11 @@ import (
 	"net/http"
 )
 
-//	EventNotificationsApi Class Reference
+//EventNotificationsApi Class Reference
 //
-//	Allows to publish event with Administration Server as publisher.
+//Allows to publish event with Administration Server as publisher.
 //
-//	List of all members.
+//List of all members.
 type EventNotificationsApi service
 
 //EventNotificationParams struct
@@ -52,9 +52,10 @@ type PEventBody struct {
 	GnrlEaParam8 int64  `json:"GNRL_EA_PARAM_8"`
 }
 
-//	Publish event.
+//EventNotificationsApi.PublishEvent
+//Publish event.
 //
-//	Publishes event with Administration Server as publisher
+//Publishes event with Administration Server as publisher
 //
 //	Parameters:
 //	- params (interface{}) with fields:

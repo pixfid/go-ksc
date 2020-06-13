@@ -31,15 +31,16 @@ import (
 	"net/http"
 )
 
-//	CertPoolCtrl2 Class Reference
+//CertPoolCtrl2 Class Reference
 //
-//	2nd interface to manage the pool of certificates used by the
-//	Kaspersky Security Center Server
+//2nd interface to manage the pool of certificates used by the
+//Kaspersky Security Center Server
 //
-//	Public Member Functions
+//Public Member Functions
 type CertPoolCtrl2 service
 
-//	Returns information about certificate from server's certificates pool.
+//CertPoolCtrl2.GetCertificateInfoDetails
+//Returns information about certificate from server's certificates pool.
 //
 //	Parameters:
 //	- nVServerId (int64) Virtual server id (-1 for current, 0 for main server)

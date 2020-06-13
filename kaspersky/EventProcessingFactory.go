@@ -31,11 +31,11 @@ import (
 	"net/http"
 )
 
-//	EventProcessingFactory Class Reference
+//EventProcessingFactory Class Reference
 //
-//	Interface to create event processing iterators
+//Interface to create event processing iterators
 //
-//	List of all members:
+//List of all members:
 type EventProcessingFactory service
 
 //EventPFP struct
@@ -46,7 +46,8 @@ type EventPFP struct {
 	LifetimeSEC       int64          `json:"lifetimeSec"`
 }
 
-//	Create event processing iterator.
+//EventProcessingFactory.CreateEventProcessing
+//Create event processing iterator.
 //
 //	Parameters:
 //	- params (EventPFP)
@@ -89,7 +90,8 @@ func (epf *EventProcessingFactory) CreateEventProcessing(ctx context.Context, pa
 	return strIteratorId, raw, err
 }
 
-//	Create event processing iterator with filter.
+//EventProcessingFactory.CreateEventProcessing2
+//Create event processing iterator with filter.
 //
 //	Parameters:
 //	- params (EventPFP)
@@ -151,10 +153,11 @@ type EventPFH struct {
 	LifetimeSEC       int64           `json:"lifetimeSec"`
 }
 
-//	Create event processing iterator for host.
+//EventProcessingFactory.CreateEventProcessingForHost
+//Create event processing iterator for host.
 //
 //	Parameters:
-// params (EventPFH)
+//	- params (EventPFH)
 //
 //	Example:
 //	val, raw, _ := client.EventProcessingFactory.CreateEventProcessingForHost2(ctx, kaspersky.EventPFH{
@@ -205,7 +208,8 @@ func (epf *EventProcessingFactory) CreateEventProcessingForHost(ctx context.Cont
 	return strIteratorId, raw, err
 }
 
-//	Create event processing iterator with filter for host.
+//EventProcessingFactory.CreateEventProcessingForHost2
+//Create event processing iterator with filter for host.
 //
 //	Parameters:
 // params (EventPFH)

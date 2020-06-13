@@ -32,16 +32,17 @@ import (
 	"net/http"
 )
 
-//	EventProcessing Class Reference
+//EventProcessing Class Reference
 //
-//	Interface implements the functionality for viewing and deleting events.
+//Interface implements the functionality for viewing and deleting events.
 //
-//	List of all members.
+//List of all members.
 type EventProcessing service
 
-//	Get record count in the result-set.
+//EventProcessing.GetRecordCount
+//Get record count in the result-set.
 //
-//	Returns number of elements contained in the specified result-set.
+//Returns number of elements contained in the specified result-set.
 //
 //	Parameters:
 //	- strIteratorId	(string) result-set ID, identifier of the server-side ordered collection of found data records.
@@ -60,9 +61,10 @@ func (ep *EventProcessing) GetRecordCount(ctx context.Context, strIteratorId str
 	return pxgValInt, raw, err
 }
 
-//	Acquire subset of result-set elements by range.
+//EventProcessing.GetRecordRange
+//Acquire subset of result-set elements by range.
 //
-//	Returns elements contained in the specified result-set in the diapason from position nStart to position nEnd.
+//Returns elements contained in the specified result-set in the diapason from position nStart to position nEnd.
 //
 //	Parameters:
 //	- strIteratorId	(string) result-set ID, identifier of the server-side ordered collection of found data records.
@@ -83,9 +85,10 @@ func (ep *EventProcessing) GetRecordRange(ctx context.Context, strIteratorId str
 	return raw, err
 }
 
-//	Release result-set.
+//EventProcessing.ReleaseIterator
+//Release result-set.
 //
-//	Releases the specified result-set and frees associated memory.
+//Releases the specified result-set and frees associated memory.
 //
 //	Parameters:
 //	- strIteratorId	(string) result-set ID,
@@ -102,7 +105,8 @@ func (ep *EventProcessing) ReleaseIterator(ctx context.Context, strIteratorId st
 	return pxgValInt, raw, err
 }
 
-//	Initiates mass delete of the events specified by pSettings in the result-set.
+//EventProcessing.InitiateDelete
+//Initiates mass delete of the events specified by pSettings in the result-set.
 //
 //	Parameters:
 //	- strIteratorId	(string) result-set ID, identifier of the server-side ordered collection of found data records.
@@ -133,7 +137,8 @@ func (ep *EventProcessing) InitiateDelete(ctx context.Context, params interface{
 	return raw, err
 }
 
-//	Cancels mass delete of the events specified by pSettings in the result-set.
+//EventProcessing.CancelDelete
+//Cancels mass delete of the events specified by pSettings in the result-set.
 //
 //	Parameters:
 //	- strIteratorId	(string) result-set ID, identifier of the server-side ordered collection

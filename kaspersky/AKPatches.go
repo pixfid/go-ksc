@@ -31,9 +31,9 @@ import (
 	"net/http"
 )
 
-//	Interface to manage system of autoupdating by patch.exe patches.
+//AKPatches	Interface to manage system of autoupdating by patch.exe patches.
 //
-//	List of all members.
+//List of all members.
 type AKPatches service
 
 //PatchParams struct
@@ -51,10 +51,11 @@ type PatchValue struct {
 	NeedBackupServer bool `json:"NeedBackupServer"`
 }
 
-//	Give approval to the patch on start installation.
+//AKPatches.ApprovePatch
+//Give approval to the patch on start installation.
 //
-//	This command is applicable to patches which have no right
-//	to be installed without approval of the administrator.
+//This command is applicable to patches which have no right
+//to be installed without approval of the administrator.
 //
 //	Parameters:
 //	- szwPatchId	(string). the patch identifier. see KLSTS_Par_PatchId.
@@ -93,9 +94,10 @@ func (akp *AKPatches) ApprovePatch(ctx context.Context, params interface{}) ([]b
 	return raw, err
 }
 
-//	Forbid installation of the patch.
+//AKPatches.ForbidPatch
+//Forbid installation of the patch.
 //
-//	After this forbidden will be no more notifications that this patch expecting approval on installation
+//After this forbidden will be no more notifications that this patch expecting approval on installation
 //
 //	Parameters:
 //	- szwPatchId	(string). the patch identifier. see KLSTS_Par_PatchId.

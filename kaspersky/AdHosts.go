@@ -31,13 +31,13 @@ import (
 	"net/http"
 )
 
-//	AdHosts Class Reference
+//AdHosts Class Reference
 //
-//	Scanned active directory OU structure.
+//Scanned active directory OU structure.
 //
-//	Allows to enumerate scanned active directory OU structure.
+//Allows to enumerate scanned active directory OU structure.
 //
-//	List of all members:
+//List of all members:
 type AdHosts service
 
 //FindAdGroupsParams struct
@@ -59,6 +59,7 @@ type ADHostIterator struct {
 	PxgRetVal    int64  `json:"PxgRetVal"`
 }
 
+//AdHosts.FindAdGroups
 //Enumerates AD groups.
 //
 //	- Parameters:
@@ -138,7 +139,8 @@ type AdHstIDParentPxgRetVal struct {
 	AdhstIDParent int64 `json:"adhst_idParent"`
 }
 
-//	Retrieves AD host attributes.
+//AdHosts.GetChildComputer
+//Retrieves AD host attributes.
 //
 //	Parameters:
 //	- idAdhst	(int64) host identifier (same as GetChildComputers attribute adhst_id)
@@ -161,6 +163,7 @@ func (ah *AdHosts) GetChildComputer(ctx context.Context, params ChildComputerPar
 	return adHstIdParent, raw, err
 }
 
+//AdHosts.GetChildComputers
 //Acquire list of hosts located in "Unassigned computers" for specified OU.
 //
 //Returns list of hosts located in "Unassigned computers" for specified organization unit.
@@ -233,6 +236,7 @@ type ChildOUParams struct {
 	LMaxLifeTime int64    `json:"lMaxLifeTime,omitempty"`
 }
 
+//AdHosts.GetChildOUs
 //Acquire list of child OUs for specified OU.
 //
 //Returns list of child organization units for specified organization unit
@@ -300,6 +304,7 @@ type AdhstBinOu struct {
 	Value string `json:"value"`
 }
 
+//AdHosts.GetOU
 //Returns attributes of specified OU
 //
 //	- Parameters: OUAttributesParams
@@ -352,7 +357,8 @@ type OUPData struct {
 	AdhstEnableAdScan bool `json:"adhst_enable_ad_scan,omitempty"`
 }
 
-//	Updates OU properties.
+//AdHosts.UpdateOU
+//Updates OU properties.
 //
 //	Parameters:
 //	- params UpdateOUParams

@@ -31,20 +31,21 @@ import (
 	"net/http"
 )
 
-//	DatabaseInfo Class Reference
+//DatabaseInfo Class Reference
 //
-//	Database processing..
-//	Allow to get information from a Database.
+//Database processing..
+//Allow to get information from a Database.
 //
-//	List of all members.
+//List of all members.
 type DatabaseInfo service
 
-//	Get database's files size.
+//DatabaseInfo.GetDBSize
+//Get database's files size.
 //
-//	Returns size of files of database
+//Returns size of files of database
 //
 //	Returns:
-//	- (data.PxgValInt) size of files of database.
+//	- (int64) size of files of database.
 func (di *DatabaseInfo) GetDBSize(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.GetDBSize", nil)
 	if err != nil {
@@ -56,12 +57,13 @@ func (di *DatabaseInfo) GetDBSize(ctx context.Context) (*PxgValInt, []byte, erro
 	return pxgValInt, raw, err
 }
 
-//	Get database's data size.
+//DatabaseInfo.GetDBDataSize
+//Get database's data size.
 //
-//	Returns size of data of database
+//Returns size of data of database
 //
 //	Returns:
-//	- (data.PxgValInt) size of data of database.
+//	- (int64) size of data of database.
 func (di *DatabaseInfo) GetDBDataSize(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.GetDBDataSize", nil)
 	if err != nil {
@@ -73,12 +75,13 @@ func (di *DatabaseInfo) GetDBDataSize(ctx context.Context) (*PxgValInt, []byte, 
 	return pxgValInt, raw, err
 }
 
-//	Get database's events count.
+//DatabaseInfo.GetDBEventsCount
+//Get database's events count.
 //
-//	Returns count of events of database
+//Returns count of events of database
 //
 //	Returns:
-//	- (data.PxgValInt) count of events of database
+//	- (int64) count of events of database
 func (di *DatabaseInfo) GetDBEventsCount(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.GetDBEventsCount", nil)
 	if err != nil {
@@ -90,13 +93,14 @@ func (di *DatabaseInfo) GetDBEventsCount(ctx context.Context) (*PxgValInt, []byt
 	return pxgValInt, raw, err
 }
 
-//	Check is current SQL server in cloud (Amazon RDS or Azure SQL)
+//DatabaseInfo.IsCloudSQL
+//Check is current SQL server in cloud (Amazon RDS or Azure SQL)
 //
 //	Parameters:
 //	- nCloudType	(int64) Cloud type (KLCLOUD.CloudType)
 //
 //	Returns:
-//	- (data.PxgValBool) true if there is SQL database of this cloud type
+//	- (bool) true if there is SQL database of this cloud type
 func (di *DatabaseInfo) IsCloudSQL(ctx context.Context, nCloudType int64) (*PxgValBool, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nCloudType": %d}`, nCloudType))
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.IsCloudSQL", bytes.NewBuffer(postData))
@@ -109,8 +113,8 @@ func (di *DatabaseInfo) IsCloudSQL(ctx context.Context, nCloudType int64) (*PxgV
 	return pxgValBool, raw, err
 }
 
-//
-//	Check the server administration and SQL-server permissions to read and write files along path.
+//DatabaseInfo.CheckBackupPath
+//Check the server administration and SQL-server permissions to read and write files along path.
 //
 //	Parameters:
 //	- szwPath	(string) full-path to checkable directory
@@ -128,7 +132,8 @@ func (di *DatabaseInfo) CheckBackupPath(ctx context.Context, szwPath string) (*P
 	return pxgValBool, raw, err
 }
 
-//	Check the server administration and SQL-server permissions to read and write files along path.
+//DatabaseInfo.CheckBackupPath2
+//Check the server administration and SQL-server permissions to read and write files along path.
 //
 //	Parameters:
 //	- szwWinPath	(string) full-path to checkable directory for KSC-server
@@ -148,7 +153,8 @@ func (di *DatabaseInfo) CheckBackupPath2(ctx context.Context, szwWinPath, szwLin
 	return pxgValBool, raw, err
 }
 
-//	Check is current SQL server in on Linux.
+//DatabaseInfo.IsLinuxSQL
+//Check is current SQL server in on Linux.
 //
 //	Returns:
 //	- (bool) true if there is SQL database on Linux SQL instance

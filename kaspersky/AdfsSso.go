@@ -31,16 +31,17 @@ import (
 	"net/http"
 )
 
-//	AdfsSso Class Reference
+//AdfsSso Class Reference
 //
-//	Interface for working with ADFS SSO..
+//Interface for working with ADFS SSO..
 //
-//	This interface allow you to manage ADFS SSO settings
+//This interface allow you to manage ADFS SSO settings
 //
-//	List of all members.
+//List of all members.
 type AdfsSso service
 
-//	Returns a ADFS SSO settings.
+//AdfsSso.GetSettings
+//Returns a ADFS SSO settings.
 //
 //	Returns:
 //	- (params) ADFS SSO settings; See "ADFS SSO Settings".
@@ -54,7 +55,8 @@ func (as *AdfsSso) GetSettings(ctx context.Context) ([]byte, error) {
 	return raw, err
 }
 
-//	Set a ADFS SSO settings.
+//AdfsSso.SetSettings
+//Set a ADFS SSO settings.
 //
 //	Parameters:
 //	- pAdfsSettings	(params) ADFS SSO settings; "ADFS SSO Settings".

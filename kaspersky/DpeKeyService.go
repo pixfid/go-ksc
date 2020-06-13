@@ -31,14 +31,15 @@ import (
 	"net/http"
 )
 
-//	DpeKeyService Class Reference
+//DpeKeyService Class Reference
 //
-//	Interface for working with encrypted devices..
+//Interface for working with encrypted devices..
 //
-//	List of all members.
+//List of all members.
 type DpeKeyService service
 
-//	Returns information about host and key for chosen encrypted device.
+//DpeKeyService.GetDeviceKeys3
+//Returns information about host and key for chosen encrypted device.
 //
 //	Parameters:
 //	- wstrDeviceId (string) Device id

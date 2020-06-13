@@ -31,14 +31,15 @@ import (
 	"net/http"
 )
 
-//	CgwHelper Class Reference
+//CgwHelper Class Reference
 //
-//	CgwHelper (Connection Gateway) helper proxy class.
+//CgwHelper (Connection Gateway) helper proxy class.
 //
-//	Public Member Functions
+//Public Member Functions
 type CgwHelper service
 
-//	Retrieves Slave Server Location.
+//CgwHelper.GetSlaveServerLocation
+//Retrieves Slave Server Location.
 //
 //	Parameters:
 //	- nSlaveServerId	Slave server ID.
@@ -71,7 +72,8 @@ type NagLocation struct {
 	GwLOCUseCompression  bool   `json:"GwLocUseCompression,omitempty"`
 }
 
-//	Retrieves Nagent Location by host name.
+//CgwHelper.GetNagentLocation
+//Retrieves Nagent Location by host name.
 //
 //	Parameters:
 //	- wsHostName (string)	Host name.

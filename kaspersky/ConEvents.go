@@ -32,18 +32,19 @@ import (
 	"net/http"
 )
 
-//	ConEvents Class Reference
+//ConEvents Class Reference
 //
-//	Interface to server events.
+//Interface to server events.
 //
-//	This interface allow user to subscribe on server events and retrieve them.
+//This interface allow user to subscribe on server events and retrieve them.
 //
-//	Public Member Functions
+//Public Member Functions
 type ConEvents service
 
-//	Retrieve.
+//ConEvents.Retrieve
+//Retrieve.
 //
-//	Use this method to retrieve events.
+//Use this method to retrieve events.
 //
 //	Parameters:
 //	- pEvents (array) Events array. Each element of array is params with attributes:
@@ -86,11 +87,12 @@ type SubscribeEventResponse struct {
 	PxgRetVal int64 `json:"PxgRetVal"`
 }
 
-//	Subscribe on event.
+//ConEvents.Subscribe
+//Subscribe on event.
 //
-//	Use this method to subscribe on events. Method returns period of polling.
-//	You should use it between retrieve calls.
-//	Also attribute pFilter allow you to cut off unnecessary events.
+//Use this method to subscribe on events. Method returns period of polling.
+//You should use it between retrieve calls.
+//Also attribute pFilter allow you to cut off unnecessary events.
 //
 //	Parameters:
 //	- wstrEvent (string) event type
@@ -137,9 +139,10 @@ func (ce *ConEvents) Subscribe(ctx context.Context, params interface{}) ([]byte,
 	return raw, err
 }
 
-//	UnSubscribe from event.
+//ConEvents.UnSubscribe
+//UnSubscribe from event.
 //
-//	Use this method to unsubscribe from an event.
+//Use this method to unsubscribe from an event.
 //
 //	- Parameters:
 //	nSubsId (int64) subscription id (see method ConEvents.Subscribe)

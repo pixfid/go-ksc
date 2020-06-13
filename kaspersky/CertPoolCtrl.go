@@ -32,15 +32,16 @@ import (
 	"net/http"
 )
 
-//	CertPoolCtrl Class Reference
+//CertPoolCtrl Class Reference
 //
-//	Interface to manage the pool of certificates used by the
-//	Kaspersky Security Center Server.
+//Interface to manage the pool of certificates used by the
+//Kaspersky Security Center Server.
 //
-//	Public Member Functions
+//Public Member Functions
 type CertPoolCtrl service
 
-//	Returns information about certificate from server's certificates pool.
+//CertPoolCtrl.GetCertificateInfo
+//Returns information about certificate from server's certificates pool.
 //
 //	Parameters:
 //	- nVServerId (int64) Virtual server id (-1 for current, 0 for main server)
@@ -61,7 +62,8 @@ func (cpc *CertPoolCtrl) GetCertificateInfo(ctx context.Context, nVServerId, nFu
 	return raw, err
 }
 
-//	Sets certificate of a given function for a given virtual server.
+//CertPoolCtrl.SetCertificate
+//Sets certificate of a given function for a given virtual server.
 //
 //	Parameters:
 //	- params interface{}

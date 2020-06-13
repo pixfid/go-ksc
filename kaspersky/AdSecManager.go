@@ -31,17 +31,17 @@ import (
 	"net/http"
 )
 
-//	AdSecManager Class Reference
+//AdSecManager Class Reference
 //
-//	Adaptive Security managing.
+//Adaptive Security managing.
 //
-//	Allows to approve or disprove detection results provided by Adaptive Security component.
+//Allows to approve or disprove detection results provided by Adaptive Security component.
 //
-//	List of all members.
+//List of all members.
 type AdSecManager service
 
-//
-//	Approves detection results provided by Adaptive Security component.
+//AdSecManager.ApproveDetect
+//Approves detection results provided by Adaptive Security component.
 //
 //	Parameters:
 //	- pArrDetects	(array) detection results to approve
@@ -65,8 +65,8 @@ func (asm *AdSecManager) ApproveDetect(ctx context.Context, params interface{}) 
 	return raw, err
 }
 
-//
-//	Disapprove detection results provided by Adaptive Security component.
+//AdSecManager.DisproveDetect
+//Disapprove detection results provided by Adaptive Security component.
 //
 //	Parameters:
 //	- pArrDetects	(array) detection results to disapprove
