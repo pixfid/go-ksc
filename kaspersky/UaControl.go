@@ -27,6 +27,7 @@ package kaspersky
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"net/http"
@@ -127,9 +128,91 @@ func (uc *UaControl) GetUpdateAgentsList(ctx context.Context) ([]byte, error) {
 	return raw, err
 }
 
-//TODO func (uc *UaControl) ModifyUpdateAgent(ctx context.Context)  ([]byte, error) {}
-//TODO func (uc *UaControl) RegisterDmzGateway(ctx context.Context)  ([]byte, error) {}
-//TODO func (uc *UaControl) RegisterUpdateAgent(ctx context.Context)  ([]byte, error) {}
+//	Modify update agent info of an existing Update agent.
+//
+//	Parameters:
+//	- pUaInfo	new UA configuration. See Update agent settings for parameters meaning.
+//	UA scope is replaced entirely by this call.
+//
+//	Exceptions:
+//	- Throws	exception if host is not an Update agent or any other error occurs
+func (uc *UaControl) ModifyUpdateAgent(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", uc.client.Server+"/api/v1.0/UaControl.ModifyUpdateAgent",
+		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := uc.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//	Register Connection gateway located in DMZ.
+//
+//	See Connection gateways to know about DMZ-located connection gateways. To register CG in DMZ, one should:
+//
+//	on target host install Network agent with option 'Use as connection gateway' in installer or in installation package settings
+//	determine scope of hosts which will be using this CG
+//	call this method providing ip address by which CG host is available to KSC server
+//	After successful registration CG host will appear in Unassigned computers group and will be assigned as CG.
+//	After that move CG host to appropriate Administration group.
+//	If Network agents which will be using this CG cannot access KSC server without using this CG (which is likely)
+//	they must be installed with 'Use CG' installer option.
+//
+//	Parameters:
+//	- pCgInfo	Connection gateway properties - container with following fields:
+//		|- "DmzCgAddress" paramString CG address available for KSC server
+//		|- "UaScope" paramParams UA scope
+func (uc *UaControl) RegisterDmzGateway(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", uc.client.Server+"/api/v1.0/UaControl.RegisterDmzGateway",
+		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := uc.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//	Register host as Update agent or Connection gateway.
+//
+//	To register host as an Update agent one should:
+//
+//	- call GetDefaultUpdateAgentRegistrationInfo() to get default UA settings
+//	set host id via UaHostId attribute (mandatory)
+//	define Update agent scope via UaScope attribute (mandatory)
+//	modify other options if required (optional), see Update agent settings
+//	perform this call
+//	- Parameters:
+//	- pUaInfo	UA/CG configuration. See Update agent settings for details.
+//
+//	Exceptions:
+//	Throws	exception if host is already an Update agent or any other error occurs
+func (uc *UaControl) RegisterUpdateAgent(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", uc.client.Server+"/api/v1.0/UaControl.RegisterUpdateAgent",
+		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := uc.client.Do(ctx, request, nil)
+	return raw, err
+}
 
 //	Enable or disable automatic Update agents assignment, see uactl_ua_assignment.
 //
