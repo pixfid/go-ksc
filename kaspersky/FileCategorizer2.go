@@ -297,8 +297,59 @@ func (fc *FileCategorizer2) DoStaticAnalysisAsync2(ctx context.Context, nPolicyI
 	return asyncID, raw, err
 }
 
-//TODO FileCategorizer2::DoTestStaticAnalysisAsync
-//TODO FileCategorizer2::DoTestStaticAnalysisAsync2
+//	Start static analysis for test ACL.
+//
+//	Deprecated:
+//	- Deprecated for using in OpenAPI. Use FileCategorizer2.DoTestStaticAnalysisAsync2 instead.
+//
+//	Parameters:
+//	- wstrRequestId		(string) Async id
+//	- nPolicyId			(int64) Policy id
+//	- pTestACL			(params) Test ACL (see "ACL structure 2")
+func (fc *FileCategorizer2) DoTestStaticAnalysisAsync(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.DoTestStaticAnalysisAsync", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := fc.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//	Start static analysis for test ACL.
+//
+//	Parameters:
+//	- nPolicyId		(int64) Policy id
+//	- pTestACL		(params) Test ACL (see "ACL structure 2")
+//
+//	Return:
+//	- wstrAsyncId	(string) Id of async operation. To get status use AsyncActionStateChecker.
+//	CheckActionState, lStateCode "0" means OK.
+//Result of operation is placed into views:
+//
+//Srvview results of static analysis - common information per category (count of executable files)
+//Srvview results of static analysis with exefiles info - list of executable files
+func (fc *FileCategorizer2) DoTestStaticAnalysisAsync2(ctx context.Context, params interface{}) (*WActionGUID, []byte,
+	error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.DoTestStaticAnalysisAsync2", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	wActionGUID := new(WActionGUID)
+	raw, err := fc.client.Do(ctx, request, &wActionGUID)
+	return wActionGUID, raw, err
+}
 
 //	FinishStaticAnalysis
 func (fc *FileCategorizer2) FinishStaticAnalysis(ctx context.Context) ([]byte, error) {
