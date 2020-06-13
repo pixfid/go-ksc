@@ -119,6 +119,10 @@ type ExecuteRulesParams struct {
 //	to get status use AsyncActionStateChecker.CheckActionState, lStateCode "1" means OK and "0" means fail
 func (hmr *HostMoveRules) ExecuteRulesNow(ctx context.Context, params ExecuteRulesParams) ([]byte, error) {
 	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
 	request, err := http.NewRequest("POST", hmr.client.Server+"/api/v1.0/HostMoveRules.ExecuteRulesNow", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err

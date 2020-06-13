@@ -145,7 +145,10 @@ func (sh *ServerHierarchy) GetChildServers(ctx context.Context, nGroupId int64) 
 		return nil, err
 	}
 
-	raw, _ := sh.client.Do(ctx, request, nil)
+	raw, err := sh.client.Do(ctx, request, nil)
+	if err != nil {
+		return nil, err
+	}
 	return raw, err
 }
 
@@ -187,5 +190,9 @@ func (sh *ServerHierarchy) FindSlaveServers(ctx context.Context, params PFindPar
 	}
 
 	raw, err := sh.client.Do(ctx, request, nil)
+	if err != nil {
+		return nil, err
+	}
+
 	return raw, nil
 }

@@ -155,7 +155,7 @@ func (lk *LicenseKeys) AcquireKeyHosts(ctx context.Context, params AcquireKeyHos
 
 	hostsKeyIterator := new(HostsKeyIterator)
 	raw, err := lk.client.Do(ctx, request, &hostsKeyIterator)
-	return hostsKeyIterator, raw, nil
+	return hostsKeyIterator, raw, err
 }
 
 //	EnumKeysParams struct
@@ -191,6 +191,9 @@ func (lk *LicenseKeys) EnumKeys(ctx context.Context, params EnumKeysParams) ([]b
 
 	request, err := http.NewRequest("POST", lk.client.Server+"/api/v1.0/LicenseKeys.EnumKeys",
 		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
 
 	raw, err := lk.client.Do(ctx, request, nil)
 	return raw, err
@@ -231,8 +234,12 @@ func (lk *LicenseKeys) GetKeyData(ctx context.Context, params KeyDataParams) ([]
 	if err != nil {
 		return nil, err
 	}
+
 	request, err := http.NewRequest("POST", lk.client.Server+"/api/v1.0/LicenseKeys.GetKeyData",
 		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
 
 	raw, err := lk.client.Do(ctx, request, nil)
 	return raw, err
@@ -294,8 +301,12 @@ func (lk *LicenseKeys) AdjustKey(ctx context.Context, params AdjustKeyParams) ([
 	if err != nil {
 		return nil, err
 	}
+
 	request, err := http.NewRequest("POST", lk.client.Server+"/api/v1.0/LicenseKeys.AdjustKey",
 		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
 
 	raw, err := lk.client.Do(ctx, request, nil)
 	return raw, err
@@ -337,8 +348,12 @@ func (lk *LicenseKeys) SaasTryToInstall(ctx context.Context, params SaasKeyParam
 	if err != nil {
 		return nil, err
 	}
+
 	request, err := http.NewRequest("POST", lk.client.Server+"/api/v1.0/LicenseKeys.SaasTryToInstall",
 		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
 
 	raw, err := lk.client.Do(ctx, request, nil)
 	return raw, err
@@ -363,8 +378,12 @@ func (lk *LicenseKeys) CheckIfSaasLicenseIsValid(ctx context.Context, params Saa
 	if err != nil {
 		return nil, err
 	}
+
 	request, err := http.NewRequest("POST", lk.client.Server+"/api/v1.0/LicenseKeys.CheckIfSaasLicenseIsValid",
 		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
 
 	raw, err := lk.client.Do(ctx, request, nil)
 	return raw, err

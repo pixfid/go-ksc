@@ -54,6 +54,9 @@ type VServers service
 func (vs *VServers) GetVServers(ctx context.Context, lParentGroup int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lParentGroup": %d}`, lParentGroup))
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.GetVServers", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
 
 	raw, err := vs.client.Do(ctx, request, nil)
 	return raw, err

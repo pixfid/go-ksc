@@ -152,6 +152,9 @@ func (ah *AdHosts) GetChildComputer(ctx context.Context, params ChildComputerPar
 	}
 
 	request, err := http.NewRequest("POST", ah.client.Server+"/api/v1.0/AdHosts.GetChildComputer", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
 
 	adHstIdParent := new(AdHstIDParent)
 	raw, err := ah.client.Do(ctx, request, &adHstIdParent)
@@ -263,6 +266,10 @@ func (ah *AdHosts) GetChildOUs(ctx context.Context, params ChildOUParams) (*PxgV
 	}
 
 	request, err := http.NewRequest("POST", ah.client.Server+"/api/v1.0/AdHosts.GetChildOUs", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
 	pxgValStr := new(PxgValStr)
 	raw, err := ah.client.Do(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
