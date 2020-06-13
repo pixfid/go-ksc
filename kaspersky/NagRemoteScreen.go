@@ -27,6 +27,7 @@ package kaspersky
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -38,7 +39,22 @@ import (
 //	List of all members.
 type NagRemoteScreen service
 
-//	Returns existing remote screen sessions.
+type ExistingSessions struct {
+	ExistingSessions []ExistingSession `json:"PxgRetVal"`
+}
+
+type ExistingSession struct {
+	Type         string       `json:"type"`
+	SessionValue SessionValue `json:"value"`
+}
+
+type SessionValue struct {
+	KlnagRscrSessionDN string `json:"KLNAG_RSCR_SESSION_DN"`
+	KlnagRscrSessionID string `json:"KLNAG_RSCR_SESSION_ID"`
+}
+
+//NagRemoteScreen.GetExistingSessions
+//Returns existing remote screen sessions.
 //
 //	Parameters:
 //	- nType	(int64) type of remote screen (see Remote screen type)
@@ -54,20 +70,33 @@ type NagRemoteScreen service
 //
 //	Returns:
 //	- (array) array of params, each contains KLNAG_RSCR_SESSION_* variables.
-//TODO Call NagRemoteScreen.GetExistingSessions for the instance '' (listener '') does not exist (any more?)
-func (nrs *NagRemoteScreen) GetExistingSessions(ctx context.Context, nType int64) ([]byte, error) {
+func (nrs *NagRemoteScreen) GetExistingSessions(ctx context.Context, nType int64) (*ExistingSessions, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nType": %d}`, nType))
 	request, err := http.NewRequest("POST", nrs.client.Server+"/api/v1.0/NagRemoteScreen.GetExistingSessions",
 		bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	raw, err := nrs.client.Do(ctx, request, nil)
-	return raw, err
+	existingSessions := new(ExistingSessions)
+	raw, err := nrs.client.Do(ctx, request, &existingSessions)
+	return existingSessions, raw, err
 }
 
-//	Shares the session, opens ports etc.
+//SessionHandle struct using in
+type SessionHandle struct {
+	PSharingHandle PSharingHandle `json:"PxgRetVal"`
+}
+
+type PSharingHandle struct {
+	KlnagRscrHandleID   int64  `json:"KLNAG_RSCR_HANDLE_ID"`
+	KlnagRscrHandleType int64  `json:"KLNAG_RSCR_HANDLE_TYPE"`
+	KlnagRscrHostname   string `json:"KLNAG_RSCR_HOSTNAME"`
+	KlnagRscrPort       int64  `json:"KLNAG_RSCR_PORT"`
+}
+
+//NagRemoteScreen.OpenSession
+//Shares the session, opens ports etc.
 //
 //	Parameters:
 //	- nType	(int64) type of remote screen (see Remote screen type)
@@ -83,10 +112,38 @@ func (nrs *NagRemoteScreen) GetExistingSessions(ctx context.Context, nType int64
 //
 //	Returns:
 //	- (params) sharing handle of the shared session
-//TODO Call NagRemoteScreen.OpenSession for the instance '' (listener '') does not exist (any more?)
-func (nrs *NagRemoteScreen) OpenSession(ctx context.Context, nType int64, szwID string) ([]byte, error) {
+func (nrs *NagRemoteScreen) OpenSession(ctx context.Context, nType int64, szwID string) (*SessionHandle, []byte,
+	error) {
 	postData := []byte(fmt.Sprintf(`{"nType": %d, "szwID": "%s"}`, nType, szwID))
 	request, err := http.NewRequest("POST", nrs.client.Server+"/api/v1.0/NagRemoteScreen.OpenSession",
+		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	sessionHandle := new(SessionHandle)
+	raw, err := nrs.client.Do(ctx, request, &sessionHandle)
+	return sessionHandle, raw, err
+}
+
+//SharingHandle struct using in NagRemoteScreen.CloseSession
+type SharingHandle struct {
+	//PSharingHandle value of the sharing handle returned by OpenSession
+	PSharingHandle PSharingHandle `json:"pSharingHandle"`
+}
+
+//NagRemoteScreen.CloseSession
+//Closes session.
+//
+//	Parameters:
+//	- pSharingHandle	(params) value of the sharing handle returned by OpenSession
+func (nrs *NagRemoteScreen) CloseSession(ctx context.Context, params SharingHandle) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", nrs.client.Server+"/api/v1.0/NagRemoteScreen.CloseSession",
 		bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
@@ -96,6 +153,72 @@ func (nrs *NagRemoteScreen) OpenSession(ctx context.Context, nType int64, szwID 
 	return raw, err
 }
 
-//TODO func (nrs *NagRemoteScreen) CloseSession
-//TODO func (nrs *NagRemoteScreen) GetDataForTunnel
-//TODO func (nrs *NagRemoteScreen) GetWdsData
+//TunnelData using in NagRemoteScreen.GetDataForTunnel
+type TunnelData struct {
+	//NHostPortNumber nHostPortNumber
+	NHostPortNumber int64 `json:"nHostPortNumber"`
+
+	//WstrHostNameOrIPAddr wstrHostNameOrIpAddr
+	WstrHostNameOrIPAddr string `json:"wstrHostNameOrIpAddr"`
+}
+
+//NagRemoteScreen.GetDataForTunnel
+//Returns data to create an use tunnel
+//
+//	Parameters:
+//	- pSharingHandle	(params) value of the sharing handle returned by OpenSession
+//
+//	Return:
+//	- nHostPortNumber		(int64) out the nHostPortNumber
+//	- wstrHostNameOrIpAddr	(string) out the wstrHostNameOrIpAddr
+func (nrs *NagRemoteScreen) GetDataForTunnel(ctx context.Context, params SharingHandle) (*TunnelData, []byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := http.NewRequest("POST", nrs.client.Server+"/api/v1.0/NagRemoteScreen.GetDataForTunnel",
+		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	tunnelData := new(TunnelData)
+	raw, err := nrs.client.Do(ctx, request, &tunnelData)
+	return tunnelData, raw, err
+}
+
+//WdsDataParams using in NagRemoteScreen.GetWdsData
+type WdsDataParams struct {
+	PSharingHandle   PSharingHandle `json:"pSharingHandle"`
+	NLocalPortNumber int64          `json:"nLocalPortNumber"`
+}
+
+//NagRemoteScreen.GetWdsData
+//Returns data specific for Windows Desktop Sharing
+//
+//	Parameters:
+//	- pSharingHandle	(params) value of the sharing handle returned by OpenSession
+//	- nLocalPortNumber	(int) the nLocalPortNumber parameter,
+//	port number of the local end of the tunnel;
+//	if klsctunnel utility is intended to be used for creating of the tunnel then
+//	specify here the value of the nHostPortNumber output parameter of the NagRemoteScreen.GetDataForTunnel method
+//
+//	Return:
+//	- wstrTicket	(string) out the ticket (bstrConnectionString parameter for the IRDPSRAPIViewer.Connect method)
+//	- wstrPassword	(string) out the password (bstrPassword parameter for the IRDPSRAPIViewer.Connect method)
+func (nrs *NagRemoteScreen) GetWdsData(ctx context.Context, params WdsDataParams) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", nrs.client.Server+"/api/v1.0/NagRemoteScreen.GetWdsData",
+		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := nrs.client.Do(ctx, request, nil)
+	return raw, err
+}
