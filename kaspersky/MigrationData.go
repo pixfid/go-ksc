@@ -145,7 +145,6 @@ type ProductsInfoValue struct {
 	KlmigrProductInfoVersion string `json:"KLMIGR_PRODUCT_INFO_VERSION,omitempty"`
 }
 
-//	TODO Fix Request params...
 //	Performs export of objects.
 //
 //	Exports all objects, specified in pOptions, and returns async action GUID,
@@ -197,4 +196,51 @@ func (md *MigrationData) InitFileUpload(ctx context.Context) (*PxgValStr, []byte
 	return pxgValStr, raw, err
 }
 
-//TODO MigrationData.Import
+//ImportMDParams struct using in MigrationData.Import
+type ImportMDParams struct {
+	//	upload URL. Use MigrationData.InitFileUpload() method to obtain it
+	WstrURL string `json:"wstrUrl"`
+
+	// import options
+	IOptions IOptions `json:"pOptions"`
+}
+
+type IOptions struct {
+	// root group identifier
+	KlmigrRootGroupID int64 `json:"KLMIGR_ROOT_GROUP_ID"`
+}
+
+//	Performs import of objects.
+//
+//	Imports all objects, specified in pOptions, from file, pointed by upload URL.
+//	Method is asynchronious. To correctly use this method, first call InitFileUpload() to obtain file URL.
+//	If wstrUrl is invalid, method fails with error.
+//
+//	Parameters:
+//	- wstrUrl	(string) - upload URL. Use MigrationData::InitFileUpload() method to obtain it
+//	- pOptions	(params) - import options, containing the following:
+//		|- KLMIGR_ROOT_GROUP_ID (paramInt) root group identifier
+//
+//	Returns:
+//	- (string) wstrActionGuid async action GUID
+//
+//	Remarks:
+//	Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
+//	If the operation succeeds then AsyncActionStateChecker.
+//	CheckActionState returns bFinalized=true and lStateCode=1 in pStateData.
+//	Otherwise, a call to AsyncActionStateChecker.CheckActionState returns error in pStateData.
+func (md *MigrationData) Import(ctx context.Context, params ImportMDParams) (*PxgValStr, []byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := http.NewRequest("POST", md.client.Server+"/api/v1.0/MigrationData.Import", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	pxgValStr := new(PxgValStr)
+	raw, err := md.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, raw, err
+}
