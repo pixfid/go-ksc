@@ -592,5 +592,47 @@ func (rm *ReportManager) ResetStatisticsData(ctx context.Context, params interfa
 	return requestID, raw, err
 }
 
-//TODO UpdateReport
-//TODO AddReport
+//	Create new report.
+//
+//	Parameters:
+//	- pReportInfo	(params) report info, see List of report attributes
+//
+//	Returns:
+//	- (int64) id of new report
+func (rm *ReportManager) AddReport(ctx context.Context, params interface{}) (*PxgValInt, []byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := http.NewRequest("POST", rm.client.Server+"/api/v1.0/ReportManager.AddReport", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	pxgValInt := new(PxgValInt)
+	raw, err := rm.client.Do(ctx, request, &pxgValInt)
+	return pxgValInt, raw, err
+}
+
+//	Update report info.
+//
+//	Updates info for existing report
+//
+//	Parameters:
+//	- lReportId	(int64) report id
+//	- pReportInfo	(params) report info, see List of report attributes
+func (rm *ReportManager) UpdateReport(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", rm.client.Server+"/api/v1.0/ReportManager.UpdateReport", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := rm.client.Do(ctx, request, nil)
+	return raw, err
+}
