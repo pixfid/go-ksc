@@ -35,12 +35,13 @@ import (
 //	HstAccessControl Class Reference
 //
 //	Security policy Allows to specify permissions
-//	for administrration groups and non-group objects.
+//	for administration groups and non-group objects.
 //
 //	List of all members.
 type HstAccessControl service
 
-//	Checks if current user session has access to the administration group.
+//HstAccessControl.AccessCheckToAdmGroup
+//Checks if current user session has access to the administration group.
 //
 //	Parameters:
 //	- lGroupId	(int64) id of the group
@@ -66,7 +67,8 @@ func (hac *HstAccessControl) AccessCheckToAdmGroup(ctx context.Context,
 	return pxgValBool, raw, err
 }
 
-//	Add user role.
+//HstAccessControl.AddRole
+//Add user role.
 //
 //	A role can be added only at a main server.
 //
@@ -96,7 +98,8 @@ func (hac *HstAccessControl) AddRole(ctx context.Context, params interface{}) ([
 	return raw, err
 }
 
-//	Delete user role.
+//HstAccessControl.DeleteRole
+//Delete user role.
 //
 //	Parameters:
 //	- nId	(int64) id of a role
@@ -113,7 +116,8 @@ func (hac *HstAccessControl) DeleteRole(ctx context.Context, nId int64, bProtect
 	return raw, err
 }
 
-//	Deletes ACL for the specified object.
+//HstAccessControl.DeleteScObjectAcl
+//Deletes ACL for the specified object.
 //
 //	Parameters:
 //	- nObjId	(int64) object id
@@ -130,7 +134,8 @@ func (hac *HstAccessControl) DeleteScObjectAcl(ctx context.Context, nObjId, nObj
 	return raw, err
 }
 
-//	Deletes ACL for the specified virtual server.
+//HstAccessControl.DeleteScVServerAcl
+//Deletes ACL for the specified virtual server.
 //
 //	Parameters:
 //	- nId	(int64) server id
@@ -173,6 +178,28 @@ type RoleValue struct {
 	UserPrincipalName     *string `json:"userPrincipalName,omitempty"`
 }
 
+//HstAccessControl.FindRoles
+//Find roles by filter string.
+//
+//	Parameters:
+//	- strFilter	(string) filter string, see Search filter syntax.
+//	- pFieldsToReturn	(array) array of strings with role attribute names to return.
+//	See Roles attributes for allowed attributes.
+//	- pFieldsToOrder	(array) array of containers each of them containing two attributes:
+//		|- "Name" of type (paramString), name of attribute used for sorting
+//		|- "Asc" of type (paramBool), ascending if true descending otherwise
+//	- lMaxLifeTime	(int64) max lifetime of accessor (sec)
+//
+//	Return:
+//	- strAccessor	(string) result-set ID, identifier of the server-side ordered collection of found roles.
+//	The result-set is destroyed and associated memory is freed in following cases:
+//	Passed lMaxLifeTime seconds after last access to the result-set
+//	(by methods ChunkAccessor.GetItemsCount and ChunkAccessor.GetItemsChunk
+//	Session to the Administration Server has been closed.
+//	ChunkAccessor.Release has been called.
+//
+//	Returns:
+//	- (int64) number of records found
 func (hac *HstAccessControl) FindRoles(ctx context.Context, params PFindParams) (*Accessor, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -218,7 +245,8 @@ type KlhstACLTrusteeSid struct {
 	Value *string `json:"value,omitempty"`
 }
 
-//	Searches for trustees meeting specified criteria.
+//HstAccessControl.FindTrustees
+//Searches for trustees meeting specified criteria.
 //
 //	Parameters:
 //	- strFilter	(string) search filter, see Search filter syntax, following values may be used in the filter string:
@@ -266,13 +294,14 @@ func (hac *HstAccessControl) FindTrustees(ctx context.Context, params PFindParam
 
 //FuncAreas struct using in HstAccessControl.GetAccessibleFuncAreas
 type FuncAreas struct {
-	//	array of functionality areas.
-	//	Each element of the array is a string: "<product>|<version>|<functional area>".
-	// See Functional areas.
+	//PFuncAreasArray array of functionality areas.
+	//Each element of the array is a string: "<product>|<version>|<functional area>".
+	//See Functional areas.
 	PFuncAreasArray []string `json:"pFuncAreasArray"`
 }
 
-//	Returns accessible functional areas.
+//HstAccessControl.GetAccessibleFuncAreas
+//Returns accessible functional areas.
 //
 //	Parameters:
 //	- lGroupId	(int64) id of the group
@@ -297,7 +326,8 @@ func (hac *HstAccessControl) GetAccessibleFuncAreas(ctx context.Context, lGroupI
 	return raw, err
 }
 
-//	Returns mapping functional area to policies.
+//HstAccessControl.GetMappingFuncAreaToPolicies
+//Returns mapping functional area to policies.
 //
 //	Parameters:
 //	- szwProduct	(string) product, see Functional areas
@@ -321,7 +351,8 @@ func (hac *HstAccessControl) GetMappingFuncAreaToPolicies(ctx context.Context, s
 	return raw, err
 }
 
-//	Returns mapping functional area to reports.
+//HstAccessControl.GetMappingFuncAreaToReports
+//Returns mapping functional area to reports.
 //
 //	Parameters:
 //	- szwProduct	(string) product, see Functional areas
@@ -346,7 +377,8 @@ func (hac *HstAccessControl) GetMappingFuncAreaToReports(ctx context.Context, sz
 	return raw, err
 }
 
-//	Returns mapping functional area to settings.
+//HstAccessControl.GetMappingFuncAreaToSettings
+//Returns mapping functional area to settings.
 //
 //	Parameters:
 //	- szwProduct	(string) product, see Functional areas
@@ -371,7 +403,8 @@ func (hac *HstAccessControl) GetMappingFuncAreaToSettings(ctx context.Context, s
 	return raw, err
 }
 
-//	Returns mapping functional area to tasks.
+//HstAccessControl.GetMappingFuncAreaToTasks
+//Returns mapping functional area to tasks.
 //
 //	Parameters:
 //	- szwProduct	(string) product, see Functional areas
@@ -396,9 +429,35 @@ func (hac *HstAccessControl) GetMappingFuncAreaToTasks(ctx context.Context, szwP
 	return raw, err
 }
 
-//TODO GetPolicyReadonlyNodes
+//HstAccessControl.GetPolicyReadonlyNodes
+//Returns array of paths for all nodes actually located in the specified policy section, which are readonly for current user session.
+//
+//	Parameters:
+//	- lGroupId			(int64) group id
+//	- szwProduct		(string) name of product
+//	- szwVersion		(string) product's version
+//	- szwSectionName	(string) name of policy's section name
+//	- pPolicySection	(params) policy's section data
+//
+//	Returns:
+//	- (params) nodes in readonly mode
+func (hac *HstAccessControl) GetPolicyReadonlyNodes(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
 
-//	Return parameters of a role.
+	request, err := http.NewRequest("POST", hac.client.Server+"/api/v1.0/HstAccessControl.GetPolicyReadonlyNodes", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := hac.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//HstAccessControl.GetRole
+//Return parameters of a role.
 //
 //	Parameters:
 //	- nId	(int) id of a role
@@ -429,7 +488,8 @@ func (hac *HstAccessControl) GetRole(ctx context.Context, params TRParams) (*Tru
 	return trustee, raw, err
 }
 
-//	Returns ACL for the specified object.
+//HstAccessControl.GetScObjectAcl
+//Returns ACL for the specified object.
 //
 //	Parameters:
 //	- nObjId	(int64) object id
@@ -448,10 +508,11 @@ func (hac *HstAccessControl) GetScObjectAcl(ctx context.Context, nObjId, nObjTyp
 	return raw, err
 }
 
-//	Returns ACL for the server.
+//HstAccessControl.GetScVServerAcl
+//Returns ACL for the server.
 //
 //	Parameters:
-//	- nId	(int) -1 means 'current server', otherwise virtual server id
+//	- nId			(int) -1 means 'current server', otherwise virtual server id
 //
 //	Return:
 //	- pAclParams	(params) see ACL structure 2
@@ -467,7 +528,32 @@ func (hac *HstAccessControl) GetScVServerAcl(ctx context.Context, nId int64) ([]
 	return raw, err
 }
 
-//TODO GetSettingsReadonlyNodes
+//HstAccessControl.GetSettingsReadonlyNodes
+//Returns array of paths for nodes from product's setting section, which are readonly for current user session.
+//
+//	Parameters:
+//	- lGroupId			(int64) group id
+//	- szwProduct		(string) name of product
+//	- szwVersion		(string) product's version
+//	- szwSectionName	(string) name of setting's section name
+//	- pSettingsSection	(params) setting's section data
+//
+//	Returns:
+//	- (params) nodes in readonly mode
+func (hac *HstAccessControl) GetSettingsReadonlyNodes(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", hac.client.Server+"/api/v1.0/HstAccessControl.GetSettingsReadonlyNodes", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := hac.client.Do(ctx, request, nil)
+	return raw, err
+}
 
 //TrusteeParams struct using in HstAccessControl.GetTrustee
 type TRParams struct {
@@ -483,9 +569,10 @@ type Trustee struct {
 	Trustee *TrusteeValue `json:"PxgRetVal,omitempty"`
 }
 
-//	Get trustee data.
+//HstAccessControl.GetTrustee
+//Get trustee data.
 //
-//	Returns trustee's data.
+//Returns trustee's data.
 //
 //	Parameters:
 //	- nId	(int64) trustee id
@@ -516,7 +603,8 @@ func (hac *HstAccessControl) GetTrustee(ctx context.Context, params TRParams) (*
 	return trustee, raw, err
 }
 
-//	Returns descriptions of visual view for access rights in KSC.
+//HstAccessControl.GetVisualViewForAccessRights
+//Returns descriptions of visual view for access rights in KSC.
 //
 //	Parameters:
 //	- wstrLangCode	(string) IETF language tag (for example: en-us)
@@ -548,12 +636,13 @@ func (hac *HstAccessControl) GetVisualViewForAccessRights(ctx context.Context, w
 	return raw, err
 }
 
-//	Determines read only attribute by product's task type.
+//HstAccessControl.IsTaskTypeReadonly
+//Determines read only attribute by product's task type.
 //
 //	Parameters:
-//	- lGroupId	(int64) group id
-//	- szwProduct	(string) name of product
-//	- szwVersion	(string) product's version
+//	- lGroupId			(int64) group id
+//	- szwProduct		(string) name of product
+//	- szwVersion		(string) product's version
 //	- szwTaskTypeName	(string) name of product's task type
 //
 //	Returns:
@@ -575,7 +664,97 @@ func (hac *HstAccessControl) IsTaskTypeReadonly(ctx context.Context, lGroupId in
 	return pxgValBool, raw, err
 }
 
-//TODO ModifyScObjectAcl
-//TODO SetScObjectAcl
-//TODO SetScVServerAcl
-//TODO UpdateRole
+//HstAccessControl.ModifyScObjectAcl
+//Modify ACL for the specified object.
+//
+//Method updates only Accounts, permissions and roles wich presented in pAclParams. To delete Ace from Acl, it must be added to 'delete' list.
+//
+//	Parameters:
+//	- nObjId				(int64) object id
+//	- nObjType				(int64) object type, see Object types
+//	- pAclParams			(params) ACL, see ACL structure 2
+//	- bCheckCurrentUserAce	(bool) if true then it checks that the user does not reduce rights for himself
+func (hac *HstAccessControl) ModifyScObjectAcl(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", hac.client.Server+"/api/v1.0/HstAccessControl.ModifyScObjectAcl", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := hac.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//HstAccessControl.SetScObjectAcl
+//Sets ACL for the specified object.
+//
+//	Parameters:
+//	- nObjId				(int64) object id
+//	- nObjType				(int64) object type, see Object types
+//	- pAclParams			(params) ACL, see ACL structure 2
+//	- bCheckCurrentUserAce	(bool) if true then it checks that the user does not reduce rights for himself
+func (hac *HstAccessControl) SetScObjectAcl(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", hac.client.Server+"/api/v1.0/HstAccessControl.SetScObjectAcl", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := hac.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//HstAccessControl.SetScVServerAcl
+//Set ACL for virtual server.
+//
+//	Parameters:
+//	- nId					(int64) -1 means 'current server', otherwise virtual server id
+//	- pAclParams			(params) ACL, see ACL structure 2
+//	- bCheckCurrentUserAce	(bool) if true then it checks that the user does not reduce rights for himself
+func (hac *HstAccessControl) SetScVServerAcl(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", hac.client.Server+"/api/v1.0/HstAccessControl.SetScVServerAcl", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := hac.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//HstAccessControl.UpdateRole
+//Update user role.
+//
+//	Parameters:
+//	- nId			(int64) id of a role
+//	- pRoleData		(params) parameters of a role, KLHST_ACL_ROLE_NAME is mandatory, see Role
+//	- bProtection	(bool) if true then it checks that the user does not reduce rights for himself
+//
+//	Returns:
+//	- (params) returned parameters of role (guid, id, display name).
+func (hac *HstAccessControl) UpdateRole(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", hac.client.Server+"/api/v1.0/HstAccessControl.UpdateRole", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := hac.client.Do(ctx, request, nil)
+	return raw, err
+}
