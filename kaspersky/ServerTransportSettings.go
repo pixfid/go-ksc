@@ -27,6 +27,7 @@ package kaspersky
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -263,5 +264,60 @@ func (sts *ServerTransportSettings) ResetDefaultReserveCertificate(ctx context.C
 	return raw, err
 }
 
-//TODO SetCustomSrvCertificate
-//TODO SetOrCreateDefaultCertificate
+//	SetOrCreateDefaultCertificate.
+//	It sets or recreates default certificate.
+//
+//	Parameters:
+//	- szwCertType	Certificate type (can be "CERT_TYPE_MOBILE", "CERT_TYPE_EMBEDDED")
+//	- pSettings	Certificate creation settings. May contain:
+//		|- "CERT_CHANGE_TIMEOUT"       [int64], optional, seconds, certificate change timeout for reserve certificates.
+//		It should be set for reserve certificate only.
+//		|- "TRSP_SETTINGS_CERT_DATA"   [paramParams], optional. Params with certificate settings to create new certificate, may contain:
+//			|- "TRSP_SETTINGS_FQDN"    [paramString], optional, certificates's FQDN, if absent, then curent
+//			(Administration Server) host's FQDN will be used instead.
+//		|- "TRSP_SETTINGS_CERT"        [paramParams], optional. Params with certificate data (see Common format for certificate params).
+func (sts *ServerTransportSettings) SetOrCreateDefaultCertificate(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", sts.client.Server+"/api/v1.0/ServerTransportSettings.SetOrCreateDefaultCertificate",
+		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := sts.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//	SetCustomSrvCertificate.
+//	Sets custom certificate for one of SC Server's SSL listener.
+//
+//	Parameters:
+//	- szwCertType	Certificate type (can be "CERT_TYPE_MOBILE", "CERT_TYPE_EMBEDDED")
+//	- pCertData	Params with custom certificate data (see Common format for certificate params.) and fields below:
+//		|- "CERT_USE"              [bool],
+//		it indicates if custom certificate feature is enabled or disabled for this certificate type (szwCertType).
+//		|- "CERT_CHANGE_TIMEOUT"   [int64], optional, seconds, certificate change timeout for reserve certificates.
+//		It should be set for reserve certificate only.
+//                Note that certificate can be in one format only - PEM or PKCS12.
+//                If pCertData is NULL or empty then settings will be completely removed.
+//                If "CERT_USE" is true and no any certificate was saved before then KLSTD::STDE_BADPARAM will be thrown.
+//                If "CERT_USE" is false then no any other parameters required because only "CERT_USE" will be applied.
+func (sts *ServerTransportSettings) SetCustomSrvCertificate(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", sts.client.Server+"/api/v1.0/ServerTransportSettings.SetCustomSrvCertificate",
+		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := sts.client.Do(ctx, request, nil)
+	return raw, err
+}
