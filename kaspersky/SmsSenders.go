@@ -54,7 +54,6 @@ func (ss *SmsSenders) HasAllowedSenders(ctx context.Context) (*PxgValBool, []byt
 	return pxgValBool, raw, err
 }
 
-//TODO test AllowSenders params WRONG ???
 type PNewStatuses struct {
 	PNewStatus PNewStatus `json:"pNewStatuses,omitempty"`
 }
