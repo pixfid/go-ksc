@@ -27,7 +27,7 @@ package kaspersky
 import (
 	"bytes"
 	"context"
-	"fmt"
+	"encoding/json"
 	"net/http"
 )
 
@@ -37,46 +37,60 @@ import (
 //	List of all members.
 type HostTagsApi service
 
+//HostTagsParams using in
+type HostTagsParams struct {
+	//SzwHostID host identifier ( guid )
+	SzwHostID string `json:"szwHostId"`
+	//PParams reserved.
+	PParams Null `json:"pParams"`
+}
+
 //HostTags struct using in HostTagsApi.GetHostTags
 type HostTags struct {
-	//ppHostTags	(array) collection of (params) objects where each of them has the following structure:
-	PPHostTags []PPHostTags `json:"PxgRetVal"`
+	HTags []HTags `json:"PxgRetVal"`
 }
 
-type PPHostTags struct {
+type HTags struct {
 	Type      string    `json:"type"`
-	PPHostTag PPHostTag `json:"value"`
+	HTagValue HTagValue `json:"value,omitempty"`
 }
 
-type PPHostTag struct {
+type HTagValue struct {
 	//Value of the tag
 	KLHSTTagValue string `json:"KLHST_TagValue"`
 
 	//true if tag has been set by product
-	KlhstIsTagSetByProduct bool `json:"KLHST_IS_TAG_SET_BY_PRODUCT"`
+	KlhstIsTagSetByProduct bool `json:"KLHST_IS_TAG_SET_BY_PRODUCT,omitempty"`
 
 	//true if tag has been set by host tag rule
-	KlhstIsTagSetByHosttagrule bool `json:"KLHST_IS_TAG_SET_BY_HOSTTAGRULE"`
+	KlhstIsTagSetByHosttagrule bool `json:"KLHST_IS_TAG_SET_BY_HOSTTAGRULE,omitempty"`
 }
 
-//	Get tags for the host.
+//HostTagsApi.GetHostTags
+//Get tags for the host.
 //
 //	Parameters:
-//	- szwHostId	[in] (string) - host identifier ( guid )
-//	- pParams	(params) reserved.
+//	- HostTagsParams
+//		|- szwHostId	string) - host identifier ( guid )
+//		|- pParams	(params) reserved.
 //
 //	Return:
 //	- ppHostTags	(array) collection of (params) objects where each of them has the following structure:
 //	|- "KLHST_TagValue" (string). Value of the tag
 //	|- "KLHST_IS_TAG_SET_BY_PRODUCT" (bool). true if tag has been set by product
 //	|- "KLHST_IS_TAG_SET_BY_HOSTTAGRULE" (bool). true if tag has been set by host tag rule
-func (kc *HostTagsApi) GetHostTags(ctx context.Context, szwHostId string) ([]byte, error) {
-	postData := []byte(fmt.Sprintf(`{"szwHostId": "%s"}`, szwHostId))
-	request, err := http.NewRequest("POST", kc.client.Server+"/api/v1.0/HostTagsApi.GetHostTags", bytes.NewBuffer(postData))
+func (kc *HostTagsApi) GetHostTags(ctx context.Context, params HostTagsParams) (*HostTags, []byte, error) {
+	postData, err := json.Marshal(params)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	raw, err := kc.client.Do(ctx, request, nil)
-	return raw, err
+	request, err := http.NewRequest("POST", kc.client.Server+"/api/v1.0/HostTagsApi.GetHostTags", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	hostTags := new(HostTags)
+	raw, err := kc.client.Do(ctx, request, &hostTags)
+	return hostTags, raw, err
 }
