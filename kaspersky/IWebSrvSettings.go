@@ -27,6 +27,7 @@ package kaspersky
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -93,4 +94,25 @@ func (iws *IWebSrvSettings) SetCustomPkgHttpFqdn(ctx context.Context, wsFqdn str
 	return raw, err
 }
 
-//TODO func (iws *IWebSrvSettings) SetCustomCertificate(ctx context.Context, wsFqdn string) ([]byte, error) {}
+//	SetCustomCertificate. Sets custom certificate for Web Server's SSL listener.
+//
+//
+//	FQDN name from certificate are used for HTTPS link generation.
+//
+//	Parameters:
+//	- pCertData	[in] Params with certificate data (see Common format for certificate params).
+func (iws *IWebSrvSettings) SetCustomCertificate(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", iws.client.Server+"/api/v1.0/IWebSrvSettings.SetCustomCertificate",
+		bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := iws.client.Do(ctx, request, nil)
+	return raw, err
+}
