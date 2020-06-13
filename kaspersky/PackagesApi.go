@@ -46,7 +46,7 @@ type EULAIDParams struct {
 //	Accepts given EULAs.
 //
 //	Parameters:
-//	- vecEulaIDs	(array) set of EULA IDs to accept, each item is paramInt
+//	- vecEulaIDs	(array) set of EULA IDs to accept, each item is int64
 //
 //	Exceptions:
 //	Throws	exception in case of error.
@@ -66,8 +66,61 @@ func (pa *PackagesApi) AcceptEulas(ctx context.Context, params EULAIDParams) ([]
 	return raw, err
 }
 
-//TODO PackagesApi::AddExtendedSign
-//TODO PackagesApi::AddExtendedSignAsync
+//AddExtendedSign
+//Add extended certificate/sign with authenticated attributes to executable file.
+//
+//	Parameters:
+//	- pParams	(paramParams) Extended certificate attributes, see List of standalone installation packages additional signature attributes
+//
+//	Returns:
+//	- (datetime) Expiration date of certificate
+//
+//	Remarks:
+//	If extended sign already exists - one more sign will be added
+//
+//	Exceptions:
+//	Throws	exception in case of error.
+func (pa *PackagesApi) AddExtendedSign(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.AddExtendedSign", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := pa.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//AddExtendedSignAsync
+//Add extended certificate/sign with authenticated attributes to executable file (asynchronously).
+//
+//	Parameters:
+//	- pParams		(paramParams) Extended certificate attributes, see List of standalone installation packages additional signature attributes
+//	- wstrRequestID	(string) Request ID
+//
+//	Remarks:
+//If extended sign already exists - one more sign will be added
+//
+//	Exceptions:
+//Throws	exception in case of error.
+func (pa *PackagesApi) AddExtendedSignAsync(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.AddExtendedSignAsync", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := pa.client.Do(ctx, request, nil)
+	return raw, err
+}
 
 //	Allow installation of the shared prerequisites.
 //
@@ -165,7 +218,78 @@ func (pa *PackagesApi) CancelUpdateBasesInPackages(ctx context.Context, wstrRequ
 	return raw, err
 }
 
-//TODO PackagesApi::CreateExecutablePkgAsync
+//CreateExecutablePkgAsync
+//Create a standalone package (asynchronously).
+//
+//	Parameters:
+//	- pData	(paramParams) Package attributes.
+//
+//	Mandatory params:
+//	- "KLTSK_RI_PACKAGES_IDS" - Packages IDs (paramArray <int64>)
+//	Optional params:
+//		|- "KLPKG_evpExecPkgId" - Standalone package ID (int64)
+//		|- "KLPKG_NAME" - Package name (string)
+//		|- "KLPKG_VIRTUAL" - Is virtual package (bool)
+//		|- "KLTSK_RI_GROUP_TO_MOVE_HOST" - ID of the group where to move the host when the RI task succeedes (int64)
+//		|- "KLTSK_RI_RBT_USE_TSK_SETTINGS" - Ignore reboot control options from the task parameters (bool)
+//		|- "KLTSK_RU_REBOOT_IMMEDIATELY" - Is reboot performed immediately without user confirmation (bool)
+//		|- "KLTSK_RU_REBOOT_ASK_FOR_REBOOT" - Ask for reboot (bool)
+//		|- "KLTSK_RU_REBOOT_ASK_FOR_REBOOT_PERIOD" - Period (in minutes) of display reboot message (int64)
+//		|- "KLTSK_RU_REBOOT_FORCE_REBOOT_PERIOD" - Force reboot period (in minutes) (int64)
+//		|- "KLTSK_RU_REBOOT_MESSAGE" - Reboot request text (string)
+//		|- "KLTSK_RU_FORCE_APPS_CLOSED" - Force applications close (bool)
+//		|- "KLPKG_EXT_LOC_STRINGS" - External localization strings (paramParams)
+//			|- IDS_PKINST_KLNAGCHK_FAILED
+//			|- IDS_PKINST_COMPLETED
+//			|- IDS_PKINST_ERROR_OCCURED
+//			|- IDS_PKINST_CAPTION
+//			|- IDS_PKINST_EXTRACTION
+//			|- IDS_PKINST_KLNAGCHK
+//			|- IDS_PKINST_RUNNING
+//			|- IDS_PKINST_OK
+//			|- IDS_PKINST_CANCEL
+//			|- IDS_PKINST_NAGENT
+//			|- IDS_PKINST_INSTALLING
+//			|- IDS_PKINST_ABORT_INSTALL
+//			|- IDS_PKINST_CLOSE
+//			|- IDS_PKINST_START
+//			|- IDS_PKINST_CONTINUE
+//			|- IDS_PKINST_MSG_CLOSE_APPS
+//			|- IDS_PKINST_MSG_PKG1
+//			|- IDS_PKINST_MSG_PKG2
+//			|- IDS_PKINST_NEED_REBOOT
+//		|- "UseProxy" - Use proxy (bool)
+//		|- "ProxyServerAddress" - Proxy address (string)
+//		|- "ProxyServerUser" - Proxy user (string)
+//		|- "ProxyServerPassword" - Proxy password (paramBinary) encrypted as UTF16 string
+//
+//	Returns:
+//	- (string) Request ID used to subscribe to the event that is triggered when operation is complete.
+//
+//	Remarks:
+//	Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized
+//	or cancel it by calling PackagesApi.CancelGetExecutablePkgFile.
+//	If the operation succedes then AsyncActionStateChecker.CheckActionState returns these attributes in pStateData
+//	container:
+//		- KLPKG_EP_EXECID - (int64) ID of the executable package.
+//		- KLPKG_EP_FILESIZE - (int64) Size (in bytes) of the executable package file. If the action failed then call to AsyncActionStateChecker::CheckActionState returns error in pStateData.
+//
+//	Exceptions:
+//	Throws	exception in case of error.
+func (pa *PackagesApi) CreateExecutablePkgAsync(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.CreateExecutablePkgAsync", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := pa.client.Do(ctx, request, nil)
+	return raw, err
+}
 
 //	Delete standalone package.
 //
@@ -221,23 +345,23 @@ func (pa *PackagesApi) GetEulaText(ctx context.Context, nEulaId int64) (*EULA, [
 //Returns:
 //	- (param) Packages info container.
 //		|- "KLPKG_evpExecs" - Array of packages (paramArray <paramParams>)
-//		|- "KLPKG_evpExecPkgId" - Standalone package ID (paramInt)
-//		|- "KLPKG_evpPkgId" - Package ID (paramInt)
-//		|- "KLPKG_evpPkgPath" - Path to the file in the shared folder (paramString)
-//		|- "KLPKG_evpPkgSize" - Package size (paramInt)
-//		|- "KLPKG_evpAddPkgId" - Additional package ID (paramInt)
-//		|- "KLPKG_ProdName" - Application ID (paramString)
-//		|- "KLPKG_ProdVersion" - Application version (paramString)
-//		|- "KLPKG_ProdPkgName" - Product package name (paramString)
-//		|- "KLPKG_ProdDisplayVersion" - Application version (paramString)
-//		|- "KLPKG_NagentDisplayVersion" - Agent version (paramString)
+//		|- "KLPKG_evpExecPkgId" - Standalone package ID (int64)
+//		|- "KLPKG_evpPkgId" - Package ID (int64)
+//		|- "KLPKG_evpPkgPath" - Path to the file in the shared folder (string)
+//		|- "KLPKG_evpPkgSize" - Package size (int64)
+//		|- "KLPKG_evpAddPkgId" - Additional package ID (int64)
+//		|- "KLPKG_ProdName" - Application ID (string)
+//		|- "KLPKG_ProdVersion" - Application version (string)
+//		|- "KLPKG_ProdPkgName" - Product package name (string)
+//		|- "KLPKG_ProdDisplayVersion" - Application version (string)
+//		|- "KLPKG_NagentDisplayVersion" - Agent version (string)
 //		|- "KLPKG_CreationDate" - Creation date and time (paramDateTime)
 //		|- "KLPKG_ModificationDate" - Modification date and time (paramDateTime)
-//		|- "KLPKG_IsVirtual" - Is virtual package (paramBool)
-//		|- "KLPKG_IsPublished" - Is package published (paramBool)
-//		|- "KLPKG_NAME" - Package name (paramString)
-//		|- "KLPKG_WebURL" - Package published URL (paramString)
-//		|- "KLPKG_EP_SHA256" - Package Sha256 in hex format (paramString)
+//		|- "KLPKG_IsVirtual" - Is virtual package (bool)
+//		|- "KLPKG_IsPublished" - Is package published (bool)
+//		|- "KLPKG_NAME" - Package name (string)
+//		|- "KLPKG_WebURL" - Package published URL (string)
+//		|- "KLPKG_EP_SHA256" - Package Sha256 in hex format (string)
 //
 //	Exceptions:
 //	Throws	exception in case of error.
@@ -253,7 +377,46 @@ func (pa *PackagesApi) GetExecutablePackages(ctx context.Context, nPackageId int
 	return raw, err
 }
 
-//TODO PackagesApi::GetExecutablePkgFileAsync
+//GetExecutablePkgFileAsync
+//Get standalone package file attributes (asynchronously).
+//
+//	Parameters:
+//	- pParams		(paramParams) Options container (reserved for future use).
+//	- nPackageId	(int64) Executable package ID.
+//
+//	Returns:
+//	- (string) Request ID used to subscribe to the event that is triggered when operation is complete.
+//
+//	Remarks:
+//	Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized
+//	or cancel it by calling PackagesApi.CancelGetExecutablePkgFile.
+//	If the operation succedes then AsyncActionStateChecker.CheckActionState returns these attributes in
+//	pStateData container:
+//	- KLPKG_EP_EXECID - (int64) ID of the standalone package.
+//	- KLPKG_EP_FILENAME - (string) short name of excutable bynary
+//	- KLPKG_EP_FILESIZE - (int64) Size (in bytes) of the standalone package file.
+//	- KLPKG_EP_SHA256 - (string) Package Sha256 (in hex format)
+//	- KLPKG_EP_DOWNLOAD_PATH - (string) Download path of the standalone package file. File should be downloaded right after the action is finalized, and in the same network session.
+//
+//	To download it, client should send an HTTP GET-request to the URL of format as follows:
+//	"http://host:port" + KLPKG_EP_DOWNLOAD_PATH
+//	If the action failed then call to AsyncActionStateChecker.CheckActionState returns error in pStateData.
+//	Exceptions:
+//	Throws	exception in case of error.
+func (pa *PackagesApi) GetExecutablePkgFileAsync(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.GetExecutablePkgFileAsync", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := pa.client.Do(ctx, request, nil)
+	return raw, err
+}
 
 //	Get incompatible apps info.
 //
@@ -262,10 +425,10 @@ func (pa *PackagesApi) GetExecutablePackages(ctx context.Context, nPackageId int
 //
 //	Returns:
 //	- (param) Incompatible apps info.
-//		|- "KLPKG_GIAI_RESULT" - Is operation completed successfully (paramBool)
+//		|- "KLPKG_GIAI_RESULT" - Is operation completed successfully (bool)
 //		|- "KLPKG_GIAI_INFO" - Info (param)
-//					|- "KLPKG_IncompatibleAppInfoType" - Info type (enum) (paramInt) 0 = Plain text
-//		|- "KLPKG_IncompatibleAppInfoPlainText" - Info data (paramString)
+//					|- "KLPKG_IncompatibleAppInfoType" - Info type (enum) (int64) 0 = Plain text
+//		|- "KLPKG_IncompatibleAppInfoPlainText" - Info data (string)
 //		|- "KLPKG_GIAI_CAN_REMOVE_BY_INSTALLER" - Is delete-incompatible-apps supported
 //		|- "KLPKG_GIAI_REMOVE_BY_INSTALLER" - Should incompatible-apps be deleted by installer
 //
@@ -330,7 +493,33 @@ func (pa *PackagesApi) GetIntranetFolderForPackage(ctx context.Context, nPackage
 	return raw, err
 }
 
-//TODO PackagesApi::GetKpdProfileString
+//GetKpdProfileString
+//Read kpd profile string.
+//
+//Parameters:
+//	- nPackageId	(int64) Package ID.
+//	- wstrSection	(string) Profile storage section.
+//	- wstrKey		(string) Profile storage key.
+//	- wstrDefault	(string) Default value.
+//Returns:
+//(string) Profile string.
+//
+//Exceptions:
+//Throws	exception in case of error.
+func (pa *PackagesApi) GetKpdProfileString(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.GetKpdProfileString", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := pa.client.Do(ctx, request, nil)
+	return raw, err
+}
 
 //	Get license key.
 //
@@ -386,8 +575,8 @@ func (pa *PackagesApi) GetLoginScript(ctx context.Context, nPackageId int64, wst
 //	Returns:
 //	- (param) Move-rule information
 //		|- "KLPKG_evpExecs" - (paramArray (paramParams)) Array of standalone-packages that use the rule
-//			|- "KLPKG_evpExecPkgId" - (paramInt) Standalone-package ID
-//			|- "KLPKG_evpPkgId" - (paramInt) Installation package ID
+//			|- "KLPKG_evpExecPkgId" - (int64) Standalone-package ID
+//			|- "KLPKG_evpPkgId" - (int64) Installation package ID
 func (pa *PackagesApi) GetMoveRuleInfo(ctx context.Context, nRuleId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nRuleId": %d}`, nRuleId))
 
@@ -444,7 +633,37 @@ func (pa *PackagesApi) GetPackageInfo2(ctx context.Context, nPackageId int64) ([
 	return raw, err
 }
 
-//TODO  PackagesApi::GetPackageInfoFromArchive
+//GetPackageInfoFromArchive
+//Get information from archive (zip, cab, tar, tar.gz) with package data
+//
+//First scenario: Upload archive with kpd-file to FileTransfer -> call PackagesApi.GetPackageInfoFromArchive -> call PackagesApi.RecordNewPackage3.
+//Second scenario: Upload archive with executable file to FileTransfer -> call PackagesApi.GetPackageInfoFromArchive -> call PackagesApi.RecordNewPackage3.
+//
+//Parameters:
+//	- wstrFileId	File ID of the archive file uploaded to FileTransfer
+//	- pOptions	Additional parameters
+//		|- "KLPKG_LANG" - Preferred information language (string, optional)
+//
+//Returns:
+//Package information from archive
+//	- "KLPKG_KPD" - Data from package kpd-file (string). Stored only if kpd-file exists in archive
+//	- "KLPKG_EULA" - Package EULA (string). Stored only if kpd-file exists in archive
+//	- "KLPKG_FILES" - List of files from archive root folder (paramArray <string>)
+//	- "KLPKG_PRIVACY_POLICY" - Privacy policy (paramBool). Stored only if kpd-file exists in archive
+func (pa *PackagesApi) GetPackageInfoFromArchive(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.GetPackageInfoFromArchive", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := pa.client.Do(ctx, request, nil)
+	return raw, err
+}
 
 //	Get package plugin
 //
@@ -453,9 +672,9 @@ func (pa *PackagesApi) GetPackageInfo2(ctx context.Context, nPackageId int64) ([
 //
 //	Returns:
 //	Information about plugin-file (or empty Params if plugin-file not found)
-//	- "KLPKG_PLUGIN_FILENAME" - (paramString) Short filename of package plugin-file
+//	- "KLPKG_PLUGIN_FILENAME" - (string) Short filename of package plugin-file
 //	- "KLPKG_PLUGIN_FILESIZE" - (paramLong) Size of package plugin-file (in bytes)
-//	- "KLPKG_PLUGIN_FILEURL" - (paramString) URL which can be used to download package plugin-file
+//	- "KLPKG_PLUGIN_FILEURL" - (string) URL which can be used to download package plugin-file
 func (pa *PackagesApi) GetPackagePlugin(ctx context.Context, nPackageId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nPackageId": %d}`, nPackageId))
 
@@ -580,10 +799,10 @@ type OptionsEx struct {
 //
 //	Returns:
 //	(params) Reboot options.
-//	- "KLPKG_ROPTS_ASK_REBOOT_MSGTEXT" - Reboot request text (paramString)
+//	- "KLPKG_ROPTS_ASK_REBOOT_MSGTEXT" - Reboot request text (string)
 //	- "KLPKG_ROPTS_ASK_FOR_REBOOT_PERIOD_MIN" - Period (in minutes) of display reboot message (paramLong)
 //	- "KLPKG_ROPTS_FORCE_REBOOT_TIME_MIN" - Force reboot time (in minutes) (paramLong)
-//	- "KLPKG_ROPTS_FORCE_APPS_CLOSED" - Force applications close (paramBool)
+//	- "KLPKG_ROPTS_FORCE_APPS_CLOSED" - Force applications close (bool)
 //
 //	Exceptions:
 //	Throws	exception in case of error.
@@ -628,12 +847,12 @@ type KlpkgEULA struct {
 //
 //	Returns:
 //	(array) of (paramParams), each element describes an agreement and might contain the following attributes:
-//	- "nEulaDbId" - Database id of EULA (paramInt).
-//	- "nAgreementType" - type of the user license agreement (paramInt, AT_EULA = 0, AT_KSN = 1).
-//	- "strEULA" - Agreement text (paramString).
-//	- "KLPKG_LANG_TAG" - Agreement language tag (paramString).
-//	- "bEulaAccepted" - true if the agreement is accepted for the current virtual server, false if it's not (paramBool).
-//	- "nLCID" - Agreement LCID (paramInt).
+//	- "nEulaDbId" - Database id of EULA (int64).
+//	- "nAgreementType" - type of the user license agreement (int64, AT_EULA = 0, AT_KSN = 1).
+//	- "strEULA" - Agreement text (string).
+//	- "KLPKG_LANG_TAG" - Agreement language tag (string).
+//	- "bEulaAccepted" - true if the agreement is accepted for the current virtual server, false if it's not (bool).
+//	- "nLCID" - Agreement LCID (int64).
 //
 //	Exceptions:
 //	Throws	exception in case of error.
@@ -671,10 +890,115 @@ func (pa *PackagesApi) IsPackagePublished(ctx context.Context, nPkgExecId int64)
 	return pxgValBool, raw, err
 }
 
-//TODO PackagesApi::PrePublishMobilePackage
-//TODO PackagesApi::PublishMobileManifest
-//TODO PackagesApi::PublishMobilePackage
-//TODO PackagesApi::PublishStandalonePackage
+//PrePublishMobilePackage
+//Prepare server-side data for mobile package publication on KSC web server.
+//
+//Parameters:
+//	- wstrProfileId	(string) Profile ID.
+//
+//Returns:
+//	- (string) URL of the prepublished mobile package.
+//
+//Exceptions:
+//Throws	exception in case of error.
+func (pa *PackagesApi) PrePublishMobilePackage(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.PrePublishMobilePackage", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := pa.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//PublishMobileManifest
+//Publish mobile manifest on KSC web server.
+//
+//Parameters:
+//	- nPkgExecId	(int64) ID of executable package.
+//	- pAppData	(params) Manifest data container:
+//		|- "KLPKG_ProdName" - Application ID (string, optional)
+//		|- "KLPKG_ProdDisplayName" - Application name (string, optional)
+//		|- "KLPKG_ProdDisplayVersion" - Application version (string, optional)
+//		|- "KLPKG_WebURL" - URL of the published package (string, optional)
+//Returns:
+//	- (string) URL of the published manifest.
+//
+//Exceptions:
+//Throws	exception in case of error.
+func (pa *PackagesApi) PublishMobileManifest(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.PublishMobileManifest", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := pa.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//PublishMobilePackage
+//Publish mobile package on KSC web server.
+//
+//Parameters:
+//	- wstrProfileId	(string) Profile ID.
+//	- pProfileData	(params) Package specific data container (any data).
+//
+//Exceptions:
+//Throws	exception in case of error.
+func (pa *PackagesApi) PublishMobilePackage(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.PublishMobilePackage", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := pa.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//PublishStandalonePackage
+//Publish/Unpublish a standalone package on KSC web server.
+//
+//Note:
+//You can publish an already published package and vice versa
+//
+//Parameters:
+//	- bPublish	(bool) true to publish the package, false to unpublish them.
+//	- nPkgExecId	(int64) Executable ID of the package.
+//
+//Returns:
+//	- (string) URL of the published package (empty string if bPublish = false).
+//
+//Exceptions:
+//Throws	exception in case of error.
+func (pa *PackagesApi) PublishStandalonePackage(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.PublishStandalonePackage", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := pa.client.Do(ctx, request, nil)
+	return raw, err
+}
 
 //	Read kpd file.
 //
@@ -803,10 +1127,151 @@ func (pa *PackagesApi) RecordNewPackage2(ctx context.Context, params *NewPackage
 	return pxgValStr, raw, err
 }
 
-//TODO PackagesApi::RecordNewPackage3
-//TODO PackagesApi::RecordNewPackage3Async
-//TODO PackagesApi::RecordNewPackageAsync
-//TODO PackagesApi::RecordVapmPackageAsync
+//RecordNewPackage3
+//Create a package using data from archive (zip, cab, tar, tar.gz) or executable file.
+//Use PackagesApi.GetPackageInfoFromArchive to get package information from archive.
+//
+//First scenario: Upload archive with kpd-file to FileTransfer -> call PackagesApi.GetPackageInfoFromArchive -> call PackagesApi.RecordNewPackage3.
+//Second scenario: Upload archive with executable file to FileTransfer -> call PackagesApi.GetPackageInfoFromArchive -> call PackagesApi.RecordNewPackage3.
+//Third scenario: Upload executable file to FileTransfer -> call PackagesApi.RecordNewPackage3.
+//
+//Parameters:
+//	- wstrFileId	File ID of the archive or executable file uploaded to FileTransfer
+//	- pOptions	Additional parameters
+//		|- "KLPKG_NAME" - Package name (string)
+//		|- "KLPKG_FILE" - Executable filename (string). Ignored if File from FileTransfer is archive with kpd-file. Shoud be the same as name of File from FileTransfer if it is executable file
+//		|- "KLPKG_FILE_PARAMS" - Additional executable file parameters (string). Ignored if File from FileTransfer is archive with kpd-file
+//
+//Returns:
+//Package attributes List of package attributes
+func (pa *PackagesApi) RecordNewPackage3(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.RecordNewPackage3", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := pa.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//RecordNewPackage3Async
+//Creates a package (asynchronously) with the default settings based on the product, overwritten in the folder,
+//the path to which was obtained by calling the PackagesApi.GetIntranetFolderForNewPackage.
+//
+//Parameters:
+//	- wstrName					(string) Package name.
+//	- wstrFolder				(string) Product folder (obtained by calling the PackagesApi.GetIntranetFolderForNewPackage).
+//	- wstrProductName			(string) Product name.
+//	- wstrProductVersion		(string) Product version.
+//	- wstrProductDisplName		(string) Product display name.
+//	- wstrProductDisplVersion	(string) Product display version.
+//
+//Returns:
+//	- (string) Request ID used to subscribe to the event that is triggered when operation is complete.
+//
+//Remarks:
+//Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized or
+//cancel it by calling PackagesApi.CancelRecordNewPackage.
+//If the operation succeeds then AsyncActionStateChecker.CheckActionState returns these attributes in pStateData container:
+//KLPKG_NPI_PKGID - (int64) ID of the executable package.
+//If the action failed then call to AsyncActionStateChecker.CheckActionState returns error in pStateData.
+//
+//Exceptions:
+//Throws	exception in case of error.
+func (pa *PackagesApi) RecordNewPackage3Async(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.RecordNewPackage3Async", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := pa.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//RecordNewPackageAsync
+//Creates a package (asynchronously) with the default settings based on the product, overwritten in the folder,
+//the path to which was obtained by calling the PackagesApi.GetIntranetFolderForNewPackage.
+//
+//Parameters:
+//	- wstrName					(string) Package name.
+//	- wstrFolder				(string) Product folder (obtained by calling the PackagesApi.GetIntranetFolderForNewPackage).
+//	- wstrProductName			(string) Product name.
+//	- wstrProductVersion		(string) Product version.
+//	- wstrProductDisplName		(string) Product display name.
+//	- wstrProductDisplVersion	(string) Product display version.
+//
+//Returns:
+//	- (string) Request ID used to subscribe to the event that is triggered when operation is complete.
+//
+//Remarks:
+//Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized or
+//cancel it by calling PackagesApi.CancelRecordNewPackage.
+//If the operation succedes then AsyncActionStateChecker.CheckActionState returns these attributes in pStateData container:
+//KLPKG_NPI_PKGID - (int) ID of the executable package.
+//If the action failed then call to AsyncActionStateChecker.CheckActionState returns error in pStateData.
+//
+//Exceptions:
+//Throws	exception in case of error.
+func (pa *PackagesApi) RecordNewPackageAsync(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.RecordNewPackageAsync", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := pa.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//RecordVapmPackageAsync
+//Create a package using VAPM product information.
+//
+//Parameters:
+//	- szwNewPackageName	(string) New package name.
+//	- parProductInfo	(params) Product information
+//	- "nPatchGlbId" - Global id of product patch (int64)
+//	- "nLCID" - LCID (int64)
+//
+//Returns:
+//	- (string) Request ID used to subscribe to the event that is triggered when operation is complete.
+//
+//Remarks:
+//Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized or cancel
+//it by calling PackagesApi.CancelRecordNewPackage.
+//If the operation succedes then AsyncActionStateChecker.CheckActionState returns Package ID in pStateData container
+//as KLPKG_NPI_PKGID (paramInt) attribute.
+//Otherwise, a call to AsyncActionStateChecker.CheckActionState returns error in pStateData.
+//
+//Exceptions:
+//Throws	exception in case of error.
+func (pa *PackagesApi) RecordVapmPackageAsync(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.RecordVapmPackageAsync", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := pa.client.Do(ctx, request, nil)
+	return raw, err
+}
 
 //	Remove a package.
 //
@@ -830,7 +1295,7 @@ func (pa *PackagesApi) RemovePackage(ctx context.Context, nPackageId int64) ([]b
 //RemovePackageResult struct using in PackagesApi.RemovePackage2
 type RemovePackageResult struct {
 	BResult bool        `json:"bResult,omitempty"`
-	PTasks  interface{} `json:"pTasks"` //TODO?
+	PTasks  interface{} `json:"pTasks"`
 }
 
 //	Remove a package and get the list of dependent tasks.
@@ -843,8 +1308,8 @@ type RemovePackageResult struct {
 //	- pTasks	(array) Array of dependent tasks. Each array entry is a paramParams container with attributes
 //		|- "KLPKG_TASKINFO_TASK_ID" - Task ID (paramLong)
 //		|- "KLPKG_TASKINFO_GROUP_ID" - Task group ID (paramLong)
-//		|- "KLPKG_TASKINFO_TASK_DISPLNAME" - Task display name (paramString)
-//		|- "KLPKG_TASKINFO_TASK_GROUP_DISPLNAME" - Task group display name (paramString)
+//		|- "KLPKG_TASKINFO_TASK_DISPLNAME" - Task display name (string)
+//		|- "KLPKG_TASKINFO_TASK_GROUP_DISPLNAME" - Task group display name (string)
 //
 //	Exceptions:
 //	Throws	exception in case of error.
@@ -924,8 +1389,75 @@ func (pa *PackagesApi) ResolvePackageLcid(ctx context.Context, nPackageId, nLcid
 	return raw, err
 }
 
-//TODO PackagesApi::RetranslateToVServerAsync
-//TODO PackagesApi::SetLicenseKey
+//RetranslateToVServerAsync
+//Retranslate package to a Virtual Server (asynchronously).
+//
+//Parameters:
+//	- nPackageId	(int) Package ID.
+//	- nVServerId	(int) Virtual server ID.
+//	- pOptions	(paramParams) Options container.
+//		|- "KLPKG_CREATE_STANDALONE_PRODS" - Create standalone packages for products (paramBool)
+//		|- "KLPKG_CREATE_STANDALONE_NAGT" - Create standalone packages for agents (paramBool)
+//		|- "KLPKG_USE_LANGUAGE_TAG" - Use the information about package language (string)
+//		|- "KLPKG_TYPE" - Package type (not masked, only one value) enum value (paramLong)
+//			1 = Common package
+//			2 = Install package
+//			4 = Patch package
+//			8 = Uninstall package
+//			16 = OS image
+//			32 = Published package
+//		|- "KLPKG_LAZY_RETRANSLATION" - Is lasy retranslation (paramBool)
+//
+//Returns:
+//(string) Request ID used to subscribe to the event that is triggered when operation is complete.
+//
+//Remarks:
+//Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
+//If the operation succeeds then AsyncActionStateChecker.CheckActionState does not return any attributes in
+//pStateData container. If the action failed then call to AsyncActionStateChecker.CheckActionState returns error in pStateData.
+//
+//Exceptions:
+//Throws	exception in case of error.
+func (pa *PackagesApi) RetranslateToVServerAsync(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.RetranslateToVServerAsync", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := pa.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//SetLicenseKey
+//Set license key.
+//
+//Parameters:
+//	- nPackageId	(int64) Package ID.
+//	- wstrKeyFileName	(string) Key file name.
+//	- pData	(binary) Key data. NULL means 'delete existing', in this case bRemoveExisting must be true
+//	- bRemoveExisting	(bool) Remove all existing license keys.
+//
+//Exceptions:
+//Throws	exception in case of error.
+func (pa *PackagesApi) SetLicenseKey(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.SetLicenseKey", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := pa.client.Do(ctx, request, nil)
+	return raw, err
+}
 
 //	Set incompatible apps info.
 //
@@ -951,10 +1483,127 @@ func (pa *PackagesApi) SetRemoveIncompatibleApps(ctx context.Context, nPackageId
 	return pxgValBool, raw, err
 }
 
-//TODO PackagesApi::SS_GetNames
-//TODO PackagesApi::SS_Read
-//TODO PackagesApi::SS_SectionOperation
-//TODO PackagesApi::SS_Write
+//SSGetNames
+//Get settings storage section names.
+//
+//Parameters:
+//	- wstrStorageDescr	(string) Settings storage descriptor.
+//	- wstrName			(string) Settings storage name.
+//	- wstrVersion		(string) Settings storage version.
+//	- nTimeoutMsec		(int64) Timeout of operation (in milliseconds).
+//Returns:
+//	- (array) of (string) Array of names.
+//
+//Exceptions:
+//Throws	exception in case of error.
+func (pa *PackagesApi) SSGetNames(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.SS_GetNames", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := pa.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//SSRead
+//Read settings storage data.
+//
+//Parameters:
+//	- wstrStorageDescr	(string) Settings storage descriptor.
+//	- wstrName			(string) Settings storage name.
+//	- wstrVersion		(string) Settings storage version.
+//	- wstrSection		(string) Settings storage section.
+//	- nTimeoutMsec		(int64) Timeout of operation (in milliseconds).
+//
+//Returns:
+//	- (paramParams) Container with data.
+//
+//Exceptions:
+//Throws	exception in case of error.
+func (pa *PackagesApi) SSRead(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.SS_Read", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := pa.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//SSSectionOperation
+//Perform operation on a settings storage section.
+//
+//Parameters:
+//	- wstrStorageDescr	(string) Settings storage descriptor.
+//	- wstrName			(string) Settings storage name.
+//	- wstrVersion		(string) Settings storage version.
+//	- wstrSection		(string) Settings storage section.
+//	- nTimeoutMsec		(int64) Timeout of operation (in milliseconds).
+//	- nOperationType	(int64) Type of operation (enum).
+//		|- 1 = "Create", adds new section to the setting storage. If a section already exists an error occurs.
+//		|- 2 = "Delete", deletes section from setting storage.
+//
+//Exceptions:
+//Throws	exception in case of error.
+func (pa *PackagesApi) SSSectionOperation(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.SS_SectionOperation", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := pa.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//SSWrite
+//Write settings storage data.
+//
+//Parameters:
+//	- wstrStorageDescr	(wstring) Settings storage descriptor.
+//	- wstrName	(wstring) Settings storage name.
+//	- wstrVersion	(wstring) Settings storage version.
+//	- wstrSection	(wstring) Settings storage section.
+//	- pData	(paramParams) Data to be written.
+//	- nTimeoutMsec	(int) Timeout of operation (in milliseconds).
+//	- nOperationType	(int) Type of operation (enum)
+//		|- 1 = "Update", updates existing variables in the specified section. If a variable does not exist an error occurs.
+//		|- 2 = "Add", adds new variables to the specified section. If a variable already exists an error occurs.
+//		|- 3 = "Replace", replaces variables in the specified section. If a variable already exists it will be updates, if a variable does not exist it will be added.
+//		|- 4 = "Clear", replaces existing section contents with pData, i.e. existing section contents will deleted and variables from pData will be written to the section
+//		|- 5 = "Delete", deletes variables specified in pData from the specified section.
+//
+//Exceptions:
+//Throws	exception in case of error.
+func (pa *PackagesApi) SSWrite(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.SS_Write", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := pa.client.Do(ctx, request, nil)
+	return raw, err
+}
 
 //	Unpublish a previously published mobile package on KSC web server.
 //
@@ -975,7 +1624,45 @@ func (pa *PackagesApi) UnpublishMobilePackage(ctx context.Context, wstrProfileId
 	return raw, err
 }
 
-//TODO PackagesApi::UpdateBasesInPackagesAsync
+//UpdateBasesInPackagesAsync
+//Get standalone package file attributes (asynchronously).
+//
+//Parameters:
+//	- pParams	(paramParams) Options container (reserved for future use).
+//	- nPackageId	(int) Executable package ID.
+//
+//	Returns:
+//	- (string) Request ID used to subscribe to the event that is triggered when operation is complete.
+//
+//Remarks:
+//Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized or
+//cancel it by calling PackagesApi.CancelGetExecutablePkgFile.
+//If the operation succedes then AsyncActionStateChecker.CheckActionState returns these attributes in pStateData container:
+//	- KLPKG_EP_EXECID - (int) ID of the standalone package.
+//	- KLPKG_EP_FILENAME - (wstring) short name of excutable bynary
+//	- KLPKG_EP_FILESIZE - (int) Size (in bytes) of the standalone package file.
+//	- KLPKG_EP_SHA256 - (wstring) Package Sha256 (in hex format)
+//	- KLPKG_EP_DOWNLOAD_PATH - (wstring) Download path of the standalone package file. File should be downloaded right after the action is finalized, and in the same network session.
+//
+//To download it, client should send an HTTP GET-request to the URL of format as follows:
+//"http://host:port" + KLPKG_EP_DOWNLOAD_PATH If the action failed then call to AsyncActionStateChecker::CheckActionState returns error in pStateData.
+//
+//Exceptions:
+//Throws	exception in case of error.
+func (pa *PackagesApi) UpdateBasesInPackagesAsync(ctx context.Context, params interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", pa.client.Server+"/api/v1.0/PackagesApi.UpdateBasesInPackagesAsync", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := pa.client.Do(ctx, request, nil)
+	return raw, err
+}
 
 //	Write kpd profile string.
 //
