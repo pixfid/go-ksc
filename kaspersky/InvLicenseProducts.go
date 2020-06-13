@@ -194,5 +194,65 @@ func (ilp *InvLicenseProducts) AddLicenseProduct(ctx context.Context, params Lic
 	return pxgValInt, raw, err
 }
 
-//TODO InvLicenseProducts::UpdateLicenseKey
-//TODO InvLicenseProducts::UpdateLicenseProduct
+//UpdateLicenseKeyParams struct using in InvLicenseProducts.UpdateLicenseKey
+type UpdateLicenseKeyParams struct {
+	//NLicKeyID id of License Key to modify
+	NLicKeyID int64 `json:"nLicKeyId"`
+
+	//PLicKeyData object containing License Key attributes to modify
+	PLicKeyData PLicKeyData `json:"pLicKeyData"`
+}
+
+//InvLicenseProducts.UpdateLicenseKey
+//Modifies attributes of specified License Key.
+//
+//
+//	Parameters:
+//	- nLicKeyId		(int64) id of License Key to modify
+//	- pLicKeyData	(params) object containing License Key attributes to modify,
+//	see List of attributes of software inventory License Key List of attributes of software inventory License Key
+func (ilp *InvLicenseProducts) UpdateLicenseKey(ctx context.Context, params UpdateLicenseKeyParams) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", ilp.client.Server+"/api/v1.0/InvLicenseProducts.UpdateLicenseKey", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := ilp.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+//UpdateLicenseProductParams struct using in InvLicenseProducts.UpdateLicenseProduct
+type UpdateLicenseProductParams struct {
+	//NLicProdID id of License Product to modify
+	NLicProdID string `json:"nLicProdId"`
+
+	//PLicProdData object containing License Product attributes to modify
+	PLicProdData PLicProdData `json:"pLicProdData"`
+}
+
+//InvLicenseProducts.UpdateLicenseProduct
+//Modifies attributes of specified License Product.
+//
+//	Parameters:
+//	- nLicProdId	(int64) id of License Product to modify
+//	- pLicProdData	(params) object containing License Product attributes to modify,
+//	see List of attributes of software inventory License Product List of attributes of software inventory License Product.
+func (ilp *InvLicenseProducts) UpdateLicenseProduct(ctx context.Context, params UpdateLicenseProductParams) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", ilp.client.Server+"/api/v1.0/InvLicenseProducts.UpdateLicenseProduct", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := ilp.client.Do(ctx, request, nil)
+	return raw, err
+}
