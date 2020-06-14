@@ -38,11 +38,12 @@ import (
 )
 
 type Config struct {
-	Server      string
-	UserName    string
-	Password    string
-	VServerName string
-	XKscSession bool
+	Server             string
+	UserName           string
+	Password           string
+	VServerName        string
+	XKscSession        bool
+	InsecureSkipVerify bool
 }
 
 //-------------Client------------------
@@ -137,7 +138,7 @@ type Client struct {
 	UserDevicesApi                                            *UserDevicesApi
 	VapmControlApi                                            *VapmControlApi
 	UserName, Password, Server, VServerName, XKscSessionToken string
-	XKscSession                                               bool
+	XKscSession, InsecureSkipVerify                           bool
 	VServers                                                  *VServers
 	VServers2                                                 *VServers2
 	WolSender                                                 *WolSender
@@ -153,7 +154,7 @@ func New(cfg Config) *Client {
 
 	httpClient := &http.Client{
 		Transport: &http.Transport{
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: cfg.InsecureSkipVerify},
 		},
 	}
 
