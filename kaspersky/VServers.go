@@ -32,25 +32,25 @@ import (
 	"net/http"
 )
 
-//	VServers Class Reference
+// VServers Class Reference
+// Virtual servers processing.
 //
-//	Virtual servers processing.
+// Detailed Description:
+// Allows to create and destroy virtual servers, acquire and modify their attributes.
 //
-//	Detailed Description
-//
-//	Allows to create and destroy virtual servers, acquire and modify their attributes.
+// List of all members:
 type VServers service
 
-//	Acquire virtual servers for the specified group.
+// GetVServers
+// Acquire virtual servers for the specified group.
 //
-//	Returns array of virtual servers for the specified group
+// Returns array of virtual servers for the specified group
 //
 //	Parameters:
 //	- lParentGroup	(int64) id of parent group, -1 means 'from all groups'
 //
 //	Returns:
-//	- (array) array, each element is a container KLPAR.ParamsPtr containing attributes "KLVSRV_*"
-//	(see List of virtual server attributes).
+//	- (array) array, each element is a container KLPAR.ParamsPtr containing attributes "KLVSRV_*" (see List of virtual server attributes).
 func (vs *VServers) GetVServers(ctx context.Context, lParentGroup int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lParentGroup": %d}`, lParentGroup))
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.GetVServers", bytes.NewBuffer(postData))
@@ -62,71 +62,70 @@ func (vs *VServers) GetVServers(ctx context.Context, lParentGroup int64) ([]byte
 	return raw, err
 }
 
-//VServerInfo struct
+// VServerInfo struct
 type VServerInfo struct {
 	VServer *VServer `json:"PxgRetVal,omitempty"`
 }
 
-//	VServer struct
+// VServer struct
 type VServer struct {
-	//Creation time.
+	// KlvsrvCreated Creation time.
 	KlvsrvCreated *KlvsrvCreated `json:"KLVSRV_CREATED,omitempty"`
 
-	//Virtual server display name.
+	// KlvsrvDN Virtual server display name.
 	KlvsrvDN string `json:"KLVSRV_DN,omitempty"`
 
-	//If the specified virtual server is enabled.
+	// KlvsrvEnabled If the specified virtual server is enabled.
 	KlvsrvEnabled bool `json:"KLVSRV_ENABLED,omitempty"`
 
-	//Id of virtual server's group "Managed computers".
+	// KlvsrvGroups Id of virtual server's group "Managed computers".
 	KlvsrvGroups int64 `json:"KLVSRV_GROUPS,omitempty"`
 
-	//Id of parent group
+	// KlvsrvGrp Id of parent group
 	KlvsrvGrp int64 `json:"KLVSRV_GRP,omitempty"`
 
-	//Host name of the virtual server (See KLHST_WKS_HOSTNAME attribute )
+	// KlvsrvHstUid Host name of the virtual server (See KLHST_WKS_HOSTNAME attribute )
 	KlvsrvHstUid string `json:"KLVSRV_HST_UID,omitempty"`
 
-	//Virtual server ID
+	// KlvsrvID Virtual server ID
 	KlvsrvID int64 `json:"KLVSRV_ID,omitempty"`
 
-	//Allow automatic deployment of license keys from the virtual Server to its devices.
+	// KlvsrvLicEnabled Allow automatic deployment of license keys from the virtual Server to its devices.
 	KlvsrvLicEnabled bool `json:"KLVSRV_LIC_ENABLED,omitempty"`
 
-	//New managed hosts cannot be added to the VS due to the limitation violation
+	// KlvsrvNewHostsProhibited New managed hosts cannot be added to the VS due to the limitation violation
 	//(see LP_VS_MaxCountOfHosts), read-only attribute.
 	KlvsrvNewHostsProhibited bool `json:"KLVSRV_NEW_HOSTS_PROHIBITED,omitempty"`
 
-	//Id of virtual server's group "Master server".
+	// KlvsrvSuper Id of virtual server's group "Master server".
 	KlvsrvSuper int64 `json:"KLVSRV_SUPER,omitempty"`
 
-	//Number of managed hosts connected to a VS has already reached 10% of the limit
+	// KlvsrvTooMuchHosts Number of managed hosts connected to a VS has already reached 10% of the limit
 	//(see LP_VS_MaxCountOfHosts) , read-only attribute.
 	KlvsrvTooMuchHosts bool `json:"KLVSRV_TOO_MUCH_HOSTS,omitempty"`
 
-	//Virtual server name - a globally unique string
+	// KlvsrvUid Virtual server name - a globally unique string
 	KlvsrvUid string `json:"KLVSRV_UID,omitempty"`
 
-	//Id of virtual server's group "Unassigned computers".
+	// KlvsrvUnassigned Id of virtual server's group "Unassigned computers".
 	KlvsrvUnassigned int64 `json:"KLVSRV_UNASSIGNED,omitempty"`
 }
 
+// KlvsrvCreated struct
 type KlvsrvCreated struct {
 	Type  string `json:"type,omitempty"`
 	Value string `json:"value,omitempty"`
 }
 
-//	Register new virtual server.
+// AddVServerInfo
+// Register new virtual server.
 //
 //	Parameters:
-//	- strDisplayName	(string) virtual server display name, if display name is non-unique,
-//	it will be modified to become unique
+//	- strDisplayName	(string) virtual server display name, if display name is non-unique, it will be modified to become unique
 //	- lParentGroup	(int64) virtual server parent group
 //
 //	Returns:
-//	- (params) a container KLPAR.ParamsPtr containing attributes "KLVSRV_ID" and "KLVSRV_DN" (
-//	see List of virtual server attributes).
-//
+//	- (params) a container KLPAR.ParamsPtr containing attributes "KLVSRV_ID" and "KLVSRV_DN" (see List of virtual server attributes).
 func (vs *VServers) AddVServerInfo(ctx context.Context, strDisplayName string, lParentGroup int64) (*VServer, []byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"lParentGroup": %d, "strDisplayName" : "%s"}`, lParentGroup, strDisplayName))
@@ -140,14 +139,14 @@ func (vs *VServers) AddVServerInfo(ctx context.Context, strDisplayName string, l
 	return vServer, raw, err
 }
 
-//	Unregister specified Virtual Server.
-//
-//	Unregisters specified Virtual Server
+// DelVServer
+// Unregister specified Virtual Server.
 //
 //	Parameters:
 //	- lVServer	(int64) Virtual Server id
-//	- [out]	strActionGuid	(string) id of asynchronous operation,
-//	to get status use AsyncActionStateChecker.CheckActionState
+//
+//	Return:-
+//	- strActionGuid	(string) id of asynchronous operation, to get status use AsyncActionStateChecker.CheckActionState
 func (vs *VServers) DelVServer(ctx context.Context, lVServer int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.DelVServer", bytes.NewBuffer(postData))
@@ -159,9 +158,8 @@ func (vs *VServers) DelVServer(ctx context.Context, lVServer int64) ([]byte, err
 	return raw, err
 }
 
-//	Return ACL for the specified virtual server.
-//
-//	Returns ACL for the specified virtual server
+// GetPermissions
+// Return ACL for the specified virtual server.
 //
 //	Parameters:
 //	- lVServer	(int64) virtual server id
@@ -176,15 +174,15 @@ func (vs *VServers) GetPermissions(ctx context.Context, lVServer int64) ([]byte,
 	return raw, err
 }
 
-//HostInfoParams struct
+// VServerInfoParams struct
 type VServerInfoParams struct {
 	LVServer       int64    `json:"lVServer,omitempty"`
 	PFields2Return []string `json:"pFields2Return"`
 }
 
-//	Acquire info on virtual server.
-//
-//	Returns info about the specified virtual server
+// GetVServerInfo
+// Acquire info on virtual server.
+// Returns info about the specified virtual server
 //
 //	Parameters:
 //	- params VServerInfoParams
@@ -207,9 +205,8 @@ func (vs *VServers) GetVServerInfo(ctx context.Context, params VServerInfoParams
 	return vServerInfo, raw, err
 }
 
-//	Moves specified virtual server.
-//
-//	Moves specified virtual server
+// MoveVServer
+// Moves specified virtual server
 //
 //	Parameters:
 //	- lVServer	(int64) in Virtual Server id
@@ -231,8 +228,9 @@ func (vs *VServers) MoveVServer(ctx context.Context, lVServer int64, lNewParentG
 	return wActionGUID, raw, err
 }
 
-//	Function recalls Network Agent certificate from the specified virtual server
-//	and closes active connections from such Network Agents.
+// RecallCertAndCloseConnections
+// Function recalls Network Agent certificate from the specified virtual server and closes active connections
+// from such Network Agents.
 //
 //	Parameters:
 //	- lVServer	(int64) virtual server id
@@ -247,41 +245,40 @@ func (vs *VServers) RecallCertAndCloseConnections(ctx context.Context, lVServer 
 	return raw, err
 }
 
-//UpdateVServerInfoParams struct
+// UpdateVServerInfoParams struct
 type UpdateVServerInfoParams struct {
 	LVServer int64   `json:"lVServer,omitempty"`
 	VSInfo   *VSInfo `json:"pInfo,omitempty"`
 }
 
-//VSInfo struct
+// VSInfo struct
 type VSInfo struct {
-	//Virtual server display name.
+	// KlvsrvDN Virtual server display name.
 	KlvsrvDN string `json:"KLVSRV_DN,omitempty"`
 
-	//If the specified virtual server is enabled.
+	// KlvsrvEnabled If the specified virtual server is enabled.
 	KlvsrvEnabled bool `json:"KLVSRV_ENABLED,omitempty"`
 
-	//Allow automatic deployment of license keys from the virtual Server to its devices.
+	// KlvsrvLicEnabled Allow automatic deployment of license keys from the virtual Server to its devices.
 	KlvsrvLicEnabled bool `json:"KLVSRV_LIC_ENABLED,omitempty"`
 
-	//Creation time.
+	// KlvsrvCreated Creation time.
 	KlvsrvCreated *KlvsrvCreated `json:"KLVSRV_CREATED,omitempty"`
 
-	//Custom info XML.
+	// KlvsrvCustomInfo Custom info XML.
 	KlvsrvCustomInfo string `json:"KLVSRV_CUSTOM_INFO,omitempty"`
 
-	//New managed hosts cannot be added to the VS due to the limitation violation
+	// KlvsrvNewHostsProhibited New managed hosts cannot be added to the VS due to the limitation violation
 	//(see LP_VS_MaxCountOfHosts), read-only attribute.
 	KlvsrvNewHostsProhibited bool `json:"KLVSRV_NEW_HOSTS_PROHIBITED,omitempty"`
 
-	//Number of managed hosts connected to a VS has already reached 10% of the limit
+	// KlvsrvTooMuchHosts Number of managed hosts connected to a VS has already reached 10% of the limit
 	//(see LP_VS_MaxCountOfHosts) , read-only attribute.
 	KlvsrvTooMuchHosts bool `json:"KLVSRV_TOO_MUCH_HOSTS,omitempty"`
 }
 
-//	Modify virtual server attributes.
-//
-//	Modifies attributes of the specified virtual server
+// UpdateVServerInfo
+// Modifies attributes of the specified virtual server
 //
 //	Parameters:
 //	- params UpdateVServerInfoParams
@@ -299,9 +296,8 @@ func (vs *VServers) UpdateVServerInfo(ctx context.Context, params UpdateVServerI
 	return raw, err
 }
 
-//	Set ACL for the specified virtual server.
-//
-//	Sets ACL for the specified virtual server
+// SetPermissions
+// Set ACL for the specified virtual server.
 //
 //	Parameters:
 //	- params interface{}

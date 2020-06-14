@@ -31,18 +31,19 @@ import (
 	"net/http"
 )
 
-//	VServers2 Class Reference
+// VServers2 Class Reference
 //
-//	Virtual servers processing..
+// Virtual servers processing..
 //
-//	List of all members:
+// List of all members:
 type VServers2 service
 
-//VServerStatistic struct
+// VServerStatistic struct
 type VServerStatistic struct {
 	VSStatistic *VSStatistic `json:"PxgRetVal,omitempty"`
 }
 
+// VSStatistic struct
 type VSStatistic struct {
 	KlvsrvCreated   *Klvsrv       `json:"KLVSRV_CREATED,omitempty"`
 	KlvsrvGroups    int64         `json:"KLVSRV_GROUPS,omitempty"`
@@ -55,18 +56,20 @@ type VSStatistic struct {
 	KlvsrvUsers     int64         `json:"KLVSRV_USERS,omitempty"`
 }
 
+// Klvsrv struct
 type Klvsrv struct {
 	Type  string `json:"type,omitempty"`
 	Value string `json:"value"`
 }
 
-//Acquire info on virtual server.
+// GetVServerStatistic
+// Acquire info on virtual server.
+// Returns info about the specified virtual server
 //
-//Returns info about the specified virtual server
-//
-//Parameters:
+// Parameters:
 //	- lVsId	(int64) virtual server id
-//Returns:
+//
+// Returns:
 //	- (params) a container, see Virtual server statistic.
 func (vs *VServers2) GetVServerStatistic(ctx context.Context, lVsId int) (*VServerStatistic, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lVsId": %d}`, lVsId))

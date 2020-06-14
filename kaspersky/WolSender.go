@@ -39,16 +39,19 @@ import (
 //	List of all members.
 type WolSender service
 
-//	Sends Wake-On-LAN signal to host.
+// SendWolSignal
+// Sends Wake-On-LAN signal to host.
 //
-//	The goal of this call is to wake target host up.
-//	This is done by sending WOL packets by server,
-//	some Update Agent Versions assigned to target host and some nAgent Versions which are likely
-//	to be located in same subnet where target host is located.
-//	Besides server will wake up Connection gateway assigned to host as well.
-//	Target WOL packets are sent to broadcast address 255.255.255.255,
-//	direct host IP and subnet-directed broadcast (like '10.11.12.255').
-//	WOL packets sent to ports 7 and 9.
+// The goal of this call is to wake target host up.
+//
+// This is done by sending WOL packets by server,
+// some Update Agent Versions assigned to target host and some nAgent Versions which are likely
+// to be located in same subnet where target host is located.
+//
+// Besides server will wake up Connection gateway assigned to host as well.
+// Target WOL packets are sent to broadcast address 255.255.255.255,
+// direct host IP and subnet-directed broadcast (like '10.11.12.255').
+// WOL packets sent to ports 7 and 9.
 func (ws *WolSender) SendWolSignal(ctx context.Context, szwHostId string) error {
 	postData := []byte(fmt.Sprintf(`{"szwHostId":"%s"}`, szwHostId))
 	request, err := http.NewRequest("POST", ws.client.Server+"/api/v1.0/WolSender.SendWolSignal",
