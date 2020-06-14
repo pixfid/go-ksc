@@ -43,6 +43,8 @@ func main() {
 
     		//true using XKscSession tokens (false on default, session token expired time 3 minutes)
     		XKscSession: false,
+            //InsecureSkipVerify controls whether a client verifies the server's certificate chain and host name.
+            InsecureSkipVerify: true,
     	}
 
         //Construct a new KSC client
