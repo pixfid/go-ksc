@@ -29,7 +29,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-
 	"net/http"
 )
 
@@ -42,76 +41,67 @@ import (
 //	List of all members.
 type Policy service
 
+//PxgValPolicy struct
 type PxgValPolicy struct {
 	PxgRetValPolicy PxgRetValPolicy `json:"PxgRetVal"`
 }
 
 type PxgRetValPolicy struct {
-	KlpolAcceptParent          bool   `json:"KLPOL_ACCEPT_PARENT"`
-	KlpolActive                bool   `json:"KLPOL_ACTIVE"`
-	KlpolCreated               Klpol  `json:"KLPOL_CREATED"`
+	KlpolAcceptParent          bool     `json:"KLPOL_ACCEPT_PARENT"`
+	KlpolActive                bool     `json:"KLPOL_ACTIVE"`
+	KlpolCreated               DateTime `json:"KLPOL_CREATED"`
+	KlpolDN                    string   `json:"KLPOL_DN"`
+	KlpolForced                bool     `json:"KLPOL_FORCED"`
+	KlpolForceDistrib2Children bool     `json:"KLPOL_FORCE_DISTRIB2CHILDREN"`
+	KlpolGroupID               int64    `json:"KLPOL_GROUP_ID"`
+	KlpolGroupName             string   `json:"KLPOL_GROUP_NAME"`
+	KlpolGsynID                int64    `json:"KLPOL_GSYN_ID"`
+	KlpolHideOnSlaves          bool     `json:"KLPOL_HIDE_ON_SLAVES"`
+	KlpolID                    int64    `json:"KLPOL_ID"`
+	KlpolInherited             bool     `json:"KLPOL_INHERITED"`
+	KlpolModified              DateTime `json:"KLPOL_MODIFIED"`
+	KlpolProduct               string   `json:"KLPOL_PRODUCT"`
+	KlpolRoaming               bool     `json:"KLPOL_ROAMING"`
+	KlpolVersion               string   `json:"KLPOL_VERSION"`
+}
+
+// NewPolicy new policy with the specified attributes
+type NewPolicy struct {
+	PPolicyData PPolicyData `json:"pPolicyData,omitempty"`
+}
+
+type PPolicyData struct {
 	KlpolDN                    string `json:"KLPOL_DN"`
-	KlpolForced                bool   `json:"KLPOL_FORCED"`
-	KlpolForceDistrib2Children bool   `json:"KLPOL_FORCE_DISTRIB2CHILDREN"`
-	KlpolGroupID               int64  `json:"KLPOL_GROUP_ID"`
-	KlpolGroupName             string `json:"KLPOL_GROUP_NAME"`
-	KlpolGsynID                int64  `json:"KLPOL_GSYN_ID"`
-	KlpolHideOnSlaves          bool   `json:"KLPOL_HIDE_ON_SLAVES"`
-	KlpolID                    int64  `json:"KLPOL_ID"`
-	KlpolInherited             bool   `json:"KLPOL_INHERITED"`
-	KlpolModified              Klpol  `json:"KLPOL_MODIFIED"`
 	KlpolProduct               string `json:"KLPOL_PRODUCT"`
-	KlpolRoaming               bool   `json:"KLPOL_ROAMING"`
 	KlpolVersion               string `json:"KLPOL_VERSION"`
+	KlpolGroupID               int64  `json:"KLPOL_GROUP_ID"`
+	KlpolAcceptParent          bool   `json:"KLPOL_ACCEPT_PARENT,omitempty"`
+	KlpolActive                bool   `json:"KLPOL_ACTIVE,omitempty"`
+	KlpolForceDistrib2Children bool   `json:"KLPOL_FORCE_DISTRIB2CHILDREN,omitempty"`
+	KlpolHideOnSlaves          bool   `json:"KLPOL_HIDE_ON_SLAVES,omitempty"`
+	KlpolRoaming               bool   `json:"KLPOL_ROAMING,omitempty"`
 }
 
-type Klpol struct {
-	Type  string `json:"type"`
-	Value string `json:"value"`
-}
-
-//	Create new policy.
-//
-//	Creates a new policy with the specified attributes
-//
-//	Parameters:
-//	- pPolicyData	(params) contains following attributes for policy creation
-//
-//	Mandatory:
-//	- KLPOL_DN
-//	- KLPOL_PRODUCT
-//	- KLPOL_VERSION
-//	- KLPOL_GROUP_ID
-//
-//	Optional:
-//	- KLPOL_ACTIVE (false by default)
-//	- KLPOL_ROAMING (false by default)
-//	- KLPOL_ACCEPT_PARENT (true by default)
-//	- KLPOL_FORCE_DISTRIB2CHILDREN (false by default)
-//	- KLPOL_HIDE_ON_SLAVES (false by default)
-//
-//	Returns:
-//	(int64) Id of the created policy (see KLPOL_ID)
-//
-//	See also:
-//	List of policy attributes
-func (pl *Policy) AddPolicy(ctx context.Context, params interface{}) (*PxgValInt, []byte, error) {
+// AddPolicy Create new policy.
+// Creates a new policy with the specified attributes
+func (pl *Policy) AddPolicy(ctx context.Context, params NewPolicy) (*PxgValInt, error) {
 	postData, err := json.Marshal(&params)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.AddPolicy", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := pl.client.Do(ctx, request, &pxgValInt)
-	return pxgValInt, raw, err
+	_, err = pl.client.Do(ctx, request, &pxgValInt)
+	return pxgValInt, err
 }
 
-type PExtraData struct {
+// MovePolicyParams struct
+type MovePolicyParams struct {
 	NPolicy       int64           `json:"nPolicy"`
 	NNewGroupID   int64           `json:"nNewGroupId"`
 	BDeleteOrigin bool            `json:"bDeleteOrigin"`
@@ -128,265 +118,218 @@ type PExtraDataValue struct {
 	KlpolActive bool   `json:"KLPOL_ACTIVE"`
 }
 
-//	Copy or move policy.
-//
-//	Copies the specified policy and optionally deletes it.
-//
-//	Parameters:
-//	- nPolicy	(int) source policy id
-//	- nNewGroupId	(int) id of the AdmGroup (see HostGroup) to place the resulting policy
-//	- bDeleteOrigin	(boolean) if server must delete nPolicy after copying
-//	- pExtraData	(params) optional container with extra attributes, may contain following data:
-//		|- KLPOL_DN
-//		|- KLPOL_ACTIVE
-//
-//	Returns:
-//	- (int64) id of the new policy
-//
-//	See also:
-//	List of policy attributes
-func (pl *Policy) CopyOrMovePolicy(ctx context.Context, params PExtraData) (*PxgValInt, []byte, error) {
+// CopyOrMovePolicy Copy or move policy.
+// Copies the specified policy and optionally deletes it. Returns id of the new policy
+func (pl *Policy) CopyOrMovePolicy(ctx context.Context, params MovePolicyParams) (*PxgValInt, error) {
 	postData, err := json.Marshal(&params)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.CopyOrMovePolicy", bytes.NewBuffer(postData))
-	if err != nil {
-		return nil, nil, err
-	}
-
-	pxgValInt := new(PxgValInt)
-	raw, err := pl.client.Do(ctx, request, &pxgValInt)
-	return pxgValInt, raw, err
-}
-
-//	Delete policy.
-//
-//	Makes the the specified policy inactive, and then deletes it.
-//
-//	Parameters:
-//	- nPolicy	(int64) identifier of the policy to delete
-func (pl *Policy) DeletePolicy(ctx context.Context, nPolicy int64) ([]byte, error) {
-	postData := []byte(fmt.Sprintf(`{"nPolicy": %d}`, nPolicy))
-	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.DeletePolicy", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := pl.client.Do(ctx, request, nil)
-	return raw, err
+	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.CopyOrMovePolicy", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	pxgValInt := new(PxgValInt)
+	_, err = pl.client.Do(ctx, request, &pxgValInt)
+	return pxgValInt, err
 }
 
-//	Obtain policies that affect the specified group.
-//
-//	Returns active and roaming policies that affect specified group
-//
-//	Parameters:
-//	- nGroupId	(int64) group id
-//
-//	Returns:
-//	- (array) array, each element is paramParams which contains policy attributes
-//
-//	See also:
-//	List of policy attributes
-func (pl *Policy) GetEffectivePoliciesForGroup(ctx context.Context, nGroupId int64) ([]byte, error) {
+// DeletePolicy Delete policy.
+// Makes the the specified policy inactive, and then deletes it.
+func (pl *Policy) DeletePolicy(ctx context.Context, nPolicy int64) error {
+	postData := []byte(fmt.Sprintf(`{"nPolicy": %d}`, nPolicy))
+	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.DeletePolicy", bytes.NewBuffer(postData))
+	if err != nil {
+		return err
+	}
+
+	_, err = pl.client.Do(ctx, request, nil)
+	return err
+}
+
+// PolicyList struct
+type PolicyList struct {
+	PList []PList `json:"PxgRetVal"`
+}
+
+type PList struct {
+	Type       *string     `json:"type,omitempty"`
+	PListValue *PListValue `json:"value,omitempty"`
+}
+
+type PListValue struct {
+	KlpolAcceptParent          *bool     `json:"KLPOL_ACCEPT_PARENT,omitempty"`
+	KlpolActive                *bool     `json:"KLPOL_ACTIVE,omitempty"`
+	KlpolCreated               *DateTime `json:"KLPOL_CREATED,omitempty"`
+	KlpolDN                    *string   `json:"KLPOL_DN,omitempty"`
+	KlpolForced                *bool     `json:"KLPOL_FORCED,omitempty"`
+	KlpolForceDistrib2Children *bool     `json:"KLPOL_FORCE_DISTRIB2CHILDREN,omitempty"`
+	KlpolGroupID               *int64    `json:"KLPOL_GROUP_ID,omitempty"`
+	KlpolGroupName             *string   `json:"KLPOL_GROUP_NAME,omitempty"`
+	KlpolGsynID                *int64    `json:"KLPOL_GSYN_ID,omitempty"`
+	KlpolHideOnSlaves          *bool     `json:"KLPOL_HIDE_ON_SLAVES,omitempty"`
+	KlpolID                    *int64    `json:"KLPOL_ID,omitempty"`
+	KlpolInherited             *bool     `json:"KLPOL_INHERITED,omitempty"`
+	KlpolModified              *DateTime `json:"KLPOL_MODIFIED,omitempty"`
+	KlpolProduct               *string   `json:"KLPOL_PRODUCT,omitempty"`
+	KlpolProfilesNum           *int64    `json:"KLPOL_PROFILES_NUM,omitempty"`
+	KlpolRoaming               *bool     `json:"KLPOL_ROAMING,omitempty"`
+	KlpolVersion               *string   `json:"KLPOL_VERSION,omitempty"`
+}
+
+// GetEffectivePoliciesForGroup
+// Obtain policies that affect the specified group.
+// Returns active and roaming policies that affect specified group
+func (pl *Policy) GetEffectivePoliciesForGroup(ctx context.Context, nGroupId int64) (*PolicyList, error) {
 	postData := []byte(fmt.Sprintf(`{"nGroupId": %d}`, nGroupId))
 	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.GetEffectivePoliciesForGroup", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := pl.client.Do(ctx, request, nil)
-	return raw, err
+	policyList := new(PolicyList)
+	_, err = pl.client.Do(ctx, request, &policyList)
+	return policyList, err
 }
 
-//
-//	Acquire array of outbreak policies.
-//
-//	Returns the array of outbreak policies
-//
-//	Returns:
-//	- (params) Container with attribute KLPOL_POL_OUTBREAK of type paramArray,
-//	each entry contains two attributes KLPOL_ID and KLPOL_OUTBREAK_MASK
-//
-//	See also:
-//	Policy outbreak attributes
-func (pl *Policy) GetOutbreakPolicies(ctx context.Context) ([]byte, error) {
+type OutbreakPolicies struct {
+	PxgRetVal *OPData `json:"PxgRetVal,omitempty"`
+}
+
+// GetOutbreakPolicies Acquire array of outbreak policies.
+// Returns the array of outbreak policies
+func (pl *Policy) GetOutbreakPolicies(ctx context.Context) (*OutbreakPolicies, error) {
 	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.GetOutbreakPolicies", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := pl.client.Do(ctx, request, nil)
-	return raw, err
+	outbreakPolicies := new(OutbreakPolicies)
+	_, err = pl.client.Do(ctx, request, &outbreakPolicies)
+	return outbreakPolicies, err
 }
 
-//	Obtain policies for specified group.
-//
-//	Returns policies located in specified group.
-//
-//	Parameters:
-//	- nGroupId	(int64) value -1 means "all groups"
-//
-//	Returns:
-//	- (array) array, each element is paramParams which contains policy attributes
-//
-//	See also:
-//	List of policy attributes
-func (pl *Policy) GetPoliciesForGroup(ctx context.Context, nGroupId int64) ([]byte, error) {
+// GetPoliciesForGroup Obtain policies for specified group.
+// Returns policies located in specified group.
+func (pl *Policy) GetPoliciesForGroup(ctx context.Context, nGroupId int64) (*PolicyList, error) {
 	postData := []byte(fmt.Sprintf(`{"nGroupId": %d}`, nGroupId))
 	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.GetPoliciesForGroup", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := pl.client.Do(ctx, request, nil)
-	return raw, err
+	policyList := new(PolicyList)
+	_, err = pl.client.Do(ctx, request, &policyList)
+	return policyList, err
 }
 
-//	Acquire policy contents.
-//
-//	Opens settings storage SsContents of the specified policy. The settings storage contains both predefined and product-specific sections.
-//
-//	Parameters:
-//	- nPolicy	(int64) policy id
-//	- nRevisionId	(int64) policy revision id, 0 means 'current policy'
-//	- nLifeTime	(int64) timeout in milliseconds to keep this SsContents object alive, zero means 'default value'
-//
-//	Returns:
-//	- (string) identifier of opened SsContents, must be closed with SsContents.SS_Release
-func (pl *Policy) GetPolicyContents(ctx context.Context, nPolicy, nRevisionId, nLifeTime int64) (*PxgValStr, []byte,
-	error) {
+// GetPolicyContents Acquire policy contents.
+// Opens settings storage SsContents of the specified policy.
+// The settings storage contains both predefined and product-specific sections.
+func (pl *Policy) GetPolicyContents(ctx context.Context, nPolicy, nRevisionId, nLifeTime int64) (*PxgValStr, error) {
 	postData := []byte(fmt.Sprintf(`{ "nPolicy": %d , "nRevisionId": %d , "nLifeTime": %d }`, nPolicy, nRevisionId,
 		nLifeTime))
 	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.GetPolicyContents", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := pl.client.Do(ctx, request, &pxgValStr)
-	return pxgValStr, raw, err
+	_, err = pl.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, err
 }
 
-//	Obtain policy data.
-//
-//	Returns data for specified policy
-//
-//	Parameters:
-//	- nPolicy	(int64) policy id
-//
-//	Returns:
-//	- (params) container with policy attributes ( See List of policy attributes)
-func (pl *Policy) GetPolicyData(ctx context.Context, nPolicy int64) (*PxgValPolicy, []byte, error) {
+// GetPolicyData Obtain policy data.
+// Returns data for specified policy
+func (pl *Policy) GetPolicyData(ctx context.Context, nPolicy int64) (*PxgValPolicy, error) {
 	postData := []byte(fmt.Sprintf(`{"nPolicy": %d}`, nPolicy))
 	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.GetPolicyData", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	pxgValPolicy := new(PxgValPolicy)
-	raw, err := pl.client.Do(ctx, request, &pxgValPolicy)
-	return pxgValPolicy, raw, err
+	_, err = pl.client.Do(ctx, request, &pxgValPolicy)
+	return pxgValPolicy, err
 }
 
-//	Make policy active or inactive.
-//
-//	Make the specified policy active or inactive
-//
-//	Parameters:
-//	- nPolicy	(int64) policy id to activate
-//	- bActive	(bool) true to make the specified inactive or roaming policy active (
-//	returns false if the policy is already active),
-//	false to make the specified active or roaming policy inactive
-//	(returns false if the policy is already inactive)
-//
-//	Returns:
-//	- ( bool) true if policy was successfully set to active or false otherwise
-//
-//	See also:
-//	List of policy attributes
-func (pl *Policy) MakePolicyActive(ctx context.Context, nPolicy int64, bActive bool) (*PxgValPolicy, []byte, error) {
+// MakePolicyActive Make policy active or inactive.
+// Make the specified policy active or inactive
+func (pl *Policy) MakePolicyActive(ctx context.Context, nPolicy int64, bActive bool) (*PxgValBool, error) {
 	postData := []byte(fmt.Sprintf(`{"nPolicy": %d, "bActive": %v}`, nPolicy, bActive))
 	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.MakePolicyActive", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
-	pxgValPolicy := new(PxgValPolicy)
-	raw, err := pl.client.Do(ctx, request, &pxgValPolicy)
-	return pxgValPolicy, raw, err
+	pxgValBool := new(PxgValBool)
+	_, err = pl.client.Do(ctx, request, &pxgValBool)
+	return pxgValBool, err
 }
 
-//	Make policy roaming.
-//
-//	Make the specified policy roaming
-//
-//	Parameters:
-//	- nPolicy	(int64) active or inactive policy id
-//
-//	Returns:
-//	- (bool) false if the policy is already roaming
-//
-//	See also:
-//	KLPOL_ROAMING
-//	List of policy attributes
-func (pl *Policy) MakePolicyRoaming(ctx context.Context, nPolicy int64) (*PxgValPolicy, []byte, error) {
+// MakePolicyRoaming Make policy roaming.
+// Make the specified policy roaming
+func (pl *Policy) MakePolicyRoaming(ctx context.Context, nPolicy int64) (*PxgValBool, error) {
 	postData := []byte(fmt.Sprintf(`{"nPolicy": %d}`, nPolicy))
 	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.MakePolicyRoaming", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
-	pxgValPolicy := new(PxgValPolicy)
-	raw, err := pl.client.Do(ctx, request, &pxgValPolicy)
-	return pxgValPolicy, raw, err
+	pxgValBool := new(PxgValBool)
+	_, err = pl.client.Do(ctx, request, &pxgValBool)
+	return pxgValBool, err
 }
 
-//	Revert policy to its older version.
-//
-//	Replaces the specified policy nPolicy by its revision (older version) nRevisionId
-//
-//	Parameters:
-//	- nPolicy	(int64) id of policy to revert
-//	- nRevisionId	(int64) id of policy revision
-func (pl *Policy) RevertPolicyToRevision(ctx context.Context, nPolicy, nRevisionId int64) (*PxgValPolicy, []byte,
-	error) {
+// RevertPolicyToRevision Revert policy to its older version.
+// Replaces the specified policy nPolicy by its revision (older version) nRevisionId
+func (pl *Policy) RevertPolicyToRevision(ctx context.Context, nPolicy, nRevisionId int64) error {
 	postData := []byte(fmt.Sprintf(`{"nPolicy": %d, "nRevisionId": %d}`, nPolicy, nRevisionId))
 	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.RevertPolicyToRevision", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, nil, err
+		return err
 	}
 
-	pxgValPolicy := new(PxgValPolicy)
-	raw, err := pl.client.Do(ctx, request, &pxgValPolicy)
-	return pxgValPolicy, raw, err
+	_, err = pl.client.Do(ctx, request, nil)
+	return err
 }
 
-//	Specify array of outbreak policies.
-//
-//	Sets the array of outbreak policies
-//
-//	Parameters:
-//	- pData	(params) contains attribute KLPOL_POL_OUTBREAK of type paramArray,
-//	each entry contains two attributes KLPOL_ID (integer) and KLPOL_OUTBREAK_MASK (integer)
-//
-//	See also:
-//	Policy outbreak attributes
-func (pl *Policy) SetOutbreakPolicies(ctx context.Context, params interface{}) ([]byte, error) {
+// OutbreakPoliciesParams struct
+type OutbreakPoliciesParams struct {
+	OPData OPData `json:"pData,omitempty"`
+}
+
+type OPData struct {
+	KlpolPolOutbreak []KlpolPolOutbreak `json:"KLPOL_POL_OUTBREAK"`
+}
+
+type KlpolPolOutbreak struct {
+	Type  string      `json:"type"`
+	Value PolOutbreak `json:"value"`
+}
+
+type PolOutbreak struct {
+	KlpolID           int64 `json:"KLPOL_ID,omitempty"`
+	KlpolOutbreakMask int64 `json:"KLPOL_OUTBREAK_MASK,omitempty"`
+}
+
+// SetOutbreakPolicies Specify array of outbreak policies.
+// Sets the array of outbreak policies
+func (pl *Policy) SetOutbreakPolicies(ctx context.Context, params OutbreakPoliciesParams) error {
 	postData, err := json.Marshal(&params)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.SetOutbreakPolicies", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	raw, err := pl.client.Do(ctx, request, nil)
-	return raw, err
+	_, err = pl.client.Do(ctx, request, nil)
+	return err
 }
 
 //PolicyDataUpdateParams struct using in Policy.UpdatePolicyData
@@ -398,39 +341,8 @@ type PolicyDataUpdateParams struct {
 	PPolicyData PPolicyData `json:"pPolicyData"`
 }
 
-//pPolicyData, following attributes can be changed:
-type PPolicyData struct {
-	//Policy display name
-	KlpolDN string `json:"KLPOL_DN"`
-
-	//True if policy is active
-	KlpolActive bool `json:"KLPOL_ACTIVE"`
-
-	//True if policy is roaming
-	KlpolRoaming bool `json:"KLPOL_ROAMING"`
-
-	//True if policy must be modified by parent policy (supported by Administration Server 7.0 or higher)
-	KlpolAcceptParent bool `json:"KLPOL_ACCEPT_PARENT"`
-
-	//True if policy must modify child policies (supported by Administration Server 7.0 or higher)
-	KlpolForceDistrib2Children bool `json:"KLPOL_FORCE_DISTRIB2CHILDREN"`
-}
-
-//	Update policy attributes.
-//
-//	Updates specified policy attributes.
-//
-//	Parameters:
-//	- nPolicy	(int64) identifier of the policy to update
-//	- pPolicyData	(params) contains attributes to modify, following attributes can be changed:
-//		|- KLPOL_DN
-//		|- KLPOL_ACTIVE
-//		|- KLPOL_ROAMING
-//		|- KLPOL_ACCEPT_PARENT
-//		|- KLPOL_FORCE_DISTRIB2CHILDREN
-//
-//	See also:
-//	List of policy attributes
+// UpdatePolicyData Update policy attributes.
+// Updates specified policy attributes.
 func (pl *Policy) UpdatePolicyData(ctx context.Context, params PolicyDataUpdateParams) ([]byte, error) {
 	postData, err := json.Marshal(&params)
 	if err != nil {
@@ -446,28 +358,18 @@ func (pl *Policy) UpdatePolicyData(ctx context.Context, params PolicyDataUpdateP
 	return raw, err
 }
 
-//	Export policy to a blob.
-//
-//	Exports policy into single chunk.
-//
-//	Parameters:
-//	- lPolicy	(int64) policy id
-//
-//	Returns:
-//	- blob with exported policy
-//
-//	See also:
-//	Policy.ImportPolicy
-func (pl *Policy) ExportPolicy(ctx context.Context, lPolicy int64) (*PxgValStr, []byte, error) {
+// ExportPolicy Export policy to a blob.
+// Exports policy into single chunk.
+func (pl *Policy) ExportPolicy(ctx context.Context, lPolicy int64) (*PxgValStr, error) {
 	postData := []byte(fmt.Sprintf(`{"lPolicy": %d}`, lPolicy))
 	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.ExportPolicy", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := pl.client.Do(ctx, request, &pxgValStr)
-	return pxgValStr, raw, err
+	_, err = pl.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, err
 }
 
 //PolicyBlob struct
@@ -477,18 +379,8 @@ type PolicyBlob struct {
 	PData string `json:"pData,omitempty"`
 }
 
-//	Import policy from blob.
-//
-//	Exports policy from a single chunk.
-//
-//	Parameters:
-//	- params	(PolicyBlob)
-//
-//	Returns:
-//	- policy id
-//
-//	See also:
-//	- Policy.ExportPolicy
+// ImportPolicy Import policy from blob.
+// Exports policy from a single chunk.
 func (pl *Policy) ImportPolicy(ctx context.Context, params PolicyBlob) (*PxgValStr, []byte, error) {
 	postData, err := json.Marshal(&params)
 	if err != nil {
