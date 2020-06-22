@@ -32,170 +32,84 @@ import (
 	"net/http"
 )
 
-// VServers Class Reference
-// Virtual servers processing.
-//
-// Detailed Description:
-// Allows to create and destroy virtual servers, acquire and modify their attributes.
-//
-// List of all members:
+// VServers Allows to create and destroy virtual servers, acquire and modify their attributes.
 type VServers service
 
-// GetVServers
-// Acquire virtual servers for the specified group.
-//
-// Returns array of virtual servers for the specified group
-//
-//	Parameters:
-//	- lParentGroup	(int64) id of parent group, -1 means 'from all groups'
-//
-//	Returns:
-//	- (array) array, each element is a container KLPAR.ParamsPtr containing attributes "KLVSRV_*" (see List of virtual server attributes).
-func (vs *VServers) GetVServers(ctx context.Context, lParentGroup int64) ([]byte, error) {
+//VServersInfos struct using in VServers
+type VServersInfos struct {
+	VServersInfo *[]VServersInfo `json:"PxgRetVal,omitempty"`
+}
+
+type VServersInfo struct {
+	Type    *string  `json:"type,omitempty"`
+	VServer *VServer `json:"value,omitempty"`
+}
+
+// VServers Acquire virtual servers for the specified group.
+func (vs *VServers) VServers(ctx context.Context, lParentGroup int64) (*VServersInfos, error) {
 	postData := []byte(fmt.Sprintf(`{"lParentGroup": %d}`, lParentGroup))
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.GetVServers", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := vs.client.Do(ctx, request, nil)
-	return raw, err
+	vServersInfos := new(VServersInfos)
+	_, err = vs.client.Do(ctx, request, &vServersInfos)
+	return vServersInfos, err
 }
 
-// VServerInfo struct
+// VServerInfo struct using in AddVServerInfo
 type VServerInfo struct {
 	VServer *VServer `json:"PxgRetVal,omitempty"`
 }
 
-// VServer struct
 type VServer struct {
 	// KlvsrvCreated Creation time.
-	KlvsrvCreated *KlvsrvCreated `json:"KLVSRV_CREATED,omitempty"`
+	KlvsrvCreated *DateTime `json:"KLVSRV_CREATED,omitempty"`
 
 	// KlvsrvDN Virtual server display name.
-	KlvsrvDN string `json:"KLVSRV_DN,omitempty"`
+	KlvsrvDN *string `json:"KLVSRV_DN,omitempty"`
 
 	// KlvsrvEnabled If the specified virtual server is enabled.
-	KlvsrvEnabled bool `json:"KLVSRV_ENABLED,omitempty"`
+	KlvsrvEnabled *bool `json:"KLVSRV_ENABLED,omitempty"`
 
 	// KlvsrvGroups Id of virtual server's group "Managed computers".
-	KlvsrvGroups int64 `json:"KLVSRV_GROUPS,omitempty"`
+	KlvsrvGroups *int64 `json:"KLVSRV_GROUPS,omitempty"`
 
 	// KlvsrvGrp Id of parent group
-	KlvsrvGrp int64 `json:"KLVSRV_GRP,omitempty"`
+	KlvsrvGrp *int64 `json:"KLVSRV_GRP,omitempty"`
 
-	// KlvsrvHstUid Host name of the virtual server (See KLHST_WKS_HOSTNAME attribute )
-	KlvsrvHstUid string `json:"KLVSRV_HST_UID,omitempty"`
+	// KlvsrvHstUid Host name of the virtual server
+	KlvsrvHstUid *string `json:"KLVSRV_HST_UID,omitempty"`
 
 	// KlvsrvID Virtual server ID
-	KlvsrvID int64 `json:"KLVSRV_ID,omitempty"`
+	KlvsrvID *int64 `json:"KLVSRV_ID,omitempty"`
 
 	// KlvsrvLicEnabled Allow automatic deployment of license keys from the virtual Server to its devices.
-	KlvsrvLicEnabled bool `json:"KLVSRV_LIC_ENABLED,omitempty"`
+	KlvsrvLicEnabled *bool `json:"KLVSRV_LIC_ENABLED,omitempty"`
 
 	// KlvsrvNewHostsProhibited New managed hosts cannot be added to the VS due to the limitation violation
-	//(see LP_VS_MaxCountOfHosts), read-only attribute.
-	KlvsrvNewHostsProhibited bool `json:"KLVSRV_NEW_HOSTS_PROHIBITED,omitempty"`
+	KlvsrvNewHostsProhibited *bool `json:"KLVSRV_NEW_HOSTS_PROHIBITED,omitempty"`
 
 	// KlvsrvSuper Id of virtual server's group "Master server".
-	KlvsrvSuper int64 `json:"KLVSRV_SUPER,omitempty"`
+	KlvsrvSuper *int64 `json:"KLVSRV_SUPER,omitempty"`
 
 	// KlvsrvTooMuchHosts Number of managed hosts connected to a VS has already reached 10% of the limit
 	//(see LP_VS_MaxCountOfHosts) , read-only attribute.
-	KlvsrvTooMuchHosts bool `json:"KLVSRV_TOO_MUCH_HOSTS,omitempty"`
+	KlvsrvTooMuchHosts *bool `json:"KLVSRV_TOO_MUCH_HOSTS,omitempty"`
 
 	// KlvsrvUid Virtual server name - a globally unique string
-	KlvsrvUid string `json:"KLVSRV_UID,omitempty"`
+	KlvsrvUid *string `json:"KLVSRV_UID,omitempty"`
 
 	// KlvsrvUnassigned Id of virtual server's group "Unassigned computers".
-	KlvsrvUnassigned int64 `json:"KLVSRV_UNASSIGNED,omitempty"`
+	KlvsrvUnassigned *int64 `json:"KLVSRV_UNASSIGNED,omitempty"`
 }
 
-// KlvsrvCreated struct
-type KlvsrvCreated struct {
-	Type  string `json:"type,omitempty"`
-	Value string `json:"value,omitempty"`
-}
-
-// AddVServerInfo
-// Register new virtual server.
-//
-//	Parameters:
-//	- strDisplayName	(string) virtual server display name, if display name is non-unique, it will be modified to become unique
-//	- lParentGroup	(int64) virtual server parent group
-//
-//	Returns:
-//	- (params) a container KLPAR.ParamsPtr containing attributes "KLVSRV_ID" and "KLVSRV_DN" (see List of virtual server attributes).
-func (vs *VServers) AddVServerInfo(ctx context.Context, strDisplayName string, lParentGroup int64) (*VServer, []byte,
+// AddVServerInfo Register new virtual server.
+func (vs *VServers) AddVServerInfo(ctx context.Context, strDisplayName string, lParentGroup int64) (*VServerInfo, []byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"lParentGroup": %d, "strDisplayName" : "%s"}`, lParentGroup, strDisplayName))
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.AddVServerInfo", bytes.NewBuffer(postData))
-	if err != nil {
-		return nil, nil, err
-	}
-
-	vServer := new(VServer)
-	raw, err := vs.client.Do(ctx, request, &vServer)
-	return vServer, raw, err
-}
-
-// DelVServer
-// Unregister specified Virtual Server.
-//
-//	Parameters:
-//	- lVServer	(int64) Virtual Server id
-//
-//	Return:-
-//	- strActionGuid	(string) id of asynchronous operation, to get status use AsyncActionStateChecker.CheckActionState
-func (vs *VServers) DelVServer(ctx context.Context, lVServer int64) ([]byte, error) {
-	postData := []byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))
-	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.DelVServer", bytes.NewBuffer(postData))
-	if err != nil {
-		return nil, err
-	}
-
-	raw, err := vs.client.Do(ctx, request, nil)
-	return raw, err
-}
-
-// GetPermissions
-// Return ACL for the specified virtual server.
-//
-//	Parameters:
-//	- lVServer	(int64) virtual server id
-func (vs *VServers) GetPermissions(ctx context.Context, lVServer int64) ([]byte, error) {
-	postData := []byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))
-	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.GetPermissions", bytes.NewBuffer(postData))
-	if err != nil {
-		return nil, err
-	}
-
-	raw, err := vs.client.Do(ctx, request, nil)
-	return raw, err
-}
-
-// VServerInfoParams struct
-type VServerInfoParams struct {
-	LVServer       int64    `json:"lVServer,omitempty"`
-	PFields2Return []string `json:"pFields2Return"`
-}
-
-// GetVServerInfo
-// Acquire info on virtual server.
-// Returns info about the specified virtual server
-//
-//	Parameters:
-//	- params VServerInfoParams
-//
-//	Returns:
-//	- (params) a container containing attributes "KLVSRV_*" (see List of virtual server attributes)
-func (vs *VServers) GetVServerInfo(ctx context.Context, params VServerInfoParams) (*VServerInfo, []byte, error) {
-	postData, err := json.Marshal(params)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.GetVServerInfo", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, nil, err
 	}
@@ -205,50 +119,95 @@ func (vs *VServers) GetVServerInfo(ctx context.Context, params VServerInfoParams
 	return vServerInfo, raw, err
 }
 
-// MoveVServer
-// Moves specified virtual server
-//
-//	Parameters:
-//	- lVServer	(int64) in Virtual Server id
-//	- lNewParentGroup	(int) in New group
-//
-//	Return:
-//	- strActionGuid	(string) id of asynchronous operation,
-//	to get status use AsyncActionStateChecker.CheckActionState
-func (vs *VServers) MoveVServer(ctx context.Context, lVServer int64, lNewParentGroup int64) (*WActionGUID, []byte,
-	error) {
-	postData := []byte(fmt.Sprintf(`{"lVServer": %d, "lNewParentGroup" : %d}`, lVServer, lNewParentGroup))
-	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.MoveVServer", bytes.NewBuffer(postData))
-	if err != nil {
-		return nil, nil, err
-	}
-
-	wActionGUID := new(WActionGUID)
-	raw, err := vs.client.Do(ctx, request, &wActionGUID)
-	return wActionGUID, raw, err
-}
-
-// RecallCertAndCloseConnections
-// Function recalls Network Agent certificate from the specified virtual server and closes active connections
-// from such Network Agents.
-//
-//	Parameters:
-//	- lVServer	(int64) virtual server id
-func (vs *VServers) RecallCertAndCloseConnections(ctx context.Context, lVServer int64) ([]byte, error) {
+// DelVServer Unregister specified Virtual Server.
+func (vs *VServers) DelVServer(ctx context.Context, lVServer int64) (*WActionGUID, error) {
 	postData := []byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))
-	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.RecallCertAndCloseConnections", bytes.NewBuffer(postData))
+	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.DelVServer", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := vs.client.Do(ctx, request, nil)
-	return raw, err
+	wActionGUID := new(WActionGUID)
+	_, err = vs.client.Do(ctx, request, &wActionGUID)
+	return wActionGUID, err
+}
+
+type VServerPermissions struct {
+	Permissions *Permissions `json:"PxgRetVal,omitempty"`
+}
+
+// Permissions Return ACL for the specified virtual server.
+func (vs *VServers) Permissions(ctx context.Context, lVServer int64) (*VServerPermissions, error) {
+	postData := []byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))
+	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.GetPermissions", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	vServerPermissions := new(VServerPermissions)
+	_, err = vs.client.Do(ctx, request, &vServerPermissions)
+	return vServerPermissions, err
+}
+
+// VServerInfoParams struct
+type VServerInfoParams struct {
+	// LVServer virtual server id
+	LVServer int64 `json:"lVServer,omitempty"`
+
+	// PFields2Return attributes to acquire
+	PFields2Return []string `json:"pFields2Return"`
+}
+
+// VServerInfo Returns info about the specified virtual server.
+func (vs *VServers) VServerInfo(ctx context.Context, params VServerInfoParams) (*VServerInfo, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.GetVServerInfo", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	vServerInfo := new(VServerInfo)
+	_, err = vs.client.Do(ctx, request, &vServerInfo)
+	return vServerInfo, err
+}
+
+// MoveVServer Moves specified virtual server to new parent group
+func (vs *VServers) MoveVServer(ctx context.Context, lVServer int64, lNewParentGroup int64) (*WActionGUID, error) {
+	postData := []byte(fmt.Sprintf(`{"lVServer": %d, "lNewParentGroup" : %d}`, lVServer, lNewParentGroup))
+	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.MoveVServer", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	wActionGUID := new(WActionGUID)
+	_, err = vs.client.Do(ctx, request, &wActionGUID)
+	return wActionGUID, err
+}
+
+// RecallCertAndCloseConnections Function recalls Network Agent certificate
+// from the specified virtual server and closes active connections from such Network Agents.
+func (vs *VServers) RecallCertAndCloseConnections(ctx context.Context, lVServer int64) error {
+	postData := []byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))
+	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.RecallCertAndCloseConnections", bytes.NewBuffer(postData))
+	if err != nil {
+		return err
+	}
+
+	_, err = vs.client.Do(ctx, request, nil)
+	return err
 }
 
 // UpdateVServerInfoParams struct
 type UpdateVServerInfoParams struct {
-	LVServer int64   `json:"lVServer,omitempty"`
-	VSInfo   *VSInfo `json:"pInfo,omitempty"`
+	// LVServer virtual server id
+	LVServer int64 `json:"lVServer,omitempty"`
+
+	//VSInfo a container containing no-read-only attributes "KLVSRV_*"
+	VSInfo VSInfo `json:"pInfo,omitempty"`
 }
 
 // VSInfo struct
@@ -263,7 +222,7 @@ type VSInfo struct {
 	KlvsrvLicEnabled bool `json:"KLVSRV_LIC_ENABLED,omitempty"`
 
 	// KlvsrvCreated Creation time.
-	KlvsrvCreated *KlvsrvCreated `json:"KLVSRV_CREATED,omitempty"`
+	KlvsrvCreated *DateTime `json:"KLVSRV_CREATED,omitempty"`
 
 	// KlvsrvCustomInfo Custom info XML.
 	KlvsrvCustomInfo string `json:"KLVSRV_CUSTOM_INFO,omitempty"`
@@ -277,31 +236,80 @@ type VSInfo struct {
 	KlvsrvTooMuchHosts bool `json:"KLVSRV_TOO_MUCH_HOSTS,omitempty"`
 }
 
-// UpdateVServerInfo
-// Modifies attributes of the specified virtual server
-//
-//	Parameters:
-//	- params UpdateVServerInfoParams
-func (vs *VServers) UpdateVServerInfo(ctx context.Context, params UpdateVServerInfoParams) ([]byte, error) {
+// UpdateVServerInfo Modifies attributes of the specified virtual server
+func (vs *VServers) UpdateVServerInfo(ctx context.Context, params UpdateVServerInfoParams) error {
 	postData, err := json.Marshal(params)
 	if err != nil {
-		return nil, err
+		return err
 	}
+
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.UpdateVServerInfo", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	raw, err := vs.client.Do(ctx, request, nil)
-	return raw, err
+	_, err = vs.client.Do(ctx, request, nil)
+	return err
 }
 
-// SetPermissions
-// Set ACL for the specified virtual server.
-//
-//	Parameters:
-//	- params interface{}
-func (vs *VServers) SetPermissions(ctx context.Context, params interface{}) ([]byte, error) {
+// ACLParams structure describing ACL permission
+type ACLParams struct {
+	// LVServer virtual server id
+	LVServer int64 `json:"lVServer,omitempty"`
+
+	// Permissions Permissions structure
+	Permissions Permissions `json:"pPermissions,omitempty"`
+
+	// Protection if true checks if the user does not denies access to the server to itself
+	Protection bool `json:"bProtection,omitempty"`
+}
+
+type Permissions struct {
+	// KlsplInherited If the permissions list is inherited.
+	KlsplInherited bool `json:"KLSPL_INHERITED,omitempty"`
+
+	//KlsplPermissions Permission list
+	KlsplPermissions []KlsplPermission `json:"KLSPL_PERMISSIONS"`
+
+	// KlsplPossibleRights Bitmask of access rights available for editing
+	KlsplPossibleRights int64 `json:"KLSPL_POSSIBLE_RIGHTS,omitempty"`
+}
+
+//KlsplPermission container of permissions entry attributes
+type KlsplPermission struct {
+	Type string `json:"type,omitempty"`
+	// KlsplPermissionValue permissions entry
+	KlsplPermissionValue KlsplPermissionValue `json:"value,omitempty"`
+}
+
+type KlsplPermissionValue struct {
+	// KlspluSid Security ID (if OS account).
+	KlspluSid string `json:"KLSPLU_SID,omitempty"`
+
+	// KlspluName User or group name (if OS account).
+	KlspluName string `json:"KLSPLU_NAME,omitempty"`
+
+	// KlspluIsGroup Is group (if OS account).
+	KlspluIsGroup bool `json:"KLSPLU_IS_GROUP,omitempty"`
+
+	// KlspluAkuserID Id of AK user.
+	KlspluAkuserID int64 `json:"KLSPLU_AKUSER_ID,omitempty"`
+
+	// KlspluMayWrite The entry may be modified.
+	KlspluMayWrite bool `json:"KLSPLU_MAY_WRITE,omitempty"`
+
+	// KlspluMayRemove The entry may be removed.
+	KlspluMayRemove bool `json:"KLSPLU_MAY_REMOVE,omitempty"`
+
+	// KlspluAllowmask Allow access mask
+	KlspluAllowmask int64 `json:"KLSPLU_ALLOWMASK,omitempty"`
+
+	// KlspluDenymask Deny access mask
+	KlspluDenymask int64 `json:"KLSPLU_DENYMASK,omitempty"`
+}
+
+// SetPermissions Set ACL for the specified virtual server.
+func (vs *VServers) SetPermissions(ctx context.Context, params ACLParams) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
