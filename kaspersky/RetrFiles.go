@@ -31,51 +31,48 @@ import (
 	"net/http"
 )
 
-//	RetrFiles Class Reference
-//
-//	Class provides means to get retranslated files info..
-//
-//	List of all members.
+// RetrFiles provides means to get retranslated files info
 type RetrFiles service
 
-//FilesRequest struct using in GetInfo
+// FilesRequest struct using in GetInfo
 type FilesRequest struct {
 	//Array of params, each cell (paramParams) contains request-info for one updatable file:
 	FilesRequestElement []FilesRequestElement `json:"aRequest"`
 }
 
 type FilesRequestElement struct {
-	Type              string             `json:"type,omitempty"`
-	FilesRequestValue *FilesRequestValue `json:"value,omitempty"`
+	Type              string            `json:"type,omitempty"`
+	FilesRequestValue FilesRequestValue `json:"value,omitempty"`
 }
 
 type FilesRequestValue struct {
-	//primary index relative path in lowercase, e.g. "index/u1313g.xml";
+	// Index primary index relative path in lowercase, e.g. "index/u1313g.xml";
 	Index string `json:"Index,omitempty"`
 
-	//updatable file component id in UPPERCASE, e.g. "KSC";
+	// CompID updatable file component id in UPPERCASE, e.g. "KSC";
 	CompID string `json:"CompId,omitempty"`
 
-	//file name without path in lowercase, e.g. "kscdat.zip".
+	// FileName file name without path in lowercase, e.g. "kscdat.zip".
 	FileName string `json:"FileName,omitempty"`
 }
 
-//	Synchronously requests information about some retranslated files.
-//
-//	Parameters:
-//	- aRequest	paramArray(paramParams) Array of params,
-//	each cell (paramParams) contains request-info for one updatable file:
-//	|- KLUPD_RecentIndex ("Index"): primary index relative path in lowercase, e.g. "index/u1313g.xml";
-//	|- KLUPD_RecentCompId ("CompId"): updatable file component id in UPPERCASE, e.g. "KSC";
-//	|- KLUPD_RecentFileName ("FileName"): file name without path in lowercase, e.g. "kscdat.zip".
-//
-//	Returns:
-//	- paramArray(paramArray(paramParams)) Array of found files info, correspondingly to incoming request-array,
-//	cell-by-cell. Each output cell is paramArray(paramParams), that is list of matched files data, where every file-info is params:
-//	KLUPD_RecentRelativeSrvPath ("RelativeSrvPath"): file's relative path inside retranslation folder, e.g. "updates/ksc/".
-//	If nothing is found for given in-cell, then corresponding out-cell is NULL.
-//	Null/empty in-params results in null out-array.
-func (rf *RetrFiles) GetInfo(ctx context.Context, params FilesRequest) ([]byte, error) {
+//Retranslates found files info, correspondingly to incoming request-array, cell-by-cell
+type Retranslates struct {
+	// Retranslate list of matched files data
+	Retranslate [][]Retranslate `json:"PxgRetVal"`
+}
+
+type Retranslate struct {
+	Type             *string           `json:"type,omitempty"`
+	RetranslateValue *RetranslateValue `json:"value,omitempty"`
+}
+
+type RetranslateValue struct {
+	RelativeSrvPath *string `json:"RelativeSrvPath,omitempty"`
+}
+
+// GetInfo Synchronously requests information about some retranslated files.
+func (rf *RetrFiles) GetInfo(ctx context.Context, params FilesRequest) (*Retranslates, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
@@ -86,6 +83,7 @@ func (rf *RetrFiles) GetInfo(ctx context.Context, params FilesRequest) ([]byte, 
 		return nil, err
 	}
 
-	raw, err := rf.client.Do(ctx, request, nil)
-	return raw, err
+	retranslates := new(Retranslates)
+	_, err = rf.client.Do(ctx, request, &retranslates)
+	return retranslates, err
 }
