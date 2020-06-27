@@ -32,38 +32,10 @@ import (
 	"net/http"
 )
 
-//	LicenseKeys Class Reference
-//
-//	Operating with keys
-//
-//	Public Member Functions:
+//	LicenseKeys service to operating with keys
 type LicenseKeys service
 
-//	Install a key on the server.
-//
-//	Parameters:
-//	- pKeyInfo	(params) input data container, mandatory:
-//
-//Installing a key by specifying contents of a key file:
-//
-//	 - "KLLICSRV_KEYDATA" - key data container, mandatory (paramParams).
-//		|- "KLLIC_IFKEYFILE" - set to true in this case, mandatory (paramBool)
-//		|- "KLLIC_LICFILE" - keyfile body, mandatory (paramBinary)
-//
-//	Installing a key by specifying just an activation 2.0 code:
-//
-//	- "KLLICSRV_KEYDATA" - key data container, mandatory (paramParams).
-//		|-	"KLLIC_IFKEYFILE" - set to false in this case (paramBool)
-//		|-"KLLIC_LICFILE" - ASCII-encoded string with activation code in format of XXXXX-XXXXX-XXXXX-XXXXX (
-//	exactly 23 characters long buffer) (paramBinary)
-//
-//	Returns:
-//
-//	(string) serial number of the installed license.
-//
-//	Exceptions:
-//
-//	Throws	exception in case of error.
+// InstallKey Install a key on the server.
 func (lk *LicenseKeys) InstallKey(ctx context.Context, pKeyInfo interface{}) bool {
 	postData, _ := json.Marshal(pKeyInfo)
 	request, err := http.NewRequest("POST", lk.client.Server+"/api/v1.0/LicenseKeys.InstallKey",
@@ -79,14 +51,7 @@ func (lk *LicenseKeys) InstallKey(ctx context.Context, pKeyInfo interface{}) boo
 	return false
 }
 
-//
-//	Parameters:
-//	- strActivationCode	(string) activation code in format XXXXX-XXXXX-XXXXX-XXXXX, mandatory.
-//	Returns:
-//	- (array) of paramBinary, array of license key files related to the specified code.
-//
-//	Exceptions:
-//	- Throws	exception in case of error.
+// DownloadKeyFiles Download license key files from activation key servers V1.
 func (lk *LicenseKeys) DownloadKeyFiles(ctx context.Context, wstrActivationCode string) bool {
 	postData := []byte(fmt.Sprintf(`
 	{
@@ -105,7 +70,7 @@ func (lk *LicenseKeys) DownloadKeyFiles(ctx context.Context, wstrActivationCode 
 	return false
 }
 
-//AcquireKeyHostsParams struct
+// AcquireKeyHostsParams struct
 type AcquireKeyHostsParams struct {
 	PInData        PInData  `json:"pInData"`
 	PFields        []string `json:"pFields"`
@@ -122,24 +87,7 @@ type HostsKeyIterator struct {
 	WstrIterator string `json:"wstrIterator"`
 }
 
-//	Get an array of hosts that are currently using the specified key.
-//
-//	Parameters:
-//	- pInData	(params) container of input attributes:
-//	- "KLLIC_SERIAL" - serial number of the key which the hosts array will be returned for, mandatory (string).
-//	- pFields	(array) of string, array of host attribute names to return.
-//	See List of host-specific license attributes for attribute names.
-//	- pFieldsToOrder	(array) of string, array of host attributes to be used for ordering
-//	- pOptions	(params) currently ignored.
-//	- lTimeoutSec	(int64) iterator timeout in seconds. Output iterator will be available for this time long.
-//		Default is zero which means 15 minutes long.
-//
-//	Return:
-//	- lKeyCount	(int64) count of keys returned via enumerator.
-//	- wstrIterator	(string) forward-iterator name for accesing key attributes through GroupSyncIterator.
-//
-//	Note:
-//	Call GroupSyncIterator.GetNextItems to iterate. Call GroupSyncIterator.ReleaseIterator when you are done.
+// AcquireKeyHosts Get an array of hosts that are currently using the specified key.
 func (lk *LicenseKeys) AcquireKeyHosts(ctx context.Context, params AcquireKeyHostsParams) (*HostsKeyIterator,
 	[]byte, error) {
 	postData, err := json.Marshal(params)
@@ -164,25 +112,7 @@ type EnumKeysParams struct {
 	LTimeoutSEC int64    `json:"lTimeoutSec,omitempty"`
 }
 
-// Enumerate keys.
-//
-// Parameters:
-//	- pFields	(array) of string, array of attribute names to return,
-//	mandatory . See List of license key attributes for attribute names.
-//	- pFieldsToOrder	(array) of string, array of attributes to be used for ordering, mandatory
-//	- pOptions	(params) enumeration options, optional :
-//	"KLLICSRV_ENOPT_INSTALLED_ONLY" - true if you are enumerating only installed keys.
-//	Default is false - method will return all keys including ones not-installed on adm. server (product reported keys).
-//	- lTimeoutSec	(int64) iterator timeout in seconds, optional.
-//
-//	Return: Output iterator will be available for this time long. Default is zero which means 15 minutes long.
-//	- lKeyCount	(int64) count of keys returned via enumerator.
-//	- wstrIterator	(string) forward-iterator name for accesing key attributes through GroupSyncIterator.
-//
-//	Call GroupSyncIterator.GetNextItems to iterate. Call GroupSyncIterator.ReleaseIterator when you are done.
-//
-//Exceptions:
-//	Throws	exception in case of error.
+// EnumKeys Enumerate keys.
 func (lk *LicenseKeys) EnumKeys(ctx context.Context, params EnumKeysParams) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -199,7 +129,7 @@ func (lk *LicenseKeys) EnumKeys(ctx context.Context, params EnumKeysParams) ([]b
 	return raw, err
 }
 
-//KeyDataParams struct
+// KeyDataParams struct
 type KeyDataParams struct {
 	//	PKeyInfo container which must contain "KLLIC_SERIAL" attribute to specify the interested license.
 	//	For any attribute to query you must put such attribute with any value into the container pKeyInfo.
@@ -215,20 +145,15 @@ type PKeyInfo struct {
 	KllicsrvKeydata bool `json:"KLLICSRV_KEYDATA,omitempty"`
 }
 
-//	Get data of a key.
+// GetKeyData Get data of a key. For any attribute to query you must put such attribute with any value into the container pKeyInfo.
 //
-//	Parameters:
-//	pKeyInfo	(params) container which must contain "KLLIC_SERIAL" attribute to specify the interested license.
+// In particular, if you need the key body then put into pKeyInfo container the attribute with name "KLLICSRV_KEYDATA" of type (bool).
 //
-//	For any attribute to query you must put such attribute with any value into the container pKeyInfo.
-//	In particular, if you need the key body then put into
-//	pKeyInfo container the attribute with name "KLLICSRV_KEYDATA" of type (bool).
-//	If the license key has been uploaded to the Administration Server
-//	so that and Administration Server has license key body then it will be returned in "KLLICSRV_KEYDATA" attribute.
-//	Note that the additional "ExportLicense" access right must be set up to the user under which this call is made.
+// If the license key has been uploaded to the Administration Server
+// so that and Administration Server has license key body then it will be returned in "KLLICSRV_KEYDATA" attribute.
 //
-//	Returns:
-//	(params) container with the requested key attribute values. See List of license key attributes for attribute names.
+// Note that the additional "ExportLicense" access right must be set up to the user under which this call is made.
+
 func (lk *LicenseKeys) GetKeyData(ctx context.Context, params KeyDataParams) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -245,16 +170,7 @@ func (lk *LicenseKeys) GetKeyData(ctx context.Context, params KeyDataParams) ([]
 	return raw, err
 }
 
-//	Uninstall an adm. server's license.
-//
-//	Parameters:
-//	- bCurrent	(bool) true if the current license should be uninstalled, false to uninstall the reserved one.
-//
-//	Exceptions:
-//	- Throws	exception in case of error.
-//
-//	See also:
-//	SaasTryToInstall
+// SaasTryToUninstall Uninstall an adm. server's license.
 func (lk *LicenseKeys) SaasTryToUninstall(ctx context.Context, bCurrent bool) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"bCurrent": %v}`, bCurrent))
 	request, err := http.NewRequest("POST", lk.client.Server+"/api/v1.0/LicenseKeys.SaasTryToUninstall",
@@ -284,18 +200,7 @@ type PKData struct {
 	KllicSerial string `json:"KLLIC_SERIAL,omitempty"`
 }
 
-//	Adjust adm. server's license attributes.
-//
-//	Parameters:
-//	- pData	(params) container of input attributes, mandatory.
-//	See List of license key attributes for attribute names.
-//	Supported attributes:
-//	- "KLLIC_SERIAL" - (string) License serial number (mandatory)
-//	- "KLLICSRV_AUTOKEY" - (bool) true if license can be deployed automatically, false otherwise (paramString,
-//	mandatory)
-//
-//	Exceptions:
-//	- Throws	exception in case of error.
+// AdjustKey Adjust adm. server's license attributes.
 func (lk *LicenseKeys) AdjustKey(ctx context.Context, params AdjustKeyParams) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -312,7 +217,7 @@ func (lk *LicenseKeys) AdjustKey(ctx context.Context, params AdjustKeyParams) ([
 	return raw, err
 }
 
-//SaasKeyParam struct using in LicenseKeys.SaasTryToInstall
+// SaasKeyParam struct using in LicenseKeys.SaasTryToInstall
 type SaasKeyParam struct {
 	//input data container, mandatory.
 	SaasKeyPInData *SaasKeyPInData `json:"pInData,omitempty"`
@@ -328,21 +233,7 @@ type SaasKeyPInData struct {
 	KllicSerial string `json:"KLLIC_SERIAL,omitempty"`
 }
 
-//	Install an adm. server's license.
-//
-//	Parameters:
-//	- params SaasKeyParam
-//		|- pInData	(params) input data container, mandatory. Attributes are allowed here:
-//			|- "KLLIC_SERIAL" - serial number of the license being checked,
-//	mandatory (paramString). The license must be placed in the license store before installing (see InstallKey).
-//		|- bAsCurrent	(boolean) true if license should be installed in place of active one,
-//	false to install it as a reserved one.
-//
-//	Exceptions:
-//	- Throws exception in case of error.
-//
-//	See also:
-//	- LicenseKeys.SaasTryToUninstall
+// SaasTryToInstall Install an adm. server's license.
 func (lk *LicenseKeys) SaasTryToInstall(ctx context.Context, params SaasKeyParam) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -359,20 +250,8 @@ func (lk *LicenseKeys) SaasTryToInstall(ctx context.Context, params SaasKeyParam
 	return raw, err
 }
 
-//	Check if license can be installed to the adm. server.
-//	License is treated as a valid one if it is suitable for being used by the adm.
-//	server itself (its AppId is 1017, it is not expired etc.)
-//
-//	Parameters:
-//	- params SaasKeyParam
-//	|- pInData	(params) container of input attributes, mandatory. Attributes are allowed here:
-//		|- "KLLIC_SERIAL" - serial number of the license being checked,
-//		mandatory (paramString). The license must be placed in the license store before checking (see InstallKey).
-//	|- bAsCurrent	(boolean) true if license should be checked in place of active one, false otherwise.
-//
-//	Exceptions:
-//	- KLSTD::STDE_NOTPERM	license is not valid, see Some error definitions.
-//	- KLERR::Error*	if an error occurred during the checking process.
+// CheckIfSaasLicenseIsValid Check if license can be installed to the adm. server.
+// License is treated as a valid one if it is suitable for being used by the adm. server itself (its AppId is 1017, it is not expired etc.)
 func (lk *LicenseKeys) CheckIfSaasLicenseIsValid(ctx context.Context, params SaasKeyParam) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -389,16 +268,7 @@ func (lk *LicenseKeys) CheckIfSaasLicenseIsValid(ctx context.Context, params Saa
 	return raw, err
 }
 
-//	Uninstall an adm. server's license.
-//
-//	Parameters:
-//	- bCurrent	(boolean) true if the current license should be uninstalled, false to uninstall the reserved one.
-//
-//	Exceptions:
-//	- Throws	exception in case of error.
-//
-//	See also:
-//	- LicenseKeys.SaasTryToInstall
+// UninstallKey Uninstall an adm. server's license.
 func (lk *LicenseKeys) UninstallKey(ctx context.Context, bCurrent bool) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"bCurrent": %v}`, bCurrent))
 	request, err := http.NewRequest("POST", lk.client.Server+"/api/v1.0/LicenseKeys.UninstallKey",

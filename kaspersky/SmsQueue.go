@@ -32,11 +32,7 @@ import (
 	"net/http"
 )
 
-//	SmsQueue Class Reference
-//
-//	Manage SMS message queue..
-//
-//	List of all members.
+// SmsQueue service to manage SMS message queue.
 type SmsQueue service
 
 type SQParams struct {
@@ -44,14 +40,7 @@ type SQParams struct {
 	PRecipients []string `json:"pRecipients"`
 }
 
-//	Enqueue message into SMS queue for one or more recipients.
-//
-//	Parameters:
-//	- wstrBody	(string) - message text
-//	- pRecipients	(array) of paramString phone numbers
-//
-//	Returns:
-//(int64) Request Id
+// Enqueue message into SMS queue for one or more recipients.
 func (sq *SmsQueue) Enqueue(ctx context.Context, params SQParams) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -67,10 +56,7 @@ func (sq *SmsQueue) Enqueue(ctx context.Context, params SQParams) ([]byte, error
 	return raw, err
 }
 
-//	Clear sms queue.
-//
-//	All requests which have not been sent to any device,
-//	or marked as failed will be removed.
+// Clear sms queue. All requests which have not been sent to any device, or marked as failed will be removed.
 func (sq *SmsQueue) Clear(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", sq.client.Server+"/api/v1.0/SmsQueue.Clear", nil)
 	if err != nil {
@@ -81,23 +67,13 @@ func (sq *SmsQueue) Clear(ctx context.Context) ([]byte, error) {
 	return raw, err
 }
 
-//	SQCParams struct
+// SQCParams struct
 type SQCParams struct {
 	NRequestID  int64    `json:"nRequestId,omitempty"`
 	PRecipients []string `json:"pRecipients"`
 }
 
-//	Cancel request nRequestId to recipients pRecipients.
-//
-//	If request has not yet been sent to any device, or is marked as failed, it will be removed from SMS queue.
-//	nRequestId must be result of one of Enqueue()
-//	calls or value from c_szwRequestId field of c_szwSmsQueueSrvViewName server view.
-//
-//	Parameters:
-//	- nRequestId	(int64) Request id to cancel. Value 0 means all requests to pRecipients will be removed.
-//	- pRecipients	(array) Recipients to cancel request for.
-//
-//	Value null means request will be removed for all recipients
+// Cancel request nRequestId to recipients pRecipients.
 func (sq *SmsQueue) Cancel(ctx context.Context, params SQCParams) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

@@ -31,10 +31,7 @@ import (
 	"net/http"
 )
 
-//	HostTagsApi Class Reference
-//	Interface allows to acquire and manage tags for hosts. It is additional interface for common ListTags.
-//
-//	List of all members.
+// HostTagsApi service allows to acquire and manage tags for hosts. It is additional service for common ListTags.
 type HostTagsApi service
 
 //HostTagsParams using in
@@ -56,29 +53,17 @@ type HTags struct {
 }
 
 type HTagValue struct {
-	//Value of the tag
+	// KLHSTTagValue Value of the tag
 	KLHSTTagValue string `json:"KLHST_TagValue"`
 
-	//true if tag has been set by product
+	// KlhstIsTagSetByProduct true if tag has been set by product
 	KlhstIsTagSetByProduct bool `json:"KLHST_IS_TAG_SET_BY_PRODUCT,omitempty"`
 
-	//true if tag has been set by host tag rule
+	// KlhstIsTagSetByHosttagrule true if tag has been set by host tag rule
 	KlhstIsTagSetByHosttagrule bool `json:"KLHST_IS_TAG_SET_BY_HOSTTAGRULE,omitempty"`
 }
 
-//HostTagsApi.GetHostTags
-//Get tags for the host.
-//
-//	Parameters:
-//	- HostTagsParams
-//		|- szwHostId	string) - host identifier ( guid )
-//		|- pParams	(params) reserved.
-//
-//	Return:
-//	- ppHostTags	(array) collection of (params) objects where each of them has the following structure:
-//	|- "KLHST_TagValue" (string). Value of the tag
-//	|- "KLHST_IS_TAG_SET_BY_PRODUCT" (bool). true if tag has been set by product
-//	|- "KLHST_IS_TAG_SET_BY_HOSTTAGRULE" (bool). true if tag has been set by host tag rule
+// GetHostTags Get tags for the host.
 func (kc *HostTagsApi) GetHostTags(ctx context.Context, params HostTagsParams) (*HostTags, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

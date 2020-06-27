@@ -31,15 +31,12 @@ import (
 	"net/http"
 )
 
-//CloudAccess Class Reference
-//
-//Interface to check access of public clouds.
-//
-//List of all members.
+// CloudAccess service to check access of public clouds.
 type CloudAccess service
 
+// Credentials struct
 type Credentials struct {
-	//	EnCloudType Type of the cloud infrastructure being accessed (a KLCLOUD_TYPE_*,
+	// EnCloudType Type of the cloud infrastructure being accessed (a KLCLOUD_TYPE_*,
 	//now only Microsoft Azure is supported)
 	//	╔══════╦═════════════════════╗
 	//	║ Type ║     Description     ║
@@ -51,38 +48,31 @@ type Credentials struct {
 	//	╚══════╩═════════════════════╝
 	EnCloudType int64 `json:"enCloudType,omitempty"`
 
-	//PKeyPair Cloud authentication credentials. (paramParams, mandatory)
+	// PKeyPair Cloud authentication credentials. (paramParams, mandatory)
 	//AWS: Not supported Azure:
 	PKeyPair *PKeyPair `json:"pKeyPair,omitempty"`
 }
 
 type PKeyPair struct {
-	//Subscription ID (paramString, mandatory if there is "AZURE_APP_ID")
+	// ClientID Subscription ID (paramString, mandatory if there is "AZURE_APP_ID")
 	ClientID string `json:"CLIENT_ID,omitempty"`
 
-	//Application ID (paramString, mandatory if there is "CLIENT_SECRET")
+	// AzureAppID Application ID (paramString, mandatory if there is "CLIENT_SECRET")
 	AzureAppID string `json:"AZURE_APP_ID,omitempty"`
 
-	//UTF-8 encoded Application authentication key string encrypted with KLCSPWD::ProtectDataGlobally
+	// ClientSecret UTF-8 encoded Application authentication key string encrypted with KLCSPWD::ProtectDataGlobally
 	//(or KLCSPWD::ProtectDataLocally), (paramBinary, optional)
 	ClientSecret string `json:"CLIENT_SECRET,omitempty"`
 
-	//Storage account name (paramString, mandatory if there is "AZURE_STORAGE_KEY")
+	// AzureStorageName Storage account name (paramString, mandatory if there is "AZURE_STORAGE_KEY")
 	AzureStorageName string `json:"AZURE_STORAGE_NAME,omitempty"`
 
-	//UTF-8 encoded Storage account key string encrypted with KLCSPWD::ProtectDataGlobally
+	// AzureStorageKey UTF-8 encoded Storage account key string encrypted with KLCSPWD::ProtectDataGlobally
 	//(or KLCSPWD::ProtectDataLocally), (paramBinary, optional)
 	AzureStorageKey string `json:"AZURE_STORAGE_KEY,omitempty"`
 }
 
-//VerifyCredentials
-//Verify credentials.
-//
-//	Parameters:
-//	- params Credentials
-//
-//	Returns:
-//	- true if all credentials is valid, false otherwise.
+// VerifyCredentials Verify credentials.
 func (ca *CloudAccess) VerifyCredentials(ctx context.Context, params Credentials) (*PxgValBool, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -99,23 +89,16 @@ func (ca *CloudAccess) VerifyCredentials(ctx context.Context, params Credentials
 	return pxgValBool, raw, err
 }
 
-//KeyPairAccess struct
+// KeyPairAccess struct
 type KeyPairAccess struct {
-	//Access for pcloud device discovery
+	// BAllowScanning Access for pcloud device discovery
 	BAllowScanning bool `json:"bAllowScanning,omitempty"`
 
-	//Access for remote deployment
+	// BAllowDeployment Access for remote deployment
 	BAllowDeployment bool `json:"bAllowDeployment,omitempty"`
 }
 
-//AcquireAccessForKeyPair
-//Check key-pair access
-//
-//	Parameters:
-//	- params	Credentials
-//
-//	Return:
-//	KeyPairAccess
+// AcquireAccessForKeyPair  Check key-pair access
 func (ca *CloudAccess) AcquireAccessForKeyPair(ctx context.Context, params Credentials) (*KeyPairAccess, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

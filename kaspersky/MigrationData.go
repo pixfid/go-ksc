@@ -32,16 +32,14 @@ import (
 	"net/http"
 )
 
-//	MigrationData Class Reference
+// MigrationData service provide to:
 //
-//	Detailed Description:
-//	Migration of data between KSC On-Premise and KSCHosted.
-//	Migration of data from KSC On-Premise to KSCHosted
+// Migration of data between KSC On-Premise and KSCHosted.
 //
-//	List of all members.
+// Migration of data from KSC On-Premise to KSCHosted
 type MigrationData service
 
-//KnownProducts struct
+// KnownProducts struct
 type KnownProducts struct {
 	KnownProductsVal []KnownProductsVal `json:"PxgRetVal"`
 }
@@ -57,18 +55,7 @@ type KnownProductVal struct {
 	KlmigrProductInfoVersion string `json:"KLMIGR_PRODUCT_INFO_VERSION,omitempty"`
 }
 
-//	Acquire list of known products for migration.
-//
-//	Acquire list of known products for migration
-//
-//	Returns:
-//	- Array of (params). Each element contains:
-//	|-KLMIGR_PRODUCT_INFO_NAME - (paramString) Product name
-//	|-KLMIGR_PRODUCT_INFO_VERSION - (paramString) Product version
-//	|-KLMIGR_PRODUCT_INFO_DN - (paramString) Product display name
-//
-//	Exceptions:
-//	- Throws	exception in case of error
+// AcquireKnownProducts Acquire list of known products for migration.
 func (md *MigrationData) AcquireKnownProducts(ctx context.Context) (*KnownProducts, []byte, error) {
 	request, err := http.NewRequest("POST", md.client.Server+"/api/v1.0/MigrationData.AcquireKnownProducts",
 		nil)
@@ -81,12 +68,8 @@ func (md *MigrationData) AcquireKnownProducts(ctx context.Context) (*KnownProduc
 	return knownProducts, raw, err
 }
 
-//	Cancels export operation.
-//
-//	Interrupts and cancels export operation at any time
-//
-//	Parameters:
-//	- wstrActionGuid	(string) - async action GUID of export operation, returned by MigrationData.Export() method
+// CancelExport Interrupts and cancels export operation at any time by async action GUID of export operation,
+// returned by MigrationData.Export method
 func (md *MigrationData) CancelExport(ctx context.Context, wstrActionGuid string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrActionGuid": "%s"}`, wstrActionGuid))
 	request, err := http.NewRequest("POST", md.client.Server+"/api/v1.0/MigrationData.CancelExport",
@@ -99,36 +82,36 @@ func (md *MigrationData) CancelExport(ctx context.Context, wstrActionGuid string
 	return raw, err
 }
 
-//MDExportParams struct
+// MDExportParams struct
 type MDExportParams struct {
-	//Export options, which include the following (see below). All options are mandatory!
+	// MDPOptions Export options, which include the following (see below). All options are mandatory!
 	MDPOptions *MDPOptions `json:"pOptions,omitempty"`
 }
 
-//MDPOptions struct
+// MDPOptions struct
 type MDPOptions struct {
-	//Root group identifier
+	// KlmigrRootGroupID Root group identifier
 	KlmigrRootGroupID int64 `json:"KLMIGR_ROOT_GROUP_ID,omitempty"`
 
-	//Identifiers of report templates
+	// KlmigrArrIDReports Identifiers of report templates
 	KlmigrArrIDReports []int64 `json:"KLMIGR_ARR_ID_REPORTS"`
 
-	//Non-group tasks identifiers
+	// KlmigrArrIDCmnTasks Non-group tasks identifiers
 	KlmigrArrIDCmnTasks []int64 `json:"KLMIGR_ARR_ID_CMN_TASKS"`
 
-	//Extra (user-created) queries identifiers
+	// KlmigrArrIDExtraQrs Extra (user-created) queries identifiers
 	KlmigrArrIDExtraQrs []int64 `json:"KLMIGR_ARR_ID_EXTRA_QRS"`
 
-	//Array of params, where each element contains the following:
+	// KlmigrArrProductsInfo Array of params, where each element contains the following:
 	KlmigrArrProductsInfo []KlmigrArrProductsInfo `json:"KLMIGR_ARR_PRODUCTS_INFO"`
 
-	//Skip import of custom roles
+	// KlmigrSkipCustomRoles Skip import of custom roles
 	KlmigrSkipCustomRoles bool `json:"KLMIGR_SKIP_CUSTOM_ROLES,omitempty"`
 
-	//Skip import of internal users and security groups
+	// KlmigrSkipUsersGroups Skip import of internal users and security groups
 	KlmigrSkipUsersGroups bool `json:"KLMIGR_SKIP_USERS_GROUPS,omitempty"`
 
-	//Skip import of custom application categories
+	// KlmigrSkipCustomAppCategories Skip import of custom application categories
 	KlmigrSkipCustomAppCategories bool `json:"KLMIGR_SKIP_CUSTOM_APP_CATEGORIES,omitempty"`
 }
 
@@ -138,20 +121,18 @@ type KlmigrArrProductsInfo struct {
 }
 
 type ProductsInfoValue struct {
-	//Name of product, for which tasks and policies should be exported
+	// KlmigrProductInfoName Name of product, for which tasks and policies should be exported
 	KlmigrProductInfoName string `json:"KLMIGR_PRODUCT_INFO_NAME,omitempty"`
 
-	//Version of product, for which tasks and policies should be exported
+	// KlmigrProductInfoVersion Version of product, for which tasks and policies should be exported
 	KlmigrProductInfoVersion string `json:"KLMIGR_PRODUCT_INFO_VERSION,omitempty"`
 }
 
-//	Performs export of objects.
+// Export Performs export of objects. Exports all objects, specified in pOptions, and returns async action GUID,
+// which can be used later to retrieve file URL. To provide more consistency, method can also export some additional "child" objects,
+// which are referred to by "parent" objects, specified by user.
 //
-//	Exports all objects, specified in pOptions, and returns async action GUID,
-//	which can be used later to retrieve file URL. To provide more consistency,
-//	method can also export some additional "child" objects,
-//	which are referred to by "parent" objects, specified by user.
-//	As a result, user receives GUID to async action, containing URL to zip-archive with all exported data
+// As a result, user receives GUID to async action, containing URL to zip-archive with all exported data
 func (md *MigrationData) Export(ctx context.Context, params MDExportParams) (*PxgValStr, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -168,22 +149,20 @@ func (md *MigrationData) Export(ctx context.Context, params MDExportParams) (*Px
 	return pxgValStr, raw, err
 }
 
-//	Retrieves URL for zip archive upload.
+// InitFileUpload Retrieves URL for zip archive upload. Retrieves URL for upload zip archive with exported data.
+// To correctly upload zip archive, which was received after export, one should do the following:
 //
-//	Retrieves URL for upload zip archive with exported data. To correctly upload zip archive,
-//	which was received after export, one should do the following:
+// 1. Acquire async action GUID from MigrationData.Export method
 //
-//	1. Acquire async action GUID from MigrationData::Export method
-//	2. Get URL from async action GUID by calling AsyncActionStateChecker.CheckActionState - URL-path to zip archive
-//	will be in in pStateData
-//	3. Download zip file from URL, received in previous step
-//	4. Call method MigrationData.InitFileUpload to receive URL for upload (this method)
-//	5. Upload zip archive to URL, retrieved in previous step, using HTTP PUT request.
+// 2. Get URL from async action GUID by calling AsyncActionStateChecker.CheckActionState - URL-path to zip archive will be in in pStateData
 //
-//	After all above is done, you can call MigrationData::Import to perform import
+// 3. Download zip file from URL, received in previous step
 //
-//	Returns:
-//	- (string) resulting URL for zip-archive
+// 4. Call method MigrationData.InitFileUpload to receive URL for upload (this method)
+//
+// 5. Upload zip archive to URL, retrieved in previous step, using HTTP PUT request.
+//
+// After all above is done, you can call MigrationData.Import to perform import
 func (md *MigrationData) InitFileUpload(ctx context.Context) (*PxgValStr, []byte, error) {
 	request, err := http.NewRequest("POST", md.client.Server+"/api/v1.0/MigrationData.InitFileUpload",
 		nil)
@@ -196,39 +175,30 @@ func (md *MigrationData) InitFileUpload(ctx context.Context) (*PxgValStr, []byte
 	return pxgValStr, raw, err
 }
 
-//ImportMDParams struct using in MigrationData.Import
+// ImportMDParams struct using in MigrationData.Import
 type ImportMDParams struct {
-	//	upload URL. Use MigrationData.InitFileUpload() method to obtain it
+	// WstrURL upload URL. Use MigrationData.InitFileUpload() method to obtain it
 	WstrURL string `json:"wstrUrl"`
 
-	// import options
+	// IOptions import options
 	IOptions IOptions `json:"pOptions"`
 }
 
+// IOptions struct
 type IOptions struct {
-	// root group identifier
+	// KlmigrRootGroupID root group identifier
 	KlmigrRootGroupID int64 `json:"KLMIGR_ROOT_GROUP_ID"`
 }
 
-//	Performs import of objects.
+// Import Performs import of objects. Imports all objects, specified in pOptions, from file, pointed by upload URL.
 //
-//	Imports all objects, specified in pOptions, from file, pointed by upload URL.
-//	Method is asynchronious. To correctly use this method, first call InitFileUpload() to obtain file URL.
-//	If wstrUrl is invalid, method fails with error.
+// Method is asynchronious. To correctly use this method, first call InitFileUpload() to obtain file URL.
+// If wstrUrl is invalid, method fails with error.
 //
-//	Parameters:
-//	- wstrUrl	(string) - upload URL. Use MigrationData::InitFileUpload() method to obtain it
-//	- pOptions	(params) - import options, containing the following:
-//		|- KLMIGR_ROOT_GROUP_ID (paramInt) root group identifier
-//
-//	Returns:
-//	- (string) wstrActionGuid async action GUID
-//
-//	Remarks:
-//	Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
-//	If the operation succeeds then AsyncActionStateChecker.
-//	CheckActionState returns bFinalized=true and lStateCode=1 in pStateData.
-//	Otherwise, a call to AsyncActionStateChecker.CheckActionState returns error in pStateData.
+// Remarks:
+// Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
+// If the operation succeeds then AsyncActionStateChecker. CheckActionState returns bFinalized=true and lStateCode=1 in pStateData.
+// Otherwise, a call to AsyncActionStateChecker.CheckActionState returns error in pStateData.
 func (md *MigrationData) Import(ctx context.Context, params ImportMDParams) (*PxgValStr, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

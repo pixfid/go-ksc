@@ -31,15 +31,15 @@ import (
 	"net/http"
 )
 
-//	HostTasks Class Reference
+// HostTasks service to basic management operations with host tasks.
 //
-//	Basic management operations with host tasks..
-//
-//	Interface allows to acquire and manage tasks for hosts: add, update, remove, enumerate and perform other actions.
-//
-//	List of all members.
+// This service allows to acquire and manage tasks for hosts: add, update, remove, enumerate and perform other actions.
 type HostTasks service
 
+//TODO AddTask
+//TODO DeleteTask
+
+// GetNextTask Sequentially get task data.
 func (ht *HostTasks) GetNextTask(ctx context.Context, strSrvObjId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`
 	{
@@ -54,17 +54,11 @@ func (ht *HostTasks) GetNextTask(ctx context.Context, strSrvObjId string) ([]byt
 	return raw, err
 }
 
-//Reset task iterator for a specified filter data.
-//
-//If one of the parameters is not specified then the filtration will not be performed by this parameter.
-//
-//	Parameters:
-//	- strSrvObjId	(string) server object ID that got from HostGroup.GetHostTasks
-//	- strProductName	(string) product name
-//	- strVersion	(string) product version
-//	- strComponentName	(string) component name
-//	- strInstanceId	(string) instance id
-//	- strTaskName	(string) task name
+//TODO GetTaskData
+//TODO GetTaskStartEvent
+
+// ResetTasksIterator Reset task iterator for a specified filter data.
+// If one of the parameters is not specified then the filtration will not be performed by this parameter.
 func (ht *HostTasks) ResetTasksIterator(ctx context.Context, strSrvObjId, strProductName, strVersion,
 	strComponentName, strInstanceId, strTaskName string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{
@@ -83,3 +77,6 @@ func (ht *HostTasks) ResetTasksIterator(ctx context.Context, strSrvObjId, strPro
 	raw, err := ht.client.Do(ctx, request, nil)
 	return raw, err
 }
+
+//TODO SetTaskStartEvent
+//TODO UpdateTask

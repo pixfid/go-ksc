@@ -32,30 +32,12 @@ import (
 	"net/http"
 )
 
-//	NagRdu Class Reference
-//
-//	Remote diagnostics on host..
-//
-//	This interface is implemented at Network Agent side,
-//	so use gateway connection to connect Network Agent and call interface methods.
-//
-//	List of all members.
+//	NagRdu Class service to remote diagnostics on host.
+//	This service is implemented at Network Agent side, so use gateway connection to connect Network Agent and call interface methods.
 type NagRdu service
 
-//	Change trace-level for specific product, turns on/off tracing
-//
-//	Parameters:
-//	- szwProductID	(string) product ID, taken from "current host state"-container
-//	- nTraceLevel	(int64) new trace-level (specific for each product)
-//
-//	Returns:
-//	- current host state
-//
-//	Exceptions:
-//	- throws	exception in case of error
-func (nr *NagRdu) ChangeTraceParams(ctx context.Context, szwProductID string, nTraceLevel int64) (*CurrentHostState,
-	[]byte,
-	error) {
+// ChangeTraceParams Change trace-level for specific product, turns on/off tracing
+func (nr *NagRdu) ChangeTraceParams(ctx context.Context, szwProductID string, nTraceLevel int64) (*CurrentHostState, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"szwProductID": "%s", "nTraceLevel": %d }`, szwProductID, nTraceLevel))
 	request, err := http.NewRequest("POST", nr.client.Server+"/api/v1.0/NagRdu.ChangeTraceParams", bytes.NewBuffer(postData))
 	if err != nil {
@@ -67,23 +49,9 @@ func (nr *NagRdu) ChangeTraceParams(ctx context.Context, szwProductID string, nT
 	return currentHostState, raw, err
 }
 
-//	Change rotated-trace-level for specific product, turns on/off tracing
-//
-//	Parameters:
-//	- szwProductID	(string) product ID, taken from "current host state"-container
-//	- nTraceLevel	(int64) new rotated-trace-level (specific for each product)
-//	- nPartsCount	(int64) how much parts of trace-file should be generated (cycled)
-//	- nMaxPartSize	(int64) maximal size (MB) of each part
-//
-//	Returns:
-//	- current host state
-//
-//	Exceptions:
-//	throws	exception in case of error
+// ChangeTraceRotatedParams Change rotated-trace-level for specific product, turns on/off tracing
 func (nr *NagRdu) ChangeTraceRotatedParams(ctx context.Context, szwProductID string, nTraceLevel,
-	nPartsCount, nMaxPartSize int64) (*CurrentHostState,
-	[]byte,
-	error) {
+	nPartsCount, nMaxPartSize int64) (*CurrentHostState, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{ "szwProductID": "%s", "nTraceLevel": %d, "nPartsCount": %d, 
 	"nMaxPartSize": %d }`, szwProductID, nTraceLevel, nPartsCount, nMaxPartSize))
 	request, err := http.NewRequest("POST", nr.client.Server+"/api/v1.0/NagRdu.ChangeTraceRotatedParams", bytes.NewBuffer(postData))
@@ -96,18 +64,7 @@ func (nr *NagRdu) ChangeTraceRotatedParams(ctx context.Context, szwProductID str
 	return currentHostState, raw, err
 }
 
-//	Change XPerf trace-level for specific product, turns on/off XPerf tracing
-//
-//	Parameters:
-//	- szwProductID	product ID, taken from "current host state"-container
-//	- nTraceLevel	new XPerf trace-level (specific for each product)
-//	- nXPerfMode	XPerf mode: (0 = BASIC, 1 = ONREBOOT)
-//
-//	Returns:
-//	current host state
-//
-//	Exceptions:
-//	throws	exception in case of error
+// ChangeXperfBaseParams Change XPerf trace-level for specific product, turns on/off XPerf tracing
 func (nr *NagRdu) ChangeXperfBaseParams(ctx context.Context, szwProductID string, nTraceLevel, nXPerfMode int64) (*CurrentHostState,
 	[]byte,
 	error) {
@@ -125,23 +82,9 @@ func (nr *NagRdu) ChangeXperfBaseParams(ctx context.Context, szwProductID string
 	return currentHostState, raw, err
 }
 
-//	Change XPerf rotated-trace-level for specific product, turns on/off XPerf tracing
-//
-//	Parameters:
-//	- szwProductID	product ID, taken from "current host state"-container
-//	- nTraceLevel	new XPerf trace-level (specific for each product)
-//	- nXPerfMode	XPerf mode: (0 = BASIC, 1 = ONREBOOT)
-//	- nMaxPartSize	maximal size (MB) of each part
-//
-//	Returns:
-//	current host state
-//
-//Exceptions:
-//	throws	exception in case of error
+// ChangeXperfRotatedParams Change XPerf rotated-trace-level for specific product, turns on/off XPerf tracing
 func (nr *NagRdu) ChangeXperfRotatedParams(ctx context.Context, szwProductID string, nTraceLevel, nXPerfMode,
-	nMaxPartSize int64) (*CurrentHostState,
-	[]byte,
-	error) {
+	nMaxPartSize int64) (*CurrentHostState, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"szwProductID": "%s", "nTraceLevel": %d, "nXPerfMode": %d, "nMaxPartSize": %d }`, szwProductID,
 		nTraceLevel, nXPerfMode, nMaxPartSize))
 
@@ -181,16 +124,16 @@ type InstallationLogsValue struct {
 }
 
 type Products struct {
-	Type  string                   `json:"type,omitempty"`
-	Value map[string]ProductsValue `json:"value,omitempty"`
+	Type  string                    `json:"type,omitempty"`
+	Value map[string]ProductsValues `json:"value,omitempty"`
+}
+
+type ProductsValues struct {
+	Type  string         `json:"type,omitempty"`
+	Value *ProductsValue `json:"value,omitempty"`
 }
 
 type ProductsValue struct {
-	Type  string           `json:"type,omitempty"`
-	Value *ValueValueClass `json:"value,omitempty"`
-}
-
-type ValueValueClass struct {
 	ComponentName          string        `json:"ComponentName,omitempty"`
 	DiagLog                string        `json:"DiagLog,omitempty"`
 	DiagTrace              string        `json:"DiagTrace,omitempty"`
@@ -218,21 +161,12 @@ type ValueValueClass struct {
 	XperfTraceType         int64         `json:"XperfTraceType,omitempty"`
 }
 
-//	Asynchronously create and download dump for specific process
+// CreateAndDownloadDumpAsync Asynchronously create and download dump for specific process
 //
-//	Parameters:
-//	- szwProcessName	short process name like 'klnagent.exe'
-//
-//	Returns:
-//	asynchronous request ID, used to get the result with URL-path for later downloading saved dump
-//
-//	Remarks:
-//	Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
-//	If the operation succeeds then AsyncActionStateChecker.CheckActionState returns URL-path in pStateData.
-//	Otherwise, a call to AsyncActionStateChecker::CheckActionState returns error in pStateData.
-//
-//	Exceptions:
-//	Throws	exception in case of error
+// Remarks:
+// Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
+// If the operation succeeds then AsyncActionStateChecker.CheckActionState returns URL-path in pStateData.
+// Otherwise, a call to AsyncActionStateChecker::CheckActionState returns error in pStateData.
 func (nr *NagRdu) CreateAndDownloadDumpAsync(ctx context.Context, szwProcessName string) (*PxgValStr, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"szwProcessName": "%s"}`, szwProcessName))
 	request, err := http.NewRequest("POST", nr.client.Server+"/api/v1.0/NagRdu.CreateAndDownloadDumpAsync", bytes.NewBuffer(postData))
@@ -245,17 +179,7 @@ func (nr *NagRdu) CreateAndDownloadDumpAsync(ctx context.Context, szwProcessName
 	return pxgValStr, raw, err
 }
 
-//	Permanently delete specific file on host
-//
-//	Parameters:
-//	- szwRemoteFile	location of file (taken from "current host state"-container, it is not file-path),
-//	which should be permanently deleted
-//
-//	Returns:
-//	current host state
-//
-//	Exceptions:
-//	throws	exception in case of error
+// DeleteFile Permanently delete specific file on host
 func (nr *NagRdu) DeleteFile(ctx context.Context, szwRemoteFile string) (*CurrentHostState, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"szwRemoteFile": "%s"}`, szwRemoteFile))
 	request, err := http.NewRequest("POST", nr.client.Server+"/api/v1.0/NagRdu.DeleteFile", bytes.NewBuffer(postData))
@@ -272,18 +196,7 @@ type RemoteFilesParams struct {
 	PRemoteFiles []string `json:"pRemoteFiles"`
 }
 
-//	Permanently delete array of specific files on host
-//
-//	Parameters:
-//	- RemoteFilesParams params
-//		|- pRemoteFiles	array of file locations (taken from "current host state"-container, it is not file-path),
-//	which should be permanently deleted
-//
-//	Returns:
-//	current host state
-//
-//	Exceptions:
-//	throws	exception in case of error
+// DeleteFiles Permanently delete array of specific files on host
 func (nr *NagRdu) DeleteFiles(ctx context.Context, params RemoteFilesParams) (*CurrentHostState, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -300,18 +213,12 @@ func (nr *NagRdu) DeleteFiles(ctx context.Context, params RemoteFilesParams) (*C
 	return currentHostState, raw, err
 }
 
-//	Asynchronously create archive with common-data (products local settings, policy, tasks, ...) and download it
-//
-//	Returns:
-//	- asynchronous request ID, used to get the result with URL-path for later downloading saved archive
+// DownloadCommonDataAsync Asynchronously create archive with common-data (products local settings, policy, tasks, ...) and download it
 //
 //	Remarks:
 //	Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
 //	If the operation succeeds then AsyncActionStateChecker.CheckActionState returns URL-path in pStateData.
 //	Otherwise, a call to AsyncActionStateChecker::CheckActionState returns error in pStateData.
-//
-//	Exceptions:
-//	- Throws	exception in case of error
 func (nr *NagRdu) DownloadCommonDataAsync(ctx context.Context) (*PxgValStr, []byte, error) {
 	request, err := http.NewRequest("POST", nr.client.Server+"/api/v1.0/NagRdu.DownloadCommonDataAsync", nil)
 	if err != nil {
@@ -323,21 +230,12 @@ func (nr *NagRdu) DownloadCommonDataAsync(ctx context.Context) (*PxgValStr, []by
 	return pxgValStr, raw, err
 }
 
-//	Asynchronously download specific event-log
+// DownloadEventlogAsync Asynchronously download specific event-log
 //
-//	Parameters:
-//	- szwEventLog	event-log name, taken from "current host state"-container
-//
-//	Returns:
-//	asynchronous request ID, used to get the result with URL-path for later downloading saved event-log
-//
-//	Remarks:
-//	Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
-//	If the operation succeeds then AsyncActionStateChecker.CheckActionState returns URL-path in pStateData.
-//	Otherwise, a call to AsyncActionStateChecker::CheckActionState returns error in pStateData.
-//
-//	Exceptions:
-//	Throws	exception in case of error
+// Remarks:
+// Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
+// If the operation succeeds then AsyncActionStateChecker.CheckActionState returns URL-path in pStateData.
+// Otherwise, a call to AsyncActionStateChecker::CheckActionState returns error in pStateData.
 func (nr *NagRdu) DownloadEventlogAsync(ctx context.Context, szwEventLog string) (*PxgValStr, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"szwEventLog": "%s"}`, szwEventLog))
 	request, err := http.NewRequest("POST", nr.client.Server+"/api/v1.0/NagRdu.DownloadEventlogAsync", bytes.NewBuffer(postData))
@@ -350,30 +248,8 @@ func (nr *NagRdu) DownloadEventlogAsync(ctx context.Context, szwEventLog string)
 	return pxgValStr, raw, err
 }
 
-//	Asynchronously run executable file, previously uploaded to host using GetUrlToUploadFileToHost.
-//	Uploaded file should be a zip-archive with executable-file (and, maybe, other files and folders) on 'utility'-folder
-//
-//	Parameters:
-//	- szwURL	URL-path, used previously for uploading file
-//	- szwShortExecName	short filename of executable file in 'utility'-folder in zip-archive
-//	- szwParams	command-line params
-//
-//	Returns:
-//	asynchronous request ID, used to get the result with URL-path for later downloading executable output-file
-//	Note:
-//                Example of uploaded file structure:
-//                    archive.zip
-//                        utility
-//                            executable.exe
-//                            [other_files]
-//
-//	Remarks:
-//	Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
-//	If the operation succeeds then AsyncActionStateChecker.CheckActionState returns URL-path in pStateData.
-//	Otherwise, a call to AsyncActionStateChecker::CheckActionState returns error in pStateData.
-//
-//	Exceptions:
-//	Throws	exception in case of error
+// ExecuteFileAsync Asynchronously run executable file, previously uploaded to host using GetUrlToUploadFileToHost.
+// Uploaded file should be a zip-archive with executable-file (and, maybe, other files and folders) on 'utility'-folder
 func (nr *NagRdu) ExecuteFileAsync(ctx context.Context, szwURL, szwShortExecName, szwParams string) (*PxgValStr, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"szwURL": "%s", "szwShortExecName": "%s", "szwParams": "%s"}`, szwURL, szwShortExecName, szwParams))
 	request, err := http.NewRequest("POST", nr.client.Server+"/api/v1.0/NagRdu.ExecuteFileAsync", bytes.NewBuffer(postData))
@@ -386,18 +262,12 @@ func (nr *NagRdu) ExecuteFileAsync(ctx context.Context, szwURL, szwShortExecName
 	return pxgValStr, raw, err
 }
 
-//	Asynchronously run GSI-utility
+// ExecuteGsiAsync Asynchronously run GSI-utility
 //
-//	Returns:
-//	asynchronous request ID, used to get the result with URL-path for later downloading saved GSI-results
-//
-//	Remarks:
-//	Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
-//	If the operation succeeds then AsyncActionStateChecker.CheckActionState returns URL-path in pStateData.
-//	Otherwise, a call to AsyncActionStateChecker.CheckActionState returns error in pStateData.
-//
-//	Exceptions:
-//	Throws	exception in case of error
+// Remarks:
+// Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
+// If the operation succeeds then AsyncActionStateChecker.CheckActionState returns URL-path in pStateData.
+// Otherwise, a call to AsyncActionStateChecker.CheckActionState returns error in pStateData.
 func (nr *NagRdu) ExecuteGsiAsync(ctx context.Context) (*PxgValStr, []byte, error) {
 	request, err := http.NewRequest("POST", nr.client.Server+"/api/v1.0/NagRdu.ExecuteGsiAsync", nil)
 	if err != nil {
@@ -409,13 +279,7 @@ func (nr *NagRdu) ExecuteGsiAsync(ctx context.Context) (*PxgValStr, []byte, erro
 	return pxgValStr, raw, err
 }
 
-//	Acquire current host state
-//
-//	Returns:
-//	- current host state
-//
-//	Exceptions:
-//	- throws	exception in case of error
+// GetCurrentHostState Acquire current host state
 func (nr *NagRdu) GetCurrentHostState(ctx context.Context) (*CurrentHostState, []byte, error) {
 	request, err := http.NewRequest("POST", nr.client.Server+"/api/v1.0/NagRdu.GetCurrentHostState", nil)
 	if err != nil {
@@ -427,20 +291,7 @@ func (nr *NagRdu) GetCurrentHostState(ctx context.Context) (*CurrentHostState, [
 	return currentHostState, raw, err
 }
 
-//	Get URL-path for later download file from host
-//
-//	Parameters:
-//	- szwRemoteFile	location of file (taken from "current host state"-container, it is not file-path),
-//	which should be downloaded later
-//
-//	Returns:
-//	- URL-path for downloading file from host
-//
-//	Exceptions:
-//	- throws	exception in case of error
-//
-//	See also:
-//	Some typical resources path prefixes
+// GetUrlToDownloadFileFromHost Get URL-path for later download file from host
 func (nr *NagRdu) GetUrlToDownloadFileFromHost(ctx context.Context, szwRemoteFile string) (*PxgValStr, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"szwRemoteFile": "%s"}`, jsonEscape(szwRemoteFile)))
 	request, err := http.NewRequest("POST", nr.client.Server+"/api/v1.0/NagRdu.GetUrlToDownloadFileFromHost", bytes.NewBuffer(postData))
@@ -453,16 +304,7 @@ func (nr *NagRdu) GetUrlToDownloadFileFromHost(ctx context.Context, szwRemoteFil
 	return pxgValStr, raw, err
 }
 
-//	Get URL-path for later upload file to host
-//
-//	Returns:
-//	- URL-path for uploading file to host and execute it later using ExecuteFileAsync
-//
-//	Exceptions:
-//	- throws	exception in case of error
-//
-//	See also:
-//	Some typical resources path prefixes
+// GetUrlToUploadFileToHost Get URL-path for later upload file to host
 func (nr *NagRdu) GetUrlToUploadFileToHost(ctx context.Context) (*PxgValStr, []byte, error) {
 	request, err := http.NewRequest("POST", nr.client.Server+"/api/v1.0/NagRdu.GetUrlToUploadFileToHost", nil)
 	if err != nil {
@@ -474,23 +316,12 @@ func (nr *NagRdu) GetUrlToUploadFileToHost(ctx context.Context) (*PxgValStr, []b
 	return pxgValStr, raw, err
 }
 
-//	Asynchronously run diagnostic-utility (klnagchk.exe) for specific product
+// RunKlnagchkAsync Asynchronously run diagnostic-utility (klnagchk.exe) for specific product
 //
-//	Parameters:
-//	- szwProductID	product ID, taken from "current host state"-container
-//
-//	Returns:
-//	- asynchronous request ID, used to get the result with current host state (and new klnagchk.log on it)
-//
-//	Remarks:
-//
-//	Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
-//	If the operation succeeds then AsyncActionStateChecker.CheckActionState returns current host state in pStateData.
-//	Otherwise, a call to AsyncActionStateChecker::CheckActionState returns error in pStateData.
-//
-//	Exceptions:
-//
-//	Throws	exception in case of error
+// Remarks:
+// Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
+// If the operation succeeds then AsyncActionStateChecker.CheckActionState returns current host state in pStateData.
+// Otherwise, a call to AsyncActionStateChecker::CheckActionState returns error in pStateData.
 func (nr *NagRdu) RunKlnagchkAsync(ctx context.Context, szwProductID string) (*PxgValStr, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"szwProductID": "%s"}`, szwProductID))
 	request, err := http.NewRequest("POST", nr.client.Server+"/api/v1.0/NagRdu.RunKlnagchkAsync", bytes.NewBuffer(postData))
@@ -503,22 +334,12 @@ func (nr *NagRdu) RunKlnagchkAsync(ctx context.Context, szwProductID string) (*P
 	return pxgValStr, raw, err
 }
 
-//	Asynchronously start, restart or stop specific product
+// SetProductStateAsync Asynchronously start, restart or stop specific product
 //
-//	Parameters:
-//	- szwProductID	(string) product ID, taken from "current host state"-container
-//	- nNewState	(int64) 0 = start, 1 = restart, 2 = stop
-//
-//	Returns:
-//	asynchronous request ID, used to get the result with current host state
-//
-//	Remarks:
-//	Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
-//	If the operation succeeds then AsyncActionStateChecker.CheckActionState returns current host state in pStateData.
-//	Otherwise, a call to AsyncActionStateChecker::CheckActionState returns error in pStateData.
-//
-//Exceptions:
-//	Throws	exception in case of error
+// Remarks:
+// Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
+// If the operation succeeds then AsyncActionStateChecker.CheckActionState returns current host state in pStateData.
+// Otherwise, a call to AsyncActionStateChecker::CheckActionState returns error in pStateData.
 func (nr *NagRdu) SetProductStateAsync(ctx context.Context, szwProductID string, nNewState int64) (*PxgValStr, []byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"szwProductID": "%s", "nNewState": %d }`, szwProductID, nNewState))

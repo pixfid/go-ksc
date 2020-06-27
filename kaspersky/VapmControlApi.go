@@ -32,23 +32,16 @@ import (
 	"net/http"
 )
 
-//	VapmControlApi Class Reference
-//
-//	VAPM.
-//
-//	List of all members.
+// VapmControlApi VAPM.
 type VapmControlApi service
 
-//PEulaIDParams struct using in VapmControlApi.AcceptEulas
+// PEulaIDParams struct using in VapmControlApi.AcceptEulas
 type PEulaIDParams struct {
 	PEulaIDs []int64 `json:"pEulaIDs"`
 }
 
-//VapmControlApi.AcceptEulas
-//Accepts given EULAs.
-//
-//	Parameters:
-//	- pEulaIDs	(array) set of EULA IDs to accept
+// AcceptEulas
+// Accepts given EULAs.
 func (vca *VapmControlApi) AcceptEulas(ctx context.Context, params PEulaIDParams) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -65,11 +58,8 @@ func (vca *VapmControlApi) AcceptEulas(ctx context.Context, params PEulaIDParams
 	return raw, err
 }
 
-//VapmControlApi.CancelDeleteFilesForUpdates
-//Cancel the files cleanup process initiated by DeleteFilesForUpdates() call.
-//
-//	Parameters:
-//	- wstrRequestId	(string) request ID, used to initiate the request by the DeleteFilesForUpdates() call
+// CancelDeleteFilesForUpdates
+// Cancel the files cleanup process initiated by DeleteFilesForUpdates() call.
 func (vca *VapmControlApi) CancelDeleteFilesForUpdates(ctx context.Context, wstrRequestId string) ([]byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"wstrRequestId": "%s"}`, wstrRequestId))
@@ -82,11 +72,8 @@ func (vca *VapmControlApi) CancelDeleteFilesForUpdates(ctx context.Context, wstr
 	return raw, err
 }
 
-//VapmControlApi.CancelDownloadPatch
-//Cancel the patch downloading started by DownloadPatchAsync().
-//
-//	Parameters:
-//	- wstrRequestId	(string) request ID used to call DownloadPatchAsync().
+// CancelDownloadPatch
+// Cancel the patch downloading started by DownloadPatchAsync().
 func (vca *VapmControlApi) CancelDownloadPatch(ctx context.Context, wstrRequestId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrRequestId": "%s"}`, wstrRequestId))
 	request, err := http.NewRequest("POST", vca.client.Server+"/api/v1.0/VapmControlApi.CancelDownloadPatch", bytes.NewBuffer(postData))
@@ -98,16 +85,8 @@ func (vca *VapmControlApi) CancelDownloadPatch(ctx context.Context, wstrRequestI
 	return raw, err
 }
 
-//VapmControlApi.ChangeApproval
-//Changes updates approval.
-//
-//	Parameters:
-//	- pUpdates	(array) array of update ids to be approved/declined; each entry is paramParams containing following
-//	attributes:
-//		|-'nSource' - Type of update, see Software updates source enum
-//		|- 'nPatchDbId' - Update db id (Equals to 'nKlUpdateDbId',
-//		'nRevisionID' or 'nPatchDbId' of v_vapm_update depending on 'nSource' value)
-//	- nApprovementState	(int64) new approval state for the given updates; see Update approvement state enum
+// ChangeApproval
+// Changes updates approval.
 func (vca *VapmControlApi) ChangeApproval(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -123,14 +102,8 @@ func (vca *VapmControlApi) ChangeApproval(ctx context.Context, params interface{
 	return raw, err
 }
 
-//VapmControlApi.ChangeVulnerabilityIgnorance
-//Changes "ignore" state of a vulnerability.
-//
-//	Parameters:
-//	- wstrVulnerabilityUid	(string) Unique id of the vulnerability.
-//	- wstrHostId	(string) Host identifier for the vulnerability to be ignored on; could be empty to change the
-//	vulnerability state everywhere.
-//	- bIgnore	(bool) Should the vulnerability be ignored or not.
+// ChangeVulnerabilityIgnorance
+// Changes "ignore" state of a vulnerability.
 func (vca *VapmControlApi) ChangeVulnerabilityIgnorance(ctx context.Context, wstrVulnerabilityUid, wstrHostId string, bIgnore bool) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrVulnerabilityUid": "%s", "wstrHostId": "%s", "bIgnore": %v}`,
 		wstrVulnerabilityUid, wstrHostId, bIgnore))
@@ -143,11 +116,8 @@ func (vca *VapmControlApi) ChangeVulnerabilityIgnorance(ctx context.Context, wst
 	return raw, err
 }
 
-//VapmControlApi.DeclineEulas
-//Decline given EULAs.
-//
-//	Parameters:
-//	- pEulaIDs	(array) set of EULA IDs to decline
+// DeclineEulas
+// Decline given EULAs.
 func (vca *VapmControlApi) DeclineEulas(ctx context.Context, params PEulaIDParams) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -164,17 +134,8 @@ func (vca *VapmControlApi) DeclineEulas(ctx context.Context, params PEulaIDParam
 	return raw, err
 }
 
-//VapmControlApi.DeleteFilesForUpdates
-//Cleanup all the files in all the server storages containing the bodies of the given patches.
-//The operation progress is reported by 'KLEV_EventAsyncState' events.
-//
-//	Parameters:
-//	- pUpdatesIds	(array) updates identities array; each entry is paramParams containing one of the following
-//	attributes: 'nPatchDbId' or 'nRevisionID'
-//
-//	Return:
-//	- wstrRequestId	(string) request ID, used to cancel the request by CancelDeleteFilesForUpdates(
-//	) and to subscribe for the 'KLEV_EventAsyncState' events
+// DeleteFilesForUpdates
+// Cleanup all the files in all the server storages containing the bodies of the given patches.
 func (vca *VapmControlApi) DeleteFilesForUpdates(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -190,15 +151,8 @@ func (vca *VapmControlApi) DeleteFilesForUpdates(ctx context.Context, params int
 	return raw, err
 }
 
-//VapmControlApi.DownloadPatchAsync
-//Download 3-party patch to save locally.
-//
-//	Parameters:
-//	- llPatchGlbId	(int64) - patch database ID
-//	- nLcid			(int64) - patch Lcid
-//	- wstrRequestId	(string) - request ID,
-//	used to cancel the request by CancelDownloadPatch()
-//	or to get the result by GetDownloadPatchResult().
+// DownloadPatchAsync
+// Download 3-party patch to save locally.
 func (vca *VapmControlApi) DownloadPatchAsync(ctx context.Context, llPatchGlbId, nLcid int64, wstrRequestId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"llPatchGlbId": %d, "nLcid": %d, "wstrRequestId": "%s"}`, llPatchGlbId, nLcid,
 		wstrRequestId))
@@ -211,11 +165,8 @@ func (vca *VapmControlApi) DownloadPatchAsync(ctx context.Context, llPatchGlbId,
 	return raw, err
 }
 
-//VapmControlApi.GetAttributesSetVersionNum
-//Returns edition of supported attributes, EAttributesSetVersion.
-//
-//	Returns:
-//	- EAttributesSetVersion value
+// GetAttributesSetVersionNum
+// Returns edition of supported attributes, EAttributesSetVersion.
 func (vca *VapmControlApi) GetAttributesSetVersionNum(ctx context.Context) (*PxgValInt, []byte, error) {
 
 	request, err := http.NewRequest("POST", vca.client.Server+"/api/v1.0/VapmControlApi.GetAttributesSetVersionNum",
@@ -229,16 +180,8 @@ func (vca *VapmControlApi) GetAttributesSetVersionNum(ctx context.Context) (*Pxg
 	return pxgValInt, raw, err
 }
 
-//VapmControlApi.GetDownloadPatchDataChunk
-//Get the downloaded patch body chunk.
-//
-//	Parameters:
-//	- wstrRequestId	(string) request ID used to call DownloadPatchAsync().
-//	- nStartPos		(int64) requested chunk start position
-//	- nSizeMax		(int64) maximum chunk size
-//
-//	Returns:
-//	- (binary) data chunk
+// GetDownloadPatchDataChunk
+// Get the downloaded patch body chunk.
 func (vca *VapmControlApi) GetDownloadPatchDataChunk(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -254,15 +197,8 @@ func (vca *VapmControlApi) GetDownloadPatchDataChunk(ctx context.Context, params
 	return raw, err
 }
 
-//VapmControlApi.GetDownloadPatchResult
-//Get the information on the patch download result.
-//
-//	Parameters:
-//	- wstrRequestId	(string) request ID used to call DownloadPatchAsync().
-//
-//	Return:
-//	- wstrFileName	(string) patch file name
-//	- nSize			(int64) patch file size
+// GetDownloadPatchResult
+// Get the information on the patch download result.
 func (vca *VapmControlApi) GetDownloadPatchResult(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -278,25 +214,19 @@ func (vca *VapmControlApi) GetDownloadPatchResult(ctx context.Context, params in
 	return raw, err
 }
 
-//PEULAParams struct using in VapmControlApi.GetEulaParams
+// PEULAParams struct using in VapmControlApi.GetEulaParams
 type PEULAParams struct {
 	PEULAParam *PEULAParam `json:"pEulaParams,omitempty"`
 }
 
+// PEULAParam struct
 type PEULAParam struct {
 	StrEULAURL string `json:"strEULAUrl,omitempty"`
 	StrEULA    string `json:"strEULA,omitempty"`
 }
 
-//VapmControlApi.GetEulaParams
-//Requests EULA params.
-//
-//	Parameters:
-//	- nEulaId	(int) - EULA id
-//
-//	Return:
-//	- pEulaParams	(params) - EULA params, might contain 'strEULAUrl' (EULA file URL) or 'strEULA' (
-//	EULA text); 'strEULAUrl' usage is preffered.
+// GetEulaParams
+// Requests EULA params.
 func (vca *VapmControlApi) GetEulaParams(ctx context.Context, nEulaId int64) (*PEULAParams, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nEulaId": %d}`, nEulaId))
 	request, err := http.NewRequest("POST", vca.client.Server+"/api/v1.0/VapmControlApi.GetEulaParams", bytes.NewBuffer(postData))
@@ -309,15 +239,8 @@ func (vca *VapmControlApi) GetEulaParams(ctx context.Context, nEulaId int64) (*P
 	return pEulaParams, raw, err
 }
 
-//VapmControlApi.GetEulasIdsForPatchPrerequisites
-//Requests the set of EULA ids for the distributives/patches which are required to install the given patch.
-//
-//	Parameters:
-//	- llPatchGlobalId	(int64) VAPM patch global identity ('nPatchGlbId' update attribute)
-//	- nLCID				(int64) LCID of the patch
-//
-//	Return:
-//	- pEulasIds			(array) vector of EULA ids
+// GetEulasIdsForPatchPrerequisites
+// Requests the set of EULA ids for the distributives/patches which are required to install the given patch.
 func (vca *VapmControlApi) GetEulasIdsForPatchPrerequisites(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -333,17 +256,8 @@ func (vca *VapmControlApi) GetEulasIdsForPatchPrerequisites(ctx context.Context,
 	return raw, err
 }
 
-//VapmControlApi.GetEulasIdsForUpdates
-//Requests the set of EULA ids for the given set of updates.
-//
-//	Parameters:
-//	- pUpdates	(array) array of update ids to be approved/declined; each entry is paramParams containing following	attributes:
-//		|- 'nSource' - Type of update, see Software updates source enum
-//		|- 'nPatchDbId' - Update db id (Equals to 'nKlUpdateDbId', 'nRevisionID' or 'nPatchDbId' of v_vapm_update depending on 'nSource' value)
-//	- nLcid	(int64) - preferred LCID
-//
-//	Return:
-//	- pEulaIds	[out] (array) vector of EULA ids
+// GetEulasIdsForUpdates
+// Requests the set of EULA ids for the given set of updates.
 func (vca *VapmControlApi) GetEulasIdsForUpdates(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -359,14 +273,7 @@ func (vca *VapmControlApi) GetEulasIdsForUpdates(ctx context.Context, params int
 	return raw, err
 }
 
-//VapmControlApi.GetEulasIdsForVulnerabilitiesPatches
-//Requests set of EULA ids for the given set of vulnerabilities.
-//
-//	Parameters:
-//	- pVulnerabilities	(array) Vector of integer vulnerabilities ids.
-//	- nLCID				(int64) Preferred LCID.
-//	Returns:
-//	- (array) Vector of EULA ids.
+// GetEulasIdsForVulnerabilitiesPatches Requests set of EULA ids for the given set of vulnerabilities.
 func (vca *VapmControlApi) GetEulasIdsForVulnerabilitiesPatches(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -382,21 +289,52 @@ func (vca *VapmControlApi) GetEulasIdsForVulnerabilitiesPatches(ctx context.Cont
 	return raw, err
 }
 
-//VapmControlApi.GetEulasInfo
-//Requests the set of EULA descriptors for the given set of updates.
-//
-//	Parameters:
-//	- pUpdates	(array) array of update ids to be approved/declined; each entry is paramParams containing following
-//	attributes:
-//		|-'nSource' - Type of update, see Software updates source enum
-//		|- 'nPatchDbId' - Update db id (Equals to 'nKlUpdateDbId',
-//		'nRevisionID' or 'nPatchDbId' of v_vapm_update depending on 'nSource' value)
-//	- nLcid	(int64) preferred LCID
-//
-//	Return:
-//	- pEulasInfo	(array) array of EULA params: each entry is paramParams and might contain 'strEULAUrl' (
-//	EULA file URL) or 'strEULA' (EULA text); 'strEULAUrl' usage is preffered.
-func (vca *VapmControlApi) GetEulasInfo(ctx context.Context, params interface{}) ([]byte, error) {
+// PUpdates
+type PUpdates struct {
+	// PUpdates array of PUpdate to be approved/declined
+	PUpdates []PUpdate `json:"pUpdates"`
+
+	// NLcid preferred LCID
+	NLcid int64 `json:"nLcid"`
+}
+
+type PUpdate struct {
+	Type  string       `json:"type,omitempty"`
+	Value PUpdateValue `json:"value,omitempty"`
+}
+
+type PUpdateValue struct {
+	// NSource Type of update
+	NSource int64 `json:"nSource,omitempty"`
+
+	//NPatchDBID Update db id (Equals to 'nKlUpdateDbId', 'nRevisionID' or 'nPatchDbId' of v_vapm_update depending on 'nSource' value
+	NPatchDBID int64 `json:"nPatchDbId,omitempty"`
+}
+
+type PEulasInfo struct {
+	// PEulasInfo array of EULA params
+	PEulasInfo []PEulasInfoElement `json:"pEulasInfo"`
+}
+
+type PEulasInfoElement struct {
+	Type  *string          `json:"type,omitempty"`
+	Value *PEulasInfoValue `json:"value,omitempty"`
+}
+
+// PEulasInfoValue
+type PEulasInfoValue struct {
+	// NEulaDbId EULA id
+	NEulaDbId *int64 `json:"nEulaDbId,omitempty"`
+
+	// StrEULAUrl EULA file URL
+	StrEULAUrl *string `json:"strEULAUrl,omitempty"`
+
+	// StrEULA EULA text
+	StrEULA *string `json:"strEULA,omitempty"`
+}
+
+// GetEulasInfo Requests the set of EULA descriptors for the given set of updates.
+func (vca *VapmControlApi) GetEulasInfo(ctx context.Context, params PUpdates) (*PEulasInfo, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
@@ -407,76 +345,70 @@ func (vca *VapmControlApi) GetEulasInfo(ctx context.Context, params interface{})
 		return nil, err
 	}
 
-	raw, err := vca.client.Do(ctx, request, nil)
-	return raw, err
+	pEulasInfo := new(PEulasInfo)
+	_, err = vca.client.Do(ctx, request, &pEulasInfo)
+	return pEulasInfo, err
 }
 
-//VapmControlApi.GetPendingRulesTasks
-//Get identities of VAPM tasks which rules are still being processed.
-//
-//	Parameters:
-//	- pTasksIds	(array) Array of task ids
-//	These tasks rules are still being processed and the information
-//	on them could not be actual within appropriate SrvView results/
-func (vca *VapmControlApi) GetPendingRulesTasks(ctx context.Context) ([]byte, error) {
-	request, err := http.NewRequest("POST", vca.client.Server+"/api/v1.0/VapmControlApi.GetPendingRulesTasks",
-		nil)
+// PendingRulesTasks contains task ids array
+type PendingRulesTasks struct {
+	// PTasksIDS Array of task ids
+	PTasksIDS []int64 `json:"pTasksIds"`
+}
+
+// GetPendingRulesTasks Get identities of VAPM tasks which rules are still being processed.
+func (vca *VapmControlApi) GetPendingRulesTasks(ctx context.Context) (*PendingRulesTasks, error) {
+	request, err := http.NewRequest("POST", vca.client.Server+"/api/v1.0/VapmControlApi.GetPendingRulesTasks", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := vca.client.Do(ctx, request, nil)
-	return raw, err
+	pendingRulesTasks := new(PendingRulesTasks)
+	_, err = vca.client.Do(ctx, request, &pendingRulesTasks)
+	return pendingRulesTasks, err
 }
 
-//VapmControlApi.GetSupportedLcidsForPatchPrerequisites
-//Gets all LCIDs supported by distributives/patches which are required to install the given patch.
-//
-//	Parameters:
-//	- llPatchGlobalId	(int64) VAPM patch global identity ('nPatchGlbId' update attribute).
-//	- nOriginalLcid		(int64) LCID of the original patch
-//
-//	Return:
-//	- pLcids	(array) array of Lcids
-func (vca *VapmControlApi) GetSupportedLcidsForPatchPrerequisites(ctx context.Context, params interface{}) ([]byte, error) {
-	postData, err := json.Marshal(params)
-	if err != nil {
-		return nil, err
-	}
+// SupportedLcids contains Lcids ids array
+type SupportedLcids struct {
+	// PLcids array of Lcids
+	PLcids []int64 `json:"pLcids"`
+}
+
+// GetSupportedLcidsForPatchPrerequisites Gets all LCIDs supported by distributives/patches which are required to install the given patch.
+func (vca *VapmControlApi) GetSupportedLcidsForPatchPrerequisites(ctx context.Context, llPatchGlobalId, nOriginalLcid int64) (*SupportedLcids, error) {
+	postData := []byte(fmt.Sprintf(`{"llPatchGlobalId": %d, "nOriginalLcid": %d}`, llPatchGlobalId, nOriginalLcid))
 
 	request, err := http.NewRequest("POST", vca.client.Server+"/api/v1.0/VapmControlApi.GetSupportedLcidsForPatchPrerequisites", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := vca.client.Do(ctx, request, nil)
-	return raw, err
+	supportedLcids := new(SupportedLcids)
+	_, err = vca.client.Do(ctx, request, *supportedLcids)
+	return supportedLcids, err
 }
 
-//VapmControlApi.GetUpdateSupportedLanguagesFilter
-//Get filter of supported languages for software update.
-//
-//Parameters:
-//	- nUpdateSource			(int64) Update source type KLVAPM::UpdateSource
-//	- pSupportedLanguages	(array) Sorted array of supported languages id
-//Use languages from pSupportedLanguages only if pSupportedLanguages not empty. Otherwise use all known languages (means empty filter)
-func (vca *VapmControlApi) GetUpdateSupportedLanguagesFilter(ctx context.Context, params interface{}) ([]byte, error) {
-	postData, err := json.Marshal(params)
-	if err != nil {
-		return nil, err
-	}
+// PSupportedLanguages supported languages for software update
+type PSupportedLanguages struct {
+	// PSupportedLanguages Sorted array of supported languages id
+	PSupportedLanguages []int64 `json:"pSupportedLanguages"`
+}
+
+// GetUpdateSupportedLanguagesFilter Get filter of supported languages for software update.
+func (vca *VapmControlApi) GetUpdateSupportedLanguagesFilter(ctx context.Context, nUpdateSource int64) (*PSupportedLanguages, error) {
+	postData := []byte(fmt.Sprintf(`{"nUpdateSource": %d}`, nUpdateSource))
 
 	request, err := http.NewRequest("POST", vca.client.Server+"/api/v1.0/VapmControlApi.GetUpdateSupportedLanguagesFilter", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := vca.client.Do(ctx, request, nil)
-	return raw, err
+	pSupportedLanguages := new(PSupportedLanguages)
+	_, err = vca.client.Do(ctx, request, &pSupportedLanguages)
+	return pSupportedLanguages, err
 }
 
-//VapmControlApi.InitiateDownload
-//Check if any updates have KLVAPM::DS_NEED_DOWNLOAD state, and start the download process if needed.
+// InitiateDownload Check if any updates have KLVAPM::DS_NEED_DOWNLOAD state, and start the download process if needed.
 func (vca *VapmControlApi) InitiateDownload(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", vca.client.Server+"/api/v1.0/VapmControlApi.InitiateDownload",
 		nil)
@@ -488,15 +420,7 @@ func (vca *VapmControlApi) InitiateDownload(ctx context.Context) ([]byte, error)
 	return raw, err
 }
 
-//VapmControlApi.SetPackagesToFixVulnerability
-//Set custom packages as patches for a vulnerability.
-//
-//	Parameters:
-//	- wstrVulnerabilityUid	(string) Unique id of the vulnerability.
-//	- pPackages				(array) Package ids to be used as patches (in the order of presence in the order).
-//	- pParams				(params) Additional parameters describing the custom packages assigned to fix
-//	the vulnerability; currently supported:
-//	nVulnPatchPkgLCID (contains target installation LCID; 0 if suitable for any language of the product to be patched).
+// SetPackagesToFixVulnerability Set custom packages as patches for a vulnerability.
 func (vca *VapmControlApi) SetPackagesToFixVulnerability(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

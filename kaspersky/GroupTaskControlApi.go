@@ -32,32 +32,18 @@ import (
 	"net/http"
 )
 
-//	GroupTaskControlApi Class Reference
-//
-//	Interface to perform some management actions over group tasks..
-
-//	List of all members.
+// GroupTaskControlApi service to perform some management actions over group tasks.
 type GroupTaskControlApi service
 
-//	Completes import of task.
+// CommitImportedTask Completes import of task. Performs actual import of task, which was initiated earlier by
+// GroupTaskControlApi.ImportTask method.
 //
-//	Performs actual import of task, which was initiated earlier by GroupTaskControlApi.ImportTask method. This method works with task data, which was already processed and analyzed. At time of calling this method, one should have appropriate rights for task creation. In case of group task, there should be write access to that group. If imported task is task for specified hosts, there should be read access to that hosts. If task is query-based task, there should be read access to related query. For additional info on task import options, see pExtraData parameter of GroupTaskControlApi.ImportTask method.
-//
-//	Parameters:
-//	- wstrId	(string) Identifier of blob with task data. Use GroupTaskControlApi.ImportTask method to get its value
-//	- bCommit	(bool) Whether to commit or not. If bCommit is true,
-//	method will perform its work and complete import operation by creating new task and returning its identifier. If bCommit is false, method will cleanup old data and import will be cancelled.
-//
-//	Returns:
-//	- (string) Unique identifier of new task if bCommit was set to true, and empty string otherwise
-//
-//	Exceptions:
-//	- KLERR.Error*	Method must throw KLERR.Error* exception with code KLSTD.STDE_NOACCESS. For possible reasons,
-//	see detailed method description above
-//	- KLERR.Error*	Method must throw KLERR.Error* exception with code KLSTD.STDE_NOTFOUND in case object with
-//	identifier wstrId not found: either identifier is not correct (check that it identifier string, which was returned by GroupTaskControlApi.ImportTask method), or object lifetime reached limit
-//	- KLERR.Error*	Method must throw KLERR.Error* exception with code KLSTD.STDE_NOMEMORY in case of insufficient
-//	memory for storing required task data
+// This method works with task data, which was already processed and analyzed.
+// At time of calling this method, one should have appropriate rights for task creation.
+// In case of group task, there should be write access to that group.
+// If imported task is task for specified hosts, there should be read access to that hosts.
+// If task is query-based task, there should be read access to related query.
+// For additional info on task import options, see pExtraData parameter of GroupTaskControlApi.ImportTask method.
 func (gtca *GroupTaskControlApi) CommitImportedTask(ctx context.Context, wstrId string, bCommit bool) (*TaskDescribe,
 	[]byte,
 	error) {
@@ -73,25 +59,13 @@ func (gtca *GroupTaskControlApi) CommitImportedTask(ctx context.Context, wstrId 
 	return taskDescribe, raw, err
 }
 
-//TasksIDSParams struct
+// TasksIDSParams struct
 type TasksIDSParams struct {
 	PTasksIDS []string `json:"pTasksIds"`
 }
 
-//	Request statistics of the given tasks.
-//
-//	Actual statistics for the tasks will be reported by appropriate "KLEVP_EventGroupTaskStats" events publications,
-//	event parameters:
-//
-//	- KLTSK_GRP_TSK_ID, paramString - task db id as a string
-//	- KLTSK_GRP_TSK_STATS_PARAMS, paramParams - the task's statistics,
-//	see List of task statistics attributes
-//
-//	Parameters:
-//	- pTasksIds	[in] (array) - array of the tasks identifiers, each item is paramString
-//
-//	Note:
-//	- to get task ids you can use Tasks.GetAllTasksOfHost
+// RequestStatistics of the given tasks.
+// Actual statistics for the tasks will be reported by appropriate "KLEVP_EventGroupTaskStats" events publications.
 func (gtca *GroupTaskControlApi) RequestStatistics(ctx context.Context, params TasksIDSParams) ([]byte, error) {
 	postData, err := json.Marshal(&params)
 	if err != nil {
@@ -107,21 +81,8 @@ func (gtca *GroupTaskControlApi) RequestStatistics(ctx context.Context, params T
 	return raw, err
 }
 
-//	Exports task.
-//
-//	Gets specific task by its identifier and save data to memory chunk. Chunk can be later saved to file or sent over network
-//
-//	Possible errors:
-//
-//	- Task with specified id does not exist
-//	- Read access to task with specified id is denied
-//	- Not enough memory to store result chunk
-//
-//	Parameters:
-//		wstrTaskId	(string) Task identifier
-//
-//	Returns:
-//	- (binary) Pointer to memory chunk with exported task data
+// ExportTask Gets specific task by its identifier and save data to memory chunk.
+// Chunk can be later saved to file or sent over network
 func (gtca *GroupTaskControlApi) ExportTask(ctx context.Context, wstrTaskId string) (*PxgValStr, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrTaskId": "%s"}`, wstrTaskId))
 	request, err := http.NewRequest("POST", gtca.client.Server+"/api/v1.0/GroupTaskControlApi.ExportTask",
@@ -135,11 +96,12 @@ func (gtca *GroupTaskControlApi) ExportTask(ctx context.Context, wstrTaskId stri
 	return pxgValStr, raw, err
 }
 
-//TaskDescribe struct
+// TaskDescribe struct
 type TaskDescribe struct {
 	TaskValue *TaskValue `json:"PxgRetVal,omitempty"`
 }
 
+// TaskValue struct
 type TaskValue struct {
 	EventType                    string                     `json:"EVENT_TYPE,omitempty"`
 	FilterEventsComponentName    string                     `json:"FILTER_EVENTS_COMPONENT_NAME,omitempty"`
@@ -246,18 +208,10 @@ type TaskschFirstExecutionTime struct {
 	Value string `json:"value,omitempty"`
 }
 
-//	GetTaskByRevision - get the task data by revision.
+// GetTaskByRevision get the task data by revision.
+// Returns all task data for a group/set task with a given object identity and revision.
 //
-//	Returns all task data for a group/set task with a given object identity and revision.
-//
-//	Parameters:
-//	- nObjId	(int64) Task identity.
-//	- nRevision	(int64) Task revision id, zero value means 'current task'.
-//
-//	If Administration Server version is less than "SC 10 SP2 MR1" then nRevision must be zero.
-//
-//	Returns:
-//	- (params) describing the task, see Task settings format
+// If Administration Server version is less than "SC 10 SP2 MR1" then nRevision must be zero.
 func (gtca *GroupTaskControlApi) GetTaskByRevision(ctx context.Context, nObjId, nRevision int64) (*TaskDescribe, []byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"nObjId": %d, "nRevision": %d}`, nObjId, nRevision))
@@ -272,16 +226,7 @@ func (gtca *GroupTaskControlApi) GetTaskByRevision(ctx context.Context, nObjId, 
 	return taskDescribe, raw, err
 }
 
-//	Restore task from revision.
-//
-//	Rolls back the group/set task specified by nObjId to the revision nRevision.
-//
-//	Parameters:
-//	- nObjId	(int64) Task identity.
-//	- nRevision	(int64) Task revision id, value cannot be zero.
-//
-//	Note:
-//	ExtAud interface allow you to get a revision of an object and update description.
+// RestoreTaskFromRevision Restore task from revision. Rolls back the group/set task specified by nObjId to the revision nRevision.
 func (gtca *GroupTaskControlApi) RestoreTaskFromRevision(ctx context.Context, nObjId, nRevision int64) (*TaskDescribe, []byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"nObjId": %d, "nRevision": %d}`, nObjId, nRevision))
@@ -296,42 +241,15 @@ func (gtca *GroupTaskControlApi) RestoreTaskFromRevision(ctx context.Context, nO
 	return taskDescribe, raw, err
 }
 
-//	Prepares task import.
+// ImportTask Prepares task import.
 //
-//	Prepares task import operation. This method does not perform actual import of task:
-//	instead, it prepares import operation by saving task blob and associating unique identifier with it,
-//	which should be later used in GroupTaskControlApi::CommitImportedTask method.
-//	Some tasks have import security restrictions, thus import of task can be allowed or denied.
-//	To determine these restrictions, one should analyze info,
-//	returned via output parameter pCommitInfo (see detailed parameter descriptions in parameter section),
-//	and pass analyze result in bCommit parameter of GroupTaskControlApi.CommitImportedTask.
+// Prepares task import operation. This method does not perform actual import of task: instead, it prepares import operation
+// by saving task blob and associating unique identifier with it, which should be later used in GroupTaskControlApi.CommitImportedTask method.
 //
-//	Parameters:
-//	- pBlob	(binary) Pointer to memory chunk with imported task data
-//	- pExtraData	(params) Task import options, which can be one of the following attributes:
-//	|- "PRTS_TASK_GROUPID" - in case of group task, id of parent group (paramInt)
-//	|- "HostList" - in case of global task, array of host identifiers (paramArray of paramString)
-//	|- ".HstQueryId" - in case of query-based task, id of target devices query (paramInt)
-//	- pCommitInfo	(params) Output commit info ,
-//	used to decide whether we can continue importing task with GroupTaskControlApi::CommitImportedTask method, or not.
-//	Contents of pCommitInfo contains description of task, see Task settings format,
-//	except that the contents of TASK_ADDITIONAL_PARAMS was modified in the following way - all attributes
-//	in TASK_ADDITIONAL_PARAMS were deleted, except these ones:
-//	|- "klprts-TaskSystemFlag" The flag means that the task is system task and cannot be created or deleted by user (
-//	paramBool)
-//	|- "klprts-TaskHasPredefinedTargetList" It means that a list of target computers can not be changed during task's
-//	creation (paramBool)
-//	|- "KLTSK_RI_GROUP_TO_MOVE_HOST" Group where destination hosts will be moved after deployment finishes.
-//	Attribute absence or value of -1 means "don't move" (paramInt)
+// Some tasks have import security restrictions, thus import of task can be allowed or denied.
 //
-//	Returns:
-//	- (string) Unique identifier of task blob for later import
-//
-//	Exceptions:
-//	KLERR.Error*	Method must throw KLERR.Error* exception with code KLSTD.STDE_BADFORMAT in case if data in pBlob
-//	is not recognized as a valid task data
-//	KLERR.Error*	Method must throw KLERR.Error* exception with code KLSTD.
-//	STDE_NOMEMORY in case of insufficient memory for storing required task data
+// To determine these restrictions, one should analyze info, returned via output parameter pCommitInfo
+// (see detailed parameter descriptions in parameter section), and pass analyze result in bCommit parameter of GroupTaskControlApi.CommitImportedTask.
 func (gtca *GroupTaskControlApi) ImportTask(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(&params)
 	if err != nil {
@@ -347,6 +265,7 @@ func (gtca *GroupTaskControlApi) ImportTask(ctx context.Context, params interfac
 	return raw, err
 }
 
+// ResetIterForClusterParams struct
 type ResetIterForClusterParams struct {
 	SzwClusterID     string `json:"szwClusterId,omitempty"`
 	SzwProductName   string `json:"szwProductName,omitempty"`
@@ -356,18 +275,7 @@ type ResetIterForClusterParams struct {
 	SzwTaskName      string `json:"szwTaskName,omitempty"`
 }
 
-//	Reset task iterator for a cluster.
-//
-//	Parameters:
-//	- szwClusterId	(string) - cluster ID
-//	- szwProductName	(string) - productName
-//	- szwVersion	(string) - version
-//	- szwComponentName	(string) - componentName
-//	- szwInstanceId	(string) - instanceId
-//	- szwTaskName	(string) - task type name
-//
-//	Returns:
-//	- (string) iterator identifier
+// ResetTasksIteratorForCluster Reset task iterator for a cluster.
 func (gtca *GroupTaskControlApi) ResetTasksIteratorForCluster(ctx context.Context, params ResetIterForClusterParams) ([]byte, error) {
 	postData, err := json.Marshal(&params)
 	if err != nil {

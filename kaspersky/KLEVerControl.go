@@ -32,16 +32,10 @@ import (
 	"net/http"
 )
 
-//	KLEVerControl Class Reference
-//	Controls the possibility to download and automatically create installation packages.
-//
-//	List of all members.
+//	KLEVerControl service to controls the possibility to download and automatically create installation packages.
 type KLEVerControl service
 
-//	Cancel asynchronous operation DownloadDistributiveAsync.
-//
-//	Parameters:
-//	- wstrRequestId	(string) request id of asynchronous operation KLEVerControl.DownloadDistributiveAsync
+// CancelDownloadDistributive Cancel asynchronous operation DownloadDistributiveAsync.
 func (kvc *KLEVerControl) CancelDownloadDistributive(ctx context.Context, wstrRequestId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrRequestId": "%s"}`, wstrRequestId))
 	request, err := http.NewRequest("POST", kvc.client.Server+"/api/v1.0/KLEVerControl.CancelDownloadDistributive", bytes.NewBuffer(postData))
@@ -53,13 +47,7 @@ func (kvc *KLEVerControl) CancelDownloadDistributive(ctx context.Context, wstrRe
 	return raw, err
 }
 
-//	Get result of asynchronous operation DownloadDistributiveAsync.
-//
-//	Parameters:
-//	- wstrRequestId	(string) request id of asynchronous operation KLEVerControl.DownloadDistributiveAsync
-//
-//	Return:
-//	- wstrDownloadPath	(string) path to download distributive from SC-server using HTTP GET method.
+// GetDownloadDistributiveResult Get result of asynchronous operation DownloadDistributiveAsync.
 func (kvc *KLEVerControl) GetDownloadDistributiveResult(ctx context.Context, wstrRequestId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrRequestId": "%s"}`, wstrRequestId))
 	request, err := http.NewRequest("POST", kvc.client.Server+"/api/v1.0/KLEVerControl.GetDownloadDistributiveResult", bytes.NewBuffer(postData))
@@ -71,19 +59,8 @@ func (kvc *KLEVerControl) GetDownloadDistributiveResult(ctx context.Context, wst
 	return raw, err
 }
 
-//	Initiate or cancel distributives downloading and installation
-//	packages registration from KL public distributives storage.
-//	The distributives are identified by "db_loc_id" from the appropriate
-//	SrvView Kaspersky Lab corporate product distributives available for download.
-//
-//	Parameters:
-//	- vecDistribLocIdsToCreate	(array) array of "Distributive localization database IDs" values (
-//	"db_loc_id" from Kaspersky Lab corporate product distributives available for download) to download and create packages;
-//
-//	- vecDistribLocIdsNotToCreate	(array) array of "Distributive localization database IDs" values (
-//	"db_loc_id" from Kaspersky Lab corporate product distributives available for download) to reset packages creation;
-//
-//	- parParams	(params) reserved;
+// ChangeCreatePackage Initiate or cancel distributives downloading and installation packages registration from KL public distributives storage.
+// The distributives are identified by "db_loc_id" from the appropriate SrvView Kaspersky Lab corporate product distributives available for download.
 func (kvc *KLEVerControl) ChangeCreatePackage(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -99,21 +76,8 @@ func (kvc *KLEVerControl) ChangeCreatePackage(ctx context.Context, params interf
 	return raw, err
 }
 
-//	Initiate downloading of the distributive by URL into SC-server.
-//
-//	Method is needed to download distributive by URL into SC-server.
-//	After that the distributive will be available to downloading from SC-server.
-//
-//	Parameters:
-//	- lDistribLocId	(int64) Distributive localization database Id that can be get from "db_loc_id" field
-//	- pExtendedSettings	(params) additional parameters:
-//	- "ExecutablePkg" - (bool) Download executable package
-//
-//	Returns:
-//	- (string) request id of asynchronous operation,
-//	to cancel call KLEVerControl.CancelDownloadDistributive,
-//	to get status call AsyncActionStateChecker.CheckActionState with returned request id as action guid,
-//	to get result after finishing call KLEVerControl.GetDownloadDistributiveResult
+// DownloadDistributiveAsync Initiate downloading of the distributive by URL into SC-server.
+// Method is needed to download distributive by URL into SC-server. After that the distributive will be available to downloading from SC-server.
 func (kvc *KLEVerControl) DownloadDistributiveAsync(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

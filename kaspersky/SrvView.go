@@ -33,48 +33,45 @@ import (
 	"net/http"
 )
 
-//	SrvView Class Reference
-//
-//	Interface to get plain-queries from SC-server.
-//
-//	List of all members.
+// SrvView service to get plain-queries from SC-server.
 type SrvView service
 
-//SrvViewParams struct
+// SrvViewParams struct
 type SrvViewParams struct {
-	//name of srvview see List of supported srvviews.
+	// WstrViewName name of srvview see List of supported srvviews.
 	WstrViewName string `json:"wstrViewName"`
 
-	//filter string, contains a condition over srvview attributes, see also Search filter syntax.
+	// WstrFilter filter string, contains a condition over srvview attributes, see also Search filter syntax.
 	WstrFilter string `json:"wstrFilter"`
 
-	//array of srvview attribute names to return.
+	// VecFieldsToReturn array of srvview attribute names to return.
 	VecFieldsToReturn []string `json:"vecFieldsToReturn"`
 
-	//array of containers each of them containing two attributes:
+	// VecFieldsToOrder array of containers each of them containing two attributes:
 	//	-	"Name" (paramString) name of attribute used for sorting
 	//	-	"Asc" (paramBool) ascending if true descending otherwise
 	VecFieldsToOrder []FieldsToOrder `json:"vecFieldsToOrder"`
 
-	//extra options. This parameter can contain additional options to configure query.
+	// PParams extra options. This parameter can contain additional options to configure query.
 	//Some options are specific to the wstrViewName and are part of it specification.
 	//And some options are common for all srvviews. List of common options:
 	//"TOP_N" (int64) acquire only first N records
 	PParams *ESrvViewParams `json:"pParams"`
 
-	//max result-set lifetime in seconds
+	// LifetimeSEC max result-set lifetime in seconds
 	LifetimeSEC int64 `json:"lifetimeSec"`
 }
 
+// ESrvViewParams struct
 type ESrvViewParams struct {
 	//acquire only first N records
 	TopN int64 `json:"TOP_N,omitempty"`
 }
 
-//	Find srvview data by filter string.
+// ResetIterator Find srvview data by filter string.
 //
-//	Finds data records for srvview wstrViewName that satisfy conditions from filter string wstrFilter,
-//	and creates a server-side collection of found data records.
+// Finds data records for srvview wstrViewName that satisfy conditions from filter string wstrFilter,
+// and creates a server-side collection of found data records.
 //
 //	Parameters:
 //	Example:
@@ -86,22 +83,10 @@ type ESrvViewParams struct {
 //		"pParams":null,
 //		"lifetimeSec":7200
 //	}
-//	- wstrViewName	(string) name of srvview see List of supported srvviews.
-//	- wstrFilter	(string) filter string, contains a condition over srvview attributes, see also Search filter syntax.
-//	- vecFieldsToReturn	(array) array of srvview attribute names to return.
-//	- vecFieldsToOrder	(array) array of containers each of them containing two attributes:
-//	- "Name" (string) name of attribute used for sorting
-//	- "Asc" (bool) ascending if true descending otherwise
-//	- pParams	(params) extra options. This parameter can contain additional options to configure query.
-//	Some options are specific to the wstrViewName and are part of it specification.
-//	And some options are common for all srvviews. List of common options:
-//	- "TOP_N" (int64) acquire only first N records
-//	- lifetimeSec	(int64) max result-set lifetime in seconds
-// 	- [out]	wstrIteratorId	(string) result-set ID, identifier of the server-side ordered collection of found data records.
-//	The result-set is destroyed and associated memory is freed in following cases:
-//	Passed lifetimeSec seconds after last access to the result-set (by methods GetRecordCount and GetRecordRange).
-//	Session to the Administration Server has been closed.
-//	ReleaseIterator has been called.
+// The result-set is destroyed and associated memory is freed in following cases:
+// Passed lifetimeSec seconds after last access to the result-set (by methods GetRecordCount and GetRecordRange).
+// Session to the Administration Server has been closed.
+// ReleaseIterator has been called.
 func (sv *SrvView) ResetIterator(ctx context.Context, params *SrvViewParams) (*WstrIteratorID, []byte, error) {
 	postData, err := json.Marshal(&params)
 	if err != nil {
@@ -118,15 +103,9 @@ func (sv *SrvView) ResetIterator(ctx context.Context, params *SrvViewParams) (*W
 	return srvViewIter, raw, err
 }
 
-//	Acquire count of result-set elements.
+// GetRecordCount Acquire count of result-set elements.
 //
-//	Returns number of elements contained in the specified result-set.
-//
-//	Parameters:
-//	- wstrIteratorId	(string) result-set ID, identifier of the server-side ordered collection of found data records
-//
-//	Returns:
-//	(int64) number of elements contained in the specified result-set
+// Returns number of elements contained in the specified result-set.
 func (sv *SrvView) GetRecordCount(ctx context.Context, wstrIteratorId string) (*PxgValInt, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrIteratorId":"%s"}`, wstrIteratorId))
 	request, err := http.NewRequest("POST", sv.client.Server+"/api/v1.0/SrvView.GetRecordCount", bytes.NewBuffer(postData))
@@ -139,13 +118,7 @@ func (sv *SrvView) GetRecordCount(ctx context.Context, wstrIteratorId string) (*
 	return pxgValInt, raw, err
 }
 
-//	Release result-set.
-//
-//	Releases the specified result-set and frees associated memory
-//
-//	Parameters:
-//
-//	wstrIteratorId	(string) result-set ID, identifier of the server-side ordered collection of found data records
+// ReleaseIterator Releases the specified result-set and frees associated memory
 func (sv *SrvView) ReleaseIterator(ctx context.Context, wstrIteratorId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrIteratorId":"%s"}`, wstrIteratorId))
 	request, err := http.NewRequest("POST", sv.client.Server+"/api/v1.0/SrvView.ReleaseIterator", bytes.NewBuffer(postData))
@@ -157,26 +130,17 @@ func (sv *SrvView) ReleaseIterator(ctx context.Context, wstrIteratorId string) (
 	return raw, err
 }
 
+// RecordRangeParams struct
 type RecordRangeParams struct {
 	WstrIteratorID string `json:"wstrIteratorId,omitempty"`
 	NStart         int64  `json:"nStart,omitempty"`
 	NEnd           int64  `json:"nEnd,omitempty"`
 }
 
-//	Acquire subset of result-set elements by range.
+// GetRecordRange Acquire subset of result-set elements by range.
 //
-//	Returns elements contained in the specified result-set in the diapason
-//	from position nStart to position nEnd.
-//
-//	Parameters:
-//	- wstrIteratorId	(string) result-set ID, identifier of the server-side
-//	ordered collection of found data records
-//	- nStart	(int64) zero-based start position
-//	- nEnd	(int64) zero-based finish position
-//
-//	Return:
-//	- pRecords	(params) container that has needed elements in the array with name "KLCSP_ITERATOR_ARRAY"
-func (sv *SrvView) GetRecordRange(ctx context.Context, params *RecordRangeParams) ([]byte, error) {
+// Returns elements contained in the specified result-set in the diapason from position nStart to position nEnd.
+func (sv *SrvView) GetRecordRange(ctx context.Context, params *RecordRangeParams, out interface{}) ([]byte, error) {
 	postData, err := json.Marshal(&params)
 	if err != nil {
 		return nil, err
@@ -187,6 +151,6 @@ func (sv *SrvView) GetRecordRange(ctx context.Context, params *RecordRangeParams
 		return nil, err
 	}
 
-	raw, err := sv.client.Do(ctx, request, nil)
+	raw, err := sv.client.Do(ctx, request, &out)
 	return raw, err
 }

@@ -31,18 +31,13 @@ import (
 	"net/http"
 )
 
-//AsyncActionStateChecker Class Reference
+// AsyncActionStateChecker service to monitor state of async action
 //
-//Interface to monitor state of async action
+// It is supposed that client of the AsyncActionStateChecker has added async action and this action has identifier wstrActionGuid.
 //
-//It is supposed that client of the AsyncActionStateChecker
-//has added async action and this action has identifier wstrActionGuid.
-//After that client should wait while CheckActionState will return bFinalized
-//for this action or should cancel this action.
-//If the count of finalized actions is reach some
-//limit then client connection will be closed automatically.
+// After that client should wait while CheckActionState will return bFinalized for this action or should cancel this action.
 //
-//List of all members.
+// If the count of finalized actions is reach some limit then client connection will be closed automatically.
 type AsyncActionStateChecker service
 
 type ActionStateResult struct {
@@ -76,34 +71,17 @@ type PStateData struct {
 	WuaLogsWin10     []string          `json:"WuaLogs_Win10"`
 }
 
-//CheckActionState
-//Check status of the async action.
+// CheckActionState Check status of the async action.
 //
-//Preconditions:
+// Precondition:
+// Action with identifier wstrActionGuid has been added on the same connection where this method is call
+// if there was previous call of this method and it return lNextCheckDelay
+// then there have passed not less than lNextCheckDelay milliseconds from this previous call
 //
-//action with identifier wstrActionGuid has been added on the same connection where this method is call
-//if there was previous call of this method and it return lNextCheckDelay
-//then there have passed not less than lNextCheckDelay milliseconds from this previous call
-//Postconditions:
+// Postcondition:
 //
-//if returns bFinalized==true then this action has been removed, and wstrActionGuid is not valid any more.
-//Otherwise in lNextCheckDelay it should be returned delay in msec to Do next call of the CheckActionState
-//	Parameters:
-//	- wstrActionGuid string action identifier
-//
-//	Return:
-//	- ActionStateResult (params)
-//	|- bFinalized (bool) true if action has been finished. false otherwise.
-//	|- bSuccededFinalized (bool) This parameter take sense if bFinalized is true. true if action successfully completed.
-//	|- lStateCode (int64) current action state code. The format is depends from action
-//	|- pStateData (params) current action state data. The format is depends from action.
-//	In case of error it typically contains KLBLAG_ERROR_INFO field.
-//	|- lNextCheckDelay (int64) This parameter take sense if bFinalized is false.
-//	In that case it is needed to Do next call of CheckActionState not earlier then there have passed lNextCheckDelay milliseconds
-//Exceptions:
-//	- STDE_NOTFOUND	- the action with identifier wstrActionGuid is not found.
-//	- STDE_NOACCESS	- the action has been added on other connection.
-//	- STDE_UNAVAIL	- CheckActionState has been called too early.
+// if returns bFinalized==true then this action has been removed, and wstrActionGuid is not valid any more.
+// Otherwise in lNextCheckDelay it should be returned delay in msec to Do next call of the CheckActionState
 func (ac *AsyncActionStateChecker) CheckActionState(ctx context.Context, wstrActionGuid string) (*ActionStateResult, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrActionGuid": "%s"}`, wstrActionGuid))
 	request, err := http.NewRequest("POST", ac.client.Server+"/api/v1.0/AsyncActionStateChecker.CheckActionState", bytes.NewBuffer(postData))

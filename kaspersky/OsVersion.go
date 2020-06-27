@@ -31,30 +31,28 @@ import (
 	"net/http"
 )
 
-//	OsVersion Class Reference
+// OsVersion Operating systems dictionary access.
 //
-//	Operating systems dictionary access.
-//
-//	Provides access to the server-side operating systems dictionary
-//
-//	List of all members.
+// Provides access to the server-side operating systems dictionary
 type OsVersion service
 
-//OSIndices struct
+// OSIndices struct
 type OSIndices struct {
 	POSIndices []int64 `json:"pOsIndices"`
 }
 
-//OSAttributes struct
+// OSAttributes struct
 type OSAttributes struct {
 	OSAttribute *[]OSAttribute `json:"PxgRetVal"`
 }
 
+// OSAttribute struct
 type OSAttribute struct {
 	Type             string            `json:"type,omitempty"`
 	OSAttributeValue *OSAttributeValue `json:"value,omitempty"`
 }
 
+// OSAttributeValue struct
 type OSAttributeValue struct {
 	KlhstWksCtype         int64  `json:"KLHST_WKS_CTYPE,omitempty"`
 	KlhstWksOSBuildNumber int64  `json:"KLHST_WKS_OS_BUILD_NUMBER,omitempty"`
@@ -65,27 +63,7 @@ type OSAttributeValue struct {
 	KlwnfOSIsServer       bool   `json:"KLWNF_OS_IS_SERVER,omitempty"`
 }
 
-//	Acquire attributes for specified operating systems.
-//
-//	Returns values of attributes for specified operating systems.
-//
-//	Parameters:
-//	- pOsIndices	paramArray, array of operating system IDs, each entry has type (paramInt) (see KLWNF_OS_ID)
-//
-//	Returns:
-//	- paramArray of the same size as pOsIndices, each entry is a (paramParams) container.
-//	The entry container is either empty (if bad ID was put into the corresponding entry of the pOsIndices array) or filled with following attributes:
-//	|- KLHST_WKS_CTYPE
-//	|- KLHST_WKS_PTYPE
-//	|- KLHST_WKS_OS_VER_MAJOR
-//	|- KLHST_WKS_OS_VER_MINOR
-//	|- KLHST_WKS_OS_NAME
-//	|- KLWNF_OS_IS_SERVER
-//	|- KLHST_WKS_OS_BUILD_NUMBER
-//
-//	See also:
-//	- Operating systems dictionary
-//	- Operating system attributes
+// GetAttributesByOs Acquire attributes for specified operating systems.
 func (ov *OsVersion) GetAttributesByOs(ctx context.Context, params OSIndices) (*OSAttributes, []byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", ov.client.Server+"/api/v1.0/OsVersion.GetAttributesByOs", bytes.NewBuffer(postData))
@@ -98,42 +76,27 @@ func (ov *OsVersion) GetAttributesByOs(ctx context.Context, params OSIndices) (*
 	return oSAttributes, raw, err
 }
 
-//OSRetValS struct
+// OSRetValS struct
 type OSRetValS struct {
 	OSRetVal []OSRetVal `json:"PxgRetVal"`
 }
 
+// OSRetVal struct
 type OSRetVal struct {
 	Type    string   `json:"type,omitempty"`
 	OSValue *OSValue `json:"value,omitempty"`
 }
 
+// OSValue struct
 type OSValue struct {
 	KlhstWksOSName  string `json:"KLHST_WKS_OS_NAME,omitempty"`
 	KlwnfOSID       int64  `json:"KLWNF_OS_ID,omitempty"`
 	KlwnfOSIsServer bool   `json:"KLWNF_OS_IS_SERVER,omitempty"`
 }
 
-//	Determine operating system by specified attributes.
+// GetOsByAttributes Determine operating system by specified attributes.
 //
-//	Determines operating system by specified attributes
-//	KLHST_WKS_CTYPE,
-//	KLHST_WKS_PTYPE,
-//	KLHST_WKS_OS_VER_MAJOR,
-//	KLHST_WKS_OS_VER_MINOR,
-//	KLHST_WKS_OS_BUILD_NUMBER.
-//
-//	Parameters:
-//	- pDataToResolve	paramArray, each entry is a (paramParams) container filled with following attributes:
-//	|- KLHST_WKS_CTYPE
-//	|- KLHST_WKS_PTYPE
-//	|- KLHST_WKS_OS_VER_MAJOR
-//	|- KLHST_WKS_OS_VER_MINOR
-//	|- KLHST_WKS_OS_BUILD_NUMBER (optional)
-//	|- KLHST_WKS_OS_NAME
-//	|- KLWNF_OS_IS_SERVER
-//
-// 	Example params interface{}:
+// Example:
 //
 //	{
 //  "pDataToResolve" : [
@@ -151,17 +114,6 @@ type OSValue struct {
 //    }
 //  ]
 //}
-//
-//	Returns:
-//	- paramArray of the same size as pDataToResolve, each entry is a (paramParams) container.
-//	The entry container is either empty (if failed to determine the operating system) or is filled with following attributes:
-//	|- KLWNF_OS_ID
-//	|- KLHST_WKS_OS_NAME
-//	|- KLWNF_OS_IS_SERVER
-//
-//	See also:
-//	- Operating systems dictionary
-//	- Operating system attributes
 func (ov *OsVersion) GetOsByAttributes(ctx context.Context, params interface{}) (*OSRetValS, []byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", ov.client.Server+"/api/v1.0/OsVersion.GetOsByAttributes", bytes.NewBuffer(postData))

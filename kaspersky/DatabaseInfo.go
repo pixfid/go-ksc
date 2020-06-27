@@ -31,21 +31,10 @@ import (
 	"net/http"
 )
 
-//DatabaseInfo Class Reference
-//
-//Database processing..
-//Allow to get information from a Database.
-//
-//List of all members.
+// DatabaseInfo service to Database processing. Allow to get information from a Database.
 type DatabaseInfo service
 
-//GetDBSize
-//Get database's files size.
-//
-//Returns size of files of database
-//
-//	Returns:
-//	- (int64) size of files of database.
+// GetDBSize Get database's files size.
 func (di *DatabaseInfo) GetDBSize(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.GetDBSize", nil)
 	if err != nil {
@@ -57,13 +46,7 @@ func (di *DatabaseInfo) GetDBSize(ctx context.Context) (*PxgValInt, []byte, erro
 	return pxgValInt, raw, err
 }
 
-//GetDBDataSize
-//Get database's data size.
-//
-//Returns size of data of database
-//
-//	Returns:
-//	- (int64) size of data of database.
+// GetDBDataSize Get database's data size.
 func (di *DatabaseInfo) GetDBDataSize(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.GetDBDataSize", nil)
 	if err != nil {
@@ -75,13 +58,7 @@ func (di *DatabaseInfo) GetDBDataSize(ctx context.Context) (*PxgValInt, []byte, 
 	return pxgValInt, raw, err
 }
 
-//GetDBEventsCount
-//Get database's events count.
-//
-//Returns count of events of database
-//
-//	Returns:
-//	- (int64) count of events of database
+// GetDBEventsCount Get database's events count.
 func (di *DatabaseInfo) GetDBEventsCount(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.GetDBEventsCount", nil)
 	if err != nil {
@@ -93,14 +70,7 @@ func (di *DatabaseInfo) GetDBEventsCount(ctx context.Context) (*PxgValInt, []byt
 	return pxgValInt, raw, err
 }
 
-//IsCloudSQL
-//Check is current SQL server in cloud (Amazon RDS or Azure SQL)
-//
-//	Parameters:
-//	- nCloudType	(int64) Cloud type (KLCLOUD.CloudType)
-//
-//	Returns:
-//	- (bool) true if there is SQL database of this cloud type
+// IsCloudSQL Check is current SQL server in cloud (Amazon RDS or Azure SQL)
 func (di *DatabaseInfo) IsCloudSQL(ctx context.Context, nCloudType int64) (*PxgValBool, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nCloudType": %d}`, nCloudType))
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.IsCloudSQL", bytes.NewBuffer(postData))
@@ -113,13 +83,7 @@ func (di *DatabaseInfo) IsCloudSQL(ctx context.Context, nCloudType int64) (*PxgV
 	return pxgValBool, raw, err
 }
 
-//CheckBackupPath
-//Check the server administration and SQL-server permissions to read and write files along path.
-//
-//	Parameters:
-//	- szwPath	(string) full-path to checkable directory
-//	Exceptions:
-//	- Throw	exception if there are no any permissions
+// CheckBackupPath Check the server administration and SQL-server permissions to read and write files along path.
 func (di *DatabaseInfo) CheckBackupPath(ctx context.Context, szwPath string) (*PxgValBool, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"szwPath": "%s"}`, szwPath))
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.CheckBackupPath", bytes.NewBuffer(postData))
@@ -132,15 +96,7 @@ func (di *DatabaseInfo) CheckBackupPath(ctx context.Context, szwPath string) (*P
 	return pxgValBool, raw, err
 }
 
-//CheckBackupPath2
-//Check the server administration and SQL-server permissions to read and write files along path.
-//
-//	Parameters:
-//	- szwWinPath	(string) full-path to checkable directory for KSC-server
-//	- szwLinuxPath	(string) full-path to checkable directory for SQL-server
-//
-//	Exceptions:
-//	- Throw	exception if there are no any permissions
+// CheckBackupPath2 Check the server administration and SQL-server permissions to read and write files along path.
 func (di *DatabaseInfo) CheckBackupPath2(ctx context.Context, szwWinPath, szwLinuxPath string) (*PxgValBool, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"szwWinPath": "%s",	"szwLinuxPath": "%s"}`, szwWinPath, szwLinuxPath))
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.CheckBackupPath2", bytes.NewBuffer(postData))
@@ -153,11 +109,7 @@ func (di *DatabaseInfo) CheckBackupPath2(ctx context.Context, szwWinPath, szwLin
 	return pxgValBool, raw, err
 }
 
-//IsLinuxSQL
-//Check is current SQL server in on Linux.
-//
-//	Returns:
-//	- (bool) true if there is SQL database on Linux SQL instance
+// IsLinuxSQL Check is current SQL server in on Linux.
 func (di *DatabaseInfo) IsLinuxSQL(ctx context.Context) (*PxgValBool, []byte, error) {
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/DatabaseInfo.IsLinuxSQL", nil)
 	if err != nil {

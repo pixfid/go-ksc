@@ -32,20 +32,10 @@ import (
 	"net/http"
 )
 
-//	PatchParameters Class Reference
-//	Patch parameters processing.
-//
-//	List of all members.
+//	PatchParameters Patch parameters processing.
 type PatchParameters service
 
-//	Get template for command.
-//
-//	Parameters:
-//	- patchID	(int64) Identification of patch in vapm
-//	- locID		(int64) Patch LCID
-//
-//	Returns:
-//	- parTemplate (params)
+// GetTemplate Get template for command.
 func (pp *PatchParameters) GetTemplate(ctx context.Context, patchID, locID int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"patchID": %d, "locID": %d}`, patchID, locID))
 	request, err := http.NewRequest("POST", pp.client.Server+"/api/v1.0/PatchParameters.GetTemplate", bytes.NewBuffer(postData))
@@ -57,14 +47,7 @@ func (pp *PatchParameters) GetTemplate(ctx context.Context, patchID, locID int64
 	return raw, err
 }
 
-//	Get install command for patch.
-//
-//	Parameters:
-//	- patchID	(int64) Identification of patch in vapm
-//	- locID		(int64) Identification of localization of patch in vapm
-//
-//	Returns:
-//	- parsValues (params)
+// GetValues Get install command for patch.
 func (pp *PatchParameters) GetValues(ctx context.Context, patchID, locID int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"patchID": %d, "locID": %d}`, patchID, locID))
 	request, err := http.NewRequest("POST", pp.client.Server+"/api/v1.0/PatchParameters.GetValues", bytes.NewBuffer(postData))
@@ -76,13 +59,7 @@ func (pp *PatchParameters) GetValues(ctx context.Context, patchID, locID int64) 
 	return raw, err
 }
 
-//	Get install command for patch.
-//
-//	Parameters:
-//	- packageId	(int64) Identification of package
-//
-//	Returns:
-//	- parsValues (params)
+// GetValuesByPkg Get install command for patch.
 func (pp *PatchParameters) GetValuesByPkg(ctx context.Context, packageId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"packageId": %d}`, packageId))
 	request, err := http.NewRequest("POST", pp.client.Server+"/api/v1.0/PatchParameters.GetValuesByPkg", bytes.NewBuffer(postData))
@@ -94,12 +71,7 @@ func (pp *PatchParameters) GetValuesByPkg(ctx context.Context, packageId int64) 
 	return raw, err
 }
 
-//	Set values for parameters of command.
-//
-//	Parameters:
-//	- patchID	(int64) Identification of patch in vapm
-//	- locID		(int64) Identification of localization of patch in vapm
-//	- parsValues	(params)
+// SetValues Set values for parameters of command.
 func (pp *PatchParameters) SetValues(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", pp.client.Server+"/api/v1.0/PatchParameters.SetValues", bytes.NewBuffer(postData))
@@ -111,11 +83,7 @@ func (pp *PatchParameters) SetValues(ctx context.Context, params interface{}) ([
 	return raw, err
 }
 
-//	Set values for parameters of command.
-//
-//	Parameters:
-//	- packageId		(int64) Identification of package
-//	- parsValues	(params)
+// SetValuesByPkg Set values for parameters of command.
 func (pp *PatchParameters) SetValuesByPkg(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", pp.client.Server+"/api/v1.0/PatchParameters.SetValuesByPkg", bytes.NewBuffer(postData))

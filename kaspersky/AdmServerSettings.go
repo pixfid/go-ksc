@@ -31,18 +31,10 @@ import (
 	"net/http"
 )
 
-//AdmServerSettings interface.
-//
-//Interface to manage server settings.
-//
-//List of all members:
+// AdmServerSettings interface. Interface to manage server settings.
 type AdmServerSettings service
 
-//GetSharedFolder
-//Acquire shared folder.
-//
-//	Returns:
-//	- (string) shared folder
+// GetSharedFolder Acquire shared folder.
 func (as *AdmServerSettings) GetSharedFolder(ctx context.Context) (*PxgValStr, []byte, error) {
 	request, err := http.NewRequest("POST", as.client.Server+"/api/v1.0/AdmServerSettings.GetSharedFolder", nil)
 	if err != nil {
@@ -54,25 +46,13 @@ func (as *AdmServerSettings) GetSharedFolder(ctx context.Context) (*PxgValStr, [
 	return pxgValStr, raw, err
 }
 
-//ChangeSharedFolder
-//Change shared folder.
+// ChangeSharedFolder Change shared folder.
 //
-//	Parameters:
-//	- wstrNetworkPath	(string) network path to shared folder
+// Remarks:
+// Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
+// If the operation success, then AsyncActionStateChecker.CheckActionState will return bFinalized=true and lStateCode=1.
 //
-//	Returns:
-//	- (string) id of asynchronous operation.
-//
-//Example:
-//	"\\\\Server-ksc\\klshare\\"
-//
-//	Remarks:
-//	Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's finalized.
-//	If the operation success, then AsyncActionStateChecker.CheckActionState will return bFinalized=true and lStateCode=1.
-//	Otherwise, a call to AsyncActionStateChecker.CheckActionState returns error in pStateData.
-//
-//	Exceptions:
-//	- Throws	exception in case of error.
+// Otherwise, a call to AsyncActionStateChecker.CheckActionState returns error in pStateData.
 func (as *AdmServerSettings) ChangeSharedFolder(ctx context.Context, wstrNetworkPath string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrNetworkPath": "%s"}`, wstrNetworkPath))
 	request, err := http.NewRequest("POST", as.client.Server+"/api/v1.0/AdmServerSettings.ChangeSharedFolder", bytes.NewBuffer(postData))

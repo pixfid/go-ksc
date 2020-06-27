@@ -32,24 +32,10 @@ import (
 	"net/http"
 )
 
-//CertPoolCtrl Class Reference
-//
-//Interface to manage the pool of certificates used by the
-//Kaspersky Security Center Server.
-//
-//Public Member Functions
+// CertPoolCtrl service to manage the pool of certificates used by the Kaspersky Security Center Server.
 type CertPoolCtrl service
 
-//GetCertificateInfo
-//Returns information about certificate from server's certificates pool.
-//
-//	Parameters:
-//	- nVServerId (int64) Virtual server id (-1 for current, 0 for main server)
-//	- nFunction (int64) Certificate function (see "KLCERTP.CertificateFunction enum values")
-//
-//	Returns:
-//	- (params) If certificate present then it returns params
-//	with "CPublic" (paramBinary) field only.
+// GetCertificateInfo Returns information about certificate from server's certificates pool.
 func (cpc *CertPoolCtrl) GetCertificateInfo(ctx context.Context, nVServerId, nFunction int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nVServerId": %d, "nFunction" : %d }`, nVServerId, nFunction))
 	request, err := http.NewRequest("POST", cpc.client.Server+"/api/v1.0/CertPoolCtrl.GetCertificateInfo",
@@ -62,15 +48,7 @@ func (cpc *CertPoolCtrl) GetCertificateInfo(ctx context.Context, nVServerId, nFu
 	return raw, err
 }
 
-//SetCertificate
-//Sets certificate of a given function for a given virtual server.
-//
-//	Parameters:
-//	- params interface{}
-//	|- nVServerId	(int64) Virtual server id (-1 for current, 0 for main server)
-//	|- nFunction	(int64) Certificate function (see "KLCERTP.CertificateFunction enum values")
-//	|- pCertData	Params with certificate data (see Common format for certificate params).
-//	If pCertData is empty or NULL, then certificate will be deleted.
+// SetCertificate Sets certificate of a given function for a given virtual server.
 func (cpc *CertPoolCtrl) SetCertificate(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

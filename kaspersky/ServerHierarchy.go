@@ -33,22 +33,13 @@ import (
 	"net/http"
 )
 
-//	ServerHierarchy Class Reference
-//
-//	Server hierarchy management interface.
-//
-//	List of all members.
+// ServerHierarchy Server hierarchy management service.
 type ServerHierarchy service
 
-//	Remove specified slave server.
+// DelServer Remove specified slave server.
 //
-//	This action only removes slave server registration info from master server.
-//	To remove master server settings from slave server use HostGroup.SS_Write
-//	to overwrite master server connection settings section and set "KLSRV_MASTER_SRV_USE" to false.
-//	See Slave server registration for details.
-//
-//	Parameters:
-//	- lServer	Slave server id
+// This action only removes slave server registration info from master server. To remove master server settings from slave server use HostGroup.SSWrite
+// to overwrite master server connection settings section and set "KLSRV_MASTER_SRV_USE" to false.
 func (sh *ServerHierarchy) DelServer(ctx context.Context, lServer int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lServer": %d}`, lServer))
 	request, err := http.NewRequest("POST", sh.client.Server+"/api/v1.0/ServerHierarchy.DelServer", bytes.NewBuffer(postData))
@@ -60,33 +51,7 @@ func (sh *ServerHierarchy) DelServer(ctx context.Context, lServer int64) ([]byte
 	return raw, err
 }
 
-//	Acquire specified slave server attributes.
-//
-//	Parameters:
-//	- lServer	Slave server id
-//	- pFields	paramArray array of string attributes to return.
-//	See list of slave server attributes for attributes list and description.
-//
-//	Returns:
-//	- paramParams container with specified attributes of slave server
-//
-//	+----------------------------+----------+-------------------------------------------------------------------------------------------------------+
-//	|         Attributes         |   Type   |                                              Description                                              |
-//	+----------------------------+----------+-------------------------------------------------------------------------------------------------------+
-//	| KLSRVH_SRV_ID              | int64    | Slave server id                                                                                       |
-//	| KLSRVH_SRV_INST_ID         | string   | Slave server instance id                                                                              |
-//	| KLSRVH_SRV_ADDR            | string   | Slave server address and port                                                                         |
-//	| KLSRVH_SRV_DN              | string   | Display name                                                                                          |
-//	| KLSRVH_SRV_GROUPID         | int64    | Id of administration group where the slave server is located                                          |
-//	| KLSRVH_SRV_CERTIFICATE     | binary   | Slave server certificate.                                                                             |
-//	| KLSRVH_SRV_PUBLIC_KEY_HASH | string   | Slave server certificate MD5-hash                                                                     |
-//	| KLSRVH_SRV_STATUS          | int64    | Slave server status: 0 means "Inactive", 1 means "Active".                                            |
-//	| KLSRVH_SRV_VERSION         | string   | Slave server version                                                                                  |
-//	| KLSRVH_SRV_PASSIVE         | bool     | Flag set if the slave is passive (does not connect to server, but accepts master connections instead) |
-//	| KLSRVH_SRV_LAST_CONNECTED  | DateTime | Time when server was available last time                                                              |
-//	| KLSRVH_SRV_MASTER_ADDR     | string   | Master server connection address, valid for non-passive slaves                                        |
-//	| KLSRVH_SRV_HOST_GUID       | string   | Slave server host identity                                                                            |
-//	+----------------------------+----------+-------------------------------------------------------------------------------------------------------+
+// GetServerInfo Acquire specified slave server attributes.
 //
 //	{
 //		"lServer": 1, //Slave server ID
@@ -113,31 +78,7 @@ func (sh *ServerHierarchy) GetServerInfo(ctx context.Context, params interface{}
 	return raw, nil
 }
 
-//	Enumerate slave servers for specified group.
-//
-//	Parameters:
-//	- nGroupId	administration group id where slave server located or -1 to acquire slave servers from all groups
-//	Returns:
-//	paramArray of paramParams containing following slave server attributes:
-//
-//	+----------------------------+----------+-------------------------------------------------------------------------------------------------------+
-//	|         Attributes         |   Type   |                                              Description                                              |
-//	+----------------------------+----------+-------------------------------------------------------------------------------------------------------+
-//	| KLSRVH_SRV_ID              | int64    | Slave server id                                                                                       |
-//	| KLSRVH_SRV_INST_ID         | string   | Slave server instance id                                                                              |
-//	| KLSRVH_SRV_ADDR            | string   | Slave server address and port                                                                         |
-//	| KLSRVH_SRV_DN              | string   | Display name                                                                                          |
-//	| KLSRVH_SRV_GROUPID         | int64    | Id of administration group where the slave server is located                                          |
-//	| KLSRVH_SRV_CERTIFICATE     | binary   | Slave server certificate.                                                                             |
-//	| KLSRVH_SRV_PUBLIC_KEY_HASH | string   | Slave server certificate MD5-hash                                                                     |
-//	| KLSRVH_SRV_STATUS          | int64    | Slave server status: 0 means "Inactive", 1 means "Active".                                            |
-//	| KLSRVH_SRV_VERSION         | string   | Slave server version                                                                                  |
-//	| KLSRVH_SRV_PASSIVE         | bool     | Flag set if the slave is passive (does not connect to server, but accepts master connections instead) |
-//	| KLSRVH_SRV_LAST_CONNECTED  | DateTime | Time when server was available last time                                                              |
-//	| KLSRVH_SRV_MASTER_ADDR     | string   | Master server connection address, valid for non-passive slaves                                        |
-//	| KLSRVH_SRV_HOST_GUID       | string   | Slave server host identity                                                                            |
-//	+----------------------------+----------+-------------------------------------------------------------------------------------------------------+
-//	See list of slave server attributes for attributes description.
+// GetChildServers Enumerate slave servers for specified group.
 func (sh *ServerHierarchy) GetChildServers(ctx context.Context, nGroupId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nGroupId": %d}`, nGroupId))
 	request, err := http.NewRequest("POST", sh.client.Server+"/api/v1.0/ServerHierarchy.GetChildServers", bytes.NewBuffer(postData))
@@ -152,32 +93,7 @@ func (sh *ServerHierarchy) GetChildServers(ctx context.Context, nGroupId int64) 
 	return raw, err
 }
 
-//	Searches for slave servers meeting specified criteria.
-//
-//	Parameters:
-//	- wstrFilter	filter string, see search filter syntax. Following search fields are supported:
-//	|- "KLSRVH_SRV_GROUPID_GP" (paramInt) - parent group id
-//	|- "KLHST_WKS_CREATED" (paramDateTime) - time of host record creation.
-//	As well as following slave server attributes:
-//	|- "KLSRVH_SRV_ID"
-//	|- "KLSRVH_SRV_DN"
-//	|- "KLSRVH_SRV_GROUPID"
-//	|- "KLSRVH_SRV_STATUS"
-//	- pFieldsToReturn	names of attributes to return. Following attributes are supported:
-//	|- "name" (paramString) - administration group name where slave server located
-//	|- "KLHST_WKS_CREATED" (paramDateTime) - time of host record creation
-//As well as following slave server attributes:
-//	|- "KLSRVH_SRV_ID"
-//	|- "KLSRVH_SRV_DN"
-//	|- "KLSRVH_SRV_GROUPID"
-//	|- "KLSRVH_SRV_STATUS"
-//	- pFieldsToOrder	names of columns to sort by, must be a subset of pFieldsToReturn parameter
-//	- lMaxLifeTime	max lifetime of accessor (sec)
-//	- pParams	reserved for future use, use empty paramParams container
-//
-//	Return:
-//	- wstrIterator	result-set id, use ChunkAccessor interface to iterate over found slave server parameters
-//	- number of records found
+// FindSlaveServers Searches for slave servers meeting specified criteria.
 func (sh *ServerHierarchy) FindSlaveServers(ctx context.Context, params PFindParams) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

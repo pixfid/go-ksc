@@ -31,24 +31,12 @@ import (
 	"net/http"
 )
 
-//	KsnInternal Class Reference
+// KsnInternal service for working with KsnProxy subsystem.
 //
-//	Interface for working with KsnProxy subsystem..
-//
-//	This interface allow you to set KPSN settings, check license and check connection.
-//
-//	List of all members.
+// This service allow you to set KPSN settings, check license and check connection.
 type KsnInternal service
 
-//	Check connection with KSN cloud (or KPSN)
-//
-//	Returns:
-//	- (bool) Returns true if connection checked. Otherwise - false.
-//
-//	Exceptions:
-//	- KLSTD.STDE_NOACCESS	- Access denied
-//	- KLSTD.STDE_NOTPERM - KsnProxy is disabled,
-//	- KLPRCP.ERR_CANT_CONNECT - Can not connect to KSN.
+// CheckKsnConnection Check connection with KSN cloud (or KPSN)
 func (sd *KsnInternal) CheckKsnConnection(ctx context.Context) (*PxgValBool, []byte, error) {
 	request, err := http.NewRequest("POST", sd.client.Server+"/api/v1.0/KsnInternal.CheckKsnConnection", nil)
 	if err != nil {
@@ -60,15 +48,7 @@ func (sd *KsnInternal) CheckKsnConnection(ctx context.Context) (*PxgValBool, []b
 	return pxgValBool, raw, err
 }
 
-//	Get all KPSN eula.
-//
-//	Return:
-//	- pNKsnEulas (array) Array of eula.
-//	See Format of KPSN eula params.
-//
-//	Exceptions:
-//	- KLSTD.STDE_NOTPERM	- Can't call on virtual server,
-//	- KLSTD.STDE_NOACCESS - Access denied.
+// GetNKsnEulas Get all KPSN eula.
 func (sd *KsnInternal) GetNKsnEulas(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", sd.client.Server+"/api/v1.0/KsnInternal.GetNKsnEulas", nil)
 	if err != nil {
@@ -93,11 +73,7 @@ type PSettings struct {
 	KsnproxyUseMasterKsnproxyAsKsn bool  `json:"KSNPROXY_USE_MASTER_KSNPROXY_AS_KSN,omitempty"`
 }
 
-//	Returns settings of KsnProxy. May be used on virtual server.
-//
-//	Parameters:
-//	- pSettings (params) Section KSNPROXY_SETTINGS.
-//	See Section KSNPROXY_SETTINGS attributes.
+// GetSettings Returns settings of KsnProxy. May be used on virtual server.
 func (sd *KsnInternal) GetSettings(ctx context.Context) (*KsnSettings, []byte, error) {
 	request, err := http.NewRequest("POST", sd.client.Server+"/api/v1.0/KsnInternal.GetSettings", nil)
 	if err != nil {
@@ -109,11 +85,7 @@ func (sd *KsnInternal) GetSettings(ctx context.Context) (*KsnSettings, []byte, e
 	return ksnSettings, raw, err
 }
 
-//	Check possibility to send statistics.
-//
-//	Returns:
-//	- (bool) Returns true when possible to send statistics.
-//	Otherwise - false.
+// NeedToSendStatistics Check possibility to send statistics.
 func (sd *KsnInternal) NeedToSendStatistics(ctx context.Context) (*PxgValBool, []byte, error) {
 	request, err := http.NewRequest("POST", sd.client.Server+"/api/v1.0/KsnInternal.NeedToSendStatistics", nil)
 	if err != nil {
@@ -125,19 +97,7 @@ func (sd *KsnInternal) NeedToSendStatistics(ctx context.Context) (*PxgValBool, [
 	return pxgValBool, raw, err
 }
 
-//	Get KPSN eula.
-//
-//	Parameters:
-//	- wstrNKsnLoc	(string) Localization ('ru', 'en')
-//
-//	Return:
-//	- pEula	(params) Params with EULA text and localization. See Format of KPSN eula params.
-//	Only NKsnEula and NKsnEulaLoc present.
-//
-//	Exceptions:
-//	- KLSTD.STDE_NOTPERM	- Can't call on virtual server
-//	- KLSTD.STDE_NOACCESS - Access denied,
-//	- KLSTD.STDE_NOTFOUND - Eula with specified localization not found.
+// GetNKsnEula Get KPSN eula.
 func (sd *KsnInternal) GetNKsnEula(ctx context.Context, wstrNKsnLoc string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrNKsnLoc": "%s"}`, wstrNKsnLoc))
 	request, err := http.NewRequest("POST", sd.client.Server+"/api/v1.0/KsnInternal.GetNKsnEula", bytes.NewBuffer(postData))

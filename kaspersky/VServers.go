@@ -32,10 +32,10 @@ import (
 	"net/http"
 )
 
-// VServers Allows to create and destroy virtual servers, acquire and modify their attributes.
+// VServers service allows to create and destroy virtual servers, acquire and modify their attributes.
 type VServers service
 
-//VServersInfos struct using in VServers
+// VServersInfos struct using in VServers
 type VServersInfos struct {
 	VServersInfo *[]VServersInfo `json:"PxgRetVal,omitempty"`
 }
@@ -132,6 +132,7 @@ func (vs *VServers) DelVServer(ctx context.Context, lVServer int64) (*WActionGUI
 	return wActionGUID, err
 }
 
+// VServerPermissions struct
 type VServerPermissions struct {
 	Permissions *Permissions `json:"PxgRetVal,omitempty"`
 }

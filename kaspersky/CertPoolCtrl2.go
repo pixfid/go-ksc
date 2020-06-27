@@ -31,25 +31,10 @@ import (
 	"net/http"
 )
 
-//CertPoolCtrl2 Class Reference
-//
-//2nd interface to manage the pool of certificates used by the
-//Kaspersky Security Center Server
-//
-//Public Member Functions
+//CertPoolCtrl2 2nd service to manage the pool of certificates used by the Kaspersky Security Center Server
 type CertPoolCtrl2 service
 
-//GetCertificateInfoDetails
-//Returns information about certificate from server's certificates pool.
-//
-//	Parameters:
-//	- nVServerId (int64) Virtual server id (-1 for current, 0 for main server)
-//	- nFunction (int64) Certificate function (see "KLCERTP.CertificateFunction enum values")
-//
-//	Returns:
-//
-//	Returned data format:
-//	- "KLCERTP_NOT_AFTER_DATE" [paramDateTime], optional, certificate expiration date
+// GetCertificateInfoDetails Returns information about certificate from server's certificates pool.
 func (cp *CertPoolCtrl2) GetCertificateInfoDetails(ctx context.Context, nVServerId, nFunction int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nVServerId": %d, "nFunction" : %d }`, nVServerId, nFunction))
 	request, err := http.NewRequest("POST", cp.client.Server+"/api/v1.0/CertPoolCtrl2.GetCertificateInfoDetails",

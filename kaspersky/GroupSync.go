@@ -32,11 +32,7 @@ import (
 	"net/http"
 )
 
-//	GroupSync Class Reference
-//
-//	Access to group synchronization objects..
-//
-//	List of all members.
+// GroupSync service for access to group synchronization objects.
 type GroupSync service
 
 //NSyncInfoParams struct using in GroupSync.GetSyncHostsInfo
@@ -47,21 +43,9 @@ type NSyncInfoParams struct {
 	NLifeTime         int64            `json:"nLifeTime,omitempty"`
 }
 
-//	Acquire group synchronization state at target hosts.
+// GetSyncHostsInfo Acquire group synchronization state at target hosts.
 //
-//	Returns forward iterator to access requested properties of the specified group synchronization at target hosts.
-//
-//	Parameters:
-//	-params NSyncInfoParams
-//	|- nSync	(int64) id of the group synchronization. Can be retrieved from policy attribute KLPOL_GSYN_ID
-//	|- arrFieldsToReturn	(array) array of attribute names to return.
-//	|- arrFieldsToOrder	(array) array of containers each of them containing two attributes :
-//		|- "Name" (paramString) name of List of group synchronization host attributes used for sorting
-//		|- "Asc" (paramBool) ascending if true descending otherwise
-//	|-nLifeTime	(int) timeout in seconds to keep the result-set alive, zero means 'default value'
-//
-//	Returns:
-//	- (string) forward identifier id. Use it in iterator methods of GroupSyncIterator
+// Returns forward iterator to access requested properties of the specified group synchronization at target hosts.
 func (gs *GroupSync) GetSyncHostsInfo(ctx context.Context, params NSyncInfoParams) (*PxgValStr, []byte, error) {
 	postData, err := json.Marshal(&params)
 	if err != nil {
@@ -79,13 +63,13 @@ func (gs *GroupSync) GetSyncHostsInfo(ctx context.Context, params NSyncInfoParam
 	return pxgValStr, raw, err
 }
 
-//GroupSyncInfoParams struct
+// GroupSyncInfoParams struct
 type GroupSyncInfoParams struct {
 	NSync             int64    `json:"nSync,omitempty"`
 	ArrFieldsToReturn []string `json:"arrFieldsToReturn"`
 }
 
-//GroupSyncInfo struct
+// GroupSyncInfo struct
 type GroupSyncInfo struct {
 	SyncInfo *SyncInfo `json:"PxgRetVal,omitempty"`
 }
@@ -98,18 +82,9 @@ type SyncInfo struct {
 	GsynCntFullCount int64 `json:"gsyn_cnt_FullCount,omitempty"`
 }
 
-//	Acquire group synchronization properties.
+// GetSyncInfo Acquire group synchronization properties.
 //
-//	Returns requested properties of the specified group synchronization
-//
-//	- Parameters:
-//	- (params) GroupSyncInfoParams container with values
-//		|- nSync	(int) id of the group synchronization. Can be retrieved from policy attribute KLPOL_GSYN_ID
-//		|- arrFieldsToReturn	(array) array of attribute names to return.
-//	See List of group synchronization attributes for attribute names
-//
-//	Returns:
-//	- (params) container with values of required attributes
+// Returns requested properties of the specified group synchronization
 func (gs *GroupSync) GetSyncInfo(ctx context.Context, params GroupSyncInfoParams) (*GroupSyncInfo, []byte, error) {
 	postData, err := json.Marshal(&params)
 	if err != nil {
@@ -127,16 +102,9 @@ func (gs *GroupSync) GetSyncInfo(ctx context.Context, params GroupSyncInfoParams
 	return groupSyncInfo, raw, err
 }
 
-//	Acquire group synchronization delivery time for the specified host.
+// GetSyncDeliveryTime Acquire group synchronization delivery time for the specified host.
 //
-//	Returns UTC time when the specified synchronization has been delivered to the specified host
-//
-//	Parameters:
-//	- nSync	(int64) id of the group synchronization. Can be retrieved from policy attribute KLPOL_GSYN_ID
-//	- szwHostId	(string) host name (see KLHST_WKS_HOSTNAME)
-//
-//	Returns:
-//	- group synchronization delivery UTC time
+// Returns UTC time when the specified synchronization has been delivered to the specified host
 func (gs *GroupSync) GetSyncDeliveryTime(ctx context.Context, nSync int64, szwHostId string) (*PxgValInt,
 	[]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nSync": %d, "szwHostId": "%s"}`, nSync, szwHostId))

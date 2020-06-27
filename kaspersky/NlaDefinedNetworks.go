@@ -32,21 +32,14 @@ import (
 	"net/http"
 )
 
-//	NlaDefinedNetworks Class Reference
-//	Network location awareness (NLA) defined networks.
-//	Used as a scope for Update agents.
-//	Each NLA-defined network is defined by list of NLA locations. More...
+// NlaDefinedNetworks Network location awareness (NLA) defined networks.
 //
-//	List of all members.
+// Used as a scope for Update agents.
+//
+// Each NLA-defined network is defined by list of NLA locations.
 type NlaDefinedNetworks service
 
-//	Add NLA-defined network.
-//
-//	Parameters:
-//	- wstrNetworkName (string)	Unique network name.
-//
-//	Returns:
-//	- newly created network id (int64).
+// AddNetwork Add NLA-defined network.
 func (ndn *NlaDefinedNetworks) AddNetwork(ctx context.Context, wstrNetworkName string) (*PxgValInt, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrNetworkName": "%s"}`, wstrNetworkName))
 	request, err := http.NewRequest("POST", ndn.client.Server+"/api/v1.0/NlaDefinedNetworks.AddNetwork",
@@ -60,10 +53,7 @@ func (ndn *NlaDefinedNetworks) AddNetwork(ctx context.Context, wstrNetworkName s
 	return pxgValInt, raw, err
 }
 
-//	Delete NLA-defined network.
-//
-//	Parameters:
-//	- nNetworkId	(int64)	id of network to delete.
+// DeleteNetwork Delete NLA-defined network.
 func (ndn *NlaDefinedNetworks) DeleteNetwork(ctx context.Context, nNetworkId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nNetworkId": %d}`, nNetworkId))
 	request, err := http.NewRequest("POST", ndn.client.Server+"/api/v1.0/NlaDefinedNetworks.DeleteNetwork",
@@ -76,28 +66,24 @@ func (ndn *NlaDefinedNetworks) DeleteNetwork(ctx context.Context, nNetworkId int
 	return raw, err
 }
 
+// PNetworkInfo struct
 type PNetworkInfo struct {
 	PNetwork *PNetwork `json:"pNetwork,omitempty"`
 }
 
+// PNetwork struct
 type PNetwork struct {
-	//Enable automatic Update agents assignment to this network flag
+	// NlantwkEnableAutoua Enable automatic Update agents assignment to this network flag
 	NlantwkEnableAutoua bool `json:"NLANTWK_ENABLE_AUTOUA,omitempty"`
 
-	//Network id
+	// NlantwkNetworkID Network id
 	NlantwkNetworkID int64 `json:"NLANTWK_NETWORK_ID,omitempty"`
 
-	//Human-readable network name
+	// NlantwkNetworkName Human-readable network name
 	NlantwkNetworkName string `json:"NLANTWK_NETWORK_NAME,omitempty"`
 }
 
-//	Get NLA-defined network info.
-//
-//	Parameters:
-//	- nNetworkId	(int64)	network id returned by AddNetwork().
-//
-//	Return:
-//	- pNetwork	network definition, see NLA-defined networks for values description.
+// GetNetworkInfo Get NLA-defined network info.
 func (ndn *NlaDefinedNetworks) GetNetworkInfo(ctx context.Context, nNetworkId int64) (*PNetworkInfo, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nNetworkId": %d}`, nNetworkId))
 	request, err := http.NewRequest("POST", ndn.client.Server+"/api/v1.0/NlaDefinedNetworks.GetNetworkInfo",
@@ -111,23 +97,19 @@ func (ndn *NlaDefinedNetworks) GetNetworkInfo(ctx context.Context, nNetworkId in
 	return pNetworkInfo, raw, err
 }
 
-//PNetworkList struct
+// PNetworkList struct
 type PNetworkList struct {
 	//Each representing NLA-defined network
 	PNetworks []PNetworks `json:"pNetworks"`
 }
 
-//PNetworks struct
+// PNetworks struct
 type PNetworks struct {
 	Type  string    `json:"type,omitempty"`
 	Value *PNetwork `json:"value,omitempty"`
 }
 
-//	Get list of all NLA-defined networks.
-//
-//	Return:
-//	- pNetworks	(array) of (params), each representing NLA-defined network.
-//	See NLA-defined networks for values description.
+// GetNetworksList Get list of all NLA-defined networks.
 func (ndn *NlaDefinedNetworks) GetNetworksList(ctx context.Context) (*PNetworkList, []byte, error) {
 	request, err := http.NewRequest("POST", ndn.client.Server+"/api/v1.0/NlaDefinedNetworks.GetNetworksList", nil)
 	if err != nil {
@@ -139,10 +121,7 @@ func (ndn *NlaDefinedNetworks) GetNetworksList(ctx context.Context) (*PNetworkLi
 	return pNetworkList, raw, err
 }
 
-//	Change NLA-defined network.
-//
-//	Parameters:
-//	- pNetwork	Network definition, see NLA-defined networks for values description.
+// SetNetworkInfo Change NLA-defined network.
 func (ndn *NlaDefinedNetworks) SetNetworkInfo(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

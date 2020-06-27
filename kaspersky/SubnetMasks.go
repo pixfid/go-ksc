@@ -33,61 +33,51 @@ import (
 	"net/http"
 )
 
-//	SubnetMasks Class Reference
-//	Subnets provider.
-//
-//	List of all members.
+// SubnetMasks Subnets provider.
 type SubnetMasks service
 
-//PSubnetSettings struct
+// PSubnetSettings struct
 type PSubnetSettings struct {
-	//	PSubnetSettingsClass - Subnet parameters
+	//	PSubnetSettingsClass Subnet parameters
 	PSubnetSettingsClass *PSubnetSettingsClass `json:"pSubnetSettings,omitempty"`
 }
 
+// PSubnetSettingsClass struct
 type PSubnetSettingsClass struct {
-	// NIPAddress - Subnet IP
+	// NIPAddress Subnet IP
 	NIPAddress int64 `json:"nIpAddress,omitempty"`
-	// NMask - Subnet mask
+
+	// NMask Subnet mask
 	NMask int64 `json:"nMask,omitempty"`
-	//	WstrSubnetName - Subnet name (not empty, maximum 100 unicode symbols)
+
+	// WstrSubnetName Subnet name (not empty, maximum 100 unicode symbols)
 	WstrSubnetName string `json:"wstrSubnetName,omitempty"`
-	//	WstrComment - Subnet description
+
+	// WstrComment Subnet description
 	WstrComment string `json:"wstrComment,omitempty"`
 }
 
-//PSubnetSettings struct - Subnet parameters
+// PSubnetSettings struct Subnet parameters
 type PSubnetUpdateSettings struct {
-	// NIPAddress - Subnet IP
+	// NIPAddress Subnet IP
 	NIPAddress int64 `json:"nIpAddress,omitempty"`
-	// NMask - Subnet mask
+
+	// NMask Subnet mask
 	NMask int64 `json:"nMask,omitempty"`
-	//	PSubnetSettings - new subnet parameters (params).
-	//	If parameters not exist - it will be ignored
+
+	// PSubnetSettings new subnet parameters (params). If parameters not exist - it will be ignored
 	PSubnetUpdateSettingsClass *PSubnetUpdateSettingsClass `json:"pSubnetSettings,omitempty"`
 }
 
 type PSubnetUpdateSettingsClass struct {
-	//	WstrSubnetName - Subnet name (not empty, maximum 100 unicode symbols)
+	// WstrSubnetName Subnet name (not empty, maximum 100 unicode symbols)
 	WstrSubnetName string `json:"wstrSubnetName,omitempty"`
-	//	WstrComment - Subnet description
+
+	// WstrComment Subnet description
 	WstrComment string `json:"wstrComment,omitempty"`
 }
 
-//	Create subnet for current server with specific parameters
-//
-//	Parameters:
-//	- pSubnetSettings	Subnet parameters (paramParams).
-//	|- "nIpAddress" (int64) - Subnet IP
-//	|- "nMask" (int64) - Subnet mask
-//	|- "wstrSubnetName" (string) - Subnet name (not empty, maximum 100 unicode symbols)
-//	|- "wstrComment" (string, optional) - Subnet description
-//
-//	Returns:
-//	- Real subnet name: if subnet with specified name already exist - new subnet renamed with repaired suffix name
-//
-//	Exceptions:
-//	- Throw	exception if subnet (ip-mask pair) already exists or if subnet (ip-mask pair) not correct
+// CreateSubnet for current server with specific parameters
 func (sm *SubnetMasks) CreateSubnet(ctx context.Context, params PSubnetSettings) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -103,11 +93,7 @@ func (sm *SubnetMasks) CreateSubnet(ctx context.Context, params PSubnetSettings)
 	return raw, err
 }
 
-//	Remove existing subnet
-//
-//	Parameters:
-//	- nIpAddress	(unsignedLong) Current server subnet IP
-//	- nMask	(unsignedLong) Current server subnet mask
+// DeleteSubnet Remove existing subnet
 func (sm *SubnetMasks) DeleteSubnet(ctx context.Context, nIpAddress, nMask int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nIpAddress" : %d, "nMask" : %d}`, nIpAddress, nMask))
 
@@ -120,18 +106,7 @@ func (sm *SubnetMasks) DeleteSubnet(ctx context.Context, nIpAddress, nMask int64
 	return raw, err
 }
 
-//	Modify existing subnet parameters
-//
-//	Parameters:
-//	- nIpAddress	(unsignedLong) Current server subnet IP
-//	- nMask	(unsignedLong) Current server subnet mask
-//		- pSubnetSettings	new subnet parameters (paramParams). If parameters not exist - it will be ignored
-//		|- "wstrSubnetName" (paramString, optional) - Subnet name (not empty, maximum 100 unicode symbols)
-//		|- "wstrComment" (paramString, optional) - Subnet description
-//
-//	Returns:
-//	Real subnet name:
-//	if subnet with specified changeable name already exist - subnet renamed with repaired suffix name
+// ModifySubnet Modify existing subnet parameters
 func (sm *SubnetMasks) ModifySubnet(ctx context.Context, params PSubnetUpdateSettings) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

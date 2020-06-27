@@ -31,21 +31,10 @@ import (
 	"net/http"
 )
 
-//DpeKeyService Class Reference
-//
-//Interface for working with encrypted devices..
-//
-//List of all members.
+// DpeKeyService service for working with encrypted devices..
 type DpeKeyService service
 
-//GetDeviceKeys3
-//Returns information about host and key for chosen encrypted device.
-//
-//	Parameters:
-//	- wstrDeviceId (string) Device id
-//	Return:
-//	- pKeyInfos (array) Array of params with key info. See Srvview encrypted devices on hosts.
-//	The difference is that the key is decrypted.
+// GetDeviceKeys3 Returns information about host and key for chosen encrypted device.
 func (di *DpeKeyService) GetDeviceKeys3(ctx context.Context, wstrDeviceId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrDeviceId": "%s"}`, wstrDeviceId))
 

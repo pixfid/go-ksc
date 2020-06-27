@@ -33,64 +33,39 @@ import (
 	"net/http"
 )
 
-//	SecurityPolicy Class Reference
-//
-//	Detailed Description
-//	Allows to manage users and permissions.
-//
-//	List of all members.
+// SecurityPolicy Allows to manage users and permissions.
 type SecurityPolicy service
 
+// PUserData struct
 type PUserData struct {
 	PUser PUser `json:"pUser"`
 }
 
+// PUser struct
 type PUser struct {
-	//User name
+	// KlsplUserName User name
 	KlsplUserName string `json:"KLSPL_USER_NAME"`
 
-	//Encrypted user password
+	// KlsplUserPwdEncrypted Encrypted user password
 	KlsplUserPwdEncrypted string `json:"KLSPL_USER_PWD_ENCRYPTED,omitempty"`
 
-	//User full name
+	// KlsplUserFullName User full name
 	KlsplUserFullName string `json:"KLSPL_USER_FULL_NAME"`
 
-	//User description
+	// KlsplUserDescription User description
 	KlsplUserDescription string `json:"KLSPL_USER_DESCRIPTION"`
 
-	//User mail
+	// KlsplUserMail User mail
 	KlsplUserMail string `json:"KLSPL_USER_MAIL"`
 
-	//User phone
+	// KlsplUserPhone User phone
 	KlsplUserPhone string `json:"KLSPL_USER_PHONE"`
 
-	//User account is enabled if true.
+	// KlsplUserEnabled User account is enabled if true.
 	KlsplUserEnabled bool `json:"KLSPL_USER_ENABLED"`
 }
 
-//	Add new user.
-//
-//	Parameters:
-//	- pUser	(params) user info, containing attributes "KLSPL_USER_*" (see List of user attributes).
-//
-//	Following attributes are required: -"KLSPL_USER_NAME" -"KLSPL_USER_PWD"
-//
-//	+----------------------------+-------------+------------------------------------------------------+
-//	|           Param            |    Type     |                     Description                      |
-//	+----------------------------+-------------+------------------------------------------------------+
-//	| "KLSPL_USER_ID"            | Int64       | User id.                                             |
-//	| "KLSPL_USER_NAME"          | string      | User name.                                           |
-//	| "KLSPL_USER_PWD"           | string      | Plain text user password. Obsolete.                  |
-//	| "KLSPL_USER_PWD_ENCRYPTED" | paramBinary | Encrypted user password.                             |
-//	| "KLSPL_USER_FULL_NAME"     | string      | User full name.                                      |
-//	| "KLSPL_USER_DESCRIPTION"   | string      | User description.                                    |
-//	| "KLSPL_USER_MAIL"          | string      | User mail.                                           |
-//	| "KLSPL_USER_PHONE"         | string      | User phone.                                          |
-//	| "KLSPL_USER_ENABLED"       | bool        | User account is enabled if true.                     |
-//	| "KLSPL_USER_UIS"           | bool        | User account is based on UIS. For hosted server only |
-//	+----------------------------+-------------+------------------------------------------------------+
-//Returns:
-//	- (int64) user identifier
+// AddUser Add new user.
 func (sp *SecurityPolicy) AddUser(ctx context.Context, params PUserData) (*PxgValInt, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -107,13 +82,9 @@ func (sp *SecurityPolicy) AddUser(ctx context.Context, params PUserData) (*PxgVa
 	return pxgValInt, raw, err
 }
 
-//	Modify existing user properties.
+// UpdateUser Modify existing user properties.
 //
-//	Modifies properties of the specified user
-//
-//	Parameters:
-//	- lUserId	(int64) user id
-//	- pUser	(params) user info, containing attributes "KLSPL_USER_*" (see List of user attributes).
+// Modifies properties of the specified user
 func (sp *SecurityPolicy) UpdateUser(ctx context.Context, lUserId int, params PUserData) (*PxgValInt, []byte, error) {
 	marshalledData, _ := json.Marshal(params.PUser)
 	pUser := []byte(fmt.Sprintf(`{"pUser" : %v,"lUserId" : %d}`, string(marshalledData), lUserId))
@@ -134,6 +105,7 @@ type UserInfo struct {
 	PxgRetVal bool  `json:"PxgRetVal,omitempty"`
 }
 
+// UserInfoEx struct
 type UserInfoEx struct {
 	LUserID         int64       `json:"lUserId,omitempty"`
 	NType           int64       `json:"nType,omitempty"`
@@ -141,15 +113,7 @@ type UserInfoEx struct {
 	WstrDisplayName string      `json:"wstrDisplayName,omitempty"`
 }
 
-//	Acquire current internal user id.
-//
-//	Parameters:
-//	lUserId	(int64) current user id if it is internal, -1 otherwise
-//
-//	Returns:
-//	- (bool) true if current user is internal user
-//
-//
+// GetCurrentUserId Acquire current internal user id.
 func (sp *SecurityPolicy) GetCurrentUserId(ctx context.Context) (*UserInfo, []byte, error) {
 	request, err := http.NewRequest("POST", sp.client.Server+"/api/v1.0/SecurityPolicy.GetCurrentUserId",
 		nil)
@@ -162,18 +126,11 @@ func (sp *SecurityPolicy) GetCurrentUserId(ctx context.Context) (*UserInfo, []by
 	return user, raw, err
 }
 
-//	Acquire current user id.
+// GetCurrentUserId2 Acquire current user id.
 //
-//	Parameters:
-//	- nType	(int64) type of current user:
-//	|- 0 for internal user
-//	|- 0 1 for non internal user
-//	- lUserId	(int64) current internal user id
-//	- binSystemId	(binary) current user binary id
-//	- wstrDisplayName	(string) current user display name
+// For internal user: lUserId > 0;
 //
-//	For internal user: lUserId > 0;
-//	For non internal user: lUserId = -1; binSystemId - binary representation of user SID;
+// For non internal user: lUserId = -1; binSystemId - binary representation of user SID;
 func (sp *SecurityPolicy) GetCurrentUserId2(ctx context.Context) (*UserInfoEx, []byte, error) {
 	request, err := http.NewRequest("POST", sp.client.Server+"/api/v1.0/SecurityPolicy.GetCurrentUserId2",
 		nil)
@@ -191,47 +148,42 @@ type UsersInfo struct {
 	UsersInfoArray []UsersInfoArray `json:"PxgRetVal"`
 }
 
+// UsersInfoArray struct
 type UsersInfoArray struct {
 	Type           string          `json:"type,omitempty"`
 	UserProperties *UserProperties `json:"value,omitempty"`
 }
 
+// UserProperties struct
 type UserProperties struct {
-	//User description
+	// KlsplUserDescription User description
 	KlsplUserDescription string `json:"KLSPL_USER_DESCRIPTION,omitempty"`
 
-	//User account is enabled if true.
+	// KlsplUserEnabled User account is enabled if true.
 	KlsplUserEnabled bool `json:"KLSPL_USER_ENABLED,omitempty"`
 
-	//User full name
+	// KlsplUserFullName User full name
 	KlsplUserFullName string `json:"KLSPL_USER_FULL_NAME,omitempty"`
 
-	//User id
+	// KlsplUserID User id
 	KlsplUserID int64 `json:"KLSPL_USER_ID,omitempty"`
 
-	//User mail
+	// KlsplUserMail User mail
 	KlsplUserMail string `json:"KLSPL_USER_MAIL,omitempty"`
 
-	//User name
+	// KlsplUserName User name
 	KlsplUserName string `json:"KLSPL_USER_NAME,omitempty"`
 
-	//User phone
+	// KlsplUserPhone User phone
 	KlsplUserPhone string `json:"KLSPL_USER_PHONE,omitempty"`
 
-	//User account is based on UIS. For hosted server only
+	// KlsplUserUis User account is based on UIS. For hosted server only
 	KlsplUserUis bool `json:"KLSPL_USER_UIS,omitempty"`
 }
 
-//	Acquire existing user properties.
+// GetUsers Acquire existing user properties.
 //
-//	Acquires properties of the specified user, or all users if lUserId==(-1);
-//
-//	Parameters:
-//	- lUserId	(int64) user id
-//	- lVsId	(int64) user id
-//
-//	Returns:
-//	- (array) users info, an array of containers of attributes "KLSPL_USER_*" (see List of user attributes).
+// Acquires properties of the specified user, or all users if lUserId==(-1);
 func (sp *SecurityPolicy) GetUsers(ctx context.Context, lUserId, lVsId int64) (*UsersInfo, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lUserId" : %d, "lVsId" : %d}`, lUserId, lVsId))
 	request, err := http.NewRequest("POST", sp.client.Server+"/api/v1.0/SecurityPolicy.GetUsers",
@@ -245,10 +197,7 @@ func (sp *SecurityPolicy) GetUsers(ctx context.Context, lUserId, lVsId int64) (*
 	return userInf, raw, err
 }
 
-//	Get current user personal data.
-//
-//	Returns:
-//	- (params) personal current user data
+// LoadPerUserData Get current user personal data.
 func (sp *SecurityPolicy) LoadPerUserData(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", sp.client.Server+"/api/v1.0/SecurityPolicy.LoadPerUserData",
 		nil)
@@ -260,10 +209,7 @@ func (sp *SecurityPolicy) LoadPerUserData(ctx context.Context) ([]byte, error) {
 	return raw, err
 }
 
-//	Save or replace current user personal data.
-//
-//	Parameters:
-//	- pUserData	(params) personal current user data.
+// SavePerUserData Save or replace current user personal data.
 func (sp *SecurityPolicy) SavePerUserData(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", sp.client.Server+"/api/v1.0/SecurityPolicy.SavePerUserData",
@@ -276,50 +222,47 @@ func (sp *SecurityPolicy) SavePerUserData(ctx context.Context, params interface{
 	return raw, err
 }
 
+// TrusteeParam struct
 type TrusteeParam struct {
 	LlTrusteeID  int64         `json:"llTrusteeId,omitempty"`
 	PTrusteeData *PTrusteeData `json:"pUserData,omitempty"`
 }
 
+// PTrusteeData struct
 type PTrusteeData struct {
-	//User id
+	//KlsplUserID User id
 	KlsplUserID int64 `json:"KLSPL_USER_ID,omitempty"`
 
-	//User name
+	// KlsplUserName User name
 	KlsplUserName string `json:"KLSPL_USER_NAME,omitempty"`
 
-	//Plain text user password. Obsolete
+	// KlsplUserPwd Plain text user password. Obsolete
 	KlsplUserPwd string `json:"KLSPL_USER_PWD,omitempty"`
 
-	//Encrypted user password
+	//KlsplUserPwdEncrypted Encrypted user password
 	KlsplUserPwdEncrypted string `json:"KLSPL_USER_PWD_ENCRYPTED,omitempty"`
 
-	//User full name
+	// KlsplUserFullName User full name
 	KlsplUserFullName string `json:"KLSPL_USER_FULL_NAME,omitempty"`
 
-	//User description
+	// KlsplUserDescription User description
 	KlsplUserDescription string `json:"KLSPL_USER_DESCRIPTION,omitempty"`
 
-	//User mail
+	// KlsplUserMail User mail
 	KlsplUserMail string `json:"KLSPL_USER_MAIL,omitempty"`
 
-	//User phone
+	// KlsplUserPhone User phone
 	KlsplUserPhone string `json:"KLSPL_USER_PHONE,omitempty"`
 
-	//User account is enabled if true
+	// KlsplUserEnabled User account is enabled if true
 	KlsplUserEnabled bool `json:"KLSPL_USER_ENABLED,omitempty"`
 
-	//User account is based on UIS. For hosted server only
+	// KlsplUserUis User account is based on UIS. For hosted server only
 	KlsplUserUis bool `json:"KLSPL_USER_UIS,omitempty"`
 }
 
-//	Modifies properties of the specified user (either internal user or user and group from Active Directory);
-//	for internal groups use SecurityPolicy3.UpdateSecurityGroup;.
-//
-//	Parameters:
-//	- params TrusteeParam
-//	|- llTrusteeId	(int64) unique user or group id; (matches to ul_llTrusteeId, llUserId and llGroupId)
-//	|- pUserData	(params) user info, containing attributes "KLSPL_USER_*" (see List of user attributes).
+// UpdateTrustee Modifies properties of the specified user (either internal user or user and group from Active Directory);
+// for internal groups use SecurityPolicy3.UpdateSecurityGroup.
 func (sp *SecurityPolicy) UpdateTrustee(ctx context.Context, params TrusteeParam) ([]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", sp.client.Server+"/api/v1.0/SecurityPolicy.UpdateTrustee",

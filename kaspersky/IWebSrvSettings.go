@@ -32,24 +32,13 @@ import (
 	"net/http"
 )
 
-//	IWebSrvSettings Class Reference
-//
-//	Web server settings proxy class.
-//
-//	List of all members.
+// IWebSrvSettings service to working with Web server settings proxy.
 type IWebSrvSettings service
 
-//	GetCertificateInfo. Returns information about custom certificate.
+// GetCertificateInfo. Returns information about custom certificate.
 //
-//
-//	If cert present then it return params with [["CERT_TYPE"] == 0 (PEM form)] and ["CERT_PUBLIC_PART"] fields.
-//	In case if certificate not set, then it returns empty params with no any fields.
-//
-//	Returns:
-//	Returned data format:
-//	- "CERT_TYPE"         Certificate type (0 - PEM form, 1 - PKCS#12 form);
-//	- "CERT_PUBLIC_PART"  Certificate's public part.
-//
+// If cert present then it return params with [["CERT_TYPE"] == 0 (PEM form)] and ["CERT_PUBLIC_PART"] fields.
+// In case if certificate not set, then it returns empty params with no any fields.
 func (iws *IWebSrvSettings) GetCertificateInfo(ctx context.Context) (*PxgValCIFIL, []byte, error) {
 	request, err := http.NewRequest("POST", iws.client.Server+"/api/v1.0/IWebSrvSettings.GetCertificateInfo", nil)
 	if err != nil {
@@ -61,10 +50,7 @@ func (iws *IWebSrvSettings) GetCertificateInfo(ctx context.Context) (*PxgValCIFI
 	return pxgValCIFIL, raw, err
 }
 
-//	GetCustomPkgHttpFqdn. Returns custom HTTP FQDN.
-//
-//	Returns:
-//	- Custom HTTP FQDN.
+// GetCustomPkgHttpFqdn. Returns custom HTTP FQDN.
 func (iws *IWebSrvSettings) GetCustomPkgHttpFqdn(ctx context.Context) (*PxgValStr, []byte, error) {
 	request, err := http.NewRequest("POST", iws.client.Server+"/api/v1.0/IWebSrvSettings.GetCustomPkgHttpFqdn", nil)
 	if err != nil {
@@ -76,13 +62,7 @@ func (iws *IWebSrvSettings) GetCustomPkgHttpFqdn(ctx context.Context) (*PxgValSt
 	return pxgValStr, raw, err
 }
 
-//	SetCustomPkgHttpFqdn. Set's custom HTTP FQDN. It is useful for HTTP link generation.
-//
-//	Parameters:
-//	- wsFqdn [string] Custom fqdn.
-//
-//	Exceptions:
-//	- Throws	KLSTD::STDE_BADPARAM in case of incorrect FQDN.
+// SetCustomPkgHttpFqdn. Set's custom HTTP FQDN. It is useful for HTTP link generation.
 func (iws *IWebSrvSettings) SetCustomPkgHttpFqdn(ctx context.Context, wsFqdn string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wsFqdn": "%s"}`, wsFqdn))
 	request, err := http.NewRequest("POST", iws.client.Server+"/api/v1.0/IWebSrvSettings.SetCustomPkgHttpFqdn", bytes.NewBuffer(postData))
@@ -94,13 +74,8 @@ func (iws *IWebSrvSettings) SetCustomPkgHttpFqdn(ctx context.Context, wsFqdn str
 	return raw, err
 }
 
-//	SetCustomCertificate. Sets custom certificate for Web Server's SSL listener.
-//
-//
-//	FQDN name from certificate are used for HTTPS link generation.
-//
-//	Parameters:
-//	- pCertData	[in] Params with certificate data (see Common format for certificate params).
+// SetCustomCertificate. Sets custom certificate for Web Server's SSL listener.
+// FQDN name from certificate are used for HTTPS link generation.
 func (iws *IWebSrvSettings) SetCustomCertificate(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

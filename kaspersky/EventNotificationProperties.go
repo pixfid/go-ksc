@@ -32,43 +32,37 @@ import (
 	"net/http"
 )
 
-//EventNotificationProperties Class Reference
-//
-//Notification properties.
-//
-//Allows to setup SMTP server address, port and authentication parameters
-//to send notifications via SMTP and/or SMTP SMS gateway, etc.
-//
-//List of all members.
+// EventNotificationProperties service to working with Notification properties.
+// Allows to setup SMTP server address, port and authentication parameters to send notifications via SMTP and/or SMTP SMS gateway, etc.
 type EventNotificationProperties service
 
-//DefaultSettings struct using in GetDefaultSettings
+// DefaultSettings struct using in GetDefaultSettings
 type DefaultSettings struct {
 	DefaultSettingsVal *DefaultSettingsVal `json:"PxgRetVal,omitempty"`
 }
 
-//Events notification settings
+// Events notification settings
 type DefaultSettingsVal struct {
-	//Number of days to store events in KSC server DB
-	KlevpNdDaysToStoreEvent int64 `json:"KLEVP_ND_DAYS_TO_STORE_EVENT,omitempty"`
+	// KlevpNdDaysToStoreEvent Number of days to store events in KSC server DB
+	KlevpNdDaysToStoreEvent *int64 `json:"KLEVP_ND_DAYS_TO_STORE_EVENT,omitempty"`
 
-	//List of email recipients separated by comma
-	KlevpNdEmail string `json:"KLEVP_ND_EMAIL,omitempty"`
+	// KlevpNdEmail List of email recipients separated by comma
+	KlevpNdEmail *string `json:"KLEVP_ND_EMAIL,omitempty"`
 
-	//Account name to be used for authorization on SMTP server
-	KlevpNdEmailEsmtpUser string `json:"KLEVP_ND_EMAIL_ESMTP_USER,omitempty"`
+	// KlevpNdEmailEsmtpUser Account name to be used for authorization on SMTP server
+	KlevpNdEmailEsmtpUser *string `json:"KLEVP_ND_EMAIL_ESMTP_USER,omitempty"`
 
-	//Sender address
-	KlevpNdEmailFrom string `json:"KLEVP_ND_EMAIL_FROM,omitempty"`
+	// KlevpNdEmailFrom Sender address
+	KlevpNdEmailFrom *string `json:"KLEVP_ND_EMAIL_FROM,omitempty"`
 
-	//Email subject
-	KlevpNdEmailSubject string `json:"KLEVP_ND_EMAIL_SUBJECT,omitempty"`
+	// KlevpNdEmailSubject Email subject
+	KlevpNdEmailSubject *string `json:"KLEVP_ND_EMAIL_SUBJECT,omitempty"`
 
-	//Event type (e.g., "GNRL_EV_VIRUS_FOUND" or "KLPRCI_TaskState")
-	KlevpNdEvetnType string `json:"KLEVP_ND_EVETN_TYPE,omitempty"`
+	// KlevpNdEvetnType Event type (e.g., "GNRL_EV_VIRUS_FOUND" or "KLPRCI_TaskState")
+	KlevpNdEvetnType *string `json:"KLEVP_ND_EVETN_TYPE,omitempty"`
 
-	//Template of the message to be sent as email;
-	//to see the lis of available tamplate substitutions, see Events templates
+	// KlevpNdMessageTemplate Template of the message to be sent as email;
+	// to see the lis of available tamplate substitutions, see Events templates
 	//	╔══════════╦════════╦═══════════════════╗
 	//	║   Name   ║  Type  ║    Description    ║
 	//	╠══════════╬════════╬═══════════════════╣
@@ -77,47 +71,47 @@ type DefaultSettingsVal struct {
 	//	║ EVENT    ║ string ║ Event type        ║
 	//	║ DESCR    ║ string ║ Event description ║
 	//	╚══════════╩════════╩═══════════════════╝
-	KlevpNdMessageTemplate string `json:"KLEVP_ND_MESSAGE_TEMPLATE,omitempty"`
+	KlevpNdMessageTemplate *string `json:"KLEVP_ND_MESSAGE_TEMPLATE,omitempty"`
 
-	//Obsolete parameter - must be empty or not present
-	KlevpNdNetSend string `json:"KLEVP_ND_NET_SEND,omitempty"`
+	// KlevpNdNetSend Obsolete parameter - must be empty or not present
+	KlevpNdNetSend *string `json:"KLEVP_ND_NET_SEND,omitempty"`
 
-	//Use MX record lookup when email notification is enabled
-	//(meaningful only in case if KLEVP_ND_USE_EMAIL is set to true);
-	//When enabled, KLEVP_ND_SMTP_SERVER is interpreted as a domain name which is to be resolved
-	KlevpNdResolveMX bool `json:"KLEVP_ND_RESOLVE_MX,omitempty"`
+	// KlevpNdResolveMX Use MX record lookup when email notification is enabled
+	// (meaningful only in case if KLEVP_ND_USE_EMAIL is set to true);
+	// When enabled, KLEVP_ND_SMTP_SERVER is interpreted as a domain name which is to be resolved
+	KlevpNdResolveMX *bool `json:"KLEVP_ND_RESOLVE_MX,omitempty"`
 
-	//Script to be run as event notification
-	KlevpNdScript string `json:"KLEVP_ND_SCRIPT,omitempty"`
+	// KlevpNdScript Script to be run as event notification
+	KlevpNdScript *string `json:"KLEVP_ND_SCRIPT,omitempty"`
 
-	//Account name to be used for authorization on SMTP SMS gateway
-	KlevpNdSMSEmailEsmtpUser string `json:"KLEVP_ND_SMS_EMAIL_ESMTP_USER,omitempty"`
+	// KlevpNdSMSEmailEsmtpUser Account name to be used for authorization on SMTP SMS gateway
+	KlevpNdSMSEmailEsmtpUser *string `json:"KLEVP_ND_SMS_EMAIL_ESMTP_USER,omitempty"`
 
-	//Sender address to be used for SMTP SMS gateway
-	KlevpNdSMSEmailFrom string `json:"KLEVP_ND_SMS_EMAIL_FROM,omitempty"`
+	// KlevpNdSMSEmailFrom Sender address to be used for SMTP SMS gateway
+	KlevpNdSMSEmailFrom *string `json:"KLEVP_ND_SMS_EMAIL_FROM,omitempty"`
 
-	//Email subject for SMTP messages to be sent to SMTP SMS gateway
-	KlevpNdSMSEmailSubject string `json:"KLEVP_ND_SMS_EMAIL_SUBJECT,omitempty"`
+	// KlevpNdSMSEmailSubject Email subject for SMTP messages to be sent to SMTP SMS gateway
+	KlevpNdSMSEmailSubject *string `json:"KLEVP_ND_SMS_EMAIL_SUBJECT,omitempty"`
 
-	//Recipient address to be used for SMTP SMS gateway
-	KlevpNdSMSEmailTo string `json:"KLEVP_ND_SMS_EMAIL_TO,omitempty"`
+	// KlevpNdSMSEmailTo Recipient address to be used for SMTP SMS gateway
+	KlevpNdSMSEmailTo *string `json:"KLEVP_ND_SMS_EMAIL_TO,omitempty"`
 
-	//Limitation on the number of SMS notifications
-	KlevpNdSMSLimit int64 `json:"KLEVP_ND_SMS_LIMIT,omitempty"`
+	// KlevpNdSMSLimit Limitation on the number of SMS notifications
+	KlevpNdSMSLimit *int64 `json:"KLEVP_ND_SMS_LIMIT,omitempty"`
 
-	//SMS recipients list
-	KlevpNdSMSRecipients string `json:"KLEVP_ND_SMS_RECIPIENTS,omitempty"`
+	// KlevpNdSMSRecipients SMS recipients list
+	KlevpNdSMSRecipients *string `json:"KLEVP_ND_SMS_RECIPIENTS,omitempty"`
 
-	//Unsupported, must be empty
-	KlevpNdSMSServiceID string `json:"KLEVP_ND_SMS_SERVICE_ID,omitempty"`
+	// KlevpNdSMSServiceID Unsupported, must be empty
+	KlevpNdSMSServiceID *string `json:"KLEVP_ND_SMS_SERVICE_ID,omitempty"`
 
-	//SMTP SMS gateway server port to be used for SMS notifications
-	KlevpNdSMSSMTPPort int64 `json:"KLEVP_ND_SMS_SMTP_PORT,omitempty"`
+	// KlevpNdSMSSMTPPort SMTP SMS gateway server port to be used for SMS notifications
+	KlevpNdSMSSMTPPort *int64 `json:"KLEVP_ND_SMS_SMTP_PORT,omitempty"`
 
-	//SMTP SMS gateway server address to be used for SMS notifications
-	KlevpNdSMSSMTPServer string `json:"KLEVP_ND_SMS_SMTP_SERVER,omitempty"`
+	// KlevpNdSMSSMTPServer SMTP SMS gateway server address to be used for SMS notifications
+	KlevpNdSMSSMTPServer *string `json:"KLEVP_ND_SMS_SMTP_SERVER,omitempty"`
 
-	//SMS message template;
+	// KlevpNdSMSTemplate SMS message template;
 	//to see the list of available tamplate substitutions, see Events templates
 	//	╔══════════╦════════╦═══════════════════╗
 	//	║   Name   ║  Type  ║    Description    ║
@@ -127,60 +121,53 @@ type DefaultSettingsVal struct {
 	//	║ EVENT    ║ string ║ Event type        ║
 	//	║ DESCR    ║ string ║ Event description ║
 	//	╚══════════╩════════╩═══════════════════╝
-	KlevpNdSMSTemplate string `json:"KLEVP_ND_SMS_TEMPLATE,omitempty"`
+	KlevpNdSMSTemplate *string `json:"KLEVP_ND_SMS_TEMPLATE,omitempty"`
 
-	//SMS notification type:
+	// KlevpNdSMSType SMS notification type:
 	//
 	//	0 - Undefined
 	//	1 - SMTP SMS gateway
 	//	2 - SMS service
-	KlevpNdSMSType int64 `json:"KLEVP_ND_SMS_TYPE,omitempty"`
+	KlevpNdSMSType *int64 `json:"KLEVP_ND_SMS_TYPE,omitempty"`
 
-	//SMTP server port
-	KlevpNdSMTPPort int64 `json:"KLEVP_ND_SMTP_PORT,omitempty"`
+	// KlevpNdSMTPPort SMTP server port
+	KlevpNdSMTPPort *int64 `json:"KLEVP_ND_SMTP_PORT,omitempty"`
 
-	//SMTP server address to be used for email notifications
-	KlevpNdSMTPServer string `json:"KLEVP_ND_SMTP_SERVER,omitempty"`
+	// KlevpNdSMTPServer SMTP server address to be used for email notifications
+	KlevpNdSMTPServer *string `json:"KLEVP_ND_SMTP_SERVER,omitempty"`
 
-	//Store events in Kaspersky Event Log on client computer
-	KlevpNdStoreAtClientLog bool `json:"KLEVP_ND_STORE_AT_CLIENT_LOG,omitempty"`
+	// KlevpNdStoreAtClientLog Store events in Kaspersky Event Log on client computer
+	KlevpNdStoreAtClientLog *bool `json:"KLEVP_ND_STORE_AT_CLIENT_LOG,omitempty"`
 
-	//Obsolete parameter - must be set to false or not present
-	KlevpNdStoreAtClientPres bool `json:"KLEVP_ND_STORE_AT_CLIENT_PRES,omitempty"`
+	// KlevpNdStoreAtClientPres Obsolete parameter - must be set to false or not present
+	KlevpNdStoreAtClientPres *bool `json:"KLEVP_ND_STORE_AT_CLIENT_PRES,omitempty"`
 
-	//Store events in Kaspersky Event Log on KSC server computer
-	KlevpNdStoreAtServerLog bool `json:"KLEVP_ND_STORE_AT_SERVER_LOG,omitempty"`
+	// KlevpNdStoreAtServerLog Store events in Kaspersky Event Log on KSC server computer
+	KlevpNdStoreAtServerLog *bool `json:"KLEVP_ND_STORE_AT_SERVER_LOG,omitempty"`
 
-	//Using emails for notifications; must be false for default settings
-	KlevpNdUseEmail bool `json:"KLEVP_ND_USE_EMAIL,omitempty"`
+	// KlevpNdUseEmail Using emails for notifications; must be false for default settings
+	KlevpNdUseEmail *bool `json:"KLEVP_ND_USE_EMAIL,omitempty"`
 
-	//Obsolete parameter - must be set to false or not present
-	KlevpNdUseNetSend bool `json:"KLEVP_ND_USE_NET_SEND,omitempty"`
+	// KlevpNdUseNetSend Obsolete parameter - must be set to false or not present
+	KlevpNdUseNetSend *bool `json:"KLEVP_ND_USE_NET_SEND,omitempty"`
 
-	//Notify on event by running the script. The script itself (KLEVP_ND_SCRIPT)
-	//can be set in the same params, otherwise default parameters for server are used
-	KlevpNdUseScript bool `json:"KLEVP_ND_USE_SCRIPT,omitempty"`
+	// KlevpNdUseScript Notify on event by running the script. The script itself (KLEVP_ND_SCRIPT)
+	// can be set in the same params, otherwise default parameters for server are used
+	KlevpNdUseScript *bool `json:"KLEVP_ND_USE_SCRIPT,omitempty"`
 
-	//Using SMS for notifications; must be false for default settings
-	KlevpNdUseSMS bool `json:"KLEVP_ND_USE_SMS,omitempty"`
+	// KlevpNdUseSMS Using SMS for notifications; must be false for default settings
+	KlevpNdUseSMS *bool `json:"KLEVP_ND_USE_SMS,omitempty"`
 
-	//Notify on events by SNMP
-	KlevpNdUseSNMP bool `json:"KLEVP_ND_USE_SNMP,omitempty"`
+	// KlevpNdUseSNMP Notify on events by SNMP
+	KlevpNdUseSNMP *bool `json:"KLEVP_ND_USE_SNMP,omitempty"`
 
-	//Notify on events by exporting to SysLog
-	KlevpNdUseSyslog bool `json:"KLEVP_ND_USE_SYSLOG,omitempty"`
+	// KlevpNdUseSyslog Notify on events by exporting to SysLog
+	KlevpNdUseSyslog *bool `json:"KLEVP_ND_USE_SYSLOG,omitempty"`
 
 	//KLEVP_ND_BODY_FILTER interface ???
 }
 
-//GetDefaultSettings
-//Reads the default notification settings.
-//
-//Reads the default notification settings, such as SMTP server properties, etc.
-//
-//	Returns:
-//	- (params) object containing the current notification settings
-//	- (see Events notification settings).
+// GetDefaultSettings Reads the default notification settings. Reads the default notification settings, such as SMTP server properties, etc.
 func (enp *EventNotificationProperties) GetDefaultSettings(ctx context.Context) (*DefaultSettings, []byte, error) {
 	request, err := http.NewRequest("POST", enp.client.Server+"/api/v1.0/EventNotificationProperties.GetDefaultSettings", nil)
 	if err != nil {
@@ -192,32 +179,29 @@ func (enp *EventNotificationProperties) GetDefaultSettings(ctx context.Context) 
 	return defaultSettings, raw, err
 }
 
-//ENLimits struct
+// ENLimits struct
 type ENLimits struct {
 	NLimits *NLimits `json:"PxgRetVal,omitempty"`
 }
 
-//ENLimitsSettings struct
+// ENLimitsSettings struct
 type ENLimitsParams struct {
 	NLimits *NLimits `json:"pSettings,omitempty"`
 }
 
+// NLimits struct
 type NLimits struct {
-	KlevpMaxEventsToSendPerPeriod   int64 `json:"KLEVP_MAX_EVENTS_TO_SEND_PER_PERIOD,omitempty"`
-	KlevpMaxVirusEventsForOutbreak  int64 `json:"KLEVP_MAX_VIRUS_EVENTS_FOR_OUTBREAK,omitempty"`
-	KlevpMaxVirusEventsForOutbreakE int64 `json:"KLEVP_MAX_VIRUS_EVENTS_FOR_OUTBREAK_E,omitempty"`
-	KlevpMaxVirusEventsForOutbreakP int64 `json:"KLEVP_MAX_VIRUS_EVENTS_FOR_OUTBREAK_P,omitempty"`
-	KlevpTestPeriodToOutbreak       int64 `json:"KLEVP_TEST_PERIOD_TO_OUTBREAK,omitempty"`
-	KlevpTestPeriodToOutbreakE      int64 `json:"KLEVP_TEST_PERIOD_TO_OUTBREAK_E,omitempty"`
-	KlevpTestPeriodToOutbreakP      int64 `json:"KLEVP_TEST_PERIOD_TO_OUTBREAK_P,omitempty"`
-	KlevpTestPeriodToSendEvents     int64 `json:"KLEVP_TEST_PERIOD_TO_SEND_EVENTS,omitempty"`
+	KlevpMaxEventsToSendPerPeriod   *int64 `json:"KLEVP_MAX_EVENTS_TO_SEND_PER_PERIOD,omitempty"`
+	KlevpMaxVirusEventsForOutbreak  *int64 `json:"KLEVP_MAX_VIRUS_EVENTS_FOR_OUTBREAK,omitempty"`
+	KlevpMaxVirusEventsForOutbreakE *int64 `json:"KLEVP_MAX_VIRUS_EVENTS_FOR_OUTBREAK_E,omitempty"`
+	KlevpMaxVirusEventsForOutbreakP *int64 `json:"KLEVP_MAX_VIRUS_EVENTS_FOR_OUTBREAK_P,omitempty"`
+	KlevpTestPeriodToOutbreak       *int64 `json:"KLEVP_TEST_PERIOD_TO_OUTBREAK,omitempty"`
+	KlevpTestPeriodToOutbreakE      *int64 `json:"KLEVP_TEST_PERIOD_TO_OUTBREAK_E,omitempty"`
+	KlevpTestPeriodToOutbreakP      *int64 `json:"KLEVP_TEST_PERIOD_TO_OUTBREAK_P,omitempty"`
+	KlevpTestPeriodToSendEvents     *int64 `json:"KLEVP_TEST_PERIOD_TO_SEND_EVENTS,omitempty"`
 }
 
-//GetNotificationLimits
-//Reads the notification limits.
-//
-//	Returns:
-//	- (params) object containing the current notification limits (see Events notification settings).
+// GetNotificationLimits Reads the notification limits.
 func (enp *EventNotificationProperties) GetNotificationLimits(ctx context.Context) (*ENLimits, []byte, error) {
 	request, err := http.NewRequest("POST", enp.client.Server+"/api/v1.0/EventNotificationProperties.GetNotificationLimits", nil)
 	if err != nil {
@@ -229,21 +213,10 @@ func (enp *EventNotificationProperties) GetNotificationLimits(ctx context.Contex
 	return enLimits, raw, err
 }
 
-//TestNotification
-//Tests the notification settings.
-//
-//Allows to test the notification settings, such as SMTP server properties,
-//etc. by sending a test notification using the provided notification settings.
-//
-//	Parameters:
-//	eType	(EventNT) type of the notification to be tested (see Events notification types).
-//
-//	- Undefined EventNT = 0 //Undefined
-//	- EMAIL     EventNT = 1 //EMAIL
-//	- SMS       EventNT = 8 //SMS
-//	- pSettings	(params) object containing the notification settings to be tested (see Events notification settings).
-func (enp *EventNotificationProperties) TestNotification(ctx context.Context, eType int,
-	pSettings interface{}) ([]byte, error) {
+// TestNotification Tests the notification settings.
+// Allows to test the notification settings, such as SMTP server properties, etc.
+// by sending a test notification using the provided notification settings.
+func (enp *EventNotificationProperties) TestNotification(ctx context.Context, eType int, pSettings interface{}) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"eType": %d,"pSettings": %v	}`, eType, pSettings))
 	request, err := http.NewRequest("POST", enp.client.Server+"/api/v1.0/EventNotificationProperties.TestNotification", bytes.NewBuffer(postData))
 	if err != nil {
@@ -254,13 +227,7 @@ func (enp *EventNotificationProperties) TestNotification(ctx context.Context, eT
 	return raw, err
 }
 
-//SetNotificationLimits
-//Sets up the notification limits.
-//
-//Allows to setup notification limits.
-//
-//Parameters:
-//	- pSettings	(params) object containing the notification limits to be set (see Events notification limits).
+// SetNotificationLimits Sets up the notification limits. Allows to setup notification limits.
 func (enp *EventNotificationProperties) SetNotificationLimits(ctx context.Context, params ENLimitsParams) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -276,13 +243,8 @@ func (enp *EventNotificationProperties) SetNotificationLimits(ctx context.Contex
 	return raw, err
 }
 
-//SetDefaultSettings
-//Sets up the default notification settings.
-//
-//Allows to setup the default notification settings, such as SMTP server properties, etc.
-//
-//	Parameters:
-//	- pSettings	(params) object containing the notification settings to be set (see Events notification settings).
+// SetDefaultSettings Sets up the default notification settings.
+// Allows to setup the default notification settings, such as SMTP server properties, etc.
 func (enp *EventNotificationProperties) SetDefaultSettings(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

@@ -59,12 +59,12 @@ type PPngData struct {
 
 //	PxgValArrayOfInt struct
 type PxgValArrayOfInt struct {
-	ArrayInt []int64 `json:"PxgRetVal"`
+	Array []int64 `json:"PxgRetVal"`
 }
 
 //	PxgValArrayOfString struct
 type PxgValArrayOfString struct {
-	ArrayString []string `json:"PxgRetVal"`
+	Array []string `json:"PxgRetVal"`
 }
 
 //	RequestID struct
@@ -93,11 +93,11 @@ type PxgRetError struct {
 }
 
 type Error struct {
-	Code    int64  `json:"code,omitempty"`
-	File    string `json:"file,omitempty"`
-	Line    int64  `json:"line,omitempty"`
-	Message string `json:"message,omitempty"`
-	Module  string `json:"module,omitempty"`
+	Code    *int64  `json:"code,omitempty"`
+	File    *string `json:"file,omitempty"`
+	Line    *int64  `json:"line,omitempty"`
+	Message *string `json:"message,omitempty"`
+	Module  *string `json:"module,omitempty"`
 }
 
 func (e Error) Error() string {
@@ -212,6 +212,11 @@ func jsonEscape(i string) string {
 }
 
 type DateTime struct {
-	Type  string `json:"type"`
-	Value string `json:"value"`
+	Type  *string `json:"type"`
+	Value *string `json:"value"`
+}
+
+type Size struct {
+	Type  *string `json:"type,omitempty"`
+	Value *int64  `json:"value,omitempty"`
 }

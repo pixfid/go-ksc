@@ -31,43 +31,12 @@ import (
 	"net/http"
 )
 
-//	NagGuiCalls Class Reference
+// NagGuiCalls Remote host caller.
 //
-//	Remote host caller..
-//
-//	This interface is implemented at Network Agent side,
-//	so use gateway connection to connect Network Agent and call interface methods.
-//
-//	List of all members.
+// This interface is implemented at Network Agent side, so use gateway connection to connect Network Agent and call interface methods.
 type NagGuiCalls service
 
-//	Asynchronously connects to the remote host (if hasn't connected yet), and makes call with the specified name szwCallName
-//
-//	Parameters:
-//	- szwProduct	product name
-//	- szwVersion	product settings compatibility version
-//	- szwCallName	remote call name
-//	- pInData	call-specific input data
-//
-//	Returns:
-//	- asynchronous request ID, used to get the result
-//
-//	Remarks:
-//	Check the operation state by calling AsyncActionStateChecker.CheckActionState periodically until it's
-//	finalized. If the operation succeeds then AsyncActionStateChecker.CheckActionState returns call-results in pStateData. Otherwise, a call to AsyncActionStateChecker.CheckActionState returns error in pStateData.
-//
-//	Exceptions:
-//	Throws	exception in case of error, see Some error definitions
-//
-//	 +------------------------------------------------+------+--------------------------+--------------------------------------------------+
-//	 |                  Module name                   | Code |      Mnemonic name       |                Error description                 |
-//	 +------------------------------------------------+------+--------------------------+--------------------------------------------------+
-//	 | KLPRSS                                         | 1125 | KLPRSS.NOT_EXIST        | Parameter with the specified name does not exist |
-//	 | KLSTD                                          | 1184 | KLSTD.STDE_NOACCESS     | Access denied                                    |
-//	 | KLSTD                                          | 1186 | KLSTD.STDE_NOTFOUND     | Object not found                                 |
-//	 | KLSTD                                          | 1193 | KLSTD.STDE_NOTPERM      | Operation is not permitted                       |
-//	 | KLCONN                                         | 1194 | KLCONN.GCR_NO_SUCH_CALL |  No such GUI call (GUI call is not implemented)  |
-//	 +------------------------------------------------+------+--------------------------+--------------------------------------------------+
+// CallConnectorAsync Asynchronously connects to the remote host (if hasn't connected yet), and makes call with the specified name szwCallName
 func (ngc *NagGuiCalls) CallConnectorAsync(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", ngc.client.Server+"/api/v1.0/NagGuiCalls.CallConnectorAsync", bytes.NewBuffer(postData))

@@ -32,13 +32,10 @@ import (
 	"net/http"
 )
 
-//	InvLicenseProducts Class Reference
-//
-//	Interface to manage License Management (third party) Functionality..
-//
-//	List of all members.
+//	InvLicenseProducts service to manage License Management (third party) Functionality.
 type InvLicenseProducts service
 
+// GetLicenseProducts Acquire License Products data.
 func (ilp *InvLicenseProducts) GetLicenseProducts(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", ilp.client.Server+"/api/v1.0/InvLicenseProducts.GetLicenseProducts", nil)
 	if err != nil {
@@ -49,10 +46,7 @@ func (ilp *InvLicenseProducts) GetLicenseProducts(ctx context.Context) ([]byte, 
 	return raw, err
 }
 
-//	Removes specified License Key.
-//
-//	Parameters:
-//	- nLicKeyId	(int64) id of License Key to remove
+// DeleteLicenseKey Removes specified License Key.
 func (ilp *InvLicenseProducts) DeleteLicenseKey(ctx context.Context, nLicKeyId int64) (*PxgRetError, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nLicKeyId": %d}`, nLicKeyId))
 	request, err := http.NewRequest("POST", ilp.client.Server+"/api/v1.0/InvLicenseProducts.DeleteLicenseKey", bytes.NewBuffer(postData))
@@ -65,10 +59,7 @@ func (ilp *InvLicenseProducts) DeleteLicenseKey(ctx context.Context, nLicKeyId i
 	return pxgRetError, raw, err
 }
 
-//	Removes specified License Product.
-//
-//	Parameters:
-//	- nLicProdId	(int64) id of License Product to remove
+// DeleteLicenseProduct Removes specified License Product.
 func (ilp *InvLicenseProducts) DeleteLicenseProduct(ctx context.Context, nLicProdId int64) (*PxgRetError, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nLicProdId": %d}`, nLicProdId))
 	request, err := http.NewRequest("POST", ilp.client.Server+"/api/v1.0/InvLicenseProducts.DeleteLicenseProduct", bytes.NewBuffer(postData))
@@ -81,7 +72,7 @@ func (ilp *InvLicenseProducts) DeleteLicenseProduct(ctx context.Context, nLicPro
 	return pxgRetError, raw, err
 }
 
-//LicenseKeyParams struct
+// LicenseKeyParams struct
 type LicenseKeyParams struct {
 	PLicKeyData *PLicKeyData `json:"pLicKeyData,omitempty"`
 }
@@ -99,15 +90,7 @@ type KlinvlicKey struct {
 	Value string `json:"value,omitempty"`
 }
 
-//	Add a new License Key.
-//
-//	Returns attributes for License Key.
-//
-//	Parameters:
-//	- pLicKeyData	(params) object containing License Key attributes,
-//	see List of attributes of software inventory License Key List
-//	of attributes of software inventory License Key Following attributes are required:
-//	- KLINVLIC_KEY_NAME
+// AddLicenseKey Add a new License Key.
 //
 //	╔════════════════════════════════╦═══════════════╦═══════════════════════════════════════╦══════════╗
 //	║              Name              ║     Type      ║              Description              ║ Remarks  ║
@@ -118,9 +101,6 @@ type KlinvlicKey struct {
 //	║ "KLINVLIC_KEY_EXPIRATIONLIMIT" ║ paramDateTime ║ Indicates time when key expires       ║ Optional ║
 //	║ "KLINVLIC_KEY_INFO"            ║ paramString   ║ Description                           ║          ║
 //	╚════════════════════════════════╩═══════════════╩═══════════════════════════════════════╩══════════╝
-//
-//	Returns:
-//	- (int64) id of created License Key.
 func (ilp *InvLicenseProducts) AddLicenseKey(ctx context.Context, params LicenseKeyParams) (*PxgValInt, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -137,7 +117,7 @@ func (ilp *InvLicenseProducts) AddLicenseKey(ctx context.Context, params License
 	return pxgValInt, raw, err
 }
 
-//LicenseProductParams struct
+// LicenseProductParams struct
 type LicenseProductParams struct {
 	PLicProdData *PLicProdData `json:"pLicProdData,omitempty"`
 }
@@ -163,21 +143,7 @@ type KlinvlicMasksValue struct {
 	KlinvlicMaskProdTagValue        string `json:"KLINVLIC_MASK_PROD_TAG_VALUE,omitempty"`
 }
 
-//	Add a new License Product.
-//
-//	Returns attributes for License Products.
-//
-//	- Parameters:
-//	- pLicProdData	(params) object containing License Product attributes,
-//	see List of attributes of software inventory License Product List
-//	of attributes of software inventory License Product. Following attributes are required:
-//	- KLINVLIC_NAME
-//	- KLINVLIC_ACTIVE
-//	- KLINVLIC_MASKS
-//	- KLINVLIC_LIKEYS
-//
-//	Returns:
-//	- (int64) id of created License Product.
+// AddLicenseProduct Add a new License Product.
 func (ilp *InvLicenseProducts) AddLicenseProduct(ctx context.Context, params LicenseProductParams) (*PxgValInt, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -194,7 +160,7 @@ func (ilp *InvLicenseProducts) AddLicenseProduct(ctx context.Context, params Lic
 	return pxgValInt, raw, err
 }
 
-//UpdateLicenseKeyParams struct using in InvLicenseProducts.UpdateLicenseKey
+// UpdateLicenseKeyParams struct using in InvLicenseProducts.UpdateLicenseKey
 type UpdateLicenseKeyParams struct {
 	//NLicKeyID id of License Key to modify
 	NLicKeyID int64 `json:"nLicKeyId"`
@@ -203,14 +169,7 @@ type UpdateLicenseKeyParams struct {
 	PLicKeyData PLicKeyData `json:"pLicKeyData"`
 }
 
-//InvLicenseProducts.UpdateLicenseKey
-//Modifies attributes of specified License Key.
-//
-//
-//	Parameters:
-//	- nLicKeyId		(int64) id of License Key to modify
-//	- pLicKeyData	(params) object containing License Key attributes to modify,
-//	see List of attributes of software inventory License Key List of attributes of software inventory License Key
+// UpdateLicenseKey Modifies attributes of specified License Key.
 func (ilp *InvLicenseProducts) UpdateLicenseKey(ctx context.Context, params UpdateLicenseKeyParams) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -226,22 +185,16 @@ func (ilp *InvLicenseProducts) UpdateLicenseKey(ctx context.Context, params Upda
 	return raw, err
 }
 
-//UpdateLicenseProductParams struct using in InvLicenseProducts.UpdateLicenseProduct
+// UpdateLicenseProductParams struct using in InvLicenseProducts.UpdateLicenseProduct
 type UpdateLicenseProductParams struct {
-	//NLicProdID id of License Product to modify
+	// NLicProdID id of License Product to modify
 	NLicProdID string `json:"nLicProdId"`
 
-	//PLicProdData object containing License Product attributes to modify
+	// PLicProdData object containing License Product attributes to modify
 	PLicProdData PLicProdData `json:"pLicProdData"`
 }
 
-//InvLicenseProducts.UpdateLicenseProduct
-//Modifies attributes of specified License Product.
-//
-//	Parameters:
-//	- nLicProdId	(int64) id of License Product to modify
-//	- pLicProdData	(params) object containing License Product attributes to modify,
-//	see List of attributes of software inventory License Product List of attributes of software inventory License Product.
+// UpdateLicenseProduct Modifies attributes of specified License Product.
 func (ilp *InvLicenseProducts) UpdateLicenseProduct(ctx context.Context, params UpdateLicenseProductParams) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

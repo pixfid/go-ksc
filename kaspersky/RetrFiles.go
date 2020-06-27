@@ -31,7 +31,7 @@ import (
 	"net/http"
 )
 
-// RetrFiles provides means to get retranslated files info
+// RetrFiles service provides means to get retranslated files info
 type RetrFiles service
 
 // FilesRequest struct using in GetInfo
@@ -45,6 +45,7 @@ type FilesRequestElement struct {
 	FilesRequestValue FilesRequestValue `json:"value,omitempty"`
 }
 
+// FilesRequestValue struct
 type FilesRequestValue struct {
 	// Index primary index relative path in lowercase, e.g. "index/u1313g.xml";
 	Index string `json:"Index,omitempty"`
@@ -56,7 +57,7 @@ type FilesRequestValue struct {
 	FileName string `json:"FileName,omitempty"`
 }
 
-//Retranslates found files info, correspondingly to incoming request-array, cell-by-cell
+// Retranslates found files info, correspondingly to incoming request-array, cell-by-cell
 type Retranslates struct {
 	// Retranslate list of matched files data
 	Retranslate [][]Retranslate `json:"PxgRetVal"`

@@ -31,7 +31,7 @@ import (
 	"net/http"
 )
 
-// VServers2 Virtual servers processing..
+// VServers2 service to access Virtual servers processing.
 type VServers2 service
 
 // VServerStatistic struct

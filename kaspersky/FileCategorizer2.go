@@ -32,32 +32,18 @@ import (
 	"net/http"
 )
 
-//FileCategorizer2 Class Reference
+//FileCategorizer2 service for working with FileCategorizer subsystem.
 //
-//Interface for working with FileCategorizer subsystem.
+// There are 3 types of categories: simple, autoupdate and silverimage.
 //
-//There are 3 types of categories: simple, autoupdate and silverimage.
+// Simple category can be created by user manually.
 //
-//	- Simple category can be created by user manually.
-//	- Autoupdate category is working on server side and calculating hashes of files from chosen directory.
-//	- SilverImage category type accumulates hashes of files from chosen hosts.
+// Autoupdate category is working on server side and calculating hashes of files from chosen directory.
 //
-//List of all members.
+// SilverImage category type accumulates hashes of files from chosen hosts.
 type FileCategorizer2 service
 
-//AddExpressions
-//Add some expressions to category.
-//
-//	Parameters:
-//	- nCategoryId	(int64) Category id
-//	- arrNewExpressions	(array) Array of new expressions. Max size is 100 elements. See Custom category format.
-//	- bInclusions	(bool) If true then add to inclusions. Otherwise add to exclusions.
-//
-//	Return:
-//	- wstrAsyncId	(string) Id of async operation.
-//
-//See also:
-//AsyncActionStateChecker
+// AddExpressions Add some expressions to category.
 func (fc *FileCategorizer2) AddExpressions(ctx context.Context, params interface{}) (*PxgValStr, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -74,10 +60,9 @@ func (fc *FileCategorizer2) AddExpressions(ctx context.Context, params interface
 	return pxgValStr, raw, err
 }
 
-//CancelFileMetadataOperations
-//Cancel file metadata operations.
+// CancelFileMetadataOperations Cancel file metadata operations.
 //
-//Method cancels operation (GetFileMetadata, GetFilesMetadata, GetFilesMetadataFromMSI) initialized using current connection.
+// Method cancels operation (GetFileMetadata, GetFilesMetadata, GetFilesMetadataFromMSI) initialized using current connection.
 func (fc *FileCategorizer2) CancelFileMetadataOperations(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.CancelFileMetadataOperations", nil)
 	if err != nil {
@@ -89,11 +74,10 @@ func (fc *FileCategorizer2) CancelFileMetadataOperations(ctx context.Context) (*
 	return pxgValInt, raw, err
 }
 
-//CancelFileUpload
-//Cancel file upload for file categorizer subsystem.
+// CancelFileUpload Cancel file upload for file categorizer subsystem.
 //
-//This methode cancels file upload.
-//Call FileCategorizer2.InitFileUpload to start new upload.
+// This methode cancels file upload.
+// Call FileCategorizer2.InitFileUpload to start new upload.
 func (fc *FileCategorizer2) CancelFileUpload(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.CancelFileUpload", nil)
 	if err != nil {
@@ -105,7 +89,7 @@ func (fc *FileCategorizer2) CancelFileUpload(ctx context.Context) (*PxgValInt, [
 	return pxgValInt, raw, err
 }
 
-//CategoryParams struct
+// CategoryParams struct
 type CategoryParams struct {
 	Category *Category `json:"pCategory,omitempty"`
 }
@@ -160,17 +144,7 @@ type CertificateParams struct {
 type Certificate struct {
 }
 
-//CreateCategory
-//Create category (simple, autoupdate or silverimage)
-//
-//	Parameters:
-//	- pCategory	(params) Category body (see Custom category format)
-//
-//	Returns:
-//	- (int64) Category id
-//
-//	Exceptions:
-//	- KLSTD.STDE_OBJ_EXISTS	- name or UUID is not unique
+// CreateCategory Create category (simple, autoupdate or silverimage)
 func (fc *FileCategorizer2) CreateCategory(ctx context.Context, params CategoryParams) (*PxgValStr, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -187,15 +161,7 @@ func (fc *FileCategorizer2) CreateCategory(ctx context.Context, params CategoryP
 	return pxgValStr, raw, err
 }
 
-//DeleteCategory
-//Delete category.
-//
-//	Parameters:
-//	- nCategoryId (int) Category id
-//
-//	Exceptions:
-//	- KLSTD.STDE_NOTFOUND	- category not found
-//	- KLSTD.STDE_NOACCESS
+// DeleteCategory Delete category.
 func (fc *FileCategorizer2) DeleteCategory(ctx context.Context, nCategoryId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nCategoryId": %d}`, nCategoryId))
 	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.DeleteCategory",
@@ -208,26 +174,14 @@ func (fc *FileCategorizer2) DeleteCategory(ctx context.Context, nCategoryId int6
 	return raw, err
 }
 
-//ExpressionParams struct using in FileCategorizer2.DeleteExpression
+// ExpressionParams struct using in FileCategorizer2.DeleteExpression
 type ExpressionParams struct {
 	NCategoryID int64   `json:"nCategoryId,omitempty"`
 	ArrIDS      []int64 `json:"arrIds"`
 	BInclusions bool    `json:"bInclusions,omitempty"`
 }
 
-//DeleteExpression
-//Delete some expressions from category.
-//
-//	Parameters:
-//	- nCategoryId	(int64) Category id
-//	- arrIds	(array) Array of identifiers (int). Max size is 100 elements.
-//	- bInclusions	(bool) If true then delete from inclusions. Otherwise delete from exclusions.
-//
-//	Return:
-//	- wstrAsyncId	(string) Id of async operation.
-//
-//See also:
-//AsyncActionStateChecker
+// DeleteExpression Delete some expressions from category.
 func (fc *FileCategorizer2) DeleteExpression(ctx context.Context, params ExpressionParams) (*PxgValStr, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -244,18 +198,9 @@ func (fc *FileCategorizer2) DeleteExpression(ctx context.Context, params Express
 	return pxgValStr, raw, err
 }
 
-//DoStaticAnalysisAsync
-//Start static analysis.
+// DoStaticAnalysisAsync Start static analysis.
 //
-//	Deprecated:
-//	for using in OpenAPI. Use FileCategorizer2.DoStaticAnalysisAsync2 instead.
-//
-//	Parameters:
-//	- wstrRequestId	(string) Async id
-//	- nPolicyId	(int64) Policy id
-//
-//	Exceptions:
-//	KLSTD::STDE_NOACCESS	- access denied
+// Deprecated: Use FileCategorizer2.DoStaticAnalysisAsync2 instead.
 func (fc *FileCategorizer2) DoStaticAnalysisAsync(ctx context.Context, wstrRequestId string, nPolicyId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrRequestId": "%s", "nPolicyId": %d}`, wstrRequestId, nPolicyId))
 	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.DoStaticAnalysisAsync",
@@ -268,30 +213,12 @@ func (fc *FileCategorizer2) DoStaticAnalysisAsync(ctx context.Context, wstrReque
 	return raw, err
 }
 
-//AsyncID struct
+// AsyncID struct
 type AsyncID struct {
 	WstrAsyncID string `json:"wstrAsyncId,omitempty"`
 }
 
-//DoStaticAnalysisAsync2
-//Start static analysis.
-//
-//	Parameters:
-//	- nPolicyId	(int64) Policy id
-//
-//	Return:
-//	- wstrAsyncId	(string) Id of async operation.
-//	To get status use AsyncActionStateChecker.CheckActionState, lStateCode "0" means OK.
-//
-//	Result of operation is placed into views:
-//
-//	Srvview results of static analysis - common information per category (count of executable files)
-//	Srvview results of static analysis with exefiles info - list of executable files
-//
-//See also:
-//AsyncActionStateChecker
-//
-//Static analysis of application categories
+// DoStaticAnalysisAsync2 Start Static analysis of application categories
 func (fc *FileCategorizer2) DoStaticAnalysisAsync2(ctx context.Context, nPolicyId int64) (*AsyncID, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nPolicyId": %d}`, nPolicyId))
 	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.DoStaticAnalysisAsync2",
@@ -305,16 +232,9 @@ func (fc *FileCategorizer2) DoStaticAnalysisAsync2(ctx context.Context, nPolicyI
 	return asyncID, raw, err
 }
 
-//DoTestStaticAnalysisAsync
-//Start static analysis for test ACL.
+// DoTestStaticAnalysisAsync Start static analysis for test ACL.
 //
-//	Deprecated:
-//	- Deprecated for using in OpenAPI. Use FileCategorizer2.DoTestStaticAnalysisAsync2 instead.
-//
-//	Parameters:
-//	- wstrRequestId		(string) Async id
-//	- nPolicyId			(int64) Policy id
-//	- pTestACL			(params) Test ACL (see "ACL structure 2")
+// Deprecated: Use FileCategorizer2.DoTestStaticAnalysisAsync2 instead.
 func (fc *FileCategorizer2) DoTestStaticAnalysisAsync(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -330,22 +250,8 @@ func (fc *FileCategorizer2) DoTestStaticAnalysisAsync(ctx context.Context, param
 	return raw, err
 }
 
-//DoTestStaticAnalysisAsync2
-//Start static analysis for test ACL.
-//
-//	Parameters:
-//	- nPolicyId		(int64) Policy id
-//	- pTestACL		(params) Test ACL (see "ACL structure 2")
-//
-//	Return:
-//	- wstrAsyncId	(string) Id of async operation. To get status use AsyncActionStateChecker.
-//	CheckActionState, lStateCode "0" means OK.
-//Result of operation is placed into views:
-//
-//Srvview results of static analysis - common information per category (count of executable files)
-//Srvview results of static analysis with exefiles info - list of executable files
-func (fc *FileCategorizer2) DoTestStaticAnalysisAsync2(ctx context.Context, params interface{}) (*WActionGUID, []byte,
-	error) {
+// DoTestStaticAnalysisAsync2 Start static analysis for test ACL.
+func (fc *FileCategorizer2) DoTestStaticAnalysisAsync2(ctx context.Context, params interface{}) (*WActionGUID, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, nil, err
@@ -361,7 +267,7 @@ func (fc *FileCategorizer2) DoTestStaticAnalysisAsync2(ctx context.Context, para
 	return wActionGUID, raw, err
 }
 
-//FinishStaticAnalysis
+// FinishStaticAnalysis Inform server that reading of analysis results is finished and server should clean it.
 func (fc *FileCategorizer2) FinishStaticAnalysis(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.FinishStaticAnalysis", nil)
 	if err != nil {
@@ -372,14 +278,7 @@ func (fc *FileCategorizer2) FinishStaticAnalysis(ctx context.Context) ([]byte, e
 	return raw, err
 }
 
-//ForceCategoryUpdate
-//Force process of automatic update (for autoupdate and silverimage)
-//
-//	Parameters:
-//	- nCategoryId (int64) Category id
-//
-//	Exceptions:
-//	KLSTD.STDE_NOTPERM	- wrong category type
+// ForceCategoryUpdate Force process of automatic update (for autoupdate and silverimage)
 func (fc *FileCategorizer2) ForceCategoryUpdate(ctx context.Context, nCategoryId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nCategoryId": %d}`, nCategoryId))
 	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.ForceCategoryUpdate",
@@ -392,11 +291,7 @@ func (fc *FileCategorizer2) ForceCategoryUpdate(ctx context.Context, nCategoryId
 	return raw, err
 }
 
-//GetCategoriesModificationCounter
-//Returns modification counter. It increments on every category change.
-//
-//	Returns:
-//	- (int64) Modification counter
+// GetCategoriesModificationCounter Returns modification counter. It increments on every category change.
 func (fc *FileCategorizer2) GetCategoriesModificationCounter(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.GetCategoriesModificationCounter", nil)
 	if err != nil {
@@ -408,18 +303,7 @@ func (fc *FileCategorizer2) GetCategoriesModificationCounter(ctx context.Context
 	return pxgValInt, raw, err
 }
 
-//GetCategory
-//Get category by id.
-//
-//	Parameters:
-//	 - nCategoryId	(int64) Category id
-//
-//	Return:
-//	- pCategory	(params) Category body (see Custom category format)
-//
-//	Exceptions:
-//	- KLSTD.STDE_NOTFOUND	- category not found
-//	- KLSTD.STDE_BADFORMAT	- format of category is wrong
+// GetCategory Get category by id.
 func (fc *FileCategorizer2) GetCategory(ctx context.Context, nCategoryId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nCategoryId": %d}`, nCategoryId))
 	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.GetCategory",
@@ -432,17 +316,7 @@ func (fc *FileCategorizer2) GetCategory(ctx context.Context, nCategoryId int64) 
 	return raw, err
 }
 
-//GetCategoryByUUID
-//Get category by uuid.
-//
-//	Parameters:
-//	- pCategoryUUID	(string) Category uuid
-//
-//	Return:
-//		- pCategory	(params) Category body (see Custom category format)
-//
-//	Exceptions:
-//	- KLSTD.STDE_NOTFOUND	- category not found
+// GetCategoryByUUID Get category by uuid.
 func (fc *FileCategorizer2) GetCategoryByUUID(ctx context.Context, pCategoryUUID string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"pCategoryUUID": "%s"}`, pCategoryUUID))
 	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.GetCategoryByUUID",
@@ -455,21 +329,11 @@ func (fc *FileCategorizer2) GetCategoryByUUID(ctx context.Context, pCategoryUUID
 	return raw, err
 }
 
-//GetFileMetadata
-//Get file metadata.
+// GetFileMetadata Get file metadata.
 //
-//	Parameters:
-//	- ulFlag (int64) Requested meta information. Use like a mask of flags. See File metadata flags.
+// To get result use AsyncActionStateChecker.CheckActionState.
 //
-//	Return:
-//	- wstrAsyncId (string) Id of async operation.
-//
-//	To get result use AsyncActionStateChecker.CheckActionState.
-//	It returns params with requested attributes.
-//	See list of attributes File metadata flags.
-//
-//See also:
-//AsyncActionStateChecker
+// It returns params with requested attributes.
 func (fc *FileCategorizer2) GetFileMetadata(ctx context.Context, ulFlag int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"ulFlag": %d}`, ulFlag))
 	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.GetFileMetadata",
@@ -482,23 +346,15 @@ func (fc *FileCategorizer2) GetFileMetadata(ctx context.Context, ulFlag int64) (
 	return raw, err
 }
 
-//GetFilesMetadata
-//Get files metadata from zip-archive.
+// GetFilesMetadata Get files metadata from zip-archive.
 //
-//	Parameters:
-//	- ulFlag (int64) Requested meta information. Use like a mask of flags. See File metadata flags.
+// To get action status use AsyncActionStateChecker.CheckActionState.
 //
-//	Return:
-//	- wstrAsyncId (string) Id of async operation.
+// When action is not finished and lStateCode equals 2 then task in progress and pStateData may contain attribute "Progress" (int).
 //
-//	To get action status use AsyncActionStateChecker.CheckActionState.
-//	When action is not finished and lStateCode equals 2 then task in progress
-//	and pStateData may contain attribute "Progress" (int).
-//	When action is successfully finished it returns pStateData with an array "FilesMetadata".
-//	Each element is a params with requested attributes. See list of attributes File metadata flags.
+// When action is successfully finished it returns pStateData with an array "FilesMetadata".
 //
-//See also:
-//AsyncActionStateChecker
+// Each element is a params with requested attributes. See list of attributes File metadata flags.
 func (fc *FileCategorizer2) GetFilesMetadata(ctx context.Context, ulFlag int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"ulFlag": %d}`, ulFlag))
 	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.GetFilesMetadata",
@@ -511,22 +367,7 @@ func (fc *FileCategorizer2) GetFilesMetadata(ctx context.Context, ulFlag int64) 
 	return raw, err
 }
 
-//GetFilesMetadataFromMSI
-//Get files metadata from MSI.
-//
-//	Parameters:
-//	- ulFlag (int64) Requested meta information. Use like a mask of flags. See File metadata flags.
-//
-//	Return:
-//	- wstrAsyncId	(string) Id of async operation.
-//	To get action status use AsyncActionStateChecker.CheckActionState.
-//	When action is not finished and lStateCode equals 2 then task in progress
-//	and pStateData may contain attribute "Progress" (int).
-//	When action is successfully finished it returns pStateData with an array "FilesMetadata".
-//	Each element is a params with requested attributes. See list of attributes File metadata flags.
-//
-//See also:
-//AsyncActionStateChecker
+// GetFilesMetadataFromMSI Get files metadata from MSI.
 func (fc *FileCategorizer2) GetFilesMetadataFromMSI(ctx context.Context, ulFlag int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"ulFlag": %d}`, ulFlag))
 	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.GetFilesMetadataFromMSI",
@@ -539,7 +380,7 @@ func (fc *FileCategorizer2) GetFilesMetadataFromMSI(ctx context.Context, ulFlag 
 	return raw, err
 }
 
-//RefPolicies struct
+// RefPolicies struct
 type RefPolicies struct {
 	PPolicies *PPolicies `json:"pPolicies,omitempty"`
 }
@@ -563,17 +404,7 @@ type RefPolicyValue struct {
 	VServerName string `json:"VServerName,omitempty"`
 }
 
-//GetRefPolicies
-//Returns array of policies with references to specified category.
-//
-//	Parameters:
-//	- nCatId (int64) Category id
-//
-//	Return:
-//	- pPolicies	(params) See Policies array
-//
-//	Exceptions:
-//	- KLSTD.STDE_NOACCESS	- access denied
+// GetRefPolicies Returns array of policies with references to specified category.
 func (fc *FileCategorizer2) GetRefPolicies(ctx context.Context, nCatId int64) (*RefPolicies, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nCatId": %d}`, nCatId))
 	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.GetRefPolicies",
@@ -587,17 +418,9 @@ func (fc *FileCategorizer2) GetRefPolicies(ctx context.Context, nCatId int64) (*
 	return refPolicies, raw, err
 }
 
-//GetSerializedCategoryBody
-//Returns serialized category body for plugin.
+// GetSerializedCategoryBody Returns serialized category body for plugin.
 //
-//	Warning:
-//	Deprecated for using in OpenAPI. Use FileCategorizer2.GetSerializedCategoryBody2 instead.
-//
-//	Parameters:
-//	- nCategoryId (int) Category id
-//
-//	Return:
-//	 - pCategory (params) Category serialized body
+// Deprecated: Use FileCategorizer2.GetSerializedCategoryBody2 instead.
 func (fc *FileCategorizer2) GetSerializedCategoryBody(ctx context.Context, nCategoryId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nCategoryId": %d}`, nCategoryId))
 	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.GetSerializedCategoryBody",
@@ -610,17 +433,7 @@ func (fc *FileCategorizer2) GetSerializedCategoryBody(ctx context.Context, nCate
 	return raw, err
 }
 
-//GetSerializedCategoryBody2
-//Returns serialized category body for plugin.
-//
-//	Parameters:
-//	- nCategoryId (int64) Category id
-//
-//	Return:
-//	- pCategory	(params) Category serialized body
-//
-//See also:
-//See Serialized category format
+// GetSerializedCategoryBody2 Returns serialized category body for plugin.
 func (fc *FileCategorizer2) GetSerializedCategoryBody2(ctx context.Context, nCategoryId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nCategoryId": %d}`, nCategoryId))
 	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.GetSerializedCategoryBody2",
@@ -633,14 +446,7 @@ func (fc *FileCategorizer2) GetSerializedCategoryBody2(ctx context.Context, nCat
 	return raw, err
 }
 
-//GetSyncId
-//Returns categories synchronization id.
-//
-//	Returns:
-//	- (int64) Synchronization id
-//
-//See also:
-//See GroupSync
+// GetSyncId Returns categories synchronization id.
 func (fc *FileCategorizer2) GetSyncId(ctx context.Context) (*PxgValInt, []byte, error) {
 	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.GetSyncId", nil)
 	if err != nil {
@@ -656,13 +462,9 @@ type UploadParams struct {
 	WstrUploadURL string `json:"wstrUploadUrl,omitempty"`
 }
 
-//InitFileUpload
-//Initialize file upload for file categorizer subsystem.
+// InitFileUpload Initialize file upload for file categorizer subsystem.
 //
-//	Return:
-//	- wstrUploadUrl	(string) Upload url. See Files upload.
-//
-//Only one upload url is allowed for connection.
+// Remark: Only one upload url is allowed for connection.
 func (fc *FileCategorizer2) InitFileUpload(ctx context.Context) (*UploadParams, []byte, error) {
 	request, err := http.NewRequest("POST", fc.client.Server+"/api/v1.0/FileCategorizer2.InitFileUpload", nil)
 	if err != nil {
@@ -674,17 +476,7 @@ func (fc *FileCategorizer2) InitFileUpload(ctx context.Context) (*UploadParams, 
 	return uploadParams, raw, err
 }
 
-//UpdateCategory
-//Update category.
-//
-//	Parameters:
-//	- nCategoryId	(int64) Category id
-//	- pCategory	(params) New category body (see Custom category format)
-//
-//	Exceptions:
-//	- KLSTD::STDE_NOTFOUND	- category not found
-//	- KLSTD::STDE_BADFORMAT	- format of category is wrong
-//	- KLSTD::STDE_NOTPERM	- can't change attribute
+// UpdateCategory Update category.
 func (fc *FileCategorizer2) UpdateCategory(ctx context.Context, params interface{}) (*PxgValStr, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -701,22 +493,7 @@ func (fc *FileCategorizer2) UpdateCategory(ctx context.Context, params interface
 	return pxgValStr, raw, err
 }
 
-//UpdateExpressions
-//Update some expressions in category.
-//
-//	Parameters:
-//	- nCategoryId	(int64) Category id
-//	- arrIdAndExpression	(array) Array of params.
-//	Each element contains 2 attributes: "id" (int) - expression id,	"body" (params) - expression body.
-//	Max size is 100 elements. See Custom category format.
-//
-//	- bInclusions	(boolean) If true then update inclusions. Otherwise update exclusions.
-//
-//	Return:
-//	wstrAsyncId	 (string) Id of async operation.
-//
-//See also:
-//AsyncActionStateChecker
+// UpdateExpressions Update some expressions in category.
 func (fc *FileCategorizer2) UpdateExpressions(ctx context.Context, params interface{}) (*PxgValStr, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

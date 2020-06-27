@@ -32,27 +32,23 @@ import (
 	"net/http"
 )
 
-//	Interface for working with Hardware storage subsystem..
-//
-//	List of all members.
+// HWInvStorage service for working with Hardware storage subsystem.
 type HWInvStorage service
 
-//	Start export of hardware inventory.
-//
-//	Parameters:
-//	- eExportType	[in]
-//
-//	Import and export types:
-//	╔════╦═════════════╗
-//	║ ID ║ Description ║
-//	╠════╬═════════════╣
-//	║  0 ║ XML         ║
-//	║  1 ║ Excel (XML) ║
-//	╚════╩═════════════╝
-//
-//	Returns:
-//	- Id of asynchronous operation.
-//	To get status use AsyncActionStateChecker.CheckActionState, lStateCode "0" means OK.
+// AddDynColumn Add dynamic column.
+func (hw *HWInvStorage) AddDynColumn(ctx context.Context, wstrColName string) (*PxgValStr, error) {
+	postData := []byte(fmt.Sprintf(`{"wstrColName": "%s"}`, wstrColName))
+	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.AddDynColumn", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	pxgValStr := new(PxgValStr)
+	_, err = hw.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, err
+}
+
+// ExportHWInvStorage2 Start export of hardware inventory.
 func (hw *HWInvStorage) ExportHWInvStorage2(ctx context.Context, eExportType int) (*PxgValStr, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"eExportType": %d}`, eExportType))
 	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.ExportHWInvStorage2", bytes.NewBuffer(postData))
@@ -65,10 +61,7 @@ func (hw *HWInvStorage) ExportHWInvStorage2(ctx context.Context, eExportType int
 	return pxgValStr, raw, err
 }
 
-//	Cancel export of hardware inventory.
-//
-//	Parameters:
-//	- wstrAsyncId	(string) Async id returned from HWInvStorage.ExportHWInvStorage2
+// ExportHWInvStorageCancel Cancel export of hardware inventory.
 func (hw *HWInvStorage) ExportHWInvStorageCancel(ctx context.Context, wstrAsyncId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrAsyncId": "%s"}`, wstrAsyncId))
 	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.ExportHWInvStorageCancel", bytes.NewBuffer(postData))
@@ -80,21 +73,7 @@ func (hw *HWInvStorage) ExportHWInvStorageCancel(ctx context.Context, wstrAsyncI
 	return raw, err
 }
 
-//	Start import of hardware inventory.
-//
-//	Parameters:
-//	- eImportType	[in64] (int64)
-//
-//	Import and export types:
-//	╔════╦═════════════╗
-//	║ ID ║ Description ║
-//	╠════╬═════════════╣
-//	║  0 ║ XML         ║
-//	║  1 ║ Excel (XML) ║
-//	╚════╩═════════════╝
-//
-//	Returns:
-//	- Id of asynchronous operation. To get status use AsyncActionStateChecker.CheckActionState, lStateCode "0" means OK.
+// EnumDynColumns Start import of hardware inventory.
 func (hw *HWInvStorage) ImportHWInvStorage2(ctx context.Context, eImportType int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"eImportType": %d}`, eImportType))
 	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.ImportHWInvStorage2", bytes.NewBuffer(postData))
@@ -106,45 +85,51 @@ func (hw *HWInvStorage) ImportHWInvStorage2(ctx context.Context, eImportType int
 	return raw, err
 }
 
-//	Return list of dynamic columns.
-//
-//	Parameters:
-//	- arrDynColumnInfo	(array) Array of params. Format of element:
-//	|- DynColId (string) - Column id
-//	|- DynColName (string) - Column name
-//
-//	Exceptions:
-//	- KLSTD::STDE_NOACCESS	- access denied
-func (hw *HWInvStorage) EnumDynColumns(ctx context.Context) ([]byte, error) {
+// DynamicColumns struct
+type DynamicColumns struct {
+	// ArrDynColumnInfo Array of params.
+	ArrDynColumnInfo []ArrDynColumnInfo `json:"arrDynColumnInfo"`
+}
+
+// ArrDynColumnInfo struct
+type ArrDynColumnInfo struct {
+	Type  *string             `json:"type,omitempty"`
+	Value *DynColumnInfoValue `json:"value,omitempty"`
+}
+
+// DynColumnInfoValue struct
+type DynColumnInfoValue struct {
+	// DynColID Column id
+	DynColID *string `json:"DynColId,omitempty"`
+
+	// DynColName Column name
+	DynColName *string `json:"DynColName,omitempty"`
+}
+
+// EnumDynColumns Return list of dynamic columns.
+func (hw *HWInvStorage) EnumDynColumns(ctx context.Context) (*DynamicColumns, error) {
 	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.EnumDynColumns", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := hw.client.Do(ctx, request, nil)
-	return raw, err
+	dynamicColumns := new(DynamicColumns)
+	_, err = hw.client.Do(ctx, request, &dynamicColumns)
+	return dynamicColumns, err
 }
 
-//Processing rules container
+// ProcessingRules Processing rules container
 type ProcessingRules struct {
 	PRules *PRules `json:"pRules,omitempty"`
 }
 
-//Processing rules
+// Processing rules
 type PRules struct {
-	//Array of Object type. See Object types. Type of each element is int64.
+	// AutoCorporativeByType Array of Object type. See Object types. Type of each element is int64.
 	AutoCorporativeByType []int64 `json:"AutoCorporativeByType"`
 }
 
-//	Get processing rules.
-//
-//	Parameters:
-//
-//	Return:
-//	- pRules (params) See Processing rules format
-//
-//	Exceptions:
-//	- KLSTD::STDE_NOACCESS	- access denied
+// GetProcessingRules Get processing rules.
 func (hw *HWInvStorage) GetProcessingRules(ctx context.Context) (*ProcessingRules, []byte, error) {
 	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.GetProcessingRules", nil)
 	if err != nil {
@@ -156,13 +141,7 @@ func (hw *HWInvStorage) GetProcessingRules(ctx context.Context) (*ProcessingRule
 	return processingRules, raw, err
 }
 
-//	Set processing rules.
-//
-//	Parameters:
-//	- pRules	(params) See Processing rules format
-//
-//	Exceptions:
-//	- KLSTD::STDE_NOACCESS	- access denied
+// SetProcessingRules Set processing rules.
 func (hw *HWInvStorage) SetProcessingRules(ctx context.Context, params ProcessingRules) ([]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.SetProcessingRules", bytes.NewBuffer(postData))
@@ -174,17 +153,7 @@ func (hw *HWInvStorage) SetProcessingRules(ctx context.Context, params Processin
 	return raw, err
 }
 
-//	Get hardware inventory object.
-//
-//	Parameters:
-//	- nObjId 	(int64) Object id
-//
-//	Return:
-//	- pObj 	(params) Object body. See Object format
-//
-//	Exceptions:
-//	- KLSTD::STDE_NOACCESS	- access denied
-//	- KLSTD::STDE_NOTFOUND	- Object not found
+// GetHWInvObject Get hardware inventory object.
 func (hw *HWInvStorage) GetHWInvObject(ctx context.Context, nObjId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nObjId": %d}`, nObjId))
 	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.GetHWInvObject", bytes.NewBuffer(postData))
@@ -196,7 +165,7 @@ func (hw *HWInvStorage) GetHWInvObject(ctx context.Context, nObjId int64) ([]byt
 	return raw, err
 }
 
-//HWInvStorageResponse struct
+// HWInvStorageResponse struct
 type HWInvStorageResponse struct {
 	//Data chunk
 	PChunk string `json:"pChunk,omitempty"`
@@ -208,14 +177,7 @@ type HWInvStorageResponse struct {
 	NDataSizeREST int64 `json:"nDataSizeRest,omitempty"`
 }
 
-//	Get exported data. Call this method until nDataSizeRest is not zero.
-//
-//	Parameters:
-//	- wstrAsyncId	(string) Async id returned from HWInvStorage.ExportHWInvStorage2
-//	- nGetDataSize	(int64) Max data size to retrieve
-//
-//	Return:
-//	- response	HWInvStorageResponse
+// ExportHWInvStorageGetData Get exported data. Call this method until nDataSizeRest is not zero.
 func (hw *HWInvStorage) ExportHWInvStorageGetData(ctx context.Context, wstrAsyncId string,
 	nGetDataSize int64) (*HWInvStorageResponse, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrAsyncId": "%s","nGetDataSize": %d}`, wstrAsyncId, nGetDataSize))
@@ -230,13 +192,7 @@ func (hw *HWInvStorage) ExportHWInvStorageGetData(ctx context.Context, wstrAsync
 	return hwInvStorageResponse, raw, err
 }
 
-//	Delete hardware inventory object.
-//
-//	Parameters:
-//	- nObjId	(int64) Object id
-//
-//	Exceptions:
-//	- KLSTD::STDE_NOACCESS	- access denied
+// DelHWInvObject Delete hardware inventory object.
 func (hw *HWInvStorage) DelHWInvObject(ctx context.Context, nObjId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nObjId": %d}`, nObjId))
 	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.DelHWInvObject", bytes.NewBuffer(postData))
@@ -248,14 +204,7 @@ func (hw *HWInvStorage) DelHWInvObject(ctx context.Context, nObjId int64) ([]byt
 	return raw, err
 }
 
-//	Delete array of objects.
-//
-//	Parameters:
-//	- arrObjId	(array) Array of device ids. Max array size is 1000 elements.
-//	For device id see Hardware inventory object format hardware object format.
-//
-//	Exceptions:
-//	- KLSTD::STDE_NOACCESS	- access denied
+// DelHWInvObject2 Delete array of objects.
 func (hw *HWInvStorage) DelHWInvObject2(ctx context.Context, arrObjId []int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"arrObjId": %s}`, ToJson(arrObjId)))
 	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.DelHWInvObject2", bytes.NewBuffer(postData))
@@ -267,15 +216,7 @@ func (hw *HWInvStorage) DelHWInvObject2(ctx context.Context, arrObjId []int64) (
 	return raw, err
 }
 
-//	Set corporative flag for array of devices.
-//
-//	Parameters:
-//	- arrObjId	(array) Array of device ids. Max array size is 1000 elements.
-//	For device id see Hardware inventory object format hardware object format.
-//	- bState	(bool) New state
-//
-//	Exceptions:
-//	- KLSTD::STDE_NOACCESS	- access denied
+// SetCorpFlag2 Set corporative flag for array of devices.
 func (hw *HWInvStorage) SetCorpFlag2(ctx context.Context, arrObjId []int64, bState bool) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"arrObjId": %s, "bState" : %v}`, ToJson(arrObjId), bState))
 	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.SetCorpFlag2", bytes.NewBuffer(postData))

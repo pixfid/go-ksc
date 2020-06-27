@@ -32,13 +32,9 @@ import (
 	"net/http"
 )
 
-//	QBTNetworkListApi Class Reference
+// QBTNetworkListApi Interface to working with Quarantine, Backup and TIF network lists.
 //
-//	Interface to working with Quarantine, Backup and TIF network lists.
-//
-//	To retrieve info for these lists use List of files from quarantine, backup or unprocessed network lists
-//
-//	List of all members.
+// To retrieve info for these lists use List of files from quarantine, backup or unprocessed network lists
 type QBTNetworkListApi service
 
 //NetworkListFileInfo struct
@@ -59,16 +55,7 @@ type PPInfo struct {
 	StrListName string `json:"strListName,omitempty"`
 }
 
-//	Acquire info about specified file from specified network list.
-//
-//	Parameters:
-//	- itemId	(int64), identifier of the file. (see "nId" attribute from Quarantine, Backup, TIF lists)
-//
-//	Returns:
-//	- ppInfo (params) contains following attributes:
-//	|- "strHostName" (string), Host name. (see "strHostName" attribute from Quarantine, Backup, TIF lists)
-//	|- "strListName" (string), name of the network list.
-//	|- "strId" (string), id of an item on the host. (see "strId" attribute from Quarantine, Backup, TIF lists)
+// GetListItemInfo Acquire info about specified file from specified network list.
 func (nc *QBTNetworkListApi) GetListItemInfo(ctx context.Context, itemId int64) (*NetworkListFileInfo, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"itemId": %d}`, itemId))
 	request, err := http.NewRequest("POST", nc.client.Server+"/api/v1.0/QBTNetworkListApi.GetListItemInfo", bytes.NewBuffer(postData))
@@ -81,7 +68,7 @@ func (nc *QBTNetworkListApi) GetListItemInfo(ctx context.Context, itemId int64) 
 	return networkListFileInfo, raw, err
 }
 
-//QBTParams struct
+// QBTParams struct
 type QBTParams struct {
 	//Name of the network list.
 	ListName string `json:"listName,omitempty"`
@@ -103,13 +90,10 @@ type QBTParams struct {
 	PTaskParams PTaskParams `json:"pTaskParams,omitempty"`
 }
 
-//PTaskParams struct
+// PTaskParams struct
 type PTaskParams struct{}
 
-//	Initiate action under the specified file from specified network list.
-//
-//	Parameters:
-//	- params	(QBTParams)
+// AddListItemTask Initiate action under the specified file from specified network list.
 func (nc *QBTNetworkListApi) AddListItemTask(ctx context.Context, params QBTParams) ([]byte, error) {
 	postData, err := json.Marshal(&params)
 	if err != nil {
@@ -125,7 +109,7 @@ func (nc *QBTNetworkListApi) AddListItemTask(ctx context.Context, params QBTPara
 	return raw, err
 }
 
-//NetworkTaskParam struct
+// QBTsParam struct
 type QBTsParam struct {
 	//Name of the network list.
 	ListName string `json:"listName,omitempty"`
@@ -148,10 +132,7 @@ type QBTsParam struct {
 	PTaskParams PTaskParams `json:"pTaskParams,omitempty"`
 }
 
-//Initiate action under the specified files from specified network list.
-//
-//	Parameters:
-//	- params	(QBTsParam)
+// AddListItemsTask Initiate action under the specified files from specified network list.
 func (nc *QBTNetworkListApi) AddListItemsTask(ctx context.Context, params QBTsParam) ([]byte, error) {
 	postData, err := json.Marshal(&params)
 	if err != nil {

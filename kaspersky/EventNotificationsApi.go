@@ -31,20 +31,17 @@ import (
 	"net/http"
 )
 
-//EventNotificationsApi Class Reference
-//
-//Allows to publish event with Administration Server as publisher.
-//
-//List of all members.
+// EventNotificationsApi service allows to publish event with Administration Server as publisher.
 type EventNotificationsApi service
 
-//EventNotificationParams struct
+// EventNotificationParams struct
 type EventNotificationParams struct {
 	WstrEventType string     `json:"wstrEventType"`
 	PEventBody    PEventBody `json:"pEventBody"`
 	TmBirthTime   string     `json:"tmBirthTime"`
 }
 
+// PEventBody struct
 type PEventBody struct {
 	GnrlEaParam2 string `json:"GNRL_EA_PARAM_2"`
 	GnrlEaParam5 string `json:"GNRL_EA_PARAM_5"`
@@ -52,16 +49,7 @@ type PEventBody struct {
 	GnrlEaParam8 int64  `json:"GNRL_EA_PARAM_8"`
 }
 
-//PublishEvent
-//Publish event.
-//
-//Publishes event with Administration Server as publisher
-//
-//	Parameters:
-//	- params (interface{}) with fields:
-//	|- wstrEventType	(string) event type
-//	|- pEventBody	(params) event body, content depends on event type
-//	|- tmBirthTime	(datetime) time when event was published
+// PublishEvent Publishes event with Administration Server as publisher
 func (ts *EventNotificationsApi) PublishEvent(ctx context.Context, params EventNotificationParams) ([]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", ts.client.Server+"/api/v1.0/EventNotificationsApi.PublishEvent", bytes.NewBuffer(postData))

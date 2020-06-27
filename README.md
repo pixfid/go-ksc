@@ -10,7 +10,8 @@ go-ksc is a Go client library for accessing the KSC (Kaspersky Security Center) 
 package main
 
 import (
-    "github.com/pixfid/go-ksc/kaspersky"
+    "github.com/pixfid/go-ksc/v1/kaspersky"	// with go modules enabled (GO111MODULE=on or outside GOPATH)
+    "github.com/pixfid/go-ksc/kaspersky" // with go modules disabled
 )
 
 ```
@@ -25,7 +26,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/pixfid/go-ksc/kaspersky"
+	"github.com/pixfid/go-ksc/v1/kaspersky"
 )
 
 func main() {
@@ -325,8 +326,8 @@ tastList, raw, err := client.Tasks.GetAllTasksOfHost(ctx, "", "c2b22f83-307c-45a
 |    ✔    | WolSender.go                   | WolSender                   | Wake-On-LAN signal sender                                                                                                                               |
 
 #### TODO
-* [x] Implement all classes
-* [x] Implements all Methods
+* [x] Implement all services
+* [ ] Implements all Methods
 * [ ] Write Tests
 * [ ] Examples
 * [ ] Write Documentation

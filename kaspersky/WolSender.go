@@ -32,7 +32,7 @@ import (
 	"net/http"
 )
 
-// WolSender Wake-On-LAN signal sender.
+// WolSender service Wake-On-LAN signal sender.
 type WolSender service
 
 // SendWolSignal Sends Wake-On-LAN signal to host.

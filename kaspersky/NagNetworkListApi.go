@@ -31,46 +31,30 @@ import (
 	"net/http"
 )
 
-//	NagNetworkListApi Class Reference
-//	Nagent OpenAPI to work with network lists.
-//
-//	List of all members.
+// NagNetworkListApi Nagent OpenAPI to work with network lists.
 type NagNetworkListApi service
 
 type NetworkListParams struct {
-	//Network list name
+	// ListName Network list name
 	ListName string `json:"listName"`
 
-	//Network list item identifier
+	// ItemID Network list item identifier
 	ItemID string `json:"itemId"`
 
-	//if true than will be get info about packed content of the file.
-	//It is useful if file is the virus and it is needed to load it.
+	// BNeedPacked if true than will be get info about packed content of the file.
+	// It is useful if file is the virus and it is needed to load it.
 	BNeedPacked bool `json:"bNeedPacked"`
 
-	//start position of the chunk
+	// ULStartPos start position of the chunk
 	ULStartPos int64 `json:"ulStartPos"`
 
-	//number of bytes to read
+	// LBytesToRead number of bytes to read
 	LBytesToRead int64 `json:"lBytesToRead"`
 }
 
-//	Retrieves information about file associated with network list item.
+// GetListItemFileInfo Retrieves information about file associated with network list item.
 //
-//	Values for listName and itemId see in Network lists which elements are associated with
-//	files Network lists which elements are associated with files.
-//
-//	Parameters:
-//	- listName	Network list name.
-//	- itemId	Network list item identifier
-//	- bNeedPacked	if true than will be get info about packed content of the file.
-//	It is useful if file is the virus and it is needed to load it.
-//
-//	Returns:
-//	- pFileInfo	Contains information about queried file. contains following attributes:
-//		|- KLNLST_FILE_NAME, String, name of the file
-//		|- KLNLST_TOTAL_SIZE, Integer, total size of the file
-//	- lResult int64, value from enum NLSTFileOperationResult.
+// Values for listName and itemId see in Network lists which elements are associated with files Network lists which elements are associated with files.
 func (nnla *NagNetworkListApi) GetListItemFileInfo(ctx context.Context, params NetworkListParams) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -86,22 +70,9 @@ func (nnla *NagNetworkListApi) GetListItemFileInfo(ctx context.Context, params N
 	return raw, err
 }
 
-//	Retrieves chunk of the file associated with network list item.
+// GetListItemFileChunk Retrieves chunk of the file associated with network list item.
 //
-//	Values for listName and itemId see in Network lists which elements are associated with files
-//	Network lists which elements are associated with files.
-//
-//	Parameters:
-//	- listName	Network list name
-//	- itemId	Network list item identifier
-//	- bNeedPacked	if true than will be get info about packed content of the file.
-//	It is useful if file is the virus and it is needed to load it.
-//	- ulStartPos	start position of the chunk
-//	- lBytesToRead	number of bytes to read
-//
-//	Return values:
-//	- pChunk	binary data as array of bytes.
-//	- lResult	int64, value from enum NLSTFileOperationResult
+// Values for listName and itemId see in Network lists which elements are associated with files Network lists which elements are associated with files.
 func (nnla *NagNetworkListApi) GetListItemFileChunk(ctx context.Context, params NetworkListParams) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

@@ -32,16 +32,10 @@ import (
 	"net/http"
 )
 
-//ExtAud Class Reference
-//
-//Interface for working with ExtAudit subsystem.
-//This interface allow you to get a revision of an object and update description.
-//
-//List of all members.
+// ExtAud service for working with ExtAudit subsystem. This service allow you to get a revision of an object and update description.
 type ExtAud service
 
-//GetRevision
-//Get object revision.
+// GetRevision Get object revision.
 //	╔════╦══════════════════════╗
 //	║ ID ║     Description      ║
 //	╠════╬══════════════════════╣
@@ -67,8 +61,7 @@ func (ea *ExtAud) GetRevision(ctx context.Context, nObjId, nObjType, nObjRevisio
 	return raw, err
 }
 
-//UpdateRevisionDesc
-//Update revision description.
+// UpdateRevisionDesc Update revision description.
 //	╔════╦══════════════════════╗
 //	║ ID ║     Description      ║
 //	╠════╬══════════════════════╣
@@ -111,12 +104,7 @@ type FDValue struct {
 	ObjType int64 `json:"nObjType,omitempty"`
 }
 
-//FinalDelete"
-//Final delete for deleted objects.
-//
-//	Parameters:
-//	- arrObjects	[params] (array) Array of pairs ObjId-ObjType.
-//	Max size of array is 100 elements.
+// FinalDelete delete for deleted objects.
 func (ea *ExtAud) FinalDelete(ctx context.Context, params FinalDeleteParams) ([]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", ea.client.Server+"/api/v1.0/ExtAud.FinalDelete", bytes.NewBuffer(postData))

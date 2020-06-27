@@ -32,22 +32,10 @@ import (
 	"net/http"
 )
 
-//ChunkAccessor Class Reference
-//
-//Working with host result-set..
-//
-//Working with a result-set, that is a server-side ordered collection of found hosts.
-//
-//List of all members.
+// ChunkAccessor service working with host result-set, that is a server-side ordered collection of found hosts.
 type ChunkAccessor service
 
-//Release
-//Release result-set.
-//
-//Releases the specified result-set and frees associated memory
-//
-//Parameters:
-//	- strAccessor	(string) result-set ID, identifier of the server-side ordered collection of found hosts
+// Release result-set. Releases the specified result-set and frees associated memory
 func (ca *ChunkAccessor) Release(ctx context.Context, accessor string) bool {
 	postData := []byte(fmt.Sprintf(`{"strAccessor": "%s"}`, accessor))
 	request, err := http.NewRequest("POST", ca.client.Server+"/api/v1.0/ChunkAccessor.Release", bytes.NewBuffer(postData))
@@ -62,20 +50,12 @@ func (ca *ChunkAccessor) Release(ctx context.Context, accessor string) bool {
 	return false
 }
 
-//GetItemsCount
-//Acquire count of result-set elements.
-//
-//Returns number of elements contained in the specified result-set.
-//
-//Parameters:
-//	- strAccessor	(string) result-set ID, identifier of the server-side ordered collection of found hosts
-//Returns:
-//	- (data.PxgValInt) number of elements contained in the specified result-set
+// GetItemsCount Acquire count of result-set elements. Returns number of elements contained in the specified result-set.
 func (ca *ChunkAccessor) GetItemsCount(ctx context.Context, accessor string) (*PxgValInt, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strAccessor": "%s"}`, accessor))
 	request, err := http.NewRequest("POST", ca.client.Server+"/api/v1.0/ChunkAccessor.GetItemsCount", bytes.NewBuffer(postData))
 	if err != nil {
-		panic(err)
+		return nil, nil, err
 	}
 
 	pxgValInt := new(PxgValInt)
@@ -89,21 +69,13 @@ type ItemsChunkParams struct {
 	NCount      int64  `json:"nCount,omitempty"`
 }
 
-//GetItemsChunk
-//Acquire subset of result-set elements by range.
-//
-//Returns specified nCount elements contained in the specified result-set beginning from position nStart.
-//
-//	Parameters:
-//	- strAccessor	(string) result-set ID, identifier of the server-side ordered collection of found hosts
-//	- nStart	(int64) zero-based start position
-//	- nCount	(int64) number of elements to return
-//	- [out]	pChunk	(params) container that has needed elements in the array with name "KLCSP_ITERATOR_ARRAY"
-//	Returns:
-//	- (int64) actual number of returned elements (less or equal to nCount)
-func (ca *ChunkAccessor) GetItemsChunk(ctx context.Context, params ItemsChunkParams, result interface{}) ([]byte,
-	error) {
-	postData, _ := json.Marshal(params)
+// GetItemsChunk Acquire subset of result-set elements by range.
+// Returns specified nCount elements contained in the specified result-set beginning from position nStart.
+func (ca *ChunkAccessor) GetItemsChunk(ctx context.Context, params ItemsChunkParams, result interface{}) ([]byte, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
 
 	request, err := http.NewRequest("POST", ca.client.Server+"/api/v1.0/ChunkAccessor.GetItemsChunk", bytes.NewBuffer(postData))
 

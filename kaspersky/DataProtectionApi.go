@@ -32,42 +32,28 @@ import (
 	"net/http"
 )
 
-//DataProtectionApi Class Reference
-//
-//Allows to protect sensitive data in policies, tasks, and/or on specified host.
-//
-//List of all members.
+// DataProtectionApi service allows to protect sensitive data in policies, tasks, and/or on specified host.
 type DataProtectionApi service
 
-//CheckPasswordSplPpc
-//Checks if Spl password policy compliance is enabled for the specified Administration Server
-//and checks the specified password for compliance to the password policy.
+// CheckPasswordSplPpc Checks if Spl password policy compliance is enabled for the specified Administration Server
+// and checks the specified password for compliance to the password policy.
 //
-//Password Policy is specified below
+// Password Policy is specified below
 //
-//Characters allowed:
+// Characters allowed:
 //
-//A – Z
-//a – z
-//0 – 9
-//@ # $ % ^ & * - _ ! + = [ ] { } | \ : ‘ , . ? / ` ~ “ ( ) ;
+// A – Z
+// a – z
+// 0 – 9
+// @ # $ % ^ & * - _ ! + = [ ] { } | \ : ‘ , . ? / ` ~ “ ( ) ;
 //
-//Characters disallowed:
+// Characters disallowed:
+// Unicode characters, spaces, Cannot contain a dot character '.' immediately preceding the '@' symbol
 //
-//	Unicode characters
-//	spaces
-//	Cannot contain a dot character '.' immediately preceding the '@' symbol
+// Password restrictions:
 //
-//Password restrictions:
-//
-//	- 8 characters minimum and 16 characters maximum
-//	- Must contain characters at least from any 3 of 4 groups mentioned in the section "Characters allowed"
-//
-//	Parameters:
-//	- szwPassword	(string)	The password to check.
-//
-//	Exceptions:
-//	- KLSTD.STDE_NOFUNC	the password does not comply with the password policy
+// 8 characters minimum and 16 characters maximum
+// Must contain characters at least from any 3 of 4 groups mentioned in the section "Characters allowed"
 func (dpa *DataProtectionApi) CheckPasswordSplPpc(ctx context.Context, szwPassword string) (*PxgValBool, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"szwPassword": "%s"}`, szwPassword))
 	request, err := http.NewRequest("POST", dpa.client.Server+"/api/v1.0/DataProtectionApi.CheckPasswordSplPpc", bytes.NewBuffer(postData))
@@ -89,20 +75,7 @@ type ProtectedData struct {
 	PDataProtected string `json:"pDataProtected,omitempty"`
 }
 
-//ProtectDataForHost
-//Protects sensitive data to store in SettingsStorage or local task.
-//
-//	Parameters:
-//	- szwHostId host name
-//	- pData pointer to data
-//
-//	- pDataProtected pointer to protected data block.
-//
-//	Exceptions:
-//	- KLSTD.STDE_NOTPERM	host has no public key (
-//	possibly it doesn't support data protection or nagent isn't installed
-//	there or host belongs to other virtual server)
-//	- KLSTD.STDE_NOFUNC	server doesn't support data protection
+// ProtectDataForHost Protects sensitive data to store in SettingsStorage or local task.
 func (dpa *DataProtectionApi) ProtectDataForHost(ctx context.Context, params ToProtectData) (*ProtectedData, []byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", dpa.client.Server+"/api/v1.0/DataProtectionApi.ProtectDataForHost", bytes.NewBuffer(postData))
@@ -114,12 +87,7 @@ func (dpa *DataProtectionApi) ProtectDataForHost(ctx context.Context, params ToP
 	return protectedData, raw, err
 }
 
-//ProtectDataGlobally
-//Protects sensitive data to store in policy or global/group task.
-//
-//	Parameters:
-//	- pData pointer to data
-//	- pDataProtected pointer to protected data block.
+// ProtectDataGlobally Protects sensitive data to store in policy or global/group task.
 func (dpa *DataProtectionApi) ProtectDataGlobally(ctx context.Context, params ToProtectData) (*ProtectedData, []byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", dpa.client.Server+"/api/v1.0/DataProtectionApi.ProtectDataGlobally", bytes.NewBuffer(postData))
@@ -132,17 +100,8 @@ func (dpa *DataProtectionApi) ProtectDataGlobally(ctx context.Context, params To
 	return protectedData, raw, err
 }
 
-//ProtectUtf16StringForHost
-//Protects sensitive data for the specified host (to store in its local settings or a local task)
-//
-//Protects the specified text as UTF16 string encrypted with the key of the specified host.
-//
-//	Parameters:
-//	- szwHostId host name
-//	- szwPlainText plainText
-//
-//	Returns:
-//	- Ciphertext
+// ProtectUtf16StringForHost Protects sensitive data for the specified host (to store in its local settings or a local task)
+// Protects the specified text as UTF16 string encrypted with the key of the specified host.
 func (dpa *DataProtectionApi) ProtectUtf16StringForHost(ctx context.Context, szwHostId, szwPlainText string) ([]byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"szwPassword" : "%s", "szwPlainText" : "%s"}`, szwHostId, szwPlainText))
@@ -155,18 +114,8 @@ func (dpa *DataProtectionApi) ProtectUtf16StringForHost(ctx context.Context, szw
 	return raw, err
 }
 
-//ProtectUtf16StringGlobally
-//Protects sensitive data to store in policy, global/group task, Administration Server settings.
-//
-//Protects the specified text as UTF16 string encrypted with the key of the Administration Server.
-//
-//The same as Tasks.ProtectPassword
-//
-//	Parameters:
-//	- szwPlainText plainText
-//
-//	Returns:
-//	- Ciphertext
+// ProtectUtf16StringGlobally Protects sensitive data to store in policy, global/group task, Administration Server settings.
+// Protects the specified text as UTF16 string encrypted with the key of the Administration Server.
 func (dpa *DataProtectionApi) ProtectUtf16StringGlobally(ctx context.Context, szwPlainText string) ([]byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"szwPlainText" : "%s"}`, szwPlainText))
@@ -179,17 +128,8 @@ func (dpa *DataProtectionApi) ProtectUtf16StringGlobally(ctx context.Context, sz
 	return raw, err
 }
 
-//ProtectUtf8StringForHost
-//Protects sensitive data for the specified host (to store in its local settings or a local task)
-//
-//Protects the specified text as UTF8 string encrypted with the key of the specified host.
-//
-//	Parameters:
-//	- szwHostId host name
-//	- szwPlainText plainText
-//
-//	Returns:
-//	- Ciphertext
+// ProtectUtf8StringForHost Protects sensitive data for the specified host (to store in its local settings or a local task)
+// Protects the specified text as UTF8 string encrypted with the key of the specified host.
 func (dpa *DataProtectionApi) ProtectUtf8StringForHost(ctx context.Context, szwHostId, szwPlainText string) ([]byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"szwPassword" : "%s", "szwPlainText" : "%s"}`, szwHostId, szwPlainText))
@@ -202,18 +142,8 @@ func (dpa *DataProtectionApi) ProtectUtf8StringForHost(ctx context.Context, szwH
 	return raw, err
 }
 
-//ProtectUtf8StringGlobally
-//Protects sensitive data to store in policy, global/group task,
-//Administration Server settings.
-//
-//Protects the specified text as UTF8 string encrypted with the key
-//of the Administration Server.
-//
-//	Parameters:
-//	- szwPlainText plainText
-//
-//	Returns:
-//	- Ciphertext
+// ProtectUtf8StringGlobally Protects sensitive data to store in policy, global/group task, Administration Server settings.
+// Protects the specified text as UTF8 string encrypted with the key of the Administration Server.
 func (dpa *DataProtectionApi) ProtectUtf8StringGlobally(ctx context.Context, szwPlainText string) ([]byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"szwPlainText" : "%s"}`, szwPlainText))

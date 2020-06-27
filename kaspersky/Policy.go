@@ -32,37 +32,31 @@ import (
 	"net/http"
 )
 
-//	Policy Class Reference
-//
-//	Policies processing..
-//
-//	Allows to manage policies, change policies states and acquire policies data
-//
-//	List of all members.
+// Policy Policies processing. Allows to manage policies, change policies states and acquire policies data
 type Policy service
 
 //PxgValPolicy struct
 type PxgValPolicy struct {
-	PxgRetValPolicy PxgRetValPolicy `json:"PxgRetVal"`
+	PxgRetValPolicy *PxgRetValPolicy `json:"PxgRetVal"`
 }
 
 type PxgRetValPolicy struct {
-	KlpolAcceptParent          bool     `json:"KLPOL_ACCEPT_PARENT"`
-	KlpolActive                bool     `json:"KLPOL_ACTIVE"`
-	KlpolCreated               DateTime `json:"KLPOL_CREATED"`
-	KlpolDN                    string   `json:"KLPOL_DN"`
-	KlpolForced                bool     `json:"KLPOL_FORCED"`
-	KlpolForceDistrib2Children bool     `json:"KLPOL_FORCE_DISTRIB2CHILDREN"`
-	KlpolGroupID               int64    `json:"KLPOL_GROUP_ID"`
-	KlpolGroupName             string   `json:"KLPOL_GROUP_NAME"`
-	KlpolGsynID                int64    `json:"KLPOL_GSYN_ID"`
-	KlpolHideOnSlaves          bool     `json:"KLPOL_HIDE_ON_SLAVES"`
-	KlpolID                    int64    `json:"KLPOL_ID"`
-	KlpolInherited             bool     `json:"KLPOL_INHERITED"`
-	KlpolModified              DateTime `json:"KLPOL_MODIFIED"`
-	KlpolProduct               string   `json:"KLPOL_PRODUCT"`
-	KlpolRoaming               bool     `json:"KLPOL_ROAMING"`
-	KlpolVersion               string   `json:"KLPOL_VERSION"`
+	KlpolAcceptParent          *bool     `json:"KLPOL_ACCEPT_PARENT"`
+	KlpolActive                *bool     `json:"KLPOL_ACTIVE"`
+	KlpolCreated               *DateTime `json:"KLPOL_CREATED"`
+	KlpolDN                    *string   `json:"KLPOL_DN"`
+	KlpolForced                *bool     `json:"KLPOL_FORCED"`
+	KlpolForceDistrib2Children *bool     `json:"KLPOL_FORCE_DISTRIB2CHILDREN"`
+	KlpolGroupID               *int64    `json:"KLPOL_GROUP_ID"`
+	KlpolGroupName             *string   `json:"KLPOL_GROUP_NAME"`
+	KlpolGsynID                *int64    `json:"KLPOL_GSYN_ID"`
+	KlpolHideOnSlaves          *bool     `json:"KLPOL_HIDE_ON_SLAVES"`
+	KlpolID                    *int64    `json:"KLPOL_ID"`
+	KlpolInherited             *bool     `json:"KLPOL_INHERITED"`
+	KlpolModified              *DateTime `json:"KLPOL_MODIFIED"`
+	KlpolProduct               *string   `json:"KLPOL_PRODUCT"`
+	KlpolRoaming               *bool     `json:"KLPOL_ROAMING"`
+	KlpolVersion               *string   `json:"KLPOL_VERSION"`
 }
 
 // NewPolicy new policy with the specified attributes
@@ -256,7 +250,6 @@ func (pl *Policy) GetPolicyData(ctx context.Context, nPolicy int64) (*PxgValPoli
 }
 
 // MakePolicyActive Make policy active or inactive.
-// Make the specified policy active or inactive
 func (pl *Policy) MakePolicyActive(ctx context.Context, nPolicy int64, bActive bool) (*PxgValBool, error) {
 	postData := []byte(fmt.Sprintf(`{"nPolicy": %d, "bActive": %v}`, nPolicy, bActive))
 	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.MakePolicyActive", bytes.NewBuffer(postData))
@@ -270,7 +263,6 @@ func (pl *Policy) MakePolicyActive(ctx context.Context, nPolicy int64, bActive b
 }
 
 // MakePolicyRoaming Make policy roaming.
-// Make the specified policy roaming
 func (pl *Policy) MakePolicyRoaming(ctx context.Context, nPolicy int64) (*PxgValBool, error) {
 	postData := []byte(fmt.Sprintf(`{"nPolicy": %d}`, nPolicy))
 	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.MakePolicyRoaming", bytes.NewBuffer(postData))
@@ -342,7 +334,6 @@ type PolicyDataUpdateParams struct {
 }
 
 // UpdatePolicyData Update policy attributes.
-// Updates specified policy attributes.
 func (pl *Policy) UpdatePolicyData(ctx context.Context, params PolicyDataUpdateParams) ([]byte, error) {
 	postData, err := json.Marshal(&params)
 	if err != nil {
@@ -359,7 +350,6 @@ func (pl *Policy) UpdatePolicyData(ctx context.Context, params PolicyDataUpdateP
 }
 
 // ExportPolicy Export policy to a blob.
-// Exports policy into single chunk.
 func (pl *Policy) ExportPolicy(ctx context.Context, lPolicy int64) (*PxgValStr, error) {
 	postData := []byte(fmt.Sprintf(`{"lPolicy": %d}`, lPolicy))
 	request, err := http.NewRequest("POST", pl.client.Server+"/api/v1.0/Policy.ExportPolicy", bytes.NewBuffer(postData))
@@ -380,7 +370,6 @@ type PolicyBlob struct {
 }
 
 // ImportPolicy Import policy from blob.
-// Exports policy from a single chunk.
 func (pl *Policy) ImportPolicy(ctx context.Context, params PolicyBlob) (*PxgValStr, []byte, error) {
 	postData, err := json.Marshal(&params)
 	if err != nil {

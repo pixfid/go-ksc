@@ -33,19 +33,10 @@ import (
 	"net/http"
 )
 
-//	Multitenancy Class Reference
-//
-//	Multitenancy product managing.
-//
-//	List of all members.
+// Multitenancy product managing.
 type Multitenancy service
 
-//	Retrieves tenant identity.
-//
-//	Identity is unique for each tenant
-//
-//	Returns:
-//	- (string) tenant id
+// GetTenantId Retrieves tenant identity. Identity is unique for each tenant
 func (m *Multitenancy) GetTenantId(ctx context.Context) (*PxgValStr, []byte, error) {
 	request, err := http.NewRequest("POST", m.client.Server+"/api/v1.0/Multitenancy.GetTenantId", nil)
 	if err != nil {
@@ -57,23 +48,7 @@ func (m *Multitenancy) GetTenantId(ctx context.Context) (*PxgValStr, []byte, err
 	return pxgValStr, raw, err
 }
 
-//	Retrieves multitenancy products available for current tenant.
-//
-//	Parameters:
-//	- strProdName	(string) product name, if set then result will be filtered by this value
-//	- strProdVersion	(string) product version, if set then result will be filtered by this value
-//
-//	Returns:
-//	- (array) each element of array contains information about multitenancy product:
-//
-//	+---------------------------+--------+-------------------------+
-//	|           Value           |  Type  |       Description       |
-//	+---------------------------+--------+-------------------------+
-//	| MTNC_PRODUCT_NAME         | string | product name            |
-//	| MTNC_PRODUCT_VERSION      | string | product version         |
-//	| MTNC_PRODUCT_DISP_NAME    | string | display product name    |
-//	| MTNC_PRODUCT_DISP_VERSION | string | display product version |
-//	+---------------------------+--------+-------------------------+
+// GetProducts Retrieves multitenancy products available for current tenant.
 func (m *Multitenancy) GetProducts(ctx context.Context, strProdName, strProdVersion string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strProdName": "%s", "strProdVersion": "%s"}`, strProdName, strProdVersion))
 	request, err := http.NewRequest("POST", m.client.Server+"/api/v1.0/Multitenancy.GetProducts", bytes.NewBuffer(postData))
@@ -85,12 +60,7 @@ func (m *Multitenancy) GetProducts(ctx context.Context, strProdName, strProdVers
 	return raw, err
 }
 
-//	Get new binary token for current tennant
-//
-//	Returns:
-//	- new token for current tennant
-//
-//	NotWoking on KSC < 12
+// GetAuthToken Get new binary token for current tennant
 func (m *Multitenancy) GetAuthToken(ctx context.Context) (*PxgValStr, []byte, error) {
 	request, err := http.NewRequest("POST", m.client.Server+"/api/v1.0/Multitenancy.GetAuthToken", nil)
 	if err != nil {
@@ -111,6 +81,7 @@ type VerifyTokenParam struct {
 	BinToken string `json:"binToken,omitempty"`
 }
 
+// CheckAuthToken Verify token
 func (m *Multitenancy) CheckAuthToken(ctx context.Context, params VerifyTokenParam) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

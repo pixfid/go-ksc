@@ -31,19 +31,10 @@ import (
 	"net/http"
 )
 
-//	GroupSyncIterator Class Reference
-//
-//	Access to the group synchronization forward iterator for the result-set..
-//
-//	List of all members.
+// GroupSyncIterator service for access to the group synchronization forward iterator for the result-set.
 type GroupSyncIterator service
 
-//Releases the result-set.
-//
-//Releases the specified result-set and frees associated memory
-//
-//Parameters:
-//	- szwIterator	(string) result-set ID
+// ReleaseIterator Releases the result-set. Releases the specified result-set and frees associated memory
 func (ca *GroupSyncIterator) ReleaseIterator(ctx context.Context, szwIterator string) error {
 	postData := []byte(fmt.Sprintf(`
 	{
@@ -61,19 +52,9 @@ func (ca *GroupSyncIterator) ReleaseIterator(ctx context.Context, szwIterator st
 	return nil
 }
 
-//	Acquire subset of elements contained in the result-set
+// GetNextItems Acquire subset of elements contained in the result-set.
 //
-//	Returns nCount elements contained in the specified result-set beginning from the current position and moves internal pointer to the new position.
-//
-//	Parameters:
-//	- szwIterator	(string) forward iterator id
-//	- nCount	(int64) number of elements to return
-//
-//Returns:
-//	- int actual number of returned elements (less or equal to nCount)
-//	- bEOF	(bool) returns false if the returned chunk is the last one,
-//	and there's no need in further calls of this method
-//	- pData	(params) container that has needed elements in the array with name "KLCSP_ITERATOR_ARRAY"
+// Returns nCount elements contained in the specified result-set beginning from the current position and moves internal pointer to the new position.
 func (ca *GroupSyncIterator) GetNextItems(ctx context.Context, szwIterator string, nCount int64, out interface{}) (
 	[]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"szwIterator": "%s","nCount": %d}`, szwIterator, nCount))

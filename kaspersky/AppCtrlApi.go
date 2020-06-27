@@ -31,11 +31,7 @@ import (
 	"net/http"
 )
 
-//AppCtrlApi Class Reference
-//
-//Interface to get info about execution files.
-//
-//Public Member Functions
+// AppCtrlApi service to get info about execution files.
 type AppCtrlApi service
 
 type ExeFileInfoParams struct {
@@ -49,26 +45,10 @@ type ExePFilter struct {
 	FileName string `json:"FILE_NAME,omitempty"`
 }
 
-//GetExeFileInfo
-//Get data about instances of the execution file on the host.
+// GetExeFileInfo Get data about instances of the execution file on the host.
 //
-//	Parameters:
-//	- szwHostId	(string) host name, a unique server-generated string (see KLHST_WKS_HOSTNAME attribute).
-//	It is NOT the same as computer network name (DNS-, FQDN-, NetBIOS-name) . If empty then will be returned only attributes from List of common attributes of execution file from AppControl
-//	- lFileId	(long) The file identifier ( see FILE_ID attribute ). It is id from database,
-//	so it is internal id and it is valid only for this SC-server )
-//	- pFilter	(params) Specify set of the fields that should be returned.
-//
-//To do this for field 'FieldName' it is needed to add into pFilter the value of any type with name 'FieldName'
-//If NULL than all possible fields will be returned.
-//
-//	Examples:
-//	to get all possible fields: use NULL
-//	to get fields "FILE_ID" and "FILE_NAME" use:
-//                            +--"FILE_ID" = (string)""
-//                            |
-//                            +--"FILE_NAME" = (string)""
-//
+// To do this for field 'FieldName' it is needed to add into pFilter the value of any type with name 'FieldName'
+// If NULL than all possible fields will be returned.
 func (ac *AppCtrlApi) GetExeFileInfo(ctx context.Context, params ExeFileInfoParams) ([]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", ac.client.Server+"/api/v1.0/AppCtrlApi.GetExeFileInfo",

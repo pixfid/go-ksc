@@ -31,20 +31,13 @@ import (
 	"net/http"
 )
 
-//	FilesAcceptor Class Reference
-//
-//	Upload files to server.
-//
-//	List of all members.
+// FilesAcceptor service to upload files to server.
 type FilesAcceptor service
 
-//	Cancel file upload operation.
+// CancelFileUpload Cancel file upload operation.
 //
-//	After cancellation provided URL will not be valid anymore and any uploaded by the moment file chunks will be dropped.
-//	You should not call this method unless you want to break upload operation.
-//
-//	Parameters:
-//	- wstrFileId	(string) file identifier
+// After cancellation provided URL will not be valid anymore and any uploaded by the moment file chunks will be dropped.
+// You should not call this method unless you want to break upload operation.
 func (di *FilesAcceptor) CancelFileUpload(ctx context.Context, wstrFileId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrFileId": "%s"}`, wstrFileId))
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/FilesAcceptor.CancelFileUpload", bytes.NewBuffer(postData))
@@ -61,21 +54,23 @@ type FileUploadParams struct {
 	WstrUploadURL string `json:"wstrUploadURL,omitempty"`
 }
 
-//	Prepare server to accept file.
+// InitiateFileUpload Prepare server to accept file.
 //
-//	In order to upload file(s) to KSC server follow these steps:
+// In order to upload file(s) to KSC server follow these steps:
 //
-//	Call this function to get upload URL and file identifier which can be used in KSC API (e.g. uploading installation package)
-//	Upload file using provided URL via HTTP PUT calls
-//	Provide file identifier to KSC API to use file on server side
-//	Uploaded file should be used immediately after upload. Otherwise it may be dropped by timeout or during KSC server restart.
-//	Original file name is ignored, only returned file identifier is used to identify uploaded file.
-//	If you need to transfer to server a directory or several files put them into zip or tar.gz archive and use 'bIsArchive' flag.
-//	All path names inside archive must be in UTF-8 encoding.
+// Call this function to get upload URL and file identifier which can be used in KSC API (e.g. uploading installation package)
 //
-//	Parameters:
-//	- bIsArchive	(bool) Transferred file(s) archived
-//	- qwFileSize	(int64) Transferred file size. If archive is transferred then archive file size.
+// Upload file using provided URL via HTTP PUT calls
+//
+// Provide file identifier to KSC API to use file on server side
+//
+// Uploaded file should be used immediately after upload. Otherwise it may be dropped by timeout or during KSC server restart.
+//
+// Original file name is ignored, only returned file identifier is used to identify uploaded file.
+//
+// If you need to transfer to server a directory or several files put them into zip or tar.gz archive and use 'bIsArchive' flag.
+//
+// All path names inside archive must be in UTF-8 encoding.
 func (di *FilesAcceptor) InitiateFileUpload(ctx context.Context, bIsArchive bool,
 	qwFileSize int64) (*FileUploadParams, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"bIsArchive": %v, "qwFileSize": %d}`, bIsArchive, qwFileSize))

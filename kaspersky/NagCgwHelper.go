@@ -32,57 +32,14 @@ import (
 	"net/http"
 )
 
-//	NagCgwHelper Class Reference
+// NagCgwHelper Nagent CGW (Connection Gateway) API
 //
-//	Nagent CGW (Connection Gateway) API
-//
-//	This interface is implemented at Network Agent side,
-//	so use gateway connection to connect Network Agent and call interface methods.
-//
-//	List of all members.
+// This interface is implemented at Network Agent side, so use gateway connection to connect Network Agent and call interface methods.
 type NagCgwHelper service
 
-//	Retrieves product's component location.
-//
-//	Parameters:
-//	- szwProduct	Product name *
-//	- szwVersion	Product version *
-//	- szwComponent	Component name
-//
-//	+-----------------------------------------------------------------+--------------------------+-----------------------------+
-//	|                             Product                             | "KLHST_WKS_PRODUCT_NAME" | "KLHST_WKS_PRODUCT_VERSION" |
-//	+-----------------------------------------------------------------+--------------------------+-----------------------------+
-//	| Kaspersky Administration Server                                 | "1093"                   | "1.0.0.0"                   |
-//	| Kaspersky Network Agent                                         | "1103"                   | "1.0.0.0"                   |
-//	| Kaspersky Anti-Virus 5.0 for Windows Workstation                | "Workstation"            | "5.0.0.0"                   |
-//	| Kaspersky Anti-Virus 5.0 for Windows File Server                | "Fileserver"             | "5.0.0.0"                   |
-//	| Kaspersky Anti-Virus 6.0 for Windows Workstation                | "KAVWKS6"                | "6.0.0.0"                   |
-//	| Kaspersky Anti-Virus 6.0 for Windows File Server                | "KAVFS6"                 | "6.0.0.0"                   |
-//	| Kaspersky Anti-Virus 6.0 for Windows Workstation MP1            | "KAVWKS6"                | "6.0.4.0"                   |
-//	| Kaspersky Anti-Virus 6.0 for Windows File Server MP1            | "KAVFS6"                 | "6.0.4.0"                   |
-//	| Kaspersky Anti-Virus 6.0 for Windows Servers Enterprise Edition | "KAVFSEE"                | "6.0.0.0"                   |
-//	| Kaspersky Anti-Virus 8.0 for Windows Servers Enterprise Edition | "KAVFSEE"                | "8.0.0.0"                   |
-//	| Kaspersky Anti-Virus 6.0 for Linux File Server                  | "KLIN"                   | "6.0.0.0"                   |
-//	| Kaspersky Enterprise Security 8.0                               | "KES"                    | "8.1.0.0"                   |
-//	| Kaspersky Enterprise Security 10.0                              | "KES"                    | "10.1.0.0"                  |
-//	| Kaspersky Enterprise Security 10.0 Maintenance Release 1        | "KES"                    | "10.2.1.0"                  |
-//	| Kaspersky Enterprise Security 10.0 Service Pack 1               | "KES"                    | "10.2.2.0"                  |
-//	| Kaspersky Security for Virtualization Light Agent 3.0           | "KSVLA"                  | "3.0.0.0"                   |
-//	| Kaspersky Endpoint Security 10 MR1                              | "KES"                    | "10.2.1.0"                  |
-//	| Kaspersky Endpoint Security 10 SP1                              | "KES"                    | "10.2.2.0"                  |
-//	| Kaspersky Endpoint Security 10 SP1 MR1                          | "KES"                    | "10.2.4.0"                  |
-//	| Kaspersky Endpoint Security 11                                  | "KES"                    | "11.0.0.0"                  |
-//	+-----------------------------------------------------------------+--------------------------+-----------------------------+
-//
-//	Returns:
-//	- (params) Location params (non-transparent for a user).
-func (nc *NagCgwHelper) GetProductComponentLocation(ctx context.Context, szwProduct, szwVersion,
-	szwComponent string) ([]byte, error) {
-	postData := []byte(fmt.Sprintf(`{
-		"szwProduct": "%s",
-		"szwVersion": "%s",
-		"szwComponent": "%s"
-	}`, szwProduct, szwVersion, szwComponent))
+// GetProductComponentLocation Retrieves product's component location.
+func (nc *NagCgwHelper) GetProductComponentLocation(ctx context.Context, szwProduct, szwVersion, szwComponent string) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"szwProduct": "%s",	"szwVersion": "%s",	"szwComponent": "%s"}`, szwProduct, szwVersion, szwComponent))
 	request, err := http.NewRequest("POST", nc.client.Server+"/api/v1.0/NagCgwHelper.GetProductComponentLocation", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err

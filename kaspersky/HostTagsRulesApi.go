@@ -32,23 +32,17 @@ import (
 	"net/http"
 )
 
-//	HostTagsRulesApi Class Reference
+// HostTagsRulesApi service allows to acquire and manage host automatic tagging rules
 //
-//	Interface allows to acquire and manage host automatic tagging rules
+// Administration server contains global list of the rules that may automatically set tags for computers.
 //
-//	Detailed Description
+// Every rule is identified by szwTagValue that the rule will be set: szwTagValue is a non-empty string, up to 256 unicode characters.
 //
-//	Interface allows to acquire and manage host automatic tagging rules.
-//	Administration server contains global list of the rules that may automatically set tags for computers.
-//	Every rule is identified by szwTagValue that the rule will be set: szwTagValue is a non-empty string,
-//	up to 256 unicode characters.
-//	Application of the rules happens on by HostTagsRulesApi.ExecuteRule call Periodically.
-//	By default every 2 hours, by notification about changing important settings that can change rule query output.
+// Application of the rules happens on by HostTagsRulesApi.ExecuteRule call Periodically. By default every 2 hours,
+// by notification about changing important settings that can change rule query output.
 //
-//	Application of the rule is set the rule szwTagValue to the hosts falling under a rule scope and reset szwTagValue
-//	for other hosts if the tag has been established by the rule earlier
-//
-//	Public Member Functions:
+// Application of the rule is set the rule szwTagValue to the hosts falling under a rule scope and reset szwTagValue
+// for other hosts if the tag has been established by the rule earlier
 type HostTagsRulesApi service
 
 //HostTagsRulesParams struct
@@ -56,24 +50,20 @@ type HostTagsRulesParams struct {
 	PFields2ReturnArray []string `json:"pFields2ReturnArray"`
 }
 
-//	Enumerates all rules.
+// GetRules Enumerates all rules. Returns specified attributes of all rules.
 //
-//	Returns specified attributes of all rules.
-//
-//	Parameters:
-//	- pFields2ReturnArray	(array) string array with names of requested rule attribute names that need to return see List of host automatic tagging rule attributes.
-//{
-//	"pFields2ReturnArray" : ["KLHST_HTR_DN",
-//		"KLHST_HTR_Enabled",
-//		"KLHST_HTR_TagValue",
-//		"KLHST_HTR_Custom",
-//		"KLHST_HTR_Query"]
+//	Example:
+//	- pFields2ReturnArray	(array) string array with names of requested rule attribute names.
+//	{
+//	"pFields2ReturnArray" :
+//		[
+//			"KLHST_HTR_DN",
+//			"KLHST_HTR_Enabled",
+//			"KLHST_HTR_TagValue",
+//			"KLHST_HTR_Custom",
+//			"KLHST_HTR_Query",
+//		]
 //	}
-//
-//	Returns:
-//	- ppRules (params) contains following attributes:
-//	"KLHST_HTR_Rules" - host automatic tagging rules (paramArray|paramParams)
-//	list of attributes that are specified in pFields2ReturnArray
 func (htra *HostTagsRulesApi) GetRules(ctx context.Context, params HostTagsRulesParams) ([]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", htra.client.Server+"/api/v1.0/HostTagsRulesApi.GetRules", bytes.NewBuffer(postData))
@@ -85,15 +75,7 @@ func (htra *HostTagsRulesApi) GetRules(ctx context.Context, params HostTagsRules
 	return raw, err
 }
 
-//	Acquire attributes of specified rule.
-//
-//	Returns attributes of specified rule.
-//
-//	Parameters:
-//	- szwTagValue	(string). tag of the rule. rule id
-//
-//	Returns:
-//	- (params) object containing attributes of specified rule, see List of host automatic tagging rule attributes.
+// GetRule Acquire attributes of specified rule. Returns attributes of specified rule.
 func (htra *HostTagsRulesApi) GetRule(ctx context.Context, szwTagValue string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"szwTagValue": "%s"}`, szwTagValue))
 	request, err := http.NewRequest("POST", htra.client.Server+"/api/v1.0/HostTagsRulesApi.GetRule", bytes.NewBuffer(postData))
@@ -105,19 +87,13 @@ func (htra *HostTagsRulesApi) GetRule(ctx context.Context, szwTagValue string) (
 	return raw, err
 }
 
-//	Initiate application of the rule.
+// ExecuteRule Initiate application of the rule. Method initiates application of specified rule.
 //
-//	Method initiates application of specified rule.
+// It is also allowed to execute disabled rule ( when "KLHST_HTR_Enabled" attribute is false ).
+// Such run is reset rule tag for all hosts where it was been previously set by the rule.
 //
-//	It is also allowed to execute disabled rule ( when "KLHST_HTR_Enabled" attribute is false ).
-//	Such run is reset rule tag for all hosts where it was been previously set by the rule.
-//
-//	After returning from this method it is needed to wait while AsyncActionStateChecker.CheckActionState will return bFinalized or call HostTagsRulesApi.CancelAsyncAction with wstrActionGuid
-//
-//	Parameters:
-//	- szwTagValue	(string). tag of the rule. rule id
-//	- [out]	wstrActionGuid	(string) id of asynchronous operation, to get status use AsyncActionStateChecker.
-//	CheckActionState
+// After returning from this method it is needed to wait while
+// AsyncActionStateChecker.CheckActionState will return bFinalized or call HostTagsRulesApi.CancelAsyncAction with wstrActionGuid
 func (htra *HostTagsRulesApi) ExecuteRule(ctx context.Context, szwTagValue string) (*WActionGUID, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"szwTagValue": "%s"}`, szwTagValue))
 	request, err := http.NewRequest("POST", htra.client.Server+"/api/v1.0/HostTagsRulesApi.ExecuteRule", bytes.NewBuffer(postData))
@@ -130,12 +106,10 @@ func (htra *HostTagsRulesApi) ExecuteRule(ctx context.Context, szwTagValue strin
 	return wActionGUID, raw, err
 }
 
-//	Cancel asynchronous operation.
+// CancelAsyncAction Cancel asynchronous operation.
 //
-//	This method should be called if there is no wish to wait while AsyncActionStateChecker.CheckActionState will return bFinalized for earlier launched asynchronous operation.
-//
-//	Parameters:
-//	- wstrActionGuid	(string). id of asynchronous operation that has been started earlier
+// This method should be called if there is no wish to wait while
+// AsyncActionStateChecker.CheckActionState will return bFinalized for earlier launched asynchronous operation.
 func (htra *HostTagsRulesApi) CancelAsyncAction(ctx context.Context, wstrActionGuid string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrActionGuid": "%s"}`, wstrActionGuid))
 	request, err := http.NewRequest("POST", htra.client.Server+"/api/v1.0/HostTagsRulesApi.CancelAsyncAction", bytes.NewBuffer(postData))
@@ -147,10 +121,7 @@ func (htra *HostTagsRulesApi) CancelAsyncAction(ctx context.Context, wstrActionG
 	return raw, err
 }
 
-//	Remove host automatic tagging rule.
-//
-//	Parameters:
-//	- szwTagValue	(string). tag of the rule. rule id
+// DeleteRule Remove host automatic tagging rule.
 func (htra *HostTagsRulesApi) DeleteRule(ctx context.Context, szwTagValue string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"szwTagValue": "%s"}`, szwTagValue))
 	request, err := http.NewRequest("POST", htra.client.Server+"/api/v1.0/HostTagsRulesApi.DeleteRule", bytes.NewBuffer(postData))
@@ -162,26 +133,26 @@ func (htra *HostTagsRulesApi) DeleteRule(ctx context.Context, szwTagValue string
 	return raw, err
 }
 
-//UpdateRuleParams struct using in HostTagsRulesApi.UpdateRule
+// UpdateRuleParams struct using in HostTagsRulesApi.UpdateRule
 type UpdateRuleParams struct {
-	//tag of the rule. rule id
+	// SzwTagValue tag of the rule. rule id
 	SzwTagValue string `json:"szwTagValue"`
 
-	//object containing rule attributes, see List of host automatic tagging rule attributes.
+	// PRuleInfo object containing rule attributes, see List of host automatic tagging rule attributes.
 	PRuleInfo PRuleInfo `json:"pRuleInfo"`
 }
 
 type PRuleInfo struct {
-	//Rule display name.
+	// KlhstHtrDN Rule display name.
 	KlhstHtrDN string `json:"KLHST_HTR_DN"`
 
-	//Whether rule is turned on.
+	// KLHSTHTREnabled Whether rule is turned on.
 	KLHSTHTREnabled bool `json:"KLHST_HTR_Enabled"`
 
-	//Tag value that will be set by rule. It is rule identifier.
+	// KLHSTHTRTagValue Tag value that will be set by rule. It is rule identifier.
 	KLHSTHTRTagValue string `json:"KLHST_HTR_TagValue"`
 
-	//	Host filtering expression (see Search filter syntax).
+	// KLHSTHTRQuery Host filtering expression (see Search filter syntax).
 	//
 	//	Don't use filtering by fields other then listed below.
 	//
@@ -217,23 +188,18 @@ type PRuleInfo struct {
 	KLHSTHTRCustom KLHSTHTRCustom `json:"KLHST_HTR_Custom"`
 }
 
+// KLHSTHTRCustom struct
 type KLHSTHTRCustom struct {
-	//type "params"
+	// Type type "params"
 	Type string `json:"type"`
 
-	//Any data associated with rule. It is not analyzed by the Administration Server
+	// CustomValue Any data associated with rule. It is not analyzed by the Administration Server
 	CustomValue CustomValue `json:"value"`
 }
 
 type CustomValue struct{}
 
-//	Adds/Updates host automatic tagging rule.
-//
-//	Parameters:
-//	- szwTagValue	(wstring). tag of the rule. rule id
-//	- pRuleInfo	(params) object containing rule attributes, see List of host automatic tagging rule attributes.
-//	Following attributes are required:
-//	- "KLHST_HTR_DN"
+// UpdateRule Adds/Updates host automatic tagging rule.
 func (htra *HostTagsRulesApi) UpdateRule(ctx context.Context, params UpdateRuleParams) ([]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", htra.client.Server+"/api/v1.0/HostTagsRulesApi.UpdateRule", bytes.NewBuffer(postData))

@@ -32,17 +32,12 @@ import (
 	"net/http"
 )
 
-//	QueriesStorage Class Reference
-//
-//	QueriesStorage interface.
-//
-//	List of all members.
+// QueriesStorage QueriesStorage.
 type QueriesStorage service
 
-//	New query registration.
+// AddQuery New query registration.
 //
-//	Creates a new query and stores it for the current user
-//	(associated with the connection to the Administration Server).
+// Creates a new query and stores it for the current user (associated with the connection to the Administration Server).
 func (qs *QueriesStorage) AddQuery(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -59,12 +54,9 @@ func (qs *QueriesStorage) AddQuery(ctx context.Context, params interface{}) ([]b
 	return raw, err
 }
 
-//	Delete query.
+// DeleteQuery Delete query.
 //
-//	Deletes the query with the specified ID.
-//
-//	Parameters:
-//	- nId	(int64) query id
+// Deletes the query with the specified ID.
 func (qs *QueriesStorage) DeleteQuery(ctx context.Context, nId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nId": %d}`, nId))
 	request, err := http.NewRequest("POST", qs.client.Server+"/api/v1.0/QueriesStorage.DeleteQuery", bytes.NewBuffer(postData))
@@ -76,18 +68,10 @@ func (qs *QueriesStorage) DeleteQuery(ctx context.Context, nId int64) ([]byte, e
 	return raw, err
 }
 
-//	Acquire array of queries params of given type.
+// GetQueries Acquire array of queries params of given type.
 //
-//	Returns array of IDs
-//	and data of all queries of given type defined for the current user
-//	(associated with the connection to the Administration Server).
-//
-//	Parameters:
-//	- eType	(int) queries type QueryType
-//
-//	Returns:
-//	- (array) array object, each element is a KLPAR::ParamsPtr object query data,
-//	see Query storage data format
+// Returns array of IDs and data of all queries of given type defined for the current user
+// (associated with the connection to the Administration Server).
 func (qs *QueriesStorage) GetQueries(ctx context.Context, eType int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"eType": %d}`, eType))
 	request, err := http.NewRequest("POST", qs.client.Server+"/api/v1.0/QueriesStorage.GetQueries", bytes.NewBuffer(postData))
@@ -99,7 +83,7 @@ func (qs *QueriesStorage) GetQueries(ctx context.Context, eType int64) ([]byte, 
 	return raw, err
 }
 
-//QueryParams struct
+// QueryParams struct
 type QueryParams struct {
 	QueryParamVal *QueryParamVal `json:"PxgRetVal,omitempty"`
 }
@@ -135,18 +119,9 @@ type PageSettingsValue struct {
 	FoundLastNDays int64  `json:"FoundLastNDays,omitempty"`
 }
 
-//	Acquire query param by id.
+// GetQuery Acquire query param by id.
 //
-//	Returns data of the query with the specified ID.
-//
-//	Parameters:
-//	- nId	(int64) query id
-//
-//	Returns:
-//	- (params) object containing variables:
-//	|- KLQRS_QUERY_DATA, KLPAR::ParamsPtr object, see Query storage data format
-//	|- KLQRS_QUERY_TYPE, int64, value from enum QueryType
-//	|- KLQRS_QUERY_GUID (string), string unique identifier of the query
+// Returns data of the query with the specified ID.
 func (qs *QueriesStorage) GetQuery(ctx context.Context, nId int64) (*QueryParams, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nId": %d}`, nId))
 	request, err := http.NewRequest("POST", qs.client.Server+"/api/v1.0/QueriesStorage.GetQuery", bytes.NewBuffer(postData))
@@ -159,16 +134,9 @@ func (qs *QueriesStorage) GetQuery(ctx context.Context, nId int64) (*QueryParams
 	return queryParams, raw, err
 }
 
-//	Acquire array of queries id given type.
+// GetQueryIds Acquire array of queries id given type.
 //
-//	Returns array of IDs of all queries of given type defined for the current user
-//	(associated with the connection to the Administration Server).
-//
-//	Parameters:
-//	- eType	(int64) queries type QueryType
-//
-//	Returns:
-//	- (array) query ids. Collection of integers
+// Returns array of IDs of all queries of given type defined for the current user (associated with the connection to the Administration Server).
 func (qs *QueriesStorage) GetQueryIds(ctx context.Context, eType int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"eType": %d}`, eType))
 	request, err := http.NewRequest("POST", qs.client.Server+"/api/v1.0/QueriesStorage.GetQueryIds", bytes.NewBuffer(postData))
@@ -180,10 +148,9 @@ func (qs *QueriesStorage) GetQueryIds(ctx context.Context, eType int64) ([]byte,
 	return raw, err
 }
 
-//	Query params update.
+// UpdateQuery Query params update.
 //
-//	Clears current contents of the query data
-//	and stores new contents specified in pParData
+// Clears current contents of the query data and stores new contents specified in pParData
 func (qs *QueriesStorage) UpdateQuery(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

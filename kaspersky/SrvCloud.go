@@ -31,31 +31,12 @@ import (
 	"net/http"
 )
 
-//	SrvCloud Class Reference
-//
-//	Interface to acquire info about public clouds.
-//
-//	List of all members.
+// SrvCloud service to acquire info about public clouds.
 type SrvCloud service
 
-//	Returns list of clouds of the current server.
+// GetCloudsInfo Returns list of clouds of the current server.
 //
-//	For main server also returns only clouds of main server.
-//
-//	Parameters:
-//	- pParams	(params), For additional options. Reserved.
-//
-//	Returns:
-//	- (array) collection of paramParams objects where each of them has the following structure:
-//	each element contains attributes from List of server cloud attributes.
-//
-//	Note:
-//	cloud containers may be listed my means of CloudContainersSrvViewName SrvView
-//
-//	See also:
-//	List of server cloud attributes.
-//	SrvView List of server cloud containers
-//	SrvView List of server cloud hosts
+// For main server also returns only clouds of main server.
 func (sc *SrvCloud) GetCloudsInfo(ctx context.Context, params Null) ([]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", sc.client.Server+"/api/v1.0/SrvCloud.GetCloudsInfo",
@@ -68,36 +49,19 @@ func (sc *SrvCloud) GetCloudsInfo(ctx context.Context, params Null) ([]byte, err
 	return raw, err
 }
 
+// CloudHostInfoParams struct
 type CloudHostInfoParams struct {
-	//Internal id of the cloud host (see KLHST_CLOUD_HOST_BINID).
+	// PCloudHostBinID Internal id of the cloud host (see KLHST_CLOUD_HOST_BINID).
 	PCloudHostBinID string `json:"pCloudHostBinId,omitempty"`
 
-	//collection of cloud host attribute names that need to return see List of server cloud host attributes..
+	// PFields collection of cloud host attribute names that need to return see List of server cloud host attributes..
 	PFields []string `json:"pFields"`
-	//For additional options. Reserved.
+
+	// PParams For additional options. Reserved.
 	PParams Null `json:"pParams"`
 }
 
-//	Returns properties of the cloud host.
-//
-//	Parameters:
-//	- pCloudHostBinId	(binary). Internal id of the cloud host (see KLHST_CLOUD_HOST_BINID).
-//	- pFields	(array) collection of cloud host attribute names that need to return see List of server cloud host
-//	attributes..
-//	- pParams	(params), For additional options. Reserved.
-//
-//	Returns:
-//	- ppHostInfo (params) contains following attributes:
-//
-//	list of founded attributes that are specified in arrFields
-//
-//	Note:
-//	cloud hosts may be listed my means of CloudHostsSrvViewName SrvView
-//
-//	See also:
-//	List of server cloud host attributes.
-//	SrvView List of server cloud hosts
-//	SrvView List of server cloud containers
+// GetCloudHostInfo Returns properties of the cloud host.
 func (sc *SrvCloud) GetCloudHostInfo(ctx context.Context, params CloudHostInfoParams) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

@@ -31,19 +31,10 @@ import (
 	"net/http"
 )
 
-//	KeyService2 Class Reference
-//	Additional interface for working with KeyService subsystem.
-//
-//	List of all members.
+// KeyService2 additional service for working with KeyService subsystem.
 type KeyService2 service
 
-//	Imports encryption keys.
-//
-//	Parameters:
-//	- pProtectedPass	(binary base64 string) Password protected with DataProtectionApi.ProtectUtf8StringGlobally
-//
-//	Return:
-//	- pEncryptedKeysData	(binary base64 string) Earlier exported keys data
+// ImportDpeKeys Imports encryption keys.
 func (ks2 *KeyService2) ImportDpeKeys(ctx context.Context, pProtectedPass string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"pProtectedPass": "%s"}`, pProtectedPass))
 	request, err := http.NewRequest("POST", ks2.client.Server+"/api/v1.0/KeyService2.ImportDpeKeys", bytes.NewBuffer(postData))
@@ -55,13 +46,7 @@ func (ks2 *KeyService2) ImportDpeKeys(ctx context.Context, pProtectedPass string
 	return raw, err
 }
 
-//	Exports own and all stored encryption keys.
-//
-//	Parameters:
-//	- pProtectedPass	(binary base64 string) Password protected with DataProtectionApi::ProtectUtf8StringGlobally
-//
-//	Return:
-//	- pEncryptedKeysData	(binary base64 string) Serialized binary data
+// ExportDpeKeys Exports own and all stored encryption keys.
 func (ks2 *KeyService2) ExportDpeKeys(ctx context.Context, pProtectedPass string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"pProtectedPass": "%s"}`, pProtectedPass))
 	request, err := http.NewRequest("POST", ks2.client.Server+"/api/v1.0/KeyService2.ExportDpeKeys", bytes.NewBuffer(postData))

@@ -31,45 +31,24 @@ import (
 	"net/http"
 )
 
-//	IWebUsersSrv Class Reference
-//
-//	Operating with emails
-//
-//	List of all members.
+// IWebUsersSrv service to operating with emails
 type IWebUsersSrv service
 
-//	Send an email to multiple recipients.
+// SendEmail Send an email to multiple recipients.
 //
-//	How to embeed QR-code pictures into html body ("QrCodes" array):
-//	Set "EmbedQrCodes" value to true if you want to embed QR-code pictures into html rather then sending them as attachments.
-//	Pictures will be embedded into html using pattern
+// How to embeed QR-code pictures into html body ("QrCodes" array):
 //
-//	'<div id="qrcode<arrayIndex>"><img src="cid:<"QrCodePicture">"></div>'
-//	which will pe appended to the end of "MailBody" (in respect of the order they appear in "QrCodes" array)
+// Set "EmbedQrCodes" value to true if you want to embed QR-code pictures into html rather then sending them as attachments.
 //
-//	For example, embedding of the first qr-code picture from "QrCodes" array would look like:
-//	<div id="qrcode0"><img src="cid:example.png"></div>
+// Pictures will be embedded into html using pattern:
 //
-//	You can also css-style that div using its id inside of your html message body.
+// '<div id="qrcode<arrayIndex>"><img src="cid:<"QrCodePicture">"></div>' which will pe appended to the end of "MailBody"
+// (in respect of the order they appear in "QrCodes" array)
 //
-//	Parameters:
-//	- pParams	(params) Input parameters container:
-//		|- "MailRecipients" - Email addresses of recipients (paramArray of paramString), mandatory
-//		|- "MailSubject" - Email subject string (paramString), optional
-//		|- "MailBody" - Email body string (paramString), optional
-//		|- "MailBodyType" - Email body string (paramString), optional.
-//		Set this parameter to "html" if "MailBody" contain a UTF-8 encoded HTML message body.
-//		|- "EmbedQrCodes" - Embeed QR-code pictures into html body (paramBool), optional, default false.
-//		Set this value to true if you want to embed QR-code pictures into html rather then sending them as attachments.
-//		|- "QrCodes" - QR-code pictures array (paramArray of paramParams), optional
-//		   |-- "QrCodePicture" - QR-code pictures array item: image file contents encoded to base64 (
-//		single-byte characters in a paramBinary value or a wide-char paramString), optional but mandatory if "QrCodes" is set.
-//		   |-- "QrCodePictureName" - QR-code pictures array item: name of the image file as an attachment (
-//		paramString), optional but mandatory if "QrCodes" is set.
-//		|- wstrRequestId	Async request id.
+// For example, embedding of the first qr-code picture from "QrCodes" array would look like:
+// <div id="qrcode0"><img src="cid:example.png"></div>
 //
-//	Exceptions:
-//	Throws	KLERR::Error* in case of error.
+// You can also css-style that div using its id inside of your html message body.
 func (iwus *IWebUsersSrv) SendEmail(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", iwus.client.Server+"/api/v1.0/IWebUsersSrv.SendEmail",

@@ -31,21 +31,10 @@ import (
 	"net/http"
 )
 
-//CgwHelper Class Reference
-//
-//CgwHelper (Connection Gateway) helper proxy class.
-//
-//Public Member Functions
+//CgwHelper (Connection Gateway) service to work with helper proxy.
 type CgwHelper service
 
-//GetSlaveServerLocation
-//Retrieves Slave Server Location.
-//
-//	Parameters:
-//	- nSlaveServerId	Slave server ID.
-//
-//	Returns:
-//	- (params) Location params (non-transparent for a user).
+// GetSlaveServerLocation Retrieves Slave Server Location.
 func (cp *CgwHelper) GetSlaveServerLocation(ctx context.Context, nSlaveServerId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nSlaveServerId": %d}`, nSlaveServerId))
 	request, err := http.NewRequest("POST", cp.client.Server+"/api/v1.0/CgwHelper.GetSlaveServerLocation",
@@ -58,7 +47,7 @@ func (cp *CgwHelper) GetSlaveServerLocation(ctx context.Context, nSlaveServerId 
 	return raw, err
 }
 
-//NagentLocation struct
+// NagentLocation struct
 type NagentLocation struct {
 	NagLocation *NagLocation `json:"PxgRetVal,omitempty"`
 }
@@ -72,14 +61,7 @@ type NagLocation struct {
 	GwLOCUseCompression  bool   `json:"GwLocUseCompression,omitempty"`
 }
 
-//GetNagentLocation
-//Retrieves Nagent Location by host name.
-//
-//	Parameters:
-//	- wsHostName (string)	Host name.
-//
-//	Returns:
-//	- (params) Location params (non-transparent for a user).
+// GetNagentLocation Retrieves Nagent Location by host name.
 func (cp *CgwHelper) GetNagentLocation(ctx context.Context, wsHostName string) (*NagentLocation, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wsHostName": "%s"}`, wsHostName))
 	request, err := http.NewRequest("POST", cp.client.Server+"/api/v1.0/CgwHelper.GetNagentLocation",

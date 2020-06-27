@@ -32,36 +32,19 @@ import (
 	"net/http"
 )
 
-//	HostMoveRules Class Reference
+// HostMoveRules service to Modify and acquire move rules to hosts.
 //
-//	Modify and acquire move rules to hosts..
-//
-//	Interface allows to acquire and manage host moving rules.
-//	The rule will move host which fits KLHST_MR_Query to KLHST_MR_Group
-//
-//	List of all members.
+// Service allows to acquire and manage host moving rules.
+// The rule will move host which fits KLHST_MR_Query to KLHST_MR_Group
 type HostMoveRules service
 
-//	Add extended host moving rule.
-//
-//	Creates new extended host moving rule with specified attributes.
-//
-//	Parameters:
-//	- pRuleInfo	(params) object containing rule attributes, see List of extended host moving rule attributes.
-//
-//	Following attributes are required:
-//	KLHST_MR_DN
-//	KLHST_MR_Group
-//	KLHST_MR_Options
-//	KLHST_MR_Query
-//
-//	Returns:
-//	(int64) id of created rule.
+// AddRule Creates new extended host moving rule with specified attributes.
 func (hmr *HostMoveRules) AddRule(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
 	}
+
 	request, err := http.NewRequest("POST", hmr.client.Server+"/api/v1.0/HostMoveRules.AddRule", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
@@ -71,12 +54,7 @@ func (hmr *HostMoveRules) AddRule(ctx context.Context, params interface{}) ([]by
 	return raw, err
 }
 
-//Remove extended host moving rule.
-//
-//Removes specified extended host moving rule.
-//
-//	Parameters:
-//	- nRule	(int64) id of rule to remove
+// DeleteRule Removes specified extended host moving rule.
 func (hmr *HostMoveRules) DeleteRule(ctx context.Context, nRule int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nRule": %d}`, nRule))
 	request, err := http.NewRequest("POST", hmr.client.Server+"/api/v1.0/HostMoveRules.DeleteRule", bytes.NewBuffer(postData))
@@ -88,35 +66,21 @@ func (hmr *HostMoveRules) DeleteRule(ctx context.Context, nRule int64) ([]byte, 
 	return raw, err
 }
 
-//ExecuteRulesParams struct using in HostMoveRules.ExecuteRulesNow
+// ExecuteRulesParams struct using in HostMoveRules.ExecuteRulesNow
 type ExecuteRulesParams struct {
-	//group to launch rules for
-	NGroupID int64 `json:"nGroupId,omitempty"`
+	// NGroupID group to launch rules for
+	NGroupID int64 `json:"nGroupId"`
 
-	//array of rule ids(int64)
+	// PRules array of rule ids
 	PRules []int64 `json:"pRules"`
 
-	//		|- nOptions	(int64) possible values:
-	//			- 0 - rule is processed for hosts that need it
-	//			- 1 - execute even if rule has been already executed
-	NOptions string `json:"nOptions,omitempty"`
+	// NOptions possible values:
+	//  0 - rule is processed for hosts that need it
+	//  1 - execute even if rule has been already executed
+	NOptions int64 `json:"nOptions"`
 }
 
-//	Execute rules now.
-//
-//	Executes rules for a specific group
-//
-//	Parameters:
-//	- params ExecuteRulesParams
-//		|- nGroupId	(int64) group to launch rules for
-//		|- pRules	(array) array of rule ids(int64)
-//		|- nOptions	(int64) possible values:
-//			- 0 - rule is processed for hosts that need it
-//			- 1 - execute even if rule has been already executed
-//
-//	Return:
-//	- strActionGuid	(string) id of asynchronous operation,
-//	to get status use AsyncActionStateChecker.CheckActionState, lStateCode "1" means OK and "0" means fail
+// ExecuteRulesNow Executes rules for a specific group
 func (hmr *HostMoveRules) ExecuteRulesNow(ctx context.Context, params ExecuteRulesParams) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -132,11 +96,12 @@ func (hmr *HostMoveRules) ExecuteRulesNow(ctx context.Context, params ExecuteRul
 	return raw, err
 }
 
-//HMoveRule struct using in HostMoveRules.GetRule
+// HMoveRule struct using in HostMoveRules.GetRule
 type HMoveRule struct {
 	HMRule *HMRule `json:"PxgRetVal,omitempty"`
 }
 
+// HMRule struct
 type HMRule struct {
 	KLHSTMRAutoDelete bool            `json:"KLHST_MR_AutoDelete,omitempty"`
 	KLHSTMRCustom     *KLHSTMRCustom  `json:"KLHST_MR_Custom,omitempty"`
@@ -201,15 +166,7 @@ type HMRules struct {
 	HMRule *HMRule `json:"value,omitempty"`
 }
 
-//Acquire attributes of specified rule.
-//
-//Returns attributes of specified rule.
-//
-//	Parameters:
-//	- nRule	(int64) id of rule
-//
-//	Returns:
-//	- (params) object containing attributes of specified rule, see List of extended host moving rule attributes
+// GetRule Acquire attributes of specified rule.
 func (hmr *HostMoveRules) GetRule(ctx context.Context, nRule int64) (*HMoveRule, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nRule": %d}`, nRule))
 	request, err := http.NewRequest("POST", hmr.client.Server+"/api/v1.0/HostMoveRules.GetRule", bytes.NewBuffer(postData))
@@ -222,26 +179,18 @@ func (hmr *HostMoveRules) GetRule(ctx context.Context, nRule int64) (*HMoveRule,
 	return hMoveRule, raw, err
 }
 
+// Rules struct
 type Rules struct {
 	PFields []string `json:"pFields"`
 }
 
-//Enumerate all extended host moving rules.
-//
-//Enumerates all extended host moving rules.
-//
-// Parameters:
-//	- pFields	(array) array containing names of attributes to acquire
-//
-// Returns:
-//	- (array) array, each element is (params) object containing attributes of rule
-//
-//See List of extended host moving rule attributes
+// GetRules Enumerate all extended host moving rules. Enumerates all extended host moving rules.
 func (hmr *HostMoveRules) GetRules(ctx context.Context, params Rules) (*HMoveRules, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, nil, err
 	}
+
 	request, err := http.NewRequest("POST", hmr.client.Server+"/api/v1.0/HostMoveRules.GetRules", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, nil, err
@@ -252,23 +201,19 @@ func (hmr *HostMoveRules) GetRules(ctx context.Context, params Rules) (*HMoveRul
 	return hMoveRules, raw, err
 }
 
-//RulesOrderParams struct using in HostMoveRules.SetRulesOrder
+// RulesOrderParams struct using in HostMoveRules.SetRulesOrder
 type RulesOrderParams struct {
-	//pRules	(array) array of rule ids(int64)
+	// PRules array of rule ids
 	PRules []int64 `json:"pRules"`
 }
 
-//	Modifies order of specified rules in the global list.
-//
-//	Order of rules not contained in pRules array will be indefinite.
-//
-//	Parameters:
-//	- pRules	(array) array of rule ids(int64)
+// SetRulesOrder Modifies order of specified rules in the global list. Order of rules not contained in pRules array will be indefinite.
 func (hmr *HostMoveRules) SetRulesOrder(ctx context.Context, params RulesOrderParams) (*HMoveRules, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, nil, err
 	}
+
 	request, err := http.NewRequest("POST", hmr.client.Server+"/api/v1.0/HostMoveRules.SetRulesOrder", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, nil, err
@@ -279,18 +224,13 @@ func (hmr *HostMoveRules) SetRulesOrder(ctx context.Context, params RulesOrderPa
 	return hMoveRules, raw, err
 }
 
-//	Modify attributes of specified rule.
-//
-//	Modifies attributed of specified rule.
-//
-//	Parameters:
-//	- nRule	(int64) id of rule to modify
-//	- pRuleInfo	(params) object containing rule attributes to modify, see List of extended host moving rule attributes
+// UpdateRule Modify attributes of specified rule.
 func (hmr *HostMoveRules) UpdateRule(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
 	}
+
 	request, err := http.NewRequest("POST", hmr.client.Server+"/api/v1.0/HostMoveRules.UpdateRule", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err

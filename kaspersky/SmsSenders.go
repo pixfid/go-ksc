@@ -32,17 +32,10 @@ import (
 	"net/http"
 )
 
-//	SmsSenders Class Reference
-//
-//	Configure mobile devices as SMS senders..
-//
-//	List of all members.
+// SmsSenders service provide to configure mobile devices as SMS senders.
 type SmsSenders service
 
-//	checks if there is a device allowed to send SMS
-//
-//	Returns:
-//	- (bool) true if server has devices allowed to send SMS, false otherwise
+// HasAllowedSenders checks if there is a device allowed to send SMS
 func (ss *SmsSenders) HasAllowedSenders(ctx context.Context) (*PxgValBool, []byte, error) {
 	request, err := http.NewRequest("POST", ss.client.Server+"/api/v1.0/SmsSenders.HasAllowedSenders", nil)
 	if err != nil {
@@ -54,25 +47,24 @@ func (ss *SmsSenders) HasAllowedSenders(ctx context.Context) (*PxgValBool, []byt
 	return pxgValBool, raw, err
 }
 
+// PNewStatuses struct
 type PNewStatuses struct {
 	PNewStatus PNewStatus `json:"pNewStatuses,omitempty"`
 }
 
+// PNewStatus struct
 type PNewStatus struct {
 	Type            string          `json:"type,omitempty"`
 	PNewStatusValue PNewStatusValue `json:"value,omitempty"`
 }
 
+// PNewStatusValue struct
 type PNewStatusValue struct {
 	Name              string `json:"name,omitempty"`
 	BMayUseSMSSending bool   `json:"bMayUseSmsSending,omitempty"`
 }
 
-//change bMayUseSmsSending parameter for mobile devices
-//
-//Parameters:
-//	- pNewStatuses	(params) Container with list of devices to change SMS sender status.
-//	Each container value has a name - host id and value of type paramBool meaning allow or disallow SMS sending.
+// AllowSenders change bMayUseSmsSending parameter for mobile devices
 func (ss *SmsSenders) AllowSenders(ctx context.Context, params PNewStatuses) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

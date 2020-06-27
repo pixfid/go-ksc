@@ -31,19 +31,14 @@ import (
 	"net/http"
 )
 
-//	PLCDevApi Class Reference
-//	Interface allows to acquire and manage PLC devices registry.
+// PLCDevApi Interface allows to acquire and manage PLC devices registry.
 //
-//	Administration server contains global list of the PLC devices.
-//	Every PLC device is identified by pPLCId - (binary) - binary data as array of 16 bytes.
+// Administration server contains global list of the PLC devices.
 //
-//	List of all members.
+// Every PLC device is identified by pPLCId - (binary) - binary data as array of 16 bytes.
 type PLCDevApi service
 
-//	Remove PLC device.
-//
-//	Parameters:
-//	- pPLCId	(binary). PLC device id. binary data as array of 16 bytes.
+// DeletePLCRemove PLC device.
 func (pda *PLCDevApi) DeletePLC(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", pda.client.Server+"/api/v1.0/PLCDevApi.DeletePLC", bytes.NewBuffer(postData))
@@ -55,16 +50,7 @@ func (pda *PLCDevApi) DeletePLC(ctx context.Context, params interface{}) ([]byte
 	return raw, err
 }
 
-//	Acquire attributes of specified PLC device.
-//
-//	Returns attributes of specified PLC device.
-//
-//	Parameters:
-//	- pPLCId		(binary). PLC device id. binary data as array of 16 bytes.
-//	- parOptions	reserved. (params)
-//
-//	Returns:
-//	- (params) object containing attributes of specified PLC device, see List of plc device attributes.
+// GetPLC Acquire attributes of specified PLC device.
 func (pda *PLCDevApi) GetPLC(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", pda.client.Server+"/api/v1.0/PLCDevApi.GetPLC", bytes.NewBuffer(postData))
@@ -76,13 +62,7 @@ func (pda *PLCDevApi) GetPLC(ctx context.Context, params interface{}) ([]byte, e
 	return raw, err
 }
 
-//	Adds/Updates PLC device.
-//
-//	Parameters:
-//	- pPLCId	(binary). PLC device id. binary data as array of 16 bytes.
-//	- pPLCInfo	(params) object containing device attributes,
-//	see List of plc device attributes. Following attributes are required:
-//		|- "KLPLC_DisplayName"
+// UpdatePLC Adds/Updates PLC device.
 func (pda *PLCDevApi) UpdatePLC(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", pda.client.Server+"/api/v1.0/PLCDevApi.UpdatePLC", bytes.NewBuffer(postData))

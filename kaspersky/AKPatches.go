@@ -31,9 +31,7 @@ import (
 	"net/http"
 )
 
-//AKPatches	Interface to manage system of autoupdating by patch.exe patches.
-//
-//List of all members.
+// AKPatches service to manage system of autoupdating by patch.exe patches.
 type AKPatches service
 
 //PatchParams struct
@@ -51,33 +49,9 @@ type PatchValue struct {
 	NeedBackupServer bool `json:"NeedBackupServer"`
 }
 
-//ApprovePatch
-//Give approval to the patch on start installation.
+// ApprovePatch Give approval to the patch on start installation.
 //
-//This command is applicable to patches which have no right
-//to be installed without approval of the administrator.
-//
-//	Parameters:
-//	- szwPatchId	(string). the patch identifier. see KLSTS_Par_PatchId.
-//	- parOptions	(params) object containing additional parameters:
-//
-//	Example params request:
-//	{
-//	  "szwPatchId": "patchId",
-//	  "parOptions": {
-//	    "type": "params",
-//	    "value": {
-//	      "NeedBackupServer": true
-//	    }
-//	  }
-//	}
-//	|-"NeedBackupServer" (bool) true if is required to do SC-server backup before installation of the patch,
-//	optional
-//
-//	Returns:
-//	- ppResult (params) contains following attributes:
-//	- "CallResult" (bool) true if success
-//	- "ErrorDescription" (string) error description, empty if no error
+// This command is applicable to patches which have no right to be installed without approval of the administrator.
 func (akp *AKPatches) ApprovePatch(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -94,26 +68,15 @@ func (akp *AKPatches) ApprovePatch(ctx context.Context, params interface{}) ([]b
 	return raw, err
 }
 
-//ForbidPatch
-//Forbid installation of the patch.
+// ForbidPatch Forbid installation of the patch.
 //
-//After this forbidden will be no more notifications that this patch expecting approval on installation
-//
-//	Parameters:
-//	- szwPatchId	(string). the patch identifier. see KLSTS_Par_PatchId.
-//	- parOptions	reserved. (params)
-//	Example params request:
-//	{
-//	  "szwPatchId": "patchId",
-//	  "parOptions": nil
-//	}
-//
-//	Returns:
-//	- ppResult (params) contains following attributes:
-//	- "CallResult" (bool) true if success
-//	- "ErrorDescription" (string) error description, empty if no error
+// After this forbidden will be no more notifications that this patch expecting approval on installation
 func (akp *AKPatches) ForbidPatch(ctx context.Context, params interface{}) ([]byte, error) {
-	postData, _ := json.Marshal(params)
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
 	request, err := http.NewRequest("POST", akp.client.Server+"/api/v1.0/AKPatches.ForbidPatch",
 		bytes.NewBuffer(postData))
 	if err != nil {

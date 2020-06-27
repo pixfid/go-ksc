@@ -31,11 +31,7 @@ import (
 	"net/http"
 )
 
-//	GatewayConnection Class Reference
-//
-//	Interface for creating gateway connections.
-//
-//	List of all members.
+//	GatewayConnection service for creating gateway connections.
 type GatewayConnection service
 
 type GCParams struct {
@@ -53,18 +49,10 @@ type AuthKey struct {
 	WstrAuthKey string `json:"wstrAuthKey,omitempty"`
 }
 
-//	Create gateway connection.
-//	See Creating gateway connections to know how to create gateway connections.
-//	If any connection errors occur this method throws corresponding exception.
+// PrepareGatewayConnection Create gateway connection.
 //
-//	Parameters:
-//	- GCParams
-//		|- pLocations - (params) gateway nodes locations.
-//
-//	Return:
-//	- wstrAuthKey	- one-time authentication key. Should be used in 'login' or Session.
-//
-//	StartSession method call in KSCGW authentication scheme. Valid only for 60 seconds.
+// Remark:
+// StartSession method call in KSCGW authentication scheme. Valid only for 60 seconds.
 func (gc *GatewayConnection) PrepareGatewayConnection(ctx context.Context, params GCParams) (*AuthKey, []byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", gc.client.Server+"/api/v1.0/GatewayConnection.PrepareGatewayConnection",
@@ -78,20 +66,10 @@ func (gc *GatewayConnection) PrepareGatewayConnection(ctx context.Context, param
 	return authKey, raw, err
 }
 
-//	Create tunnel connection.
-//	See Creating gateway connections to know how to create tunnel connections.
-//	If any connection errors occur this method throws corresponding exception.
+// PrepareTunnelConnection Create tunnel connection.
 //
-//	Parameters:
-//	- GCParams
-//		|- pLocations - (params) gateway nodes locations.
-//		|- szwTargetHostName (string)
-//		|- nTargetPort (int64)
-//
-//	Return:
-//	- wstrAuthKey	- one-time authentication key.
-//
-//	Should be used in 'login' method call in KSCGW authentication scheme. Valid only for 60 seconds.
+// Remark:
+// Should be used in 'login' method call in KSCGW authentication scheme. Valid only for 60 seconds.
 func (gc *GatewayConnection) PrepareTunnelConnection(ctx context.Context, params GCParams) (*AuthKey, []byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", gc.client.Server+"/api/v1.0/GatewayConnection.PrepareTunnelConnection",

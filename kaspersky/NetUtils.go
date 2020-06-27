@@ -30,8 +30,10 @@ import (
 	"net/http"
 )
 
+// NetUtils custom service to upload\download files from\to KSC servers
 type NetUtils service
 
+// DownloadFile using to download files from KSC server
 func (ac *NetUtils) DownloadFile(ctx context.Context, prefix string) ([]byte, error) {
 	request, err := http.NewRequest("GET", ac.client.Server+prefix, nil)
 	if err != nil {
@@ -42,8 +44,9 @@ func (ac *NetUtils) DownloadFile(ctx context.Context, prefix string) ([]byte, er
 	return raw, err
 }
 
-//	Prefix:
-//	- FTUR/1b20a383-9ae7-49e3-b0ad-1e5edfe5926d
+// UploadFile using to upload file to KSC server
+// Prefix:
+// FTUR/1b20a383-9ae7-49e3-b0ad-1e5edfe5926d
 func (ac *NetUtils) UploadFile(ctx context.Context, prefix string, data io.Reader) ([]byte, error) {
 	request, err := http.NewRequest("PUT", ac.client.Server+prefix, data)
 	if err != nil {

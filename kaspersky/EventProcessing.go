@@ -32,23 +32,10 @@ import (
 	"net/http"
 )
 
-//EventProcessing Class Reference
-//
-//Interface implements the functionality for viewing and deleting events.
-//
-//List of all members.
+// EventProcessing service implements the functionality for viewing and deleting events.
 type EventProcessing service
 
-//GetRecordCount
-//Get record count in the result-set.
-//
-//Returns number of elements contained in the specified result-set.
-//
-//	Parameters:
-//	- strIteratorId	(string) result-set ID, identifier of the server-side ordered collection of found data records.
-//
-//	Returns:
-//	- (int64) number of elements contained in the specified result-set.
+// GetRecordCount Get record count in the result-set. Returns number of elements contained in the specified result-set.
 func (ep *EventProcessing) GetRecordCount(ctx context.Context, strIteratorId string) (*PxgValInt, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strIteratorId": "%s"}`, strIteratorId))
 	request, err := http.NewRequest("POST", ep.client.Server+"/api/v1.0/EventProcessing.GetRecordCount", bytes.NewBuffer(postData))
@@ -61,18 +48,8 @@ func (ep *EventProcessing) GetRecordCount(ctx context.Context, strIteratorId str
 	return pxgValInt, raw, err
 }
 
-//GetRecordRange
-//Acquire subset of result-set elements by range.
-//
-//Returns elements contained in the specified result-set in the diapason from position nStart to position nEnd.
-//
-//	Parameters:
-//	- strIteratorId	(string) result-set ID, identifier of the server-side ordered collection of found data records.
-//	- nStart	(int64) zero-based start position.
-//	- nEnd	(int64) zero-based finish position.
-//
-//	Return:
-//	pParamsEvents	(params) - container that has needed elements in the array with name "KLEVP_EVENT_RANGE_ARRAY".
+// GetRecordRange Acquire subset of result-set elements by range.
+// Returns elements contained in the specified result-set in the diapason from position nStart to position nEnd.
 func (ep *EventProcessing) GetRecordRange(ctx context.Context, strIteratorId string, nStart, nEnd int64) ([]byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"strIteratorId": "%s", "nStart": %d, "nEnd": %d}`, strIteratorId, nStart, nEnd))
@@ -85,14 +62,7 @@ func (ep *EventProcessing) GetRecordRange(ctx context.Context, strIteratorId str
 	return raw, err
 }
 
-//ReleaseIterator
-//Release result-set.
-//
-//Releases the specified result-set and frees associated memory.
-//
-//	Parameters:
-//	- strIteratorId	(string) result-set ID,
-//	identifier of the server-side ordered collection of found data records.
+// ReleaseIterator Releases the specified result-set and frees associated memory.
 func (ep *EventProcessing) ReleaseIterator(ctx context.Context, strIteratorId string) (*PxgValInt, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strIteratorId": "%s"}`, strIteratorId))
 	request, err := http.NewRequest("POST", ep.client.Server+"/api/v1.0/EventProcessing.ReleaseIterator", bytes.NewBuffer(postData))
@@ -105,22 +75,7 @@ func (ep *EventProcessing) ReleaseIterator(ctx context.Context, strIteratorId st
 	return pxgValInt, raw, err
 }
 
-//InitiateDelete
-//Initiates mass delete of the events specified by pSettings in the result-set.
-//
-//	Parameters:
-//	- strIteratorId	(string) result-set ID, identifier of the server-side ordered collection of found data records.
-//	- pSettings	(params) contains range blocks to mass delete events.
-//
-//	Format of pSettings parameter:
-//
-//	EVP_EVENT_BLOCKS // paramArray
-//    +---0 // paramParams
-//        +---EVP_EVENT_BLOCK_BEGIN_ID // int64, write here Event ID (event_db_id) to set start of block, see List of event attributes for attribute names.
-//        +---EVP_EVENT_BLOCK_END_ID // int64, write here Event ID (event_db_id) to set end of block, see List of event attributes for attribute names.
-//    +---1 // paramParams
-//        ...
-//    ...
+// InitiateDelete Initiates mass delete of the events specified by pSettings in the result-set.
 func (ep *EventProcessing) InitiateDelete(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -137,24 +92,7 @@ func (ep *EventProcessing) InitiateDelete(ctx context.Context, params interface{
 	return raw, err
 }
 
-//CancelDelete
-//Cancels mass delete of the events specified by pSettings in the result-set.
-//
-//	Parameters:
-//	- strIteratorId	(string) result-set ID, identifier of the server-side ordered collection
-//	of found data records.
-//	- pSettings	(params) contains range blocks to mass delete events.
-//
-//	Format of pSettings parameter:
-//
-//	EVP_EVENT_BLOCKS // paramArray
-//    +---0 // paramParams
-//        +---EVP_EVENT_BLOCK_BEGIN_ID // int64, write here Event ID (event_db_id) to set start of block, see List of event attributes for attribute names.
-//        +---EVP_EVENT_BLOCK_END_ID // int64, write here Event ID (event_db_id) to set end of block, see List of event attributes for attribute names.
-//    +---1 // paramParams
-//        ...
-//    ...
-//
+// CancelDelete Cancels mass delete of the events specified by pSettings in the result-set.
 func (ep *EventProcessing) CancelDelete(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

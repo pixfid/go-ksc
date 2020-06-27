@@ -31,24 +31,16 @@ import (
 	"net/http"
 )
 
-//	IWebUsersSrv2 Class Reference
-//
-//	Operating with emails from GUI
-//
-//	List of all members.
+// IWebUsersSrv2 service to operating with emails from GUI
 type IWebUsersSrv2 service
 
-//	IWebUsersSrvProxy2::SendEmail GUI bridge.
-//
-//	Parameters:
-//	- pParams	Attributes.
-//	- pSink	Sink object pointer.
-//	- hSink	Sink id.
-//
-//	Exceptions:
-//	Throws	KLERR::Error* in case of error.
+// SendEmailAsync IWebUsersSrvProxy2::SendEmail GUI bridge.
 func (iwus2 *IWebUsersSrv2) SendEmailAsync(ctx context.Context, params interface{}) ([]byte, error) {
-	postData, _ := json.Marshal(params)
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
 	request, err := http.NewRequest("POST", iwus2.client.Server+"/api/v1.0/IWebUsersSrv2.SendEmailAsync",
 		bytes.NewBuffer(postData))
 	if err != nil {

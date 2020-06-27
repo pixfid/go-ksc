@@ -31,23 +31,11 @@ import (
 	"net/http"
 )
 
-//	SrvSsRevision Class Reference
-//
-//	Access to virtual server settings storage revisions..
-//
-//	List of all members.
+// SrvSsRevision service provide access to virtual server settings storage revisions.
 type SrvSsRevision service
 
-//	Open specified version of virtual server settings storage.
-//
-//	Parameters:
-//	- nVServer	id of the virtual server, zero means the 'main server'
-//	- nRevision	revision, zero means 'current version'
-//	- szwType	only "SS_SETTINGS" is supported
-//
-//	Returns:
-//	opened settings storage identifier, it must be closed via SrvSsRevision.SsRevision_Close method
-func (ssr *SrvSsRevision) SsRevision_Open(ctx context.Context, nVServer, nRevision int64, szwType string) ([]byte, error) {
+// SsRevisionOpen Open specified version of virtual server settings storage.
+func (ssr *SrvSsRevision) SsRevisionOpen(ctx context.Context, nVServer, nRevision int64, szwType string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{
 		"nVServer": %d, 
 		"nRevision": %d, 
@@ -62,11 +50,8 @@ func (ssr *SrvSsRevision) SsRevision_Open(ctx context.Context, nVServer, nRevisi
 	return raw, err
 }
 
-//	Close settings storage opened by SrvSsRevision.SsRevision_Open
-//
-//	Parameters:
-//	- szwId	settings storage identifier returned by SrvSsRevision.SsRevision_Open method
-func (ssr *SrvSsRevision) SsRevision_Close(ctx context.Context, szwType string) ([]byte, error) {
+// SsRevisionClose Close settings storage opened by SrvSsRevision.SsRevisionOpen
+func (ssr *SrvSsRevision) SsRevisionClose(ctx context.Context, szwType string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{
 		"szwType": "%s"
 	}`, szwType))

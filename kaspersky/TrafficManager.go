@@ -33,31 +33,7 @@ import (
 	"net/http"
 )
 
-//	TrafficManager Class Reference
-//
-//	Traffic manager interface.
-//
-//	Traffic manager allows to limit network traffic speed between
-//	KSC server and Network agents or between servers within server hierarchy.
-//	This interface manages restrictions used by traffic manager.
-//
-//	+-----------------------+--------+--------------------------------------------------------------------------------------------------------+
-//	|         Param         |  Type  |                                              Description                                               |
-//	+-----------------------+--------+--------------------------------------------------------------------------------------------------------+
-//	| TRFM_RESTR_IP4_LOW    | string | Low border of IP addresses diapason                                                                    |
-//	| TRFM_RESTR_IP4_HIGH   | string | High border of IP addresses diapason                                                                   |
-//	| TRFM_RESTR_IP4_SUBNET | string | IP subnet                                                                                              |
-//	| TRFM_RESTR_IP4_MASK   | string | IP subnet mask                                                                                         |
-//	| TRFM_RESTR_FROM_HOUR  | int64  | time period start hour, 0-23                                                                           |
-//	| TRFM_RESTR_FROM_MIN   | int64  | time period start minute, 0-59                                                                         |
-//	| TRFM_RESTR_TO_HOUR    | int64  | time period end hour, 0-23                                                                             |
-//	| TRFM_RESTR_TO_MIN     | int64  | time period end minute, 0-59                                                                           |
-//	| TRFM_RESTR_TIME_LIMIT | int64  | limit for specified time, kilobytes per second                                                         |
-//	| TRFM_RESTR_LIMIT      | int64  | limit for all other time, kilobytes per second                                                         |
-//	| TRFM_RESTR_ID         | int64  | restriction id. This is output-only field and is ignored when passed to Add/Update restriction methods |
-//	+-----------------------+--------+--------------------------------------------------------------------------------------------------------+
-//
-//	List of all members:
+// TrafficManager service allows to limit network traffic speed between KSC server and Network agents or between servers within server hierarchy.
 type TrafficManager service
 
 //TrafficRestrictions struct
@@ -65,39 +41,40 @@ type TrafficRestrictions struct {
 	TrafficPRestrictions TrafficPRestrictions `json:"pRestriction"`
 }
 
+// TrafficPRestrictions struct
 type TrafficPRestrictions struct {
-	TrfmRestrFromHour  int64  `json:"TRFM_RESTR_FROM_HOUR"`
-	TrfmRestrFromMin   int64  `json:"TRFM_RESTR_FROM_MIN"`
-	TrfmRestrIp4High   string `json:"TRFM_RESTR_IP4_HIGH"`
-	TrfmRestrIp4Low    string `json:"TRFM_RESTR_IP4_LOW"`
-	TrfmRestrIp4Mask   string `json:"TRFM_RESTR_IP4_MASK,omitempty"`
+	// TrfmRestrFromHour time period start hour, 0-23
+	TrfmRestrFromHour int64 `json:"TRFM_RESTR_FROM_HOUR"`
+
+	//TrfmRestrFromMin time period start minute, 0-59
+	TrfmRestrFromMin int64 `json:"TRFM_RESTR_FROM_MIN"`
+
+	// TrfmRestrIp4High High border of IP addresses diapason
+	TrfmRestrIp4High string `json:"TRFM_RESTR_IP4_HIGH"`
+
+	// TrfmRestrIp4Low Low border of IP addresses diapason
+	TrfmRestrIp4Low string `json:"TRFM_RESTR_IP4_LOW"`
+
+	// TrfmRestrIp4Mask IP subnet mask
+	TrfmRestrIp4Mask string `json:"TRFM_RESTR_IP4_MASK,omitempty"`
+
+	// TrfmRestrIp4Subnet IP subnet
 	TrfmRestrIp4Subnet string `json:"TRFM_RESTR_IP4_SUBNET,omitempty"`
-	TrfmRestrLimit     int64  `json:"TRFM_RESTR_LIMIT"`
-	TrfmRestrTimeLimit int64  `json:"TRFM_RESTR_TIME_LIMIT"`
-	TrfmRestrToHour    int64  `json:"TRFM_RESTR_TO_HOUR"`
-	TrfmRestrToMin     int64  `json:"TRFM_RESTR_TO_MIN"`
+
+	// TrfmRestrLimit limit for all other time, kilobytes per second
+	TrfmRestrLimit int64 `json:"TRFM_RESTR_LIMIT"`
+
+	// TrfmRestrTimeLimit limit for specified time, kilobytes per second
+	TrfmRestrTimeLimit int64 `json:"TRFM_RESTR_TIME_LIMIT"`
+
+	// TrfmRestrToHour time period start hour, 0-23
+	TrfmRestrToHour int64 `json:"TRFM_RESTR_TO_HOUR"`
+
+	// TrfmRestrToMin time period end minute, 0-59
+	TrfmRestrToMin int64 `json:"TRFM_RESTR_TO_MIN"`
 }
 
-//
-//	Parameters:
-//	 [in]	pRestriction	Restriction definition, see Traffic restrictions for details and attributes meaning
-//
-//	Example of pRestriction:
-//	{
-//	  "pRestriction": {
-//	    "TRFM_RESTR_FROM_HOUR": 0,
-//	    "TRFM_RESTR_FROM_MIN": 0,
-//	    "TRFM_RESTR_IP4_HIGH": "10.10.10.25",
-//	    "TRFM_RESTR_IP4_LOW": "10.10.10.20",
-//	    "TRFM_RESTR_LIMIT": 3000,
-//	    "TRFM_RESTR_TIME_LIMIT": 3000,
-//	    "TRFM_RESTR_TO_HOUR": 23,
-//	    "TRFM_RESTR_TO_MIN": 59
-//	  }
-//	}
-//
-//	Returns:
-//	- (int64) added restriction id
+// AddRestriction Add traffic restriction.
 func (tm *TrafficManager) AddRestriction(ctx context.Context, params interface{}) (*PxgValInt, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -114,10 +91,7 @@ func (tm *TrafficManager) AddRestriction(ctx context.Context, params interface{}
 	return pxgValInt, raw, err
 }
 
-//	Remove traffic restriction.
-//
-//	Parameters:
-//	- nRestrictionId	(int64)	restriction to delete
+// DeleteRestriction Remove traffic restriction.
 func (tm *TrafficManager) DeleteRestriction(ctx context.Context, nRestrictionId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nRestrictionId": %d}`, nRestrictionId))
 	request, err := http.NewRequest("POST", tm.client.Server+"/api/v1.0/TrafficManager.DeleteRestriction", bytes.NewBuffer(postData))
@@ -129,44 +103,7 @@ func (tm *TrafficManager) DeleteRestriction(ctx context.Context, nRestrictionId 
 	return raw, err
 }
 
-//	Returns all currently active restrictions list.
-//
-//	Parameters:
-//	- [out]	pRestrictions	array of restrictions
-//
-//	Example Response:
-//		{
-//	  "pRestrictions" : [
-//	    {
-//	      "type" : "params",
-//	      "value" : {
-//	        "TRFM_RESTR_FROM_HOUR" : 0,
-//	        "TRFM_RESTR_FROM_MIN" : 0,
-//	        "TRFM_RESTR_ID" : 2,
-//	        "TRFM_RESTR_IP4_HIGH" : "10.10.10.254",
-//	        "TRFM_RESTR_IP4_LOW" : "10.10.10.2",
-//	        "TRFM_RESTR_LIMIT" : 3000,
-//	        "TRFM_RESTR_TIME_LIMIT" : 3000,
-//	        "TRFM_RESTR_TO_HOUR" : 23,
-//	        "TRFM_RESTR_TO_MIN" : 59
-//	      }
-//	    },
-//	    {
-//	      "type" : "params",
-//	      "value" : {
-//	        "TRFM_RESTR_FROM_HOUR" : 20,
-//	        "TRFM_RESTR_FROM_MIN" : 0,
-//	        "TRFM_RESTR_ID" : 3,
-//	        "TRFM_RESTR_IP4_MASK" : "255.255.255.0",
-//	        "TRFM_RESTR_IP4_SUBNET" : "10.10.10.0",
-//	        "TRFM_RESTR_LIMIT" : 3001,
-//	        "TRFM_RESTR_TIME_LIMIT" : 3001,
-//	        "TRFM_RESTR_TO_HOUR" : 23,
-//	        "TRFM_RESTR_TO_MIN" : 59
-//	      }
-//	    }
-//	  ]
-//	}
+// GetRestrictions Returns all currently active restrictions list.
 func (tm *TrafficManager) GetRestrictions(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", tm.client.Server+"/api/v1.0/TrafficManager.GetRestrictions", nil)
 	if err != nil {
@@ -177,31 +114,7 @@ func (tm *TrafficManager) GetRestrictions(ctx context.Context) ([]byte, error) {
 	return raw, err
 }
 
-//
-//	Parameters:
-//	- [in]	nRestrictionId	restriction to modify.
-//
-//	If restriction with such id does not exist then new restriction will be added and this parameters will be ignored.
-//	- [in]	pRestriction	new restriction settings, see Traffic restrictions for details and attributes meaning
-//
-//	Example Update Restriction Params:
-//	{
-//			"nRestrictionId" : 4,
-//			"pRestriction" : {
-//				"TRFM_RESTR_FROM_HOUR" : 20,
-//				"TRFM_RESTR_FROM_MIN" : 0,
-//				"TRFM_RESTR_ID" : 3,
-//				"TRFM_RESTR_IP4_MASK" : "255.255.255.0",
-//				"TRFM_RESTR_IP4_SUBNET" : "10.10.10.0",
-//				"TRFM_RESTR_LIMIT" : 3001,
-//				"TRFM_RESTR_TIME_LIMIT" : 3001,
-//				"TRFM_RESTR_TO_HOUR" : 23,
-//				"TRFM_RESTR_TO_MIN" : 59
-//			}
-//	}
-//
-//	Returns:
-//	- (int) modified restriction id. If restriction did not exist before call then newly created restriction id.
+// UpdateRestriction Modify existing traffic restriction settings.
 func (tm *TrafficManager) UpdateRestriction(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", tm.client.Server+"/api/v1.0/TrafficManager.UpdateRestriction", bytes.NewBuffer(postData))

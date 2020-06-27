@@ -32,44 +32,27 @@ import (
 	"net/http"
 )
 
-//	NagRemoteScreen Class Reference
-//
-//	Interface for remote screen session management..
-//
-//	List of all members.
+// NagRemoteScreen Interface for remote screen session management..
 type NagRemoteScreen service
 
+// ExistingSessions struct
 type ExistingSessions struct {
 	ExistingSessions []ExistingSession `json:"PxgRetVal"`
 }
 
+// ExistingSession struct
 type ExistingSession struct {
 	Type         string       `json:"type"`
 	SessionValue SessionValue `json:"value"`
 }
 
+// SessionValue struct
 type SessionValue struct {
 	KlnagRscrSessionDN string `json:"KLNAG_RSCR_SESSION_DN"`
 	KlnagRscrSessionID string `json:"KLNAG_RSCR_SESSION_ID"`
 }
 
-//NagRemoteScreen.GetExistingSessions
-//Returns existing remote screen sessions.
-//
-//	Parameters:
-//	- nType	(int64) type of remote screen (see Remote screen type)
-//
-//	╔═══════╦═════════════════════════╦══════════════════════════════════════════╗
-//	║ Value ║      Mnemonic name      ║               Description                ║
-//	╠═══════╬═════════════════════════╬══════════════════════════════════════════╣
-//	║     1 ║ RST_WIN_RDP             ║ Remote desktop                           ║
-//	║     2 ║ RST_WIN_DESKTOP_SHARING ║ Windows Desktop Sharing                  ║
-//	║     4 ║ RST_VNC                 ║ Virtual Network Computing (VNC)          ║
-//	║     8 ║ RST_VNC_HTTP            ║ Virtual Network Computing (VNC) via HTTP ║
-//	╚═══════╩═════════════════════════╩══════════════════════════════════════════╝
-//
-//	Returns:
-//	- (array) array of params, each contains KLNAG_RSCR_SESSION_* variables.
+// GetExistingSessions Returns existing remote screen sessions.
 func (nrs *NagRemoteScreen) GetExistingSessions(ctx context.Context, nType int64) (*ExistingSessions, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nType": %d}`, nType))
 	request, err := http.NewRequest("POST", nrs.client.Server+"/api/v1.0/NagRemoteScreen.GetExistingSessions",
@@ -83,11 +66,12 @@ func (nrs *NagRemoteScreen) GetExistingSessions(ctx context.Context, nType int64
 	return existingSessions, raw, err
 }
 
-//SessionHandle struct using in
+// SessionHandle struct using in
 type SessionHandle struct {
 	PSharingHandle PSharingHandle `json:"PxgRetVal"`
 }
 
+// PSharingHandle struct
 type PSharingHandle struct {
 	KlnagRscrHandleID   int64  `json:"KLNAG_RSCR_HANDLE_ID"`
 	KlnagRscrHandleType int64  `json:"KLNAG_RSCR_HANDLE_TYPE"`
@@ -95,23 +79,7 @@ type PSharingHandle struct {
 	KlnagRscrPort       int64  `json:"KLNAG_RSCR_PORT"`
 }
 
-//NagRemoteScreen.OpenSession
-//Shares the session, opens ports etc.
-//
-//	Parameters:
-//	- nType	(int64) type of remote screen (see Remote screen type)
-//	╔═══════╦═════════════════════════╦══════════════════════════════════════════╗
-//	║ Value ║      Mnemonic name      ║               Description                ║
-//	╠═══════╬═════════════════════════╬══════════════════════════════════════════╣
-//	║     1 ║ RST_WIN_RDP             ║ Remote desktop                           ║
-//	║     2 ║ RST_WIN_DESKTOP_SHARING ║ Windows Desktop Sharing                  ║
-//	║     4 ║ RST_VNC                 ║ Virtual Network Computing (VNC)          ║
-//	║     8 ║ RST_VNC_HTTP            ║ Virtual Network Computing (VNC) via HTTP ║
-//	╚═══════╩═════════════════════════╩══════════════════════════════════════════╝
-//	- szwID	(string) empty string for RDP, id of session for others
-//
-//	Returns:
-//	- (params) sharing handle of the shared session
+// OpenSession Shares the session, opens ports etc.
 func (nrs *NagRemoteScreen) OpenSession(ctx context.Context, nType int64, szwID string) (*SessionHandle, []byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"nType": %d, "szwID": "%s"}`, nType, szwID))
@@ -126,17 +94,13 @@ func (nrs *NagRemoteScreen) OpenSession(ctx context.Context, nType int64, szwID 
 	return sessionHandle, raw, err
 }
 
-//SharingHandle struct using in NagRemoteScreen.CloseSession
+// SharingHandle struct using in NagRemoteScreen.CloseSession
 type SharingHandle struct {
 	//PSharingHandle value of the sharing handle returned by OpenSession
 	PSharingHandle PSharingHandle `json:"pSharingHandle"`
 }
 
-//NagRemoteScreen.CloseSession
-//Closes session.
-//
-//	Parameters:
-//	- pSharingHandle	(params) value of the sharing handle returned by OpenSession
+// CloseSession Closes session.
 func (nrs *NagRemoteScreen) CloseSession(ctx context.Context, params SharingHandle) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -153,7 +117,7 @@ func (nrs *NagRemoteScreen) CloseSession(ctx context.Context, params SharingHand
 	return raw, err
 }
 
-//TunnelData using in NagRemoteScreen.GetDataForTunnel
+// TunnelData using in NagRemoteScreen.GetDataForTunnel
 type TunnelData struct {
 	//NHostPortNumber nHostPortNumber
 	NHostPortNumber int64 `json:"nHostPortNumber"`
@@ -162,15 +126,7 @@ type TunnelData struct {
 	WstrHostNameOrIPAddr string `json:"wstrHostNameOrIpAddr"`
 }
 
-//NagRemoteScreen.GetDataForTunnel
-//Returns data to create an use tunnel
-//
-//	Parameters:
-//	- pSharingHandle	(params) value of the sharing handle returned by OpenSession
-//
-//	Return:
-//	- nHostPortNumber		(int64) out the nHostPortNumber
-//	- wstrHostNameOrIpAddr	(string) out the wstrHostNameOrIpAddr
+// GetDataForTunnel Returns data to create an use tunnel
 func (nrs *NagRemoteScreen) GetDataForTunnel(ctx context.Context, params SharingHandle) (*TunnelData, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -188,25 +144,13 @@ func (nrs *NagRemoteScreen) GetDataForTunnel(ctx context.Context, params Sharing
 	return tunnelData, raw, err
 }
 
-//WdsDataParams using in NagRemoteScreen.GetWdsData
+// WdsDataParams using in NagRemoteScreen.GetWdsData
 type WdsDataParams struct {
 	PSharingHandle   PSharingHandle `json:"pSharingHandle"`
 	NLocalPortNumber int64          `json:"nLocalPortNumber"`
 }
 
-//NagRemoteScreen.GetWdsData
-//Returns data specific for Windows Desktop Sharing
-//
-//	Parameters:
-//	- pSharingHandle	(params) value of the sharing handle returned by OpenSession
-//	- nLocalPortNumber	(int) the nLocalPortNumber parameter,
-//	port number of the local end of the tunnel;
-//	if klsctunnel utility is intended to be used for creating of the tunnel then
-//	specify here the value of the nHostPortNumber output parameter of the NagRemoteScreen.GetDataForTunnel method
-//
-//	Return:
-//	- wstrTicket	(string) out the ticket (bstrConnectionString parameter for the IRDPSRAPIViewer.Connect method)
-//	- wstrPassword	(string) out the password (bstrPassword parameter for the IRDPSRAPIViewer.Connect method)
+// GetWdsData Returns data specific for Windows Desktop Sharing
 func (nrs *NagRemoteScreen) GetWdsData(ctx context.Context, params WdsDataParams) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

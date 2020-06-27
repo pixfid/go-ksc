@@ -32,24 +32,14 @@ import (
 	"net/http"
 )
 
-//	ReportManager Class Reference
+// ReportManager Reports managing.
 //
-//	Reports managing..
-//
-//	Allows to enumerate, create, execute and delete reports.
-//
-//	List of all members.
+// Allows to enumerate, create, execute and delete reports.
 type ReportManager service
 
-//	Enumerate report types supported by administration server.
+// EnumReportTypes Enumerate report types supported by administration server.
 //
-//	Enumerates all existing reports.
-//
-//	Returns:
-//	- (array) collection of report type descriptions. Each entry is params object,
-//	containing following report type attributes (See List of report type attributes):
-//		- RPT_TYPE
-//		- RPT_DN
+// Enumerates all existing types.
 func (rm *ReportManager) EnumReportTypes(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", rm.client.Server+"/api/v1.0/ReportManager.EnumReportTypes", nil)
 	if err != nil {
@@ -60,20 +50,9 @@ func (rm *ReportManager) EnumReportTypes(ctx context.Context) ([]byte, error) {
 	return raw, err
 }
 
-//	Enumerate existing reports.
+// EnumReports Enumerate existing reports.
 //
-//	Enumerates all existing reports.
-//
-//	Returns:
-//	- (array) collection of reports. Each entry is params object,
-//	containing following attributes (See List of report attributes):
-//	- RPT_ID
-//	- RPT_DN
-//	- RPT_TYPE
-//	- RPT_CREATED
-//	- RPT_MODIFIED
-//	- RPT_GROUP_ID
-//	- RPT_EXTRA_DATA
+// Enumerates all existing reports.
 func (rm *ReportManager) EnumReports(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", rm.client.Server+"/api/v1.0/ReportManager.EnumReports", nil)
 	if err != nil {
@@ -84,10 +63,7 @@ func (rm *ReportManager) EnumReports(ctx context.Context) ([]byte, error) {
 	return raw, err
 }
 
-//	Enumerate available dashboards.
-//
-//	Returns:
-//	- Collection of integer dashboards IDs.
+// GetAvailableDashboards Enumerate available dashboards.
 func (rm *ReportManager) GetAvailableDashboards(ctx context.Context) (*PxgValArrayOfInt, []byte, error) {
 	request, err := http.NewRequest("POST", rm.client.Server+"/api/v1.0/ReportManager.GetAvailableDashboards", nil)
 	if err != nil {
@@ -99,16 +75,9 @@ func (rm *ReportManager) GetAvailableDashboards(ctx context.Context) (*PxgValArr
 	return reportsArray, raw, err
 }
 
-//	Return XSLT transform for report type.
+// GetConstantOutputForReportType Return XSLT transform for report type.
 //
-//	Returns XSLT transform as a string for specified report type.
-//
-//	Parameters:
-//	- lReportType	(int) report type, see List of report types
-//	- lXmlTargetType	(int) XML target type XML Target Type enum
-//
-//	Returns:
-//	- (string) XSLT transform in the form of a string
+// Returns XSLT transform as a string for specified report type.
 func (rm *ReportManager) GetConstantOutputForReportType(ctx context.Context, lReportType, lXmlTargetType int64) (*PxgValStr,
 	[]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lReportType": %d, "lXmlTargetType": %d}`, lReportType, lXmlTargetType))
@@ -122,15 +91,9 @@ func (rm *ReportManager) GetConstantOutputForReportType(ctx context.Context, lRe
 	return pxgValStr, raw, err
 }
 
-//	Obtain default report info for specified report type.
+// GetDefaultReportInfo Obtain default report info for specified report type.
 //
-//	Returns default report info for the specified report type.
-//
-//	Parameters:
-//	- lReportType	(int64) id of report type, see List of report types
-//
-//	Returns:
-//	- (params) report info, see List of report attributes
+// Returns default report info for the specified report type.
 func (rm *ReportManager) GetDefaultReportInfo(ctx context.Context, lReportType int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lReportType": %d}`, lReportType))
 	request, err := http.NewRequest("POST", rm.client.Server+"/api/v1.0/ReportManager.GetDefaultReportInfo", bytes.NewBuffer(postData))
@@ -142,13 +105,7 @@ func (rm *ReportManager) GetDefaultReportInfo(ctx context.Context, lReportType i
 	return raw, err
 }
 
-//	Get filter settings.
-//
-//	Parameters:
-//	- lReportType	(int64) report type, see List of report types
-//
-//	Returns:
-//	- (params) filter settings, see List of report filter attributes
+// GetFilterSettings Get filter settings.
 func (rm *ReportManager) GetFilterSettings(ctx context.Context, lReportType int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lReportType": %d}`, lReportType))
 	request, err := http.NewRequest("POST", rm.client.Server+"/api/v1.0/ReportManager.GetFilterSettings", bytes.NewBuffer(postData))
@@ -160,15 +117,9 @@ func (rm *ReportManager) GetFilterSettings(ctx context.Context, lReportType int6
 	return raw, err
 }
 
-//	Obtain report common data.
+// GetReportCommonData Obtain report common data.
 //
-//	Returns common data for specified report.
-//
-//	Parameters:
-//	- lReportId	(int64) id of report
-//
-//	Returns:
-//	- (params) report common data, see List of report common attributes
+// Returns common data for specified report.
 func (rm *ReportManager) GetReportCommonData(ctx context.Context, lReportId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lReportId": %d}`, lReportId))
 	request, err := http.NewRequest("POST", rm.client.Server+"/api/v1.0/ReportManager.GetReportCommonData", bytes.NewBuffer(postData))
@@ -180,12 +131,9 @@ func (rm *ReportManager) GetReportCommonData(ctx context.Context, lReportId int6
 	return raw, err
 }
 
-//	Enumerate ids of existing reports.
+// GetReportIds Enumerate ids of existing reports.
 //
-//	Returns array of existing report ids.
-//
-//	Returns:
-//	- (array) array of event ids(int)
+// Returns array of existing report ids.
 func (rm *ReportManager) GetReportIds(ctx context.Context) (*PxgValArrayOfInt, []byte, error) {
 	request, err := http.NewRequest("POST", rm.client.Server+"/api/v1.0/ReportManager.GetReportIds", nil)
 	if err != nil {
@@ -197,15 +145,9 @@ func (rm *ReportManager) GetReportIds(ctx context.Context) (*PxgValArrayOfInt, [
 	return reportsIdsArray, raw, err
 }
 
-//	Obtain report info.
+// GetReportInfo Obtain report info.
 //
-//	Returns report info for specified report.
-//
-//	Parameters:
-//	- lReportId	(int64) id of report
-//
-//	Returns:
-//	- (params) report info, see List of report attributes
+// Returns report info for specified report.
 func (rm *ReportManager) GetReportInfo(ctx context.Context, lReportId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lReportId": %d}`, lReportId))
 	request, err := http.NewRequest("POST", rm.client.Server+"/api/v1.0/ReportManager.GetReportInfo", bytes.NewBuffer(postData))
@@ -217,22 +159,9 @@ func (rm *ReportManager) GetReportInfo(ctx context.Context, lReportId int64) ([]
 	return raw, err
 }
 
-//	Obtain report type info.
+// GetReportTypeDetailedInfo Obtain report type info.
 //
-//	Returns report info for specified report type.
-//
-//	Parameters:
-//	- lReportTypeId	(int64) id of report type
-//
-//	Returns:
-//	(params) report info, containing following report type attributes (See List of report type attributes)
-//	- RPT_DESCR
-//	- RPT_FIELDS
-//	- RPT_SUMM_FIELDS
-//	- RPT_TOTALS
-//	- RPT_ACCEPT_TIME_INTERVAL
-//	- RPT_ACCEPT_COMPS_LIST
-//	- RPT_EXTRA_DATA
+// Returns report info for specified report type.
 func (rm *ReportManager) GetReportTypeDetailedInfo(ctx context.Context, lReportType int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lReportType": %d}`, lReportType))
 	request, err := http.NewRequest("POST", rm.client.Server+"/api/v1.0/ReportManager.GetReportTypeDetailedInfo", bytes.NewBuffer(postData))
@@ -244,16 +173,8 @@ func (rm *ReportManager) GetReportTypeDetailedInfo(ctx context.Context, lReportT
 	return raw, err
 }
 
-//	Get result of ReportManager.RequestStatisticsData operation.
-//
-//	Gets result of asynchronous operation
-//	ReportManager.RequestStatisticsData, such as statistics, general statuses and dashboards data.
-//
-//	Parameters:
-//	- strRequestId	(string) identity of asynchronous operation
-//
-//	Return:
-//	- pResultData	(params) result data, see List of statistics result dataset
+// GetStatisticsData Gets result of asynchronous operation ReportManager.RequestStatisticsData,
+// such as statistics, general statuses and dashboards data.
 func (rm *ReportManager) GetStatisticsData(ctx context.Context, strRequestId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strRequestId": "%s"}`, strRequestId))
 	request, err := http.NewRequest("POST", rm.client.Server+"/api/v1.0/ReportManager.GetStatisticsData", bytes.NewBuffer(postData))
@@ -265,12 +186,7 @@ func (rm *ReportManager) GetStatisticsData(ctx context.Context, strRequestId str
 	return raw, err
 }
 
-//	Remove existing report.
-//
-//	Removes specified report
-//
-//	Parameters:
-//	- lReportId	(int64) id of report to remove
+// RemoveReport Removes specified report
 func (rm *ReportManager) RemoveReport(ctx context.Context, lReportId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lReportId": %d}`, lReportId))
 	request, err := http.NewRequest("POST", rm.client.Server+"/api/v1.0/ReportManager.RemoveReport", bytes.NewBuffer(postData))
@@ -282,17 +198,9 @@ func (rm *ReportManager) RemoveReport(ctx context.Context, lReportId int64) ([]b
 	return raw, err
 }
 
-//	Request statistics, general statuses and dashboards.
+// RequestStatisticsData Request statistics, general statuses and dashboards.
 //
-//	Asynchronously requests statistics, general statuses and dashboards data.
-//
-//	Parameters:
-//	- pRequestParams	(params) Params with the list of requested parameters,
-//	each element is of type Params and optionally contains query parameters, see List of statistics query attributes)
-//
-//	Return:
-//	- strRequestId	(string) identity of asynchronous operation to be used to get the result data by
-//	ReportManager.GetStatisticsData or cancel the request by ReportManager.CancelStatisticsRequest.
+// Asynchronously requests statistics, general statuses and dashboards data.
 func (rm *ReportManager) RequestStatisticsData(ctx context.Context, params interface{}) (*RequestID, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -309,6 +217,7 @@ func (rm *ReportManager) RequestStatisticsData(ctx context.Context, params inter
 	return requestID, raw, err
 }
 
+// ExecuteReportParams struct
 type ExecuteReportParams struct {
 	//report id
 	LReportID int64 `json:"lReportId,omitempty"`
@@ -402,20 +311,10 @@ type KlrptOutputFormatValue struct {
 	KlrptPDFPageSize int64 `json:"KLRPT_PDF_PAGE_SIZE,omitempty"`
 }
 
-//	Execute report.
+// ExecuteReportAsync Execute report
 //
-//	Asynchronously executes specified report, creates resulting data in XML and data to chart.
-//	The progress and result of the report generation is reported by the event KLPPT_EventRptExecDone.
-//
-//	Parameters:
-//	- params ExecuteReportParams
-//
-//	Return:
-//	- strRequestId	(string) identity of asynchronous operation,
-//	to get status use AsyncActionStateChecker.CheckActionState, lStateCode "1" means OK and "0" means fail,
-//	to get result use AsyncActionStateChecker.CheckActionState,
-//	pStateData contains URL-like links to download report files via HTTP GET request (see description below),
-//	to cancel operation call ReportManager.ExecuteReportAsyncCancel
+// Asynchronously executes specified report, creates resulting data in XML and data to chart.
+// The progress and result of the report generation is reported by the event KLPPT_EventRptExecDone.
 func (rm *ReportManager) ExecuteReportAsync(ctx context.Context, params ExecuteReportParams) (*RequestID, []byte,
 	error) {
 	postData, err := json.Marshal(params)
@@ -433,12 +332,7 @@ func (rm *ReportManager) ExecuteReportAsync(ctx context.Context, params ExecuteR
 	return requestID, raw, err
 }
 
-//	Cancel ReportManager.RequestStatisticsData operation.
-//
-//	Cancels asynchronous operation ReportManager.RequestStatisticsData.
-//
-//	Parameters:
-//	- strRequestId	(string) identity of asynchronous operation
+// CancelStatisticsRequest Cancels asynchronous operation ReportManager.RequestStatisticsData.
 func (rm *ReportManager) CancelStatisticsRequest(ctx context.Context, strRequestId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strRequestId": "%s"}`, strRequestId))
 	request, err := http.NewRequest("POST", rm.client.Server+"/api/v1.0/ReportManager.CancelStatisticsRequest", bytes.NewBuffer(postData))
@@ -450,12 +344,7 @@ func (rm *ReportManager) CancelStatisticsRequest(ctx context.Context, strRequest
 	return raw, err
 }
 
-//	Cancel ReportManager.ExecuteReportAsync operation.
-//
-//	Cancels asynchronous operation ReportManager.ExecuteReportAsync.
-//
-//	Parameters:
-//	- strRequestId	(string) identity of asynchronous operation
+// ExecuteReportAsyncCancel Cancels asynchronous operation ReportManager.ExecuteReportAsync.
 func (rm *ReportManager) ExecuteReportAsyncCancel(ctx context.Context, strRequestId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strRequestId": "%s"}`, strRequestId))
 	request, err := http.NewRequest("POST", rm.client.Server+"/api/v1.0/ReportManager.ExecuteReportAsyncCancel", bytes.NewBuffer(postData))
@@ -467,6 +356,7 @@ func (rm *ReportManager) ExecuteReportAsyncCancel(ctx context.Context, strReques
 	return raw, err
 }
 
+// ReportData struct
 type ReportData struct {
 	PXMLData      string      `json:"pXmlData,omitempty"`
 	NDataSizeREST int64       `json:"nDataSizeRest,omitempty"`
@@ -490,13 +380,10 @@ type Value struct {
 	Data []int64 `json:"data"`
 }
 
-//	Get result of ReportManager::ExecuteReportAsync operation.
+// ExecuteReportAsyncGetData Get result of ReportManager.ExecuteReportAsync operation.
 //
-//	Gets result of asynchronous operation ReportManager::ExecuteReportAsync.
-//	If result is not ready pXmlData will be empty.
-//
-//	Deprecated:
-//	Use HTTP GET request instead, see ReportManager::ExecuteReportAsync
+// Gets result of asynchronous operation ReportManager::ExecuteReportAsync.
+// If result is not ready pXmlData will be empty.
 func (rm *ReportManager) ExecuteReportAsyncGetData(ctx context.Context, strRequestId string,
 	nChunkSize int64) (*ReportData, []byte,
 	error) {
@@ -511,15 +398,12 @@ func (rm *ReportManager) ExecuteReportAsyncGetData(ctx context.Context, strReque
 	return reportData, raw, err
 }
 
-//	Cancel waiting for report data from slave servers.
+// ExecuteReportAsyncCancelWaitingForSlaves Cancel waiting for report data from slave servers.
 //
-//	Cancels waiting for report data from slave servers when generating report.
-//	Can be used when report data from current server is already ready
-//	(an appropriate report generation progress status event KLPPT_EventRptExecDone received),
-//	but the data from slave servers is not, to get the report without data from some slave servers.
-//
-//	Parameters:
-//	- strRequestId	(string) identity of asynchronous operation
+// Cancels waiting for report data from slave servers when generating report.
+// Can be used when report data from current server is already ready (an appropriate report generation progress status
+// event KLPPT_EventRptExecDone received), but the data from slave servers is not,
+// to get the report without data from some slave servers.
 func (rm *ReportManager) ExecuteReportAsyncCancelWaitingForSlaves(ctx context.Context, strRequestId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strRequestId": "%s"}`, strRequestId))
 	request, err := http.NewRequest("POST", rm.client.Server+"/api/v1.0/ReportManager.ExecuteReportAsyncCancelWaitingForSlaves", bytes.NewBuffer(postData))
@@ -531,6 +415,7 @@ func (rm *ReportManager) ExecuteReportAsyncCancelWaitingForSlaves(ctx context.Co
 	return raw, err
 }
 
+// ChartDataParams struct
 type ChartDataParams struct {
 	PChartData *PChartData `json:"pChartData,omitempty"`
 	CDPOptions *CDPOptions `json:"pOptions,omitempty"`
@@ -541,15 +426,7 @@ type CDPOptions struct {
 	RptChartHeight int64 `json:"RPT_CHART_HEIGHT,omitempty"`
 }
 
-//	Create image with chart.
-//
-//	Creates image in PNG format with chart data
-//
-//	Parameters:
-//	- params ChartDataParams
-//
-//	Return:
-//	-pPngData	(binary) image with chart data, see Chart parameters structure.
+// CreateChartPNG Creates image in PNG format with chart data
 func (rm *ReportManager) CreateChartPNG(ctx context.Context, params ChartDataParams) (*PPngData, []byte,
 	error) {
 	postData, err := json.Marshal(params)
@@ -567,15 +444,10 @@ func (rm *ReportManager) CreateChartPNG(ctx context.Context, params ChartDataPar
 	return pPngData, raw, err
 }
 
-//	Force reset of statistics data.
+// ResetStatisticsData Force reset of statistics data.
 //
-//	Force resets statistics data, for example, resets the status
-//	of "Virus attack" or "Failed to perform the administration server task"
-//	after acquaintance with the detailed information.
-//
-//	Parameters:
-//	- pRequestParams	(params) Params with a statuses that need to be "reset",
-//	see List of possible general status reasons to be reset.
+// Force resets statistics data, for example, resets the status of "Virus attack" or "Failed to perform the administration server task"
+// after acquaintance with the detailed information.
 func (rm *ReportManager) ResetStatisticsData(ctx context.Context, params interface{}) (*RequestID, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -592,13 +464,7 @@ func (rm *ReportManager) ResetStatisticsData(ctx context.Context, params interfa
 	return requestID, raw, err
 }
 
-//	Create new report.
-//
-//	Parameters:
-//	- pReportInfo	(params) report info, see List of report attributes
-//
-//	Returns:
-//	- (int64) id of new report
+// AddReport Create new report.
 func (rm *ReportManager) AddReport(ctx context.Context, params interface{}) (*PxgValInt, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -615,13 +481,7 @@ func (rm *ReportManager) AddReport(ctx context.Context, params interface{}) (*Px
 	return pxgValInt, raw, err
 }
 
-//	Update report info.
-//
-//	Updates info for existing report
-//
-//	Parameters:
-//	- lReportId	(int64) report id
-//	- pReportInfo	(params) report info, see List of report attributes
+// UpdateReport Updates info for existing report
 func (rm *ReportManager) UpdateReport(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

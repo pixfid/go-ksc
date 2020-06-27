@@ -33,7 +33,7 @@ import (
 	"net/http"
 )
 
-// Updates Updates processing
+// Updates processing.
 type Updates service
 
 // AvailableUpdates containing well-known retranslated update components list

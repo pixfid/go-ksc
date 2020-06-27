@@ -31,20 +31,10 @@ import (
 	"net/http"
 )
 
-//AdfsSso Class Reference
-//
-//Interface for working with ADFS SSO..
-//
-//This interface allow you to manage ADFS SSO settings
-//
-//List of all members.
+// AdfsSso service for working with ADFS SSO. This service allow you to manage ADFS SSO settings
 type AdfsSso service
 
-//GetSettings
-//Returns a ADFS SSO settings.
-//
-//	Returns:
-//	- (params) ADFS SSO settings; See "ADFS SSO Settings".
+// GetSettings Returns a ADFS SSO settings.
 func (as *AdfsSso) GetSettings(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", as.client.Server+"/api/v1.0/AdfsSso.GetSettings", nil)
 	if err != nil {
@@ -55,11 +45,7 @@ func (as *AdfsSso) GetSettings(ctx context.Context) ([]byte, error) {
 	return raw, err
 }
 
-//SetSettings
-//Set a ADFS SSO settings.
-//
-//	Parameters:
-//	- pAdfsSettings	(params) ADFS SSO settings; "ADFS SSO Settings".
+// SetSettings Set a ADFS SSO settings.
 func (as *AdfsSso) SetSettings(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", as.client.Server+"/api/v1.0/AdfsSso.SetSettings", bytes.NewBuffer(postData))
