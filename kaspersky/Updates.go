@@ -110,19 +110,19 @@ type UpdatesInfo struct {
 
 // UpdatesInfoValue
 type UpdatesInfoValue struct {
-	ChangeStatus            *string    `json:"ChangeStatus,omitempty"`
-	CompID                  *string    `json:"CompId,omitempty"`
-	Date                    *DateTime  `json:"Date,omitempty"`
-	FileName                *string    `json:"FileName,omitempty"`
-	Index                   *string    `json:"Index,omitempty"`
-	KlupdsrvBundleDwlDate   *DateTime  `json:"KLUPDSRV_BUNDLE_DWL_DATE,omitempty"`
-	KlupdsrvBundleID        *string    `json:"KLUPDSRV_BUNDLE_ID,omitempty"`
-	KlupdsrvBundleTypeDescr *string    `json:"KLUPDSRV_BUNDLE_TYPE_DESCR,omitempty"`
-	LocalPath               *string    `json:"LocalPath,omitempty"`
-	RelativeSrvPath         *string    `json:"RelativeSrvPath,omitempty"`
-	Type                    *string    `json:"Type,omitempty"`
-	Size                    *SizeValue `json:"Size,omitempty"`
-	Stt                     *string    `json:"Stt,omitempty"`
+	ChangeStatus            *string   `json:"ChangeStatus,omitempty"`
+	CompID                  *string   `json:"CompId,omitempty"`
+	Date                    *DateTime `json:"Date,omitempty"`
+	FileName                *string   `json:"FileName,omitempty"`
+	Index                   *string   `json:"Index,omitempty"`
+	KlupdsrvBundleDwlDate   *DateTime `json:"KLUPDSRV_BUNDLE_DWL_DATE,omitempty"`
+	KlupdsrvBundleID        *string   `json:"KLUPDSRV_BUNDLE_ID,omitempty"`
+	KlupdsrvBundleTypeDescr *string   `json:"KLUPDSRV_BUNDLE_TYPE_DESCR,omitempty"`
+	LocalPath               *string   `json:"LocalPath,omitempty"`
+	RelativeSrvPath         *string   `json:"RelativeSrvPath,omitempty"`
+	Type                    *string   `json:"Type,omitempty"`
+	Size                    *Size     `json:"Size,omitempty"`
+	Stt                     *string   `json:"Stt,omitempty"`
 }
 
 // GetUpdatesInfo lists of retransmissions.

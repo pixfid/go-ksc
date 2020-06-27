@@ -216,7 +216,7 @@ type DateTime struct {
 	Value *string `json:"value"`
 }
 
-type SizeValue struct {
+type Size struct {
 	Type  *string `json:"type,omitempty"`
 	Value *int64  `json:"value,omitempty"`
 }
