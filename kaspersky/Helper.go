@@ -220,3 +220,8 @@ type Size struct {
 	Type  *string `json:"type,omitempty"`
 	Value *int64  `json:"value,omitempty"`
 }
+
+type CGMobileAuthCERT struct {
+	Type  *string `json:"type,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
