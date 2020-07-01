@@ -225,3 +225,12 @@ type CGMobileAuthCERT struct {
 	Type  *string `json:"type,omitempty"`
 	Value *string `json:"value,omitempty"`
 }
+
+type Long struct {
+	Type  *string `json:"type,omitempty"`
+	Value *int64  `json:"value,omitempty"`
+}
+
+type AsyncID struct {
+	WstrAsyncID string `json:"wstrAsyncId,omitempty"`
+}

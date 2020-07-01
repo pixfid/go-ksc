@@ -48,41 +48,181 @@ func (hw *HWInvStorage) AddDynColumn(ctx context.Context, wstrColName string) (*
 	return pxgValStr, err
 }
 
-// ExportHWInvStorage2 Start export of hardware inventory.
-func (hw *HWInvStorage) ExportHWInvStorage2(ctx context.Context, eExportType int) (*PxgValStr, []byte, error) {
-	postData := []byte(fmt.Sprintf(`{"eExportType": %d}`, eExportType))
-	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.ExportHWInvStorage2", bytes.NewBuffer(postData))
-	if err != nil {
-		return nil, nil, err
-	}
-
-	pxgValStr := new(PxgValStr)
-	raw, err := hw.client.Do(ctx, request, &pxgValStr)
-	return pxgValStr, raw, err
+type PpObj struct {
+	PPObj HWInvObject `json:"pObj"`
 }
 
-// ExportHWInvStorageCancel Cancel export of hardware inventory.
-func (hw *HWInvStorage) ExportHWInvStorageCancel(ctx context.Context, wstrAsyncId string) ([]byte, error) {
-	postData := []byte(fmt.Sprintf(`{"wstrAsyncId": "%s"}`, wstrAsyncId))
-	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.ExportHWInvStorageCancel", bytes.NewBuffer(postData))
+// HWInvObject struct
+type HWInvObject struct {
+	Type         int64    `json:"Type,omitempty"`
+	SubType      int64    `json:"SubType,omitempty"`
+	Created      DateTime `json:"Created,omitempty"`
+	LastVisible  DateTime `json:"LastVisible,omitempty"`
+	IsWrittenOff bool     `json:"IsWrittenOff,omitempty"`
+	WriteOffDate bool     `json:"WriteOffDate,omitempty"`
+	InvNum       string   `json:"InvNum,omitempty"`
+	UserName     string   `json:"UserName,omitempty"`
+	Placement    string   `json:"Placement,omitempty"`
+	Price        Long     `json:"Price,omitempty"`
+	PurchaseDate DateTime `json:"PurchaseDate,omitempty"`
+	Corporative  bool     `json:"Corporative,omitempty"`
+	Name         string   `json:"Name,omitempty"`
+	Description  string   `json:"Description,omitempty"`
+	Manufacturer string   `json:"Manufacturer,omitempty"`
+	SerialNumber string   `json:"SerialNumber,omitempty"`
+	CPU          string   `json:"CPU,omitempty"`
+	MemorySize   int64    `json:"MemorySize,omitempty"`
+	DiskSize     int64    `json:"DiskSize,omitempty"`
+	MotherBoard  string   `json:"MotherBoard,omitempty"`
+	VidPID       string   `json:"VidPid,omitempty"`
+	Capacity     int64    `json:"Capacity,omitempty"`
+	MAC          string   `json:"Mac,omitempty"`
+	StrMAC       string   `json:"StrMac,omitempty"`
+	OS           string   `json:"OS,omitempty"`
+	AdObject     string   `json:"AdObject,omitempty"`
+	AdObjectDN   string   `json:"AdObjectDN,omitempty"`
+	//DynColumns   []DynColumn `json:"DynColumns"`
+	DynColID   string `json:"DynColId,omitempty"`
+	DynColName string `json:"DynColName,omitempty"`
+	DynColData string `json:"DynColData,omitempty"`
+}
+
+type DynColumn struct {
+	Type  string         `json:"type,omitempty"`
+	Value DynColumnValue `json:"value,omitempty"`
+}
+
+type DynColumnValue struct {
+	DynColData string `json:"DynColData,omitempty"`
+	DynColID   string `json:"DynColId,omitempty"`
+	DynColName string `json:"DynColName,omitempty"`
+}
+
+func (hw *HWInvStorage) AddHWInvObject(ctx context.Context, params PpObj) (*PxgValInt, error) {
+	postData, _ := json.Marshal(params)
+	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.AddHWInvObject", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := hw.client.Do(ctx, request, nil)
-	return raw, err
+	pxgValInt := new(PxgValInt)
+	_, err = hw.client.Do(ctx, request, &pxgValInt)
+	return pxgValInt, err
+}
+
+// DelDynColumn Delete dynamic column.
+func (hw *HWInvStorage) DelDynColumn(ctx context.Context, wstrColId string) error {
+	postData := []byte(fmt.Sprintf(`{"wstrColId": "%s"}`, wstrColId))
+	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.DelDynColumn", bytes.NewBuffer(postData))
+	if err != nil {
+		return err
+	}
+
+	_, err = hw.client.Do(ctx, request, nil)
+	return err
+}
+
+// DelHWInvObject Delete hardware inventory object.
+func (hw *HWInvStorage) DelHWInvObject(ctx context.Context, nObjId int64) error {
+	postData := []byte(fmt.Sprintf(`{"nObjId": %d}`, nObjId))
+	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.DelHWInvObject", bytes.NewBuffer(postData))
+	if err != nil {
+		return err
+	}
+
+	_, err = hw.client.Do(ctx, request, nil)
+	return err
+}
+
+// DelHWInvObject2 Delete array of objects.
+func (hw *HWInvStorage) DelHWInvObject2(ctx context.Context, arrObjId []int64) error {
+	postData := []byte(fmt.Sprintf(`{"arrObjId": %s}`, ToJson(arrObjId)))
+	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.DelHWInvObject2", bytes.NewBuffer(postData))
+	if err != nil {
+		return err
+	}
+
+	_, err = hw.client.Do(ctx, request, nil)
+	return err
+}
+
+// ExportHWInvStorage2 Start export of hardware inventory.
+func (hw *HWInvStorage) ExportHWInvStorage2(ctx context.Context, eExportType int) (*PxgValStr, error) {
+	postData := []byte(fmt.Sprintf(`{"eExportType": %d}`, eExportType))
+	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.ExportHWInvStorage2", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	pxgValStr := new(PxgValStr)
+	_, err = hw.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, err
+}
+
+// ExportHWInvStorageCancel Cancel export of hardware inventory.
+func (hw *HWInvStorage) ExportHWInvStorageCancel(ctx context.Context, wstrAsyncId string) error {
+	postData := []byte(fmt.Sprintf(`{"wstrAsyncId": "%s"}`, wstrAsyncId))
+	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.ExportHWInvStorageCancel", bytes.NewBuffer(postData))
+	if err != nil {
+		return err
+	}
+
+	_, err = hw.client.Do(ctx, request, nil)
+	return err
 }
 
 // EnumDynColumns Start import of hardware inventory.
-func (hw *HWInvStorage) ImportHWInvStorage2(ctx context.Context, eImportType int64) ([]byte, error) {
+func (hw *HWInvStorage) ImportHWInvStorage2(ctx context.Context, eImportType int64) (*PxgValStr, error) {
 	postData := []byte(fmt.Sprintf(`{"eImportType": %d}`, eImportType))
 	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.ImportHWInvStorage2", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := hw.client.Do(ctx, request, nil)
-	return raw, err
+	pxgValStr := new(PxgValStr)
+	_, err = hw.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, err
+}
+
+// ImportHWInvStorageCancel Cancel import of hardware inventory.
+func (hw *HWInvStorage) ImportHWInvStorageCancel(ctx context.Context, params AsyncID) (*PxgValStr, error) {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.ImportHWInvStorageCancel", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	pxgValStr := new(PxgValStr)
+	_, err = hw.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, err
+}
+
+// StorageSetData struct
+type StorageSetData struct {
+	WstrAsyncID string  `json:"wstrAsyncId,omitempty"`
+	PChunk      *string `json:"pChunk,omitempty"`
+}
+
+// ImportHWInvStorageSetData Send chunk of importing data to server.
+//	If pChunk is NULL then send data is finished and started data processing and importing to DB.
+//	To get status use AsyncActionStateChecker.CheckActionState, lStateCode "0" means OK.
+func (hw *HWInvStorage) ImportHWInvStorageSetData(ctx context.Context, params StorageSetData) error {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return err
+	}
+
+	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.ImportHWInvStorageSetData", bytes.NewBuffer(postData))
+	if err != nil {
+		return err
+	}
+
+	_, err = hw.client.Do(ctx, request, nil)
+	return err
 }
 
 // DynamicColumns struct
@@ -130,27 +270,31 @@ type PRules struct {
 }
 
 // GetProcessingRules Get processing rules.
-func (hw *HWInvStorage) GetProcessingRules(ctx context.Context) (*ProcessingRules, []byte, error) {
+func (hw *HWInvStorage) GetProcessingRules(ctx context.Context) (*ProcessingRules, error) {
 	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.GetProcessingRules", nil)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	processingRules := new(ProcessingRules)
-	raw, err := hw.client.Do(ctx, request, &processingRules)
-	return processingRules, raw, err
-}
-
-// SetProcessingRules Set processing rules.
-func (hw *HWInvStorage) SetProcessingRules(ctx context.Context, params ProcessingRules) ([]byte, error) {
-	postData, _ := json.Marshal(params)
-	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.SetProcessingRules", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := hw.client.Do(ctx, request, nil)
-	return raw, err
+	processingRules := new(ProcessingRules)
+	_, err = hw.client.Do(ctx, request, &processingRules)
+	return processingRules, err
+}
+
+// SetProcessingRules Set processing rules.
+func (hw *HWInvStorage) SetProcessingRules(ctx context.Context, params ProcessingRules) error {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return err
+	}
+
+	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.SetProcessingRules", bytes.NewBuffer(postData))
+	if err != nil {
+		return err
+	}
+
+	_, err = hw.client.Do(ctx, request, nil)
+	return err
 }
 
 // GetHWInvObject Get hardware inventory object.
@@ -167,13 +311,13 @@ func (hw *HWInvStorage) GetHWInvObject(ctx context.Context, nObjId int64) ([]byt
 
 // HWInvStorageResponse struct
 type HWInvStorageResponse struct {
-	//Data chunk
+	// PChunk Data chunk
 	PChunk string `json:"pChunk,omitempty"`
 
-	//Actual size of retrieved data
+	// NGotDataSize Actual size of retrieved data
 	NGotDataSize int64 `json:"nGotDataSize,omitempty"`
 
-	//Size of not retrieved data
+	// NDataSizeREST Size of not retrieved data
 	NDataSizeREST int64 `json:"nDataSizeRest,omitempty"`
 }
 
@@ -192,38 +336,79 @@ func (hw *HWInvStorage) ExportHWInvStorageGetData(ctx context.Context, wstrAsync
 	return hwInvStorageResponse, raw, err
 }
 
-// DelHWInvObject Delete hardware inventory object.
-func (hw *HWInvStorage) DelHWInvObject(ctx context.Context, nObjId int64) ([]byte, error) {
-	postData := []byte(fmt.Sprintf(`{"nObjId": %d}`, nObjId))
-	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.DelHWInvObject", bytes.NewBuffer(postData))
-	if err != nil {
-		return nil, err
-	}
+// CorpFlagParams struct
+type CorpFlagParams struct {
+	// ArrObjId Array of device ids. Max array size is 1000 elements.
+	ArrObjId []int64 `json:"arrObjId,omitempty"`
 
-	raw, err := hw.client.Do(ctx, request, nil)
-	return raw, err
-}
-
-// DelHWInvObject2 Delete array of objects.
-func (hw *HWInvStorage) DelHWInvObject2(ctx context.Context, arrObjId []int64) ([]byte, error) {
-	postData := []byte(fmt.Sprintf(`{"arrObjId": %s}`, ToJson(arrObjId)))
-	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.DelHWInvObject2", bytes.NewBuffer(postData))
-	if err != nil {
-		return nil, err
-	}
-
-	raw, err := hw.client.Do(ctx, request, nil)
-	return raw, err
+	// BState New state
+	BState bool `json:"bState,omitempty"`
 }
 
 // SetCorpFlag2 Set corporative flag for array of devices.
-func (hw *HWInvStorage) SetCorpFlag2(ctx context.Context, arrObjId []int64, bState bool) ([]byte, error) {
-	postData := []byte(fmt.Sprintf(`{"arrObjId": %s, "bState" : %v}`, ToJson(arrObjId), bState))
-	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.SetCorpFlag2", bytes.NewBuffer(postData))
+func (hw *HWInvStorage) SetCorpFlag2(ctx context.Context, params CorpFlagParams) error {
+	postData, err := json.Marshal(params)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	raw, err := hw.client.Do(ctx, request, nil)
-	return raw, err
+	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.SetCorpFlag2", bytes.NewBuffer(postData))
+	if err != nil {
+		return err
+	}
+
+	_, err = hw.client.Do(ctx, request, nil)
+	return err
+}
+
+// HWInvObjectParams struct
+type HWInvObjectParams struct {
+	NObjID int64       `json:"nObjId,omitempty"`
+	PObj   HWInvObject `json:"pObj,omitempty"`
+}
+
+// SetHWInvObject Set hardware inventory object.
+func (hw *HWInvStorage) SetHWInvObject(ctx context.Context, params HWInvObjectParams) error {
+	postData, err := json.Marshal(params)
+	if err != nil {
+		return err
+	}
+
+	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.SetHWInvObject", bytes.NewBuffer(postData))
+	if err != nil {
+		return err
+	}
+
+	_, err = hw.client.Do(ctx, request, nil)
+	return err
+}
+
+// SetWriteOffFlag Set decommissioned flag.
+func (hw *HWInvStorage) SetWriteOffFlag(ctx context.Context, nObjId int64, bFlag bool) error {
+	postData := []byte(fmt.Sprintf(`{"nObjId": %d,"bFlag": %v}`, nObjId, bFlag))
+	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.SetWriteOffFlag", bytes.NewBuffer(postData))
+	if err != nil {
+		return err
+	}
+
+	_, err = hw.client.Do(ctx, request, nil)
+	return err
+}
+
+// WriteOffFlag struct
+type WriteOffFlag struct {
+	VecObjId []int64 `json:"vecObjId,omitempty"`
+	BFlag    bool    `json:"bFlag,omitempty"`
+}
+
+// WriteOffFlag Set decommissioned flag for array of devices.
+func (hw *HWInvStorage) SetWriteOffFlag2(ctx context.Context, params WriteOffFlag) error {
+	postData, _ := json.Marshal(params)
+	request, err := http.NewRequest("POST", hw.client.Server+"/api/v1.0/HWInvStorage.SetWriteOffFlag2", bytes.NewBuffer(postData))
+	if err != nil {
+		return err
+	}
+
+	_, err = hw.client.Do(ctx, request, nil)
+	return err
 }
