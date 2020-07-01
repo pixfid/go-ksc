@@ -85,9 +85,24 @@ func (vca *VapmControlApi) CancelDownloadPatch(ctx context.Context, wstrRequestI
 	return raw, err
 }
 
+type EulasIDSForUpdates struct {
+	PUpdates []EulasIDSPUpdate `json:"pUpdates"`
+	NLcid    int64             `json:"nLcid,omitempty"`
+}
+
+type EulasIDSPUpdate struct {
+	Type  string        `json:"type,omitempty"`
+	Value EulasIDSValue `json:"value,omitempty"`
+}
+
+type EulasIDSValue struct {
+	NSource    int64 `json:"nSource,omitempty"`
+	NPatchDBID int64 `json:"nPatchDbId,omitempty"`
+}
+
 // ChangeApproval
 // Changes updates approval.
-func (vca *VapmControlApi) ChangeApproval(ctx context.Context, params interface{}) ([]byte, error) {
+func (vca *VapmControlApi) ChangeApproval(ctx context.Context, params EulasIDSForUpdates) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
@@ -134,9 +149,24 @@ func (vca *VapmControlApi) DeclineEulas(ctx context.Context, params PEulaIDParam
 	return raw, err
 }
 
+type DeleteFilesForUpdatesParams struct {
+	PUpdatesIDS   []PUpdatesID `json:"pUpdatesIds"`
+	WstrRequestID string       `json:"wstrRequestId,omitempty"`
+}
+
+type PUpdatesID struct {
+	Type  string        `json:"type,omitempty"`
+	Value PUpdatesValue `json:"value,omitempty"`
+}
+
+type PUpdatesValue struct {
+	NPatchDBID  int64 `json:"nPatchDbId,omitempty"`
+	NRevisionID int64 `json:"nRevisionID,omitempty"`
+}
+
 // DeleteFilesForUpdates
 // Cleanup all the files in all the server storages containing the bodies of the given patches.
-func (vca *VapmControlApi) DeleteFilesForUpdates(ctx context.Context, params interface{}) ([]byte, error) {
+func (vca *VapmControlApi) DeleteFilesForUpdates(ctx context.Context, params DeleteFilesForUpdatesParams) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
@@ -167,26 +197,21 @@ func (vca *VapmControlApi) DownloadPatchAsync(ctx context.Context, llPatchGlbId,
 
 // GetAttributesSetVersionNum
 // Returns edition of supported attributes, EAttributesSetVersion.
-func (vca *VapmControlApi) GetAttributesSetVersionNum(ctx context.Context) (*PxgValInt, []byte, error) {
-
-	request, err := http.NewRequest("POST", vca.client.Server+"/api/v1.0/VapmControlApi.GetAttributesSetVersionNum",
-		nil)
+func (vca *VapmControlApi) GetAttributesSetVersionNum(ctx context.Context) (*PxgValInt, error) {
+	request, err := http.NewRequest("POST", vca.client.Server+"/api/v1.0/VapmControlApi.GetAttributesSetVersionNum", nil)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := vca.client.Do(ctx, request, &pxgValInt)
-	return pxgValInt, raw, err
+	_, err = vca.client.Do(ctx, request, &pxgValInt)
+	return pxgValInt, err
 }
 
 // GetDownloadPatchDataChunk
 // Get the downloaded patch body chunk.
-func (vca *VapmControlApi) GetDownloadPatchDataChunk(ctx context.Context, params interface{}) ([]byte, error) {
-	postData, err := json.Marshal(params)
-	if err != nil {
-		return nil, err
-	}
+func (vca *VapmControlApi) GetDownloadPatchDataChunk(ctx context.Context, wstrRequestId string, nStartPos, nSizeMax int64) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"wstrRequestId": "%s", "nStartPos": %d, "nSizeMax": %d}`, wstrRequestId, nStartPos, nSizeMax))
 
 	request, err := http.NewRequest("POST", vca.client.Server+"/api/v1.0/VapmControlApi.GetDownloadPatchDataChunk", bytes.NewBuffer(postData))
 	if err != nil {
@@ -199,11 +224,8 @@ func (vca *VapmControlApi) GetDownloadPatchDataChunk(ctx context.Context, params
 
 // GetDownloadPatchResult
 // Get the information on the patch download result.
-func (vca *VapmControlApi) GetDownloadPatchResult(ctx context.Context, params interface{}) ([]byte, error) {
-	postData, err := json.Marshal(params)
-	if err != nil {
-		return nil, err
-	}
+func (vca *VapmControlApi) GetDownloadPatchResult(ctx context.Context, wstrRequestId string) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"wstrRequestId": "%s"}`, wstrRequestId))
 
 	request, err := http.NewRequest("POST", vca.client.Server+"/api/v1.0/VapmControlApi.GetDownloadPatchResult", bytes.NewBuffer(postData))
 	if err != nil {
@@ -225,23 +247,35 @@ type PEULAParam struct {
 	StrEULA    string `json:"strEULA,omitempty"`
 }
 
-// GetEulaParams
-// Requests EULA params.
-func (vca *VapmControlApi) GetEulaParams(ctx context.Context, nEulaId int64) (*PEULAParams, []byte, error) {
+// GetEulaParams Requests EULA params.
+func (vca *VapmControlApi) GetEulaParams(ctx context.Context, nEulaId int64) (*PEULAParams, error) {
 	postData := []byte(fmt.Sprintf(`{"nEulaId": %d}`, nEulaId))
 	request, err := http.NewRequest("POST", vca.client.Server+"/api/v1.0/VapmControlApi.GetEulaParams", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	pEulaParams := new(PEULAParams)
-	raw, err := vca.client.Do(ctx, request, &pEulaParams)
-	return pEulaParams, raw, err
+	_, err = vca.client.Do(ctx, request, &pEulaParams)
+	return pEulaParams, err
+}
+
+// EulasIDSForPatchPrerequisitesParams struct
+type EulasIDSForPatchPrerequisitesParams struct {
+	// LlPatchGlobalID VAPM patch global identity ('nPatchGlbId' update attribute)
+	LlPatchGlobalID int64 `json:"llPatchGlobalId,omitempty"`
+	// NLCID LCID of the patch
+	NLCID int64 `json:"nLCID,omitempty"`
+}
+
+// EulasIDS struct
+type EulasIDS struct {
+	PEulasIDS []int64 `json:"pEulasIds"`
 }
 
 // GetEulasIdsForPatchPrerequisites
 // Requests the set of EULA ids for the distributives/patches which are required to install the given patch.
-func (vca *VapmControlApi) GetEulasIdsForPatchPrerequisites(ctx context.Context, params interface{}) ([]byte, error) {
+func (vca *VapmControlApi) GetEulasIdsForPatchPrerequisites(ctx context.Context, params EulasIDSForPatchPrerequisitesParams) (*EulasIDS, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
@@ -252,13 +286,34 @@ func (vca *VapmControlApi) GetEulasIdsForPatchPrerequisites(ctx context.Context,
 		return nil, err
 	}
 
-	raw, err := vca.client.Do(ctx, request, nil)
-	return raw, err
+	eulasIDSForPatchPrerequisites := new(EulasIDS)
+	_, err = vca.client.Do(ctx, request, &eulasIDSForPatchPrerequisites)
+	return eulasIDSForPatchPrerequisites, err
+}
+
+// ApprovalParams struct
+type EulasIdsForUpdatesParams struct {
+	PUpdates []EulasIdsPUpdate `json:"pUpdates"`
+	NLcid    int64             `json:"nLcid,omitempty"`
+}
+
+type EulasIdsPUpdate struct {
+	Type  string        `json:"type,omitempty"`
+	Value ApprovalValue `json:"value,omitempty"`
+}
+
+type ApprovalValue struct {
+	NSource    int64 `json:"nSource,omitempty"`
+	NPatchDbId int64 `json:"nPatchDbId,omitempty"`
+}
+
+type EulasID struct {
+	PEulasID []int64 `json:"pEulaIds"`
 }
 
 // GetEulasIdsForUpdates
 // Requests the set of EULA ids for the given set of updates.
-func (vca *VapmControlApi) GetEulasIdsForUpdates(ctx context.Context, params interface{}) ([]byte, error) {
+func (vca *VapmControlApi) GetEulasIdsForUpdates(ctx context.Context, params EulasIdsForUpdatesParams) (*EulasID, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
@@ -268,13 +323,19 @@ func (vca *VapmControlApi) GetEulasIdsForUpdates(ctx context.Context, params int
 	if err != nil {
 		return nil, err
 	}
+	eulasID := new(EulasID)
+	_, err = vca.client.Do(ctx, request, &eulasID)
+	return eulasID, err
+}
 
-	raw, err := vca.client.Do(ctx, request, nil)
-	return raw, err
+type EulasIDSForVulnerabilitiesPatchesParams struct {
+	PVulnerabilities []int64 `json:"pVulnerabilities"`
+	NLCID            int64   `json:"nLCID,omitempty"`
 }
 
 // GetEulasIdsForVulnerabilitiesPatches Requests set of EULA ids for the given set of vulnerabilities.
-func (vca *VapmControlApi) GetEulasIdsForVulnerabilitiesPatches(ctx context.Context, params interface{}) ([]byte, error) {
+// Remark: not implemented
+func (vca *VapmControlApi) GetEulasIdsForVulnerabilitiesPatches(ctx context.Context, params EulasIDSForVulnerabilitiesPatchesParams) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
