@@ -106,17 +106,38 @@ func (uda *UserDevicesApi) GetCommands(ctx context.Context, lDeviceId int64) ([]
 	return raw, err
 }
 
+// CommandsLibrary struct
+type CommandsLibrary struct {
+	PxgRetVal []PxgRetVal `json:"PxgRetVal"`
+}
+
+type PxgRetVal struct {
+	Type  *string      `json:"type,omitempty"`
+	Value *CmdLibValue `json:"value,omitempty"`
+}
+
+type CmdLibValue struct {
+	KlmdmCmdDefDisplayName *string       `json:"KLMDM_CMD_DEF_DISPLAY_NAME,omitempty"`
+	KlmdmCmdFlag           *KlmdmCmdFlag `json:"KLMDM_CMD_FLAG,omitempty"`
+	KlmdmCmdType           *string       `json:"KLMDM_CMD_TYPE,omitempty"`
+}
+
+type KlmdmCmdFlag struct {
+	Type  *string `json:"type,omitempty"`
+	Value *int64  `json:"value,omitempty"`
+}
+
 // GetCommandsLibrary
 // Acquires list contains commands info reqired to display and launch commands
-func (uda *UserDevicesApi) GetCommandsLibrary(ctx context.Context) ([]byte, error) {
-	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GetCommandsLibrary",
-		nil)
+func (uda *UserDevicesApi) GetCommandsLibrary(ctx context.Context) (*CommandsLibrary, error) {
+	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GetCommandsLibrary", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
-	return raw, err
+	commandsLibrary := new(CommandsLibrary)
+	_, err = uda.client.Do(ctx, request, &commandsLibrary)
+	return commandsLibrary, err
 }
 
 // GetDecipheredCommandList
@@ -151,9 +172,14 @@ func (uda *UserDevicesApi) GetDevice(ctx context.Context, lDeviceId int64) ([]by
 	return raw, err
 }
 
+// UserID struct
+type UserID struct {
+	PUserID string `json:"pUserId,omitempty"`
+}
+
 // GetDevices
 // Acquire properties of all registered devices owned by specified user.
-func (uda *UserDevicesApi) GetDevices(ctx context.Context, params interface{}) ([]byte, error) {
+func (uda *UserDevicesApi) GetDevices(ctx context.Context, params UserID) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
