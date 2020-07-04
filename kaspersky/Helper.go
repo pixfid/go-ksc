@@ -101,7 +101,7 @@ type Error struct {
 }
 
 func (e Error) Error() string {
-	return fmt.Sprintf(`Module: %s, Code: %d, Message: %s`, *e.Module, *e.Code, *e.Message)
+	return fmt.Sprintf(`Code: %d, File: %s, Line: %d, Module: %s, Message: %s`, *e.Code, *e.File, *e.Line, *e.Module, *e.Message)
 }
 
 //	AsyncAccessor struct
