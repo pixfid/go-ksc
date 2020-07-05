@@ -35,32 +35,41 @@ import (
 // GroupSync service for access to group synchronization objects.
 type GroupSync service
 
-//NSyncInfoParams struct using in GroupSync.GetSyncHostsInfo
+// NSyncInfoParams struct using in GroupSync.GetSyncHostsInfo
 type NSyncInfoParams struct {
-	NSync             int64            `json:"nSync,omitempty"`
-	ArrFieldsToReturn []string         `json:"arrFieldsToReturn"`
-	ArrFieldsToOrder  *[]FieldsToOrder `json:"arrFieldsToOrder,omitempty"`
-	NLifeTime         int64            `json:"nLifeTime,omitempty"`
+	// NSync id of the group synchronization. Can be retrieved from policy attribute KLPOL_GSYN_ID
+	NSync int64 `json:"nSync,omitempty"`
+
+	// ArrFieldsToReturn array of attribute names to return.
+	// See List of group synchronization host attributes for attribute names
+	ArrFieldsToReturn []string `json:"arrFieldsToReturn"`
+
+	// ArrFieldsToOrder array of containers each of them containing two attributes :
+	// "Name" (string) name of List of group synchronization host attributes used for sorting
+	// "Asc" (bool) ascending if true descending otherwise
+	ArrFieldsToOrder []FieldsToOrder `json:"arrFieldsToOrder,omitempty"`
+
+	// NLifeTime timeout in seconds to keep the result-set alive, zero means 'default value'
+	NLifeTime int64 `json:"nLifeTime,omitempty"`
 }
 
 // GetSyncHostsInfo Acquire group synchronization state at target hosts.
-//
 // Returns forward iterator to access requested properties of the specified group synchronization at target hosts.
-func (gs *GroupSync) GetSyncHostsInfo(ctx context.Context, params NSyncInfoParams) (*PxgValStr, []byte, error) {
+func (gs *GroupSync) GetSyncHostsInfo(ctx context.Context, params NSyncInfoParams) (*PxgValStr, error) {
 	postData, err := json.Marshal(&params)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	request, err := http.NewRequest("POST", gs.client.Server+"/api/v1.0/GroupSync.GetSyncHostsInfo",
 		bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := gs.client.Do(ctx, request, &pxgValStr)
-	return pxgValStr, raw, err
+	_, err = gs.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, err
 }
 
 // GroupSyncInfoParams struct
@@ -85,21 +94,21 @@ type SyncInfo struct {
 // GetSyncInfo Acquire group synchronization properties.
 //
 // Returns requested properties of the specified group synchronization
-func (gs *GroupSync) GetSyncInfo(ctx context.Context, params GroupSyncInfoParams) (*GroupSyncInfo, []byte, error) {
+func (gs *GroupSync) GetSyncInfo(ctx context.Context, params GroupSyncInfoParams) (*GroupSyncInfo, error) {
 	postData, err := json.Marshal(&params)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	request, err := http.NewRequest("POST", gs.client.Server+"/api/v1.0/GroupSync.GetSyncInfo",
 		bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	groupSyncInfo := new(GroupSyncInfo)
-	raw, err := gs.client.Do(ctx, request, &groupSyncInfo)
-	return groupSyncInfo, raw, err
+	_, err = gs.client.Do(ctx, request, &groupSyncInfo)
+	return groupSyncInfo, err
 }
 
 // GetSyncDeliveryTime Acquire group synchronization delivery time for the specified host.

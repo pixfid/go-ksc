@@ -145,7 +145,10 @@ type PFindParams struct {
 
 //FieldsToOrder struct
 type FieldsToOrder struct {
-	Type       string     `json:"type"`
+	// Type default "params"
+	Type string `json:"type"`
+
+	// OrderValue
 	OrderValue OrderValue `json:"value"`
 }
 
