@@ -35,22 +35,39 @@ import (
 // ConEvents service to server events. This interface allow user to subscribe on server events and retrieve them.
 type ConEvents service
 
+type EventRetrieve struct {
+	PEvents   []interface{} `json:"pEvents"`
+	NPeriod   int64         `json:"nPeriod"`
+	PxgRetVal bool          `json:"PxgRetVal"`
+}
+
 // Retrieve Use this method to retrieve events.
-func (ce *ConEvents) Retrieve(ctx context.Context) ([]byte, error) {
-	request, err := http.NewRequest("POST", ce.client.Server+"/api/v1.0/ConEvents.Retrieve",
-		nil)
+func (ce *ConEvents) Retrieve(ctx context.Context) (*EventRetrieve, error) {
+	request, err := http.NewRequest("POST", ce.client.Server+"/api/v1.0/ConEvents.Retrieve", nil)
 
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := ce.client.Do(ctx, request, nil)
-	return raw, err
+	eventRetrieve := new(EventRetrieve)
+	raw, err := ce.client.Do(ctx, request, &eventRetrieve)
+	println(string(raw))
+	return eventRetrieve, err
 }
 
-// SubscribeEventParam struct
-type SubscribeEventParam struct {
-	WstrEvent string `json:"wstrEvent"`
+// EventSubscribeParams struct
+type EventSubscribeParams struct {
+	WstrEvent string           `json:"wstrEvent"`
+	PFilter   ESubscribeFilter `json:"pFilter,omitempty"`
+}
+
+type ESubscribeFilter struct {
+	Type  string     `json:"type"`
+	Value ESubscribe `json:"value"`
+}
+
+type ESubscribe struct {
+	ProductName string `json:"product_name,omitempty"`
 }
 
 // SubscribeEventResponse struct
@@ -61,7 +78,7 @@ type SubscribeEventResponse struct {
 
 // Subscribe on event. Use this method to subscribe on events. Method returns period of polling.
 // You should use it between retrieve calls. Also attribute pFilter allow you to cut off unnecessary events.
-func (ce *ConEvents) Subscribe(ctx context.Context, params interface{}) ([]byte, error) {
+func (ce *ConEvents) Subscribe(ctx context.Context, params EventSubscribeParams) (*SubscribeEventResponse, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
@@ -73,19 +90,21 @@ func (ce *ConEvents) Subscribe(ctx context.Context, params interface{}) ([]byte,
 		return nil, err
 	}
 
-	raw, err := ce.client.Do(ctx, request, nil)
-	return raw, err
+	subscribeEventResponse := new(SubscribeEventResponse)
+	raw, err := ce.client.Do(ctx, request, &subscribeEventResponse)
+	println(string(raw))
+	return subscribeEventResponse, err
 }
 
 // UnSubscribe from event. Use this method to unsubscribe from an event.
-func (ce *ConEvents) UnSubscribe(ctx context.Context, nSubsId int64) ([]byte, error) {
+func (ce *ConEvents) UnSubscribe(ctx context.Context, nSubsId int64) error {
 	postData := []byte(fmt.Sprintf(`{"nSubsId": %d}`, nSubsId))
 	request, err := http.NewRequest("POST", ce.client.Server+"/api/v1.0/ConEvents.UnSubscribe", bytes.NewBuffer(postData))
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	raw, err := ce.client.Do(ctx, request, nil)
-	return raw, err
+	_, err = ce.client.Do(ctx, request, nil)
+	return err
 }
