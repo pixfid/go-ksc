@@ -27,7 +27,6 @@ package kaspersky
 import (
 	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -66,92 +65,89 @@ func (dpa *DataProtectionApi) CheckPasswordSplPpc(ctx context.Context, szwPasswo
 	return pxgValBool, raw, err
 }
 
-type ToProtectData struct {
-	SzwHostID string `json:"szwHostId,omitempty"`
-	PData     string `json:"pData,omitempty"`
-}
-
+// ProtectedData struct
 type ProtectedData struct {
 	PDataProtected string `json:"pDataProtected,omitempty"`
 }
 
 // ProtectDataForHost Protects sensitive data to store in SettingsStorage or local task.
-func (dpa *DataProtectionApi) ProtectDataForHost(ctx context.Context, params ToProtectData) (*ProtectedData, []byte, error) {
-	postData, _ := json.Marshal(params)
+func (dpa *DataProtectionApi) ProtectDataForHost(ctx context.Context, szwHostId, pData string) (*ProtectedData, error) {
+	postData := []byte(fmt.Sprintf(`{"szwHostId" : "%s", "pData" : "%s"}`, szwHostId, pData))
 	request, err := http.NewRequest("POST", dpa.client.Server+"/api/v1.0/DataProtectionApi.ProtectDataForHost", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	protectedData := new(ProtectedData)
-	raw, err := dpa.client.Do(ctx, request, &protectedData)
-	return protectedData, raw, err
+	_, err = dpa.client.Do(ctx, request, &protectedData)
+	return protectedData, err
 }
 
 // ProtectDataGlobally Protects sensitive data to store in policy or global/group task.
-func (dpa *DataProtectionApi) ProtectDataGlobally(ctx context.Context, params ToProtectData) (*ProtectedData, []byte, error) {
-	postData, _ := json.Marshal(params)
+func (dpa *DataProtectionApi) ProtectDataGlobally(ctx context.Context, pData string) (*ProtectedData, error) {
+	postData := []byte(fmt.Sprintf(`{"pData" : "%s"}`, pData))
 	request, err := http.NewRequest("POST", dpa.client.Server+"/api/v1.0/DataProtectionApi.ProtectDataGlobally", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	protectedData := new(ProtectedData)
-	raw, err := dpa.client.Do(ctx, request, &protectedData)
-	return protectedData, raw, err
+	_, err = dpa.client.Do(ctx, request, &protectedData)
+	return protectedData, err
 }
 
 // ProtectUtf16StringForHost Protects sensitive data for the specified host (to store in its local settings or a local task)
 // Protects the specified text as UTF16 string encrypted with the key of the specified host.
-func (dpa *DataProtectionApi) ProtectUtf16StringForHost(ctx context.Context, szwHostId, szwPlainText string) ([]byte,
+func (dpa *DataProtectionApi) ProtectUtf16StringForHost(ctx context.Context, szwHostId, szwPlainText string) (*PxgValStr,
 	error) {
-	postData := []byte(fmt.Sprintf(`{"szwPassword" : "%s", "szwPlainText" : "%s"}`, szwHostId, szwPlainText))
+	postData := []byte(fmt.Sprintf(`{"szwHostId" : "%s", "szwPlainText" : "%s"}`, szwHostId, szwPlainText))
 	request, err := http.NewRequest("POST", dpa.client.Server+"/api/v1.0/DataProtectionApi.ProtectUtf16StringForHost", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := dpa.client.Do(ctx, request, nil)
-	return raw, err
+	pxgValStr := new(PxgValStr)
+	_, err = dpa.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, err
 }
 
 // ProtectUtf16StringGlobally Protects sensitive data to store in policy, global/group task, Administration Server settings.
 // Protects the specified text as UTF16 string encrypted with the key of the Administration Server.
-func (dpa *DataProtectionApi) ProtectUtf16StringGlobally(ctx context.Context, szwPlainText string) ([]byte,
-	error) {
+func (dpa *DataProtectionApi) ProtectUtf16StringGlobally(ctx context.Context, szwPlainText string) (*PxgValStr, error) {
 	postData := []byte(fmt.Sprintf(`{"szwPlainText" : "%s"}`, szwPlainText))
 	request, err := http.NewRequest("POST", dpa.client.Server+"/api/v1.0/DataProtectionApi.ProtectUtf16StringGlobally", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := dpa.client.Do(ctx, request, nil)
-	return raw, err
+	pxgValStr := new(PxgValStr)
+	_, err = dpa.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, err
 }
 
 // ProtectUtf8StringForHost Protects sensitive data for the specified host (to store in its local settings or a local task)
 // Protects the specified text as UTF8 string encrypted with the key of the specified host.
-func (dpa *DataProtectionApi) ProtectUtf8StringForHost(ctx context.Context, szwHostId, szwPlainText string) ([]byte,
-	error) {
-	postData := []byte(fmt.Sprintf(`{"szwPassword" : "%s", "szwPlainText" : "%s"}`, szwHostId, szwPlainText))
+func (dpa *DataProtectionApi) ProtectUtf8StringForHost(ctx context.Context, szwHostId, szwPlainText string) (*PxgValStr, error) {
+	postData := []byte(fmt.Sprintf(`{"szwHostId" : "%s", "szwPlainText" : "%s"}`, szwHostId, szwPlainText))
 	request, err := http.NewRequest("POST", dpa.client.Server+"/api/v1.0/DataProtectionApi.ProtectUtf8StringForHost", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := dpa.client.Do(ctx, request, nil)
-	return raw, err
+	pxgValStr := new(PxgValStr)
+	_, err = dpa.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, err
 }
 
 // ProtectUtf8StringGlobally Protects sensitive data to store in policy, global/group task, Administration Server settings.
 // Protects the specified text as UTF8 string encrypted with the key of the Administration Server.
-func (dpa *DataProtectionApi) ProtectUtf8StringGlobally(ctx context.Context, szwPlainText string) ([]byte,
-	error) {
+func (dpa *DataProtectionApi) ProtectUtf8StringGlobally(ctx context.Context, szwPlainText string) (*PxgValStr, error) {
 	postData := []byte(fmt.Sprintf(`{"szwPlainText" : "%s"}`, szwPlainText))
 	request, err := http.NewRequest("POST", dpa.client.Server+"/api/v1.0/DataProtectionApi.ProtectUtf8StringGlobally", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := dpa.client.Do(ctx, request, nil)
-	return raw, err
+	pxgValStr := new(PxgValStr)
+	_, err = dpa.client.Do(ctx, request, &pxgValStr)
+	return pxgValStr, err
 }
