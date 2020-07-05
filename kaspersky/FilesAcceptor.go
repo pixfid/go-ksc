@@ -38,19 +38,24 @@ type FilesAcceptor service
 //
 // After cancellation provided URL will not be valid anymore and any uploaded by the moment file chunks will be dropped.
 // You should not call this method unless you want to break upload operation.
-func (di *FilesAcceptor) CancelFileUpload(ctx context.Context, wstrFileId string) ([]byte, error) {
+func (di *FilesAcceptor) CancelFileUpload(ctx context.Context, wstrFileId string) error {
 	postData := []byte(fmt.Sprintf(`{"wstrFileId": "%s"}`, wstrFileId))
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/FilesAcceptor.CancelFileUpload", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	raw, err := di.client.Do(ctx, request, nil)
-	return raw, err
+	_, err = di.client.Do(ctx, request, nil)
+	return err
 }
 
-type FileUploadParams struct {
-	WstrFileID    string `json:"wstrFileId,omitempty"`
+// FileUploadData struct
+type FileUploadData struct {
+	// WstrFileID File identifier to be used in KSC API after file upload
+	WstrFileID string `json:"wstrFileId,omitempty"`
+
+	// WstrUploadURL relative URL on KSC server to upload file to.
+	// URL becomes invalid when file is uploaded, or after server is restarted, or CancelFileUpload is called.
 	WstrUploadURL string `json:"wstrUploadURL,omitempty"`
 }
 
@@ -71,15 +76,14 @@ type FileUploadParams struct {
 // If you need to transfer to server a directory or several files put them into zip or tar.gz archive and use 'bIsArchive' flag.
 //
 // All path names inside archive must be in UTF-8 encoding.
-func (di *FilesAcceptor) InitiateFileUpload(ctx context.Context, bIsArchive bool,
-	qwFileSize int64) (*FileUploadParams, []byte, error) {
+func (di *FilesAcceptor) InitiateFileUpload(ctx context.Context, bIsArchive bool, qwFileSize int64) (*FileUploadData, error) {
 	postData := []byte(fmt.Sprintf(`{"bIsArchive": %v, "qwFileSize": %d}`, bIsArchive, qwFileSize))
 	request, err := http.NewRequest("POST", di.client.Server+"/api/v1.0/FilesAcceptor.InitiateFileUpload", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
-	fileUploadParams := new(FileUploadParams)
-	raw, err := di.client.Do(ctx, request, &fileUploadParams)
-	return fileUploadParams, raw, err
+	fileUploadData := new(FileUploadData)
+	_, err = di.client.Do(ctx, request, &fileUploadData)
+	return fileUploadData, err
 }
