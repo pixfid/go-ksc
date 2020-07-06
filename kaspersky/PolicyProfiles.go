@@ -32,7 +32,7 @@ import (
 	"net/http"
 )
 
-// PolicyProfiles Policy profiles processing.
+// PolicyProfiles service Policy profiles processing.
 //
 // Provides access to policy profiles.
 //
@@ -177,8 +177,16 @@ func (pp *PolicyProfiles) ImportProfile(ctx context.Context, lPolicy int64, pDat
 	return raw, err
 }
 
+// ProfilesPrioritiesParams struct
+type ProfilesPrioritiesParams struct {
+	// NPolicy policy id
+	NPolicy int64 `json:"nPolicy,omitempty"`
+	//  PArrayOfNames each array entry is the profile name
+	PArrayOfNames []string `json:"pArrayOfNames"`
+}
+
 // PutPriorities Update profile priority array.
-func (pp *PolicyProfiles) PutPriorities(ctx context.Context, params interface{}) ([]byte, error) {
+func (pp *PolicyProfiles) PutPriorities(ctx context.Context, params ProfilesPrioritiesParams) ([]byte, error) {
 	postData, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", pp.client.Server+"/api/v1.0/PolicyProfiles.PutPriorities", bytes.NewBuffer(postData))
 	if err != nil {
