@@ -31,7 +31,7 @@ import (
 	"net/http"
 )
 
-//CgwHelper (Connection Gateway) service to work with helper proxy.
+// CgwHelper (Connection Gateway) service to work with helper proxy.
 type CgwHelper service
 
 // GetSlaveServerLocation Retrieves Slave Server Location.
