@@ -35,41 +35,65 @@ import (
 //	InvLicenseProducts service to manage License Management (third party) Functionality.
 type InvLicenseProducts service
 
+type LicenseKeysResponse struct {
+	PxgRetVal *LKResponse `json:"PxgRetVal,omitempty"`
+}
+
+type LKResponse struct {
+	KlinvlicLicProductsArray []KlinvlicLicProductsArray `json:"KLINVLIC_LIC_PRODUCTS_ARRAY,omitempty"`
+}
+
+type KlinvlicLicProductsArray struct {
+	Type  *string                        `json:"type,omitempty"`
+	Value *KLINVLICLICPRODUCTSARRAYValue `json:"value,omitempty"`
+}
+
+type KLINVLICLICPRODUCTSARRAYValue struct {
+	KlinvlicData *KlinvlicData `json:"KLINVLIC_DATA,omitempty"`
+	KlinvlicID   *int64        `json:"KLINVLIC_ID,omitempty"`
+}
+
+type KlinvlicData struct {
+	Type  *string       `json:"type,omitempty"`
+	Value *PLicProdData `json:"value,omitempty"`
+}
+
 // GetLicenseProducts Acquire License Products data.
-func (ilp *InvLicenseProducts) GetLicenseProducts(ctx context.Context) ([]byte, error) {
+func (ilp *InvLicenseProducts) GetLicenseProducts(ctx context.Context) (*LicenseKeysResponse, error) {
 	request, err := http.NewRequest("POST", ilp.client.Server+"/api/v1.0/InvLicenseProducts.GetLicenseProducts", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := ilp.client.Do(ctx, request, nil)
-	return raw, err
+	licenseKeysResponse := new(LicenseKeysResponse)
+	_, err = ilp.client.Do(ctx, request, &licenseKeysResponse)
+	return licenseKeysResponse, err
 }
 
 // DeleteLicenseKey Removes specified License Key.
-func (ilp *InvLicenseProducts) DeleteLicenseKey(ctx context.Context, nLicKeyId int64) (*PxgRetError, []byte, error) {
+func (ilp *InvLicenseProducts) DeleteLicenseKey(ctx context.Context, nLicKeyId int64) (*PxgRetError, error) {
 	postData := []byte(fmt.Sprintf(`{"nLicKeyId": %d}`, nLicKeyId))
 	request, err := http.NewRequest("POST", ilp.client.Server+"/api/v1.0/InvLicenseProducts.DeleteLicenseKey", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	pxgRetError := new(PxgRetError)
-	raw, err := ilp.client.Do(ctx, request, &pxgRetError)
-	return pxgRetError, raw, err
+	_, err = ilp.client.Do(ctx, request, &pxgRetError)
+	return pxgRetError, err
 }
 
 // DeleteLicenseProduct Removes specified License Product.
-func (ilp *InvLicenseProducts) DeleteLicenseProduct(ctx context.Context, nLicProdId int64) (*PxgRetError, []byte, error) {
+func (ilp *InvLicenseProducts) DeleteLicenseProduct(ctx context.Context, nLicProdId int64) (*PxgRetError, error) {
 	postData := []byte(fmt.Sprintf(`{"nLicProdId": %d}`, nLicProdId))
 	request, err := http.NewRequest("POST", ilp.client.Server+"/api/v1.0/InvLicenseProducts.DeleteLicenseProduct", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	pxgRetError := new(PxgRetError)
-	raw, err := ilp.client.Do(ctx, request, &pxgRetError)
-	return pxgRetError, raw, err
+	_, err = ilp.client.Do(ctx, request, &pxgRetError)
+	return pxgRetError, err
 }
 
 // LicenseKeyParams struct
@@ -101,25 +125,25 @@ type KlinvlicKey struct {
 //	║ "KLINVLIC_KEY_EXPIRATIONLIMIT" ║ paramDateTime ║ Indicates time when key expires       ║ Optional ║
 //	║ "KLINVLIC_KEY_INFO"            ║ paramString   ║ Description                           ║          ║
 //	╚════════════════════════════════╩═══════════════╩═══════════════════════════════════════╩══════════╝
-func (ilp *InvLicenseProducts) AddLicenseKey(ctx context.Context, params LicenseKeyParams) (*PxgValInt, []byte, error) {
+func (ilp *InvLicenseProducts) AddLicenseKey(ctx context.Context, params LicenseKeyParams) (*PxgValInt, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	request, err := http.NewRequest("POST", ilp.client.Server+"/api/v1.0/InvLicenseProducts.AddLicenseKey", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := ilp.client.Do(ctx, request, &pxgValInt)
-	return pxgValInt, raw, err
+	_, err = ilp.client.Do(ctx, request, &pxgValInt)
+	return pxgValInt, err
 }
 
 // LicenseProductParams struct
 type LicenseProductParams struct {
-	PLicProdData *PLicProdData `json:"pLicProdData,omitempty"`
+	PLicProdData PLicProdData `json:"pLicProdData,omitempty"`
 }
 
 type PLicProdData struct {
@@ -144,20 +168,20 @@ type KlinvlicMasksValue struct {
 }
 
 // AddLicenseProduct Add a new License Product.
-func (ilp *InvLicenseProducts) AddLicenseProduct(ctx context.Context, params LicenseProductParams) (*PxgValInt, []byte, error) {
+func (ilp *InvLicenseProducts) AddLicenseProduct(ctx context.Context, params LicenseProductParams) (*PxgValInt, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	request, err := http.NewRequest("POST", ilp.client.Server+"/api/v1.0/InvLicenseProducts.AddLicenseProduct", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := ilp.client.Do(ctx, request, &pxgValInt)
-	return pxgValInt, raw, err
+	_, err = ilp.client.Do(ctx, request, &pxgValInt)
+	return pxgValInt, err
 }
 
 // UpdateLicenseKeyParams struct using in InvLicenseProducts.UpdateLicenseKey
@@ -170,19 +194,19 @@ type UpdateLicenseKeyParams struct {
 }
 
 // UpdateLicenseKey Modifies attributes of specified License Key.
-func (ilp *InvLicenseProducts) UpdateLicenseKey(ctx context.Context, params UpdateLicenseKeyParams) ([]byte, error) {
+func (ilp *InvLicenseProducts) UpdateLicenseKey(ctx context.Context, params UpdateLicenseKeyParams) error {
 	postData, err := json.Marshal(params)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	request, err := http.NewRequest("POST", ilp.client.Server+"/api/v1.0/InvLicenseProducts.UpdateLicenseKey", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	raw, err := ilp.client.Do(ctx, request, nil)
-	return raw, err
+	_, err = ilp.client.Do(ctx, request, nil)
+	return err
 }
 
 // UpdateLicenseProductParams struct using in InvLicenseProducts.UpdateLicenseProduct
@@ -195,17 +219,17 @@ type UpdateLicenseProductParams struct {
 }
 
 // UpdateLicenseProduct Modifies attributes of specified License Product.
-func (ilp *InvLicenseProducts) UpdateLicenseProduct(ctx context.Context, params UpdateLicenseProductParams) ([]byte, error) {
+func (ilp *InvLicenseProducts) UpdateLicenseProduct(ctx context.Context, params UpdateLicenseProductParams) error {
 	postData, err := json.Marshal(params)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	request, err := http.NewRequest("POST", ilp.client.Server+"/api/v1.0/InvLicenseProducts.UpdateLicenseProduct", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	raw, err := ilp.client.Do(ctx, request, nil)
-	return raw, err
+	_, err = ilp.client.Do(ctx, request, nil)
+	return err
 }
