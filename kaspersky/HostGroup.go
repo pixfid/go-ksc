@@ -165,10 +165,7 @@ func (hg *HostGroup) AddIncident(ctx context.Context, params AddIncidentsParams)
 
 // DelDomain Removes a domain from the database.
 func (hg *HostGroup) DelDomain(ctx context.Context, strDomain string) ([]byte, error) {
-	postData := []byte(fmt.Sprintf(`
-	{
-	"strDomain": "%s"
-	}`, strDomain))
+	postData := []byte(fmt.Sprintf(`{"strDomain": "%s"}`, strDomain))
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.DelDomain", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
@@ -263,10 +260,7 @@ func (hg *HostGroup) FindHostsAsync(ctx context.Context, params HGParams) (*Requ
 
 // FindHostsAsyncCancel Cancels asynchronous operation HostGroup.FindHostsAsync
 func (hg *HostGroup) FindHostsAsyncCancel(ctx context.Context, strRequestId string) error {
-	postData := []byte(fmt.Sprintf(`
-	{
-	"strRequestId": "%s"
-	}`, strRequestId))
+	postData := []byte(fmt.Sprintf(`{"strRequestId": "%s"}`, strRequestId))
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.FindHostsAsyncCancel", bytes.NewBuffer(postData))
 	if err != nil {
 		return err
@@ -336,15 +330,48 @@ func (hg *HostGroup) FindUsers(ctx context.Context, params PFindParams) (*Access
 	return accessor, raw, err
 }
 
-// GetAllHostfixes Returns all hotfixes installed in the network.
-func (hg *HostGroup) GetAllHostfixes(ctx context.Context) ([]byte, error) {
+// HostFixes struct
+type HostFixes struct {
+	PxgRetVal *HostFixesVal `json:"PxgRetVal,omitempty"`
+}
+
+type HostFixesVal struct {
+	KlhstHFData     []KlhstHFDatum   `json:"KLHST_HF_DATA"`
+	KlhstHFProducts []KlhstHFProduct `json:"KLHST_HF_PRODUCTS"`
+}
+
+type KlhstHFDatum struct {
+	Type  *string            `json:"type,omitempty"`
+	Value *KLHSTHFDATUMValue `json:"value,omitempty"`
+}
+
+type KLHSTHFDATUMValue struct {
+	KlhstHFDN     *string `json:"KLHST_HF_DN,omitempty"`
+	KlhstHFID     *string `json:"KLHST_HF_ID,omitempty"`
+	KlhstHFProdid *int64  `json:"KLHST_HF_PRODID,omitempty"`
+}
+
+type KlhstHFProduct struct {
+	Type  *string              `json:"type,omitempty"`
+	Value *KLHSTHFPRODUCTValue `json:"value,omitempty"`
+}
+
+type KLHSTHFPRODUCTValue struct {
+	KlhstHFProdid          *int64  `json:"KLHST_HF_PRODID,omitempty"`
+	KlhstWksProductID      *string `json:"KLHST_WKS_PRODUCT_ID,omitempty"`
+	KlhstWksProductName    *string `json:"KLHST_WKS_PRODUCT_NAME,omitempty"`
+	KlhstWksProductVersion *string `json:"KLHST_WKS_PRODUCT_VERSION,omitempty"`
+}
+
+// GetAllHostFixes Returns all hotfixes installed in the network.
+func (hg *HostGroup) GetAllHostFixes(ctx context.Context) (*HostFixes, error) {
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GetAllHostfixes", nil)
 	if err != nil {
 		return nil, err
 	}
-
-	raw, err := hg.client.Do(ctx, request, nil)
-	return raw, err
+	hostFixes := new(HostFixes)
+	_, err = hg.client.Do(ctx, request, &hostFixes)
+	return hostFixes, err
 }
 
 //	ProductComponents is returned by GetComponentsForProductOnHost
@@ -406,15 +433,31 @@ func (hg *HostGroup) GetDomainHosts(ctx context.Context, domain string) ([]byte,
 	return raw, err
 }
 
+// Domains struct
+type Domains struct {
+	PxgRetVal []DomainsValue `json:"PxgRetVal"`
+}
+
+type DomainsValue struct {
+	Type  *string      `json:"type,omitempty"`
+	Value *DomainValue `json:"value,omitempty"`
+}
+
+type DomainValue struct {
+	KlhstWksWindomain     *string `json:"KLHST_WKS_WINDOMAIN,omitempty"`
+	KlhstWksWindomainType *int64  `json:"KLHST_WKS_WINDOMAIN_TYPE,omitempty"`
+}
+
 // GetDomains List of Windows domain in the network.
-func (hg *HostGroup) GetDomains(ctx context.Context) ([]byte, error) {
+func (hg *HostGroup) GetDomains(ctx context.Context) (*Domains, error) {
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GetDomains", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := hg.client.Do(ctx, request, nil)
-	return raw, err
+	domains := new(Domains)
+	_, err = hg.client.Do(ctx, request, &domains)
+	return domains, err
 }
 
 // GetGroupId Acquire administration group id by its name and id of parent group.
@@ -430,36 +473,105 @@ func (hg *HostGroup) GetGroupId(ctx context.Context, nParent int64, strName stri
 	return pxgValInt, raw, err
 }
 
+// GroupInfo struct
+type GroupInfo struct {
+	PxgRetVal *GroupInfoVal `json:"PxgRetVal,omitempty"`
+}
+
+type GroupInfoVal struct {
+	KlgrpChldgrpCnt          *int64        `json:"KLGRP_CHLDGRP_CNT,omitempty"`
+	KlgrpChldhstCnt          *int64        `json:"KLGRP_CHLDHST_CNT,omitempty"`
+	KlgrpChldhstCntCRT       *int64        `json:"KLGRP_CHLDHST_CNT_CRT,omitempty"`
+	KlgrpChldhstCntOk        *int64        `json:"KLGRP_CHLDHST_CNT_OK,omitempty"`
+	KlgrpChldhstCntWrn       *int64        `json:"KLGRP_CHLDHST_CNT_WRN,omitempty"`
+	KLGRPHlfForceChildren    *bool         `json:"KLGRP_HlfForceChildren,omitempty"`
+	KLGRPHlfForced           *bool         `json:"KLGRP_HlfForced,omitempty"`
+	KlsrvHststatCritical     *KlsrvHststat `json:"KLSRV_HSTSTAT_CRITICAL,omitempty"`
+	KlsrvHststatWarning      *KlsrvHststat `json:"KLSRV_HSTSTAT_WARNING,omitempty"`
+	AutoRemovePeriod         *int64        `json:"autoRemovePeriod,omitempty"`
+	CGrpAutoInstallPackageID []interface{} `json:"c_grp_autoInstallPackageId"`
+	ChildGroupsNum           *int64        `json:"childGroupsNum,omitempty"`
+	CreationDate             *DateTime     `json:"creationDate,omitempty"`
+	GrpEnableFscan           *bool         `json:"grp_enable_fscan,omitempty"`
+	GrpFromUnassigned        *bool         `json:"grp_from_unassigned,omitempty"`
+	GrpFullName              *string       `json:"grp_full_name,omitempty"`
+	HostsNum                 *int64        `json:"hostsNum,omitempty"`
+	ID                       *int64        `json:"id,omitempty"`
+	Level                    *int64        `json:"level,omitempty"`
+	Name                     *string       `json:"name,omitempty"`
+	NotifyPeriod             *int64        `json:"notifyPeriod,omitempty"`
+	LastUpdate               *DateTime     `json:"lastUpdate,omitempty"`
+	ParentID                 *int64        `json:"parentId,omitempty"`
+}
+
+type KlsrvHststat struct {
+	Type  *string            `json:"type,omitempty"`
+	Value *KlsrvHststatValue `json:"value,omitempty"`
+}
+
+type KlsrvHststatValue struct {
+	KlsrvHststatInheritable     *bool  `json:"KLSRV_HSTSTAT_INHERITABLE,omitempty"`
+	KlsrvHststatInherited       *bool  `json:"KLSRV_HSTSTAT_INHERITED,omitempty"`
+	KlsrvHststatLocked          *bool  `json:"KLSRV_HSTSTAT_LOCKED,omitempty"`
+	KlsrvHststatMask            *int64 `json:"KLSRV_HSTSTAT_MASK,omitempty"`
+	KlsrvHststatOldAVBases      *int64 `json:"KLSRV_HSTSTAT_OLD_AV_BASES,omitempty"`
+	KlsrvHststatOldFscan        *int64 `json:"KLSRV_HSTSTAT_OLD_FSCAN,omitempty"`
+	KlsrvHststatOldLastConnect  *int64 `json:"KLSRV_HSTSTAT_OLD_LAST_CONNECT,omitempty"`
+	KlsrvHststatOldLicense      *int64 `json:"KLSRV_HSTSTAT_OLD_LICENSE,omitempty"`
+	KlsrvHststatSPBootExpired   *int64 `json:"KLSRV_HSTSTAT_SP_BOOT_EXPIRED,omitempty"`
+	KlsrvHststatSPBootReasons   *int64 `json:"KLSRV_HSTSTAT_SP_BOOT_REASONS,omitempty"`
+	KlsrvHststatSPDiskspace     *int64 `json:"KLSRV_HSTSTAT_SP_DISKSPACE,omitempty"`
+	KlsrvHststatSPEncryption    *int64 `json:"KLSRV_HSTSTAT_SP_ENCRYPTION,omitempty"`
+	KlsrvHststatSPRptDiffers    *int64 `json:"KLSRV_HSTSTAT_SP_RPT_DIFFERS,omitempty"`
+	KlsrvHststatSPRptInactive   *int64 `json:"KLSRV_HSTSTAT_SP_RPT_INACTIVE,omitempty"`
+	KlsrvHststatSPUasearch      *int64 `json:"KLSRV_HSTSTAT_SP_UASEARCH,omitempty"`
+	KlsrvHststatSPUncured       *int64 `json:"KLSRV_HSTSTAT_SP_UNCURED,omitempty"`
+	KlsrvHststatSPViruses       *int64 `json:"KLSRV_HSTSTAT_SP_VIRUSES,omitempty"`
+	KlsrvHststatSPVulnerability *int64 `json:"KLSRV_HSTSTAT_SP_VULNERABILITY,omitempty"`
+	KlsrvHststatSPVulnFlags     *int64 `json:"KLSRV_HSTSTAT_SP_VULN_FLAGS,omitempty"`
+}
+
 // GetGroupInfo Acquire administration group attributes.
 //
 // Deprecated: Use HostGroup.GetGroupInfoEx instead
-func (hg *HostGroup) GetGroupInfo(ctx context.Context, nGroupId int64) ([]byte, error) {
+func (hg *HostGroup) GetGroupInfo(ctx context.Context, nGroupId int64) (*GroupInfo, error) {
 	postData := []byte(fmt.Sprintf(`{"nGroupId": %d}`, nGroupId))
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GetGroupInfo", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := hg.client.Do(ctx, request, nil)
-	return raw, err
+	groupInfo := new(GroupInfo)
+	_, err = hg.client.Do(ctx, request, &groupInfo)
+	return groupInfo, err
+}
+
+// GroupInfoExParams struct
+type GroupInfoExParams struct {
+	// NGroupID Id of existing group
+	NGroupID int64 `json:"nGroupId,omitempty"`
+
+	// PArrAttributes Array of up to 100 strings. Each entry is an attrbute name (see List of group attributes).
+	PArrAttributes []string `json:"pArrAttributes"`
 }
 
 // GetGroupInfoEx Acquire administration group attributes.
 //
 // Remark: not working on KSC 10
-func (hg *HostGroup) GetGroupInfoEx(ctx context.Context, params interface{}) ([]byte, error) {
+func (hg *HostGroup) GetGroupInfoEx(ctx context.Context, params GroupInfoExParams) (*GroupInfo, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GetGroupInfoEx", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	raw, err := hg.client.Do(ctx, request, nil)
-	return raw, err
+	groupInfo := new(GroupInfo)
+	raw, err := hg.client.Do(ctx, request, &groupInfo)
+	return groupInfo, raw, err
 }
 
 // ProductFixes struct
@@ -594,16 +706,33 @@ func (hg *HostGroup) GetStaticInfo(ctx context.Context, params StaticInfoParams)
 	return raw, err
 }
 
+// SubGroups struct
+type SubGroups struct {
+	PxgRetVal []SubGroup `json:"PxgRetVal"`
+}
+
+type SubGroup struct {
+	Type  *string        `json:"type,omitempty"`
+	Value *SubGroupValue `json:"value,omitempty"`
+}
+
+type SubGroupValue struct {
+	GrpPartOfAdViewByRule *bool   `json:"grp_part_of_ad_view_by_rule,omitempty"`
+	ID                    *int64  `json:"id,omitempty"`
+	Name                  *string `json:"name,omitempty"`
+}
+
 // GetSubgroups Acquire administration group subgroups tree.
-func (hg *HostGroup) GetSubgroups(ctx context.Context, nGroupId int64, nDepth int64) ([]byte, error) {
+func (hg *HostGroup) GetSubgroups(ctx context.Context, nGroupId int64, nDepth int64) (*SubGroups, error) {
 	postData := []byte(fmt.Sprintf(`{"nParent": %d, "nDepth": %d }`, nGroupId, nDepth))
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GetSubgroups", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := hg.client.Do(ctx, request, nil)
-	return raw, err
+	subGroups := new(SubGroups)
+	_, err = hg.client.Do(ctx, request, &subGroups)
+	return subGroups, err
 }
 
 // GroupIdGroups Id of predefined root group "Managed computers".
@@ -910,21 +1039,40 @@ func (hg *HostGroup) SSRead(ctx context.Context, params SectionParams) ([]byte, 
 	return raw, err
 }
 
+// UpdateGroupParam struct
+type UpdateGroupParam struct {
+	NGroup int64      `json:"nGroup,omitempty"`
+	PInfo  PInfoGroup `json:"pInfo,omitempty"`
+}
+
+type PInfoGroup struct {
+	Name                     string      `json:"name,omitempty"`
+	ParentID                 int64       `json:"parentId,omitempty"`
+	AutoRemovePeriod         bool        `json:"autoRemovePeriod,omitempty"`
+	NotifyPeriod             int64       `json:"notifyPeriod,omitempty"`
+	KLGRPHlfInherited        bool        `json:"KLGRP_HlfInherited,omitempty"`
+	KLGRPHlfForceChildren    bool        `json:"KLGRP_HlfForceChildren,omitempty"`
+	Level                    int64       `json:"level,omitempty"`
+	KlsrvHststatCritical     interface{} `json:"KLSRV_HSTSTAT_CRITICAL,omitempty"`
+	KlsrvHststatWarning      interface{} `json:"KLSRV_HSTSTAT_WARNING,omitempty"`
+	CGrpAutoInstallPackageID []int64     `json:"c_grp_autoInstallPackageId"`
+	GrpEnableFscan           bool        `json:"grp_enable_fscan,omitempty"`
+}
+
 // UpdateGroup Change attributes of existing administration group.
-func (hg *HostGroup) UpdateGroup(ctx context.Context, params interface{}) (*PxgValStr, []byte, error) {
+func (hg *HostGroup) UpdateGroup(ctx context.Context, params UpdateGroupParam) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.UpdateGroup", bytes.NewBuffer(postData))
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
-	pxgValStr := new(PxgValStr)
-	raw, err := hg.client.Do(ctx, request, &pxgValStr)
-	return pxgValStr, raw, err
+	raw, err := hg.client.Do(ctx, request, nil)
+	return raw, err
 }
 
 // UpdateHost Modify specified attributes for host.
