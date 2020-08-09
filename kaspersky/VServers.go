@@ -45,8 +45,8 @@ type VServersInfo struct {
 	VServer *VServer `json:"value,omitempty"`
 }
 
-// VServers Acquire virtual servers for the specified group.
-func (vs *VServers) VServers(ctx context.Context, lParentGroup int64) (*VServersInfos, error) {
+// GetVServers Acquire virtual servers for the specified group.
+func (vs *VServers) GetVServers(ctx context.Context, lParentGroup int64) (*VServersInfos, error) {
 	postData := []byte(fmt.Sprintf(`{"lParentGroup": %d}`, lParentGroup))
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.GetVServers", bytes.NewBuffer(postData))
 	if err != nil {
@@ -137,8 +137,8 @@ type VServerPermissions struct {
 	Permissions *Permissions `json:"PxgRetVal,omitempty"`
 }
 
-// Permissions Return ACL for the specified virtual server.
-func (vs *VServers) Permissions(ctx context.Context, lVServer int64) (*VServerPermissions, error) {
+// GetPermissions Return ACL for the specified virtual server.
+func (vs *VServers) GetPermissions(ctx context.Context, lVServer int64) (*VServerPermissions, error) {
 	postData := []byte(fmt.Sprintf(`{"lVServer": %d}`, lVServer))
 	request, err := http.NewRequest("POST", vs.client.Server+"/api/v1.0/VServers.GetPermissions", bytes.NewBuffer(postData))
 	if err != nil {
@@ -159,8 +159,8 @@ type VServerInfoParams struct {
 	PFields2Return []string `json:"pFields2Return"`
 }
 
-// VServerInfo Returns info about the specified virtual server.
-func (vs *VServers) VServerInfo(ctx context.Context, params VServerInfoParams) (*VServerInfo, error) {
+// GetVServerInfo Returns info about the specified virtual server.
+func (vs *VServers) GetVServerInfo(ctx context.Context, params VServerInfoParams) (*VServerInfo, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
