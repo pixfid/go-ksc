@@ -38,13 +38,14 @@ import (
 type Limits service
 
 // GetLimits Returns a limit of specified parameter.
-func (ls *Limits) GetLimits(ctx context.Context, param int64) ([]byte, error) {
+func (ls *Limits) GetLimits(ctx context.Context, param int64) (*PxgValInt, error) {
 	postData := []byte(fmt.Sprintf(`{ "param": %d }`, param))
 	request, err := http.NewRequest("POST", ls.client.Server+"/api/v1.0/Limits.GetLimits", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := ls.client.Do(ctx, request, nil)
-	return raw, err
+	pxgValInt := new(PxgValInt)
+	_, err = ls.client.Do(ctx, request, &pxgValInt)
+	return pxgValInt, err
 }
