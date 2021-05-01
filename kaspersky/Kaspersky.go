@@ -46,13 +46,13 @@ type Config struct {
 	InsecureSkipVerify bool
 }
 
-//-------------Client------------------
+// Client -------------Client------------------
 type Client struct {
 	AdfsSso                                                   *AdfsSso
 	AdHosts                                                   *AdHosts
 	AdmServerSettings                                         *AdmServerSettings
 	AdSecManager                                              *AdSecManager
-	AppCtrlApi                                                *AppCtrlApi
+	AppCtrlAPI                                                *AppCtrlApi
 	AKPatches                                                 *AKPatches
 	AsyncActionStateChecker                                   *AsyncActionStateChecker
 	CertPoolCtrl                                              *CertPoolCtrl
@@ -62,10 +62,10 @@ type Client struct {
 	CloudAccess                                               *CloudAccess
 	ConEvents                                                 *ConEvents
 	DatabaseInfo                                              *DatabaseInfo
-	DataProtectionApi                                         *DataProtectionApi
+	DataProtectionAPI                                         *DataProtectionApi
 	DpeKeyService                                             *DpeKeyService
 	EventNotificationProperties                               *EventNotificationProperties
-	EventNotificationsApi                                     *EventNotificationsApi
+	EventNotificationsAPI                                     *EventNotificationsApi
 	EventProcessing                                           *EventProcessing
 	EventProcessingFactory                                    *EventProcessingFactory
 	ExtAud                                                    *ExtAud
@@ -75,14 +75,14 @@ type Client struct {
 	GroupSync                                                 *GroupSync
 	HostGroup                                                 *HostGroup
 	HostMoveRules                                             *HostMoveRules
-	HostTagsApi                                               *HostTagsApi
-	HostTagsRulesApi                                          *HostTagsRulesApi
+	HostTagsAPI                                               *HostTagsApi
+	HostTagsRulesAPI                                          *HostTagsRulesApi
 	HostTasks                                                 *HostTasks
 	HstAccessControl                                          *HstAccessControl
 	HWInvStorage                                              *HWInvStorage
 	GroupSyncIterator                                         *GroupSyncIterator
-	GroupTaskControlApi                                       *GroupTaskControlApi
-	InventoryApi                                              *InventoryApi
+	GroupTaskControlAPI                                       *GroupTaskControlApi
+	InventoryAPI                                              *InventoryApi
 	InvLicenseProducts                                        *InvLicenseProducts
 	IWebSrvSettings                                           *IWebSrvSettings
 	IWebUsersSrv                                              *IWebUsersSrv
@@ -102,19 +102,19 @@ type Client struct {
 	NagCgwHelper                                              *NagCgwHelper
 	NagGuiCalls                                               *NagGuiCalls
 	NagHstCtl                                                 *NagHstCtl
-	NagNetworkListApi                                         *NagNetworkListApi
+	NagNetworkListAPI                                         *NagNetworkListApi
 	NagRdu                                                    *NagRdu
 	NagRemoteScreen                                           *NagRemoteScreen
 	NetUtils                                                  *NetUtils
 	NlaDefinedNetworks                                        *NlaDefinedNetworks
 	OsVersion                                                 *OsVersion
-	PackagesApi                                               *PackagesApi
+	PackagesAPI                                               *PackagesApi
 	PatchParameters                                           *PatchParameters
-	PLCDevApi                                                 *PLCDevApi
+	PLCDevAPI                                                 *PLCDevApi
 	Policy                                                    *Policy
 	PolicyProfiles                                            *PolicyProfiles
 	QueriesStorage                                            *QueriesStorage
-	QBTNetworkListApi                                         *QBTNetworkListApi
+	QBTNetworkListAPI                                         *QBTNetworkListApi
 	ReportManager                                             *ReportManager
 	RetrFiles                                                 *RetrFiles
 	ScanDiapasons                                             *ScanDiapasons
@@ -135,8 +135,8 @@ type Client struct {
 	UaControl                                                 *UaControl
 	Updates                                                   *Updates
 	UpdComps                                                  *UpdComps
-	UserDevicesApi                                            *UserDevicesApi
-	VapmControlApi                                            *VapmControlApi
+	UserDevicesAPI                                            *UserDevicesApi
+	VapmControlAPI                                            *VapmControlApi
 	UserName, Password, Server, VServerName, XKscSessionToken string
 	XKscSession, InsecureSkipVerify                           bool
 	VServers                                                  *VServers
@@ -151,7 +151,6 @@ type service struct {
 }
 
 func New(cfg Config) *Client {
-
 	httpClient := &http.Client{
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{InsecureSkipVerify: cfg.InsecureSkipVerify},
@@ -174,7 +173,7 @@ func New(cfg Config) *Client {
 	c.AdmServerSettings = (*AdmServerSettings)(&c.common)
 	c.AdSecManager = (*AdSecManager)(&c.common)
 	c.AKPatches = (*AKPatches)(&c.common)
-	c.AppCtrlApi = (*AppCtrlApi)(&c.common)
+	c.AppCtrlAPI = (*AppCtrlApi)(&c.common)
 	c.AsyncActionStateChecker = (*AsyncActionStateChecker)(&c.common)
 	c.CertPoolCtrl = (*CertPoolCtrl)(&c.common)
 	c.CertPoolCtrl2 = (*CertPoolCtrl2)(&c.common)
@@ -183,10 +182,10 @@ func New(cfg Config) *Client {
 	c.CloudAccess = (*CloudAccess)(&c.common)
 	c.ConEvents = (*ConEvents)(&c.common)
 	c.DatabaseInfo = (*DatabaseInfo)(&c.common)
-	c.DataProtectionApi = (*DataProtectionApi)(&c.common)
+	c.DataProtectionAPI = (*DataProtectionApi)(&c.common)
 	c.DpeKeyService = (*DpeKeyService)(&c.common)
 	c.EventNotificationProperties = (*EventNotificationProperties)(&c.common)
-	c.EventNotificationsApi = (*EventNotificationsApi)(&c.common)
+	c.EventNotificationsAPI = (*EventNotificationsApi)(&c.common)
 	c.EventProcessing = (*EventProcessing)(&c.common)
 	c.EventProcessingFactory = (*EventProcessingFactory)(&c.common)
 	c.ExtAud = (*ExtAud)(&c.common)
@@ -196,14 +195,14 @@ func New(cfg Config) *Client {
 	c.GroupSync = (*GroupSync)(&c.common)
 	c.HostGroup = (*HostGroup)(&c.common)
 	c.HostMoveRules = (*HostMoveRules)(&c.common)
-	c.HostTagsApi = (*HostTagsApi)(&c.common)
-	c.HostTagsRulesApi = (*HostTagsRulesApi)(&c.common)
+	c.HostTagsAPI = (*HostTagsApi)(&c.common)
+	c.HostTagsRulesAPI = (*HostTagsRulesApi)(&c.common)
 	c.HostTasks = (*HostTasks)(&c.common)
 	c.HstAccessControl = (*HstAccessControl)(&c.common)
 	c.HWInvStorage = (*HWInvStorage)(&c.common)
 	c.GroupSyncIterator = (*GroupSyncIterator)(&c.common)
-	c.GroupTaskControlApi = (*GroupTaskControlApi)(&c.common)
-	c.InventoryApi = (*InventoryApi)(&c.common)
+	c.GroupTaskControlAPI = (*GroupTaskControlApi)(&c.common)
+	c.InventoryAPI = (*InventoryApi)(&c.common)
 	c.InvLicenseProducts = (*InvLicenseProducts)(&c.common)
 	c.IWebSrvSettings = (*IWebSrvSettings)(&c.common)
 	c.IWebUsersSrv = (*IWebUsersSrv)(&c.common)
@@ -223,19 +222,19 @@ func New(cfg Config) *Client {
 	c.NagCgwHelper = (*NagCgwHelper)(&c.common)
 	c.NagGuiCalls = (*NagGuiCalls)(&c.common)
 	c.NagHstCtl = (*NagHstCtl)(&c.common)
-	c.NagNetworkListApi = (*NagNetworkListApi)(&c.common)
+	c.NagNetworkListAPI = (*NagNetworkListApi)(&c.common)
 	c.NagRdu = (*NagRdu)(&c.common)
 	c.NagRemoteScreen = (*NagRemoteScreen)(&c.common)
 	c.NetUtils = (*NetUtils)(&c.common)
 	c.NlaDefinedNetworks = (*NlaDefinedNetworks)(&c.common)
 	c.OsVersion = (*OsVersion)(&c.common)
-	c.PackagesApi = (*PackagesApi)(&c.common)
+	c.PackagesAPI = (*PackagesApi)(&c.common)
 	c.PatchParameters = (*PatchParameters)(&c.common)
-	c.PLCDevApi = (*PLCDevApi)(&c.common)
+	c.PLCDevAPI = (*PLCDevApi)(&c.common)
 	c.Policy = (*Policy)(&c.common)
 	c.PolicyProfiles = (*PolicyProfiles)(&c.common)
 	c.QueriesStorage = (*QueriesStorage)(&c.common)
-	c.QBTNetworkListApi = (*QBTNetworkListApi)(&c.common)
+	c.QBTNetworkListAPI = (*QBTNetworkListApi)(&c.common)
 	c.ReportManager = (*ReportManager)(&c.common)
 	c.RetrFiles = (*RetrFiles)(&c.common)
 	c.ScanDiapasons = (*ScanDiapasons)(&c.common)
@@ -256,8 +255,8 @@ func New(cfg Config) *Client {
 	c.UaControl = (*UaControl)(&c.common)
 	c.Updates = (*Updates)(&c.common)
 	c.UpdComps = (*UpdComps)(&c.common)
-	c.UserDevicesApi = (*UserDevicesApi)(&c.common)
-	c.VapmControlApi = (*VapmControlApi)(&c.common)
+	c.UserDevicesAPI = (*UserDevicesApi)(&c.common)
+	c.VapmControlAPI = (*VapmControlApi)(&c.common)
 	c.VServers = (*VServers)(&c.common)
 	c.VServers2 = (*VServers2)(&c.common)
 	c.WolSender = (*WolSender)(&c.common)
@@ -265,7 +264,6 @@ func New(cfg Config) *Client {
 }
 
 func (c *Client) basicAuth(ctx context.Context) error {
-
 	request, err := http.NewRequest("POST", c.Server+"/api/v1.0/login", nil)
 	if err != nil {
 		return err
@@ -289,7 +287,6 @@ func (c *Client) xkscSession(ctx context.Context) error {
 }
 
 func (c *Client) KSCAuth(ctx context.Context) error {
-
 	c.UserName = base64.StdEncoding.EncodeToString([]byte(c.UserName))
 	c.Password = base64.StdEncoding.EncodeToString([]byte(c.Password))
 
@@ -407,7 +404,7 @@ func (c *Client) Do(ctx context.Context, req *http.Request, out interface{}) (dt
 	return body, err
 }
 
-//CheckResponse check KSC Response error
+// CheckResponse check KSC Response error
 func CheckResponse(body *[]byte) (err error) {
 
 	pre := new(PxgRetError)
