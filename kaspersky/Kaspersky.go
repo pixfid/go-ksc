@@ -44,6 +44,7 @@ type Config struct {
 	VServerName        string
 	XKscSession        bool
 	InsecureSkipVerify bool
+	Debug              bool
 }
 
 // Client -------------Client------------------
@@ -127,6 +128,7 @@ type Client struct {
 	SmsQueue                                                  *SmsQueue
 	SmsSenders                                                *SmsSenders
 	SrvCloud                                                  *SrvCloud
+	SrvIpmNewsAndStatistics                                   *SrvIpmNewsAndStatistics
 	SrvSsRevision                                             *SrvSsRevision
 	SrvView                                                   *SrvView
 	SsContents                                                *SsContents
@@ -145,6 +147,7 @@ type Client struct {
 	WolSender                                                 *WolSender
 	client                                                    *http.Client
 	common                                                    service
+	Debug                                                     bool
 }
 
 type service struct {
@@ -165,6 +168,7 @@ func New(cfg Config) *Client {
 		Password:    cfg.Password,
 		VServerName: cfg.VServerName,
 		XKscSession: cfg.XKscSession,
+		Debug:       cfg.Debug,
 	}
 
 	c.common.client = c
@@ -248,6 +252,7 @@ func New(cfg Config) *Client {
 	c.SmsQueue = (*SmsQueue)(&c.common)
 	c.SmsSenders = (*SmsSenders)(&c.common)
 	c.SrvCloud = (*SrvCloud)(&c.common)
+	c.SrvIpmNewsAndStatistics = (*SrvIpmNewsAndStatistics)(&c.common)
 	c.SrvSsRevision = (*SrvSsRevision)(&c.common)
 	c.SrvView = (*SrvView)(&c.common)
 	c.SsContents = (*SsContents)(&c.common)

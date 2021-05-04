@@ -28,9 +28,11 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"log"
 	"net/http"
 )
 
+// Gcm Service to manage settings of using the GCM service.
 type Gcm service
 
 // CheckIfGcmServerSettingsPresent It checks if GCM server settings are present.
@@ -42,7 +44,12 @@ func (gm *Gcm) CheckIfGcmServerSettingsPresent(ctx context.Context) (*PxgValBool
 	}
 
 	result := new(PxgValBool)
-	_, err = gm.client.Do(ctx, request, &result)
+
+	raw, err := gm.client.Do(ctx, request, &result)
+	if gm.client.Debug {
+		log.Printf("raw response: %s", string(raw))
+	}
+
 	return result, err
 }
 
@@ -55,7 +62,12 @@ func (gm *Gcm) CheckIfGcmServerSettingsShouldBeSet(ctx context.Context) (*PxgVal
 	}
 
 	result := new(PxgValBool)
-	_, err = gm.client.Do(ctx, request, &result)
+	raw, err := gm.client.Do(ctx, request, &result)
+
+	if gm.client.Debug {
+		log.Printf("raw response: %s", string(raw))
+	}
+
 	return result, err
 }
 
@@ -67,7 +79,12 @@ func (gm *Gcm) DeleteGcmServerSettings(ctx context.Context) (*PxgValBool, error)
 	}
 
 	result := new(PxgValBool)
-	_, err = gm.client.Do(ctx, request, &result)
+	raw, err := gm.client.Do(ctx, request, &result)
+
+	if gm.client.Debug {
+		log.Printf("raw response: %s", string(raw))
+	}
+
 	return result, err
 }
 
@@ -84,7 +101,12 @@ func (gm *Gcm) GetGcmPropagation2VS(ctx context.Context) (*PropagationState, err
 	}
 
 	propagationState := new(PropagationState)
-	_, err = gm.client.Do(ctx, request, &propagationState)
+	raw, err := gm.client.Do(ctx, request, &propagationState)
+
+	if gm.client.Debug {
+		log.Printf("raw response: %s", string(raw))
+	}
+
 	return propagationState, err
 }
 
@@ -102,7 +124,12 @@ func (gm *Gcm) SetGcmPropagation2VS(ctx context.Context, params PropagationState
 		return nil, err
 	}
 
-	_, err = gm.client.Do(ctx, request, nil)
+	raw, err := gm.client.Do(ctx, request, nil)
+
+	if gm.client.Debug {
+		log.Printf("raw response: %s", string(raw))
+	}
+
 	return nil, err
 }
 
@@ -129,7 +156,12 @@ func (gm *Gcm) UpdateGcmServerSettings(ctx context.Context, params GCM) (*PxgVal
 	}
 
 	result := new(PxgValBool)
-	_, err = gm.client.Do(ctx, request, &result)
+	raw, err := gm.client.Do(ctx, request, &result)
+
+	if gm.client.Debug {
+		log.Printf("raw response: %s", string(raw))
+	}
+
 	return result, err
 }
 
@@ -141,6 +173,11 @@ func (gm *Gcm) GetGcmServerSettings(ctx context.Context) (*GCM, error) {
 	}
 
 	gcm := new(GCM)
-	_, err = gm.client.Do(ctx, request, &gcm)
+	raw, err := gm.client.Do(ctx, request, &gcm)
+
+	if gm.client.Debug {
+		log.Printf("raw response: %s", string(raw))
+	}
+
 	return gcm, err
 }
