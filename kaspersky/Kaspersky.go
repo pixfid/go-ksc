@@ -136,6 +136,7 @@ type Client struct {
 	SsContents                                                *SsContents
 	SubnetMasks                                               *SubnetMasks
 	Tasks                                                     *Tasks
+	TotpGlobalSettings                                        *TotpGlobalSettings
 	TotpRegistration                                          *TotpRegistration
 	TrafficManager                                            *TrafficManager
 	UaControl                                                 *UaControl
@@ -263,6 +264,7 @@ func New(cfg Config) *Client {
 	c.SsContents = (*SsContents)(&c.common)
 	c.SubnetMasks = (*SubnetMasks)(&c.common)
 	c.Tasks = (*Tasks)(&c.common)
+	c.TotpGlobalSettings = (*TotpGlobalSettings)(&c.common)
 	c.TotpRegistration = (*TotpRegistration)(&c.common)
 	c.TrafficManager = (*TrafficManager)(&c.common)
 	c.UaControl = (*UaControl)(&c.common)
