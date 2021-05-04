@@ -138,6 +138,7 @@ type Client struct {
 	Tasks                                                     *Tasks
 	TotpGlobalSettings                                        *TotpGlobalSettings
 	TotpRegistration                                          *TotpRegistration
+	TotpUserSettings                                          *TotpUserSettings
 	TrafficManager                                            *TrafficManager
 	UaControl                                                 *UaControl
 	Updates                                                   *Updates
@@ -266,6 +267,7 @@ func New(cfg Config) *Client {
 	c.Tasks = (*Tasks)(&c.common)
 	c.TotpGlobalSettings = (*TotpGlobalSettings)(&c.common)
 	c.TotpRegistration = (*TotpRegistration)(&c.common)
+	c.TotpUserSettings = (*TotpUserSettings)(&c.common)
 	c.TrafficManager = (*TrafficManager)(&c.common)
 	c.UaControl = (*UaControl)(&c.common)
 	c.Updates = (*Updates)(&c.common)
