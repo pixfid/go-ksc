@@ -99,7 +99,9 @@ type Client struct {
 	LicensePolicy                                             *LicensePolicy
 	Limits                                                    *Limits
 	ListTags                                                  *ListTags
+	MfaCacheInner                                             *MfaCacheInner
 	MigrationData                                             *MigrationData
+	ModulesIntegrityCheck                                     *ModulesIntegrityCheck
 	Multitenancy                                              *Multitenancy
 	NagCgwHelper                                              *NagCgwHelper
 	NagGuiCalls                                               *NagGuiCalls
@@ -223,7 +225,9 @@ func New(cfg Config) *Client {
 	c.LicensePolicy = (*LicensePolicy)(&c.common)
 	c.Limits = (*Limits)(&c.common)
 	c.ListTags = (*ListTags)(&c.common)
+	c.MfaCacheInner = (*MfaCacheInner)(&c.common)
 	c.MigrationData = (*MigrationData)(&c.common)
+	c.ModulesIntegrityCheck = (*ModulesIntegrityCheck)(&c.common)
 	c.Multitenancy = (*Multitenancy)(&c.common)
 	c.NagCgwHelper = (*NagCgwHelper)(&c.common)
 	c.NagGuiCalls = (*NagGuiCalls)(&c.common)
