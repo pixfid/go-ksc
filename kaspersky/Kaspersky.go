@@ -72,6 +72,7 @@ type Client struct {
 	FileCategorizer2                                          *FileCategorizer2
 	FilesAcceptor                                             *FilesAcceptor
 	GatewayConnection                                         *GatewayConnection
+	Gcm                                                       *Gcm
 	GroupSync                                                 *GroupSync
 	HostGroup                                                 *HostGroup
 	HostMoveRules                                             *HostMoveRules
@@ -192,6 +193,7 @@ func New(cfg Config) *Client {
 	c.FileCategorizer2 = (*FileCategorizer2)(&c.common)
 	c.FilesAcceptor = (*FilesAcceptor)(&c.common)
 	c.GatewayConnection = (*GatewayConnection)(&c.common)
+	c.Gcm = (*Gcm)(&c.common)
 	c.GroupSync = (*GroupSync)(&c.common)
 	c.HostGroup = (*HostGroup)(&c.common)
 	c.HostMoveRules = (*HostMoveRules)(&c.common)
