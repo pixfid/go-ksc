@@ -280,7 +280,7 @@ func New(cfg Config) *Client {
 	return c
 }
 
-func (c *Client) basicAuth(ctx context.Context) error {
+func (c *Client) kscAuth(ctx context.Context) error {
 	request, err := http.NewRequest("POST", c.Server+"/api/v1.0/login", nil)
 	if err != nil {
 		return err
@@ -303,7 +303,7 @@ func (c *Client) xkscSession(ctx context.Context) error {
 	return e
 }
 
-func (c *Client) KSCAuth(ctx context.Context) error {
+func (c *Client) basicAuth(ctx context.Context) error {
 	c.UserName = base64.StdEncoding.EncodeToString([]byte(c.UserName))
 	c.Password = base64.StdEncoding.EncodeToString([]byte(c.Password))
 
@@ -316,23 +316,23 @@ func (c *Client) KSCAuth(ctx context.Context) error {
 	if c.XKscSession {
 		return c.xkscSession(ctx)
 	} else {
-		return c.basicAuth(ctx)
+		return c.kscAuth(ctx)
 	}
 }
 
-func (c *Client) KSCGWAuth(ctx context.Context, kscgw string) error {
+func (c *Client) kscGwAuth(ctx context.Context, token string) error {
 	request, err := http.NewRequest("POST", c.Server+"/api/v1.0/login", nil)
 	if err != nil {
 		return err
 	}
 
-	request.Header.Set("Authorization", "KSCGW "+kscgw)
+	request.Header.Set("Authorization", "KSCGW "+token)
 
 	_, err = c.Do(ctx, request, nil)
 	return err
 }
 
-func (c *Client) KSCWTAuth(ctx context.Context, kscwt string) error {
+func (c *Client) kscWTAuth(ctx context.Context, kscwt string) error {
 	request, err := http.NewRequest("POST", c.Server+"/api/v1.0/login", nil)
 	if err != nil {
 		return err
@@ -344,13 +344,13 @@ func (c *Client) KSCWTAuth(ctx context.Context, kscwt string) error {
 	return err
 }
 
-func (c *Client) KSCTAuth(ctx context.Context, ksct string) error {
+func (c *Client) kscTAuth(ctx context.Context, token string) error {
 	request, err := http.NewRequest("POST", c.Server+"/api/v1.0/login", nil)
 	if err != nil {
 		return err
 	}
 
-	request.Header.Set("Authorization", "KSCT "+ksct)
+	request.Header.Set("Authorization", "KSCT "+token)
 
 	_, err = c.Do(ctx, request, nil)
 	return err
@@ -421,9 +421,32 @@ func (c *Client) Do(ctx context.Context, req *http.Request, out interface{}) (dt
 	return body, err
 }
 
+type AuthType int
+
+const (
+	BasicAuth    AuthType = 0
+	TokenAuth    AuthType = 1
+	WebTokenAuth AuthType = 2
+	GatewayAuth  AuthType = 3
+)
+
+func (c *Client) Login(ctx context.Context, authType AuthType, token string) error {
+	switch authType {
+	case BasicAuth:
+		return c.basicAuth(ctx)
+	case TokenAuth:
+		return c.kscTAuth(ctx, token)
+	case WebTokenAuth:
+		return c.kscWTAuth(ctx, token)
+	case GatewayAuth:
+		return c.kscGwAuth(ctx, token)
+	default:
+		return c.basicAuth(ctx)
+	}
+}
+
 // CheckResponse check KSC Response error
 func CheckResponse(body *[]byte) (err error) {
-
 	pre := new(PxgRetError)
 
 	decErr := json.Unmarshal(*body, &pre)
