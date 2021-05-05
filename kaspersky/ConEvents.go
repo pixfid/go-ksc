@@ -29,6 +29,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -51,7 +52,11 @@ func (ce *ConEvents) Retrieve(ctx context.Context) (*EventRetrieve, error) {
 
 	eventRetrieve := new(EventRetrieve)
 	raw, err := ce.client.Do(ctx, request, &eventRetrieve)
-	println(string(raw))
+
+	if ce.client.Debug {
+		log.Printf("raw response: %s", string(raw))
+	}
+
 	return eventRetrieve, err
 }
 
@@ -92,7 +97,11 @@ func (ce *ConEvents) Subscribe(ctx context.Context, params EventSubscribeParams)
 
 	subscribeEventResponse := new(SubscribeEventResponse)
 	raw, err := ce.client.Do(ctx, request, &subscribeEventResponse)
-	println(string(raw))
+
+	if ce.client.Debug {
+		log.Printf("raw response: %s", string(raw))
+	}
+
 	return subscribeEventResponse, err
 }
 
@@ -105,6 +114,51 @@ func (ce *ConEvents) UnSubscribe(ctx context.Context, nSubsId int64) error {
 		return err
 	}
 
-	_, err = ce.client.Do(ctx, request, nil)
+	raw, err := ce.client.Do(ctx, request, nil)
+
+	if ce.client.Debug {
+		log.Printf("raw response: %s", string(raw))
+	}
+
+	return err
+}
+
+// IsAnyServiceConsoleAvailable Check any service console availability.
+func (ce *ConEvents) IsAnyServiceConsoleAvailable(ctx context.Context) (*PxgValBool, error) {
+	request, err := http.NewRequest("POST", ce.client.Server+"/api/v1.0/ConEvents.IsAnyServiceConsoleAvailable", nil)
+
+	if err != nil {
+		return nil, err
+	}
+
+	result := new(PxgValBool)
+	raw, err := ce.client.Do(ctx, request, &result)
+
+	if ce.client.Debug {
+		log.Printf("raw response: %s", string(raw))
+	}
+
+	return result, err
+}
+
+// IsServiceConsoleAvailable
+// Checks whether service console for specified product is connected
+// to KSC server and is able to execute Product backend commands
+func (ce *ConEvents) IsServiceConsoleAvailable(ctx context.Context, wstrProdName, wstrProdVersion string) error {
+	postData := []byte(fmt.Sprintf(`{"wstrProdName" : "%s", "wstrProdVersion" : "%s"}`, wstrProdName, wstrProdVersion))
+
+	request, err := http.NewRequest("POST", ce.client.Server+"/api/v1.0/ConEvents.IsServiceConsoleAvailable",
+		bytes.NewBuffer(postData))
+
+	if err != nil {
+		return err
+	}
+
+	raw, err := ce.client.Do(ctx, request, nil)
+
+	if ce.client.Debug {
+		log.Printf("raw response: %s", string(raw))
+	}
+
 	return err
 }
