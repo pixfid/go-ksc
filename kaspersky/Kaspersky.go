@@ -117,12 +117,13 @@ type Client struct {
 	PLCDevAPI                                                 *PLCDevApi
 	Policy                                                    *Policy
 	PolicyProfiles                                            *PolicyProfiles
+	ProductUserTokenIssuer                                    *ProductUserTokenIssuer
 	QueriesStorage                                            *QueriesStorage
 	QBTNetworkListAPI                                         *QBTNetworkListApi
 	ReportManager                                             *ReportManager
 	RetrFiles                                                 *RetrFiles
 	ScanDiapasons                                             *ScanDiapasons
-	SeamlessUpdatesTestApi                                    *SeamlessUpdatesTestApi
+	SeamlessUpdatesTestAPI                                    *SeamlessUpdatesTestApi
 	SecurityPolicy                                            *SecurityPolicy
 	SecurityPolicy3                                           *SecurityPolicy3
 	ServerHierarchy                                           *ServerHierarchy
@@ -251,12 +252,13 @@ func New(cfg Config) *Client {
 	c.PLCDevAPI = (*PLCDevApi)(&c.common)
 	c.Policy = (*Policy)(&c.common)
 	c.PolicyProfiles = (*PolicyProfiles)(&c.common)
+	c.ProductUserTokenIssuer = (*ProductUserTokenIssuer)(&c.common)
 	c.QueriesStorage = (*QueriesStorage)(&c.common)
 	c.QBTNetworkListAPI = (*QBTNetworkListApi)(&c.common)
 	c.ReportManager = (*ReportManager)(&c.common)
 	c.RetrFiles = (*RetrFiles)(&c.common)
 	c.ScanDiapasons = (*ScanDiapasons)(&c.common)
-	c.SeamlessUpdatesTestApi = (*SeamlessUpdatesTestApi)(&c.common)
+	c.SeamlessUpdatesTestAPI = (*SeamlessUpdatesTestApi)(&c.common)
 	c.SecurityPolicy = (*SecurityPolicy)(&c.common)
 	c.SecurityPolicy3 = (*SecurityPolicy3)(&c.common)
 	c.ServerHierarchy = (*ServerHierarchy)(&c.common)
