@@ -84,7 +84,7 @@ type Client struct {
 	HWInvStorage                                              *HWInvStorage
 	GroupSyncIterator                                         *GroupSyncIterator
 	GroupTaskControlAPI                                       *GroupTaskControlApi
-	InventoryAPI                                              *InventoryApi
+	InventoryAPI                                              *InventoryAPI
 	InvLicenseProducts                                        *InvLicenseProducts
 	IWebSrvSettings                                           *IWebSrvSettings
 	IWebUsersSrv                                              *IWebUsersSrv
@@ -220,7 +220,7 @@ func New(cfg Config) *Client {
 	c.HWInvStorage = (*HWInvStorage)(&c.common)
 	c.GroupSyncIterator = (*GroupSyncIterator)(&c.common)
 	c.GroupTaskControlAPI = (*GroupTaskControlApi)(&c.common)
-	c.InventoryAPI = (*InventoryApi)(&c.common)
+	c.InventoryAPI = (*InventoryAPI)(&c.common)
 	c.InvLicenseProducts = (*InvLicenseProducts)(&c.common)
 	c.IWebSrvSettings = (*IWebSrvSettings)(&c.common)
 	c.IWebUsersSrv = (*IWebUsersSrv)(&c.common)
