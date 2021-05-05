@@ -122,14 +122,17 @@ type Client struct {
 	ReportManager                                             *ReportManager
 	RetrFiles                                                 *RetrFiles
 	ScanDiapasons                                             *ScanDiapasons
+	SeamlessUpdatesTestApi                                    *SeamlessUpdatesTestApi
 	SecurityPolicy                                            *SecurityPolicy
 	SecurityPolicy3                                           *SecurityPolicy3
 	ServerHierarchy                                           *ServerHierarchy
 	ServerTransportSettings                                   *ServerTransportSettings
+	ServiceNwcDeployment                                      *ServiceNwcDeployment
 	Session                                                   *Session
 	SmsQueue                                                  *SmsQueue
 	SmsSenders                                                *SmsSenders
 	SrvCloud                                                  *SrvCloud
+	SrvCloudStat                                              *SrvCloudStat
 	SrvIpmNewsAndStatistics                                   *SrvIpmNewsAndStatistics
 	SrvSsRevision                                             *SrvSsRevision
 	SrvView                                                   *SrvView
@@ -251,14 +254,17 @@ func New(cfg Config) *Client {
 	c.ReportManager = (*ReportManager)(&c.common)
 	c.RetrFiles = (*RetrFiles)(&c.common)
 	c.ScanDiapasons = (*ScanDiapasons)(&c.common)
+	c.SeamlessUpdatesTestApi = (*SeamlessUpdatesTestApi)(&c.common)
 	c.SecurityPolicy = (*SecurityPolicy)(&c.common)
 	c.SecurityPolicy3 = (*SecurityPolicy3)(&c.common)
 	c.ServerHierarchy = (*ServerHierarchy)(&c.common)
 	c.ServerTransportSettings = (*ServerTransportSettings)(&c.common)
+	c.ServiceNwcDeployment = (*ServiceNwcDeployment)(&c.common)
 	c.Session = (*Session)(&c.common)
 	c.SmsQueue = (*SmsQueue)(&c.common)
 	c.SmsSenders = (*SmsSenders)(&c.common)
 	c.SrvCloud = (*SrvCloud)(&c.common)
+	c.SrvCloudStat = (*SrvCloudStat)(&c.common)
 	c.SrvIpmNewsAndStatistics = (*SrvIpmNewsAndStatistics)(&c.common)
 	c.SrvSsRevision = (*SrvSsRevision)(&c.common)
 	c.SrvView = (*SrvView)(&c.common)
