@@ -128,6 +128,7 @@ type Client struct {
 	SecurityPolicy3                                           *SecurityPolicy3
 	ServerHierarchy                                           *ServerHierarchy
 	ServerTransportSettings                                   *ServerTransportSettings
+	ServiceNwcCommandProvider                                 *ServiceNwcCommandProvider
 	ServiceNwcDeployment                                      *ServiceNwcDeployment
 	Session                                                   *Session
 	SmsQueue                                                  *SmsQueue
@@ -263,6 +264,7 @@ func New(cfg Config) *Client {
 	c.SecurityPolicy3 = (*SecurityPolicy3)(&c.common)
 	c.ServerHierarchy = (*ServerHierarchy)(&c.common)
 	c.ServerTransportSettings = (*ServerTransportSettings)(&c.common)
+	c.ServiceNwcCommandProvider = (*ServiceNwcCommandProvider)(&c.common)
 	c.ServiceNwcDeployment = (*ServiceNwcDeployment)(&c.common)
 	c.Session = (*Session)(&c.common)
 	c.SmsQueue = (*SmsQueue)(&c.common)
