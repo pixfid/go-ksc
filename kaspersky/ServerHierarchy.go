@@ -51,19 +51,42 @@ func (sh *ServerHierarchy) DelServer(ctx context.Context, lServer int64) ([]byte
 	return raw, err
 }
 
+type ServerHierarchyParams struct {
+	// LServer Slave server id
+
+	LServer int `json:"lServer"`
+	// PFields attributes to return. See list of slave server attributes for attributes list and description
+	//
+	// "KLSRVH_SRV_ID" Slave server id
+	//
+	// "KLSRVH_SRV_INST_ID" Slave server instance id
+	//
+	// "KLSRVH_SRV_ADDR" Slave server address and port
+	//
+	// "KLSRVH_SRV_DN" Display name
+	//
+	// "KLSRVH_SRV_GROUPID" Id of administration group where the slave server is located
+	//
+	// "KLSRVH_SRV_CERTIFICATE" Slave server certificate.
+	//
+	// "KLSRVH_SRV_PUBLIC_KEY_HASH" Slave server certificate MD5-hash
+	//
+	// "KLSRVH_SRV_STATUS" Slave server status: 0 means "Inactive", 1 means "Active".
+	//
+	// "KLSRVH_SRV_VERSION" Slave server version
+	//
+	// "KLSRVH_SRV_PASSIVE" Flag set if the slave is passive (does not connect to server, but accepts master connections instead)
+	//
+	// "KLSRVH_SRV_LAST_CONNECTED" Time when server was available last time
+	//
+	// "KLSRVH_SRV_MASTER_ADDR" Master server connection address, valid for non-passive slaves
+	//
+	// "KLSRVH_SRV_HOST_GUID" Slave server host identity
+	PFields []string `json:"pFields"`
+}
+
 // GetServerInfo Acquire specified slave server attributes.
-//
-//	{
-//		"lServer": 1, //Slave server ID
-//		"pFields": //Attributes
-//			[
-//				"KLSRVH_SRV_ID",
-//				"KLSRVH_SRV_INST_ID",
-//				"KLSRVH_SRV_ADDR",
-//				"... other"
-//			]
-//	}
-func (sh *ServerHierarchy) GetServerInfo(ctx context.Context, params interface{}) ([]byte, error) {
+func (sh *ServerHierarchy) GetServerInfo(ctx context.Context, params ServerHierarchyParams) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
