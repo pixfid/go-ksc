@@ -51,8 +51,8 @@ func main() {
         //Construct a new KSC client
     	client := kaspersky.New(cfg)
 
-    	//Auth on KSC server
-    	client.KSCAuth(ctx)
+    	//Auth on KSC server 
+    	client.Login(ctx, kaspersky.BasicAuth, "")
 
         //Get List of Windows domain in the network.
         raw,_ := client.HostGroup.GetDomains(context.Background())
