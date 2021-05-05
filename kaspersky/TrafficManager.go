@@ -75,7 +75,7 @@ type TrafficPRestrictions struct {
 }
 
 // AddRestriction Add traffic restriction.
-func (tm *TrafficManager) AddRestriction(ctx context.Context, params interface{}) (*PxgValInt, []byte, error) {
+func (tm *TrafficManager) AddRestriction(ctx context.Context, params TrafficRestrictions) (*PxgValInt, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, nil, err
