@@ -213,11 +213,6 @@ func (fc *FileCategorizer2) DoStaticAnalysisAsync(ctx context.Context, wstrReque
 	return raw, err
 }
 
-// AsyncID struct
-type AsyncID struct {
-	WstrAsyncID string `json:"wstrAsyncId,omitempty"`
-}
-
 // DoStaticAnalysisAsync2 Start Static analysis of application categories
 func (fc *FileCategorizer2) DoStaticAnalysisAsync2(ctx context.Context, nPolicyId int64) (*AsyncID, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"nPolicyId": %d}`, nPolicyId))
