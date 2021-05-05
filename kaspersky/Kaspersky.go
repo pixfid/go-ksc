@@ -138,6 +138,7 @@ type Client struct {
 	SrvSsRevision                                             *SrvSsRevision
 	SrvView                                                   *SrvView
 	SsContents                                                *SsContents
+	SsRevisionGetNames                                        *SsRevisionGetNames
 	SubnetMasks                                               *SubnetMasks
 	Tasks                                                     *Tasks
 	TotpGlobalSettings                                        *TotpGlobalSettings
@@ -271,6 +272,7 @@ func New(cfg Config) *Client {
 	c.SrvSsRevision = (*SrvSsRevision)(&c.common)
 	c.SrvView = (*SrvView)(&c.common)
 	c.SsContents = (*SsContents)(&c.common)
+	c.SsRevisionGetNames = (*SsRevisionGetNames)(&c.common)
 	c.SubnetMasks = (*SubnetMasks)(&c.common)
 	c.Tasks = (*Tasks)(&c.common)
 	c.TotpGlobalSettings = (*TotpGlobalSettings)(&c.common)
