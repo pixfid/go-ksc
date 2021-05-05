@@ -131,6 +131,7 @@ type Client struct {
 	Session                                                   *Session
 	SmsQueue                                                  *SmsQueue
 	SmsSenders                                                *SmsSenders
+	SpamEvents                                                *SpamEvents
 	SrvCloud                                                  *SrvCloud
 	SrvCloudStat                                              *SrvCloudStat
 	SrvIpmNewsAndStatistics                                   *SrvIpmNewsAndStatistics
@@ -263,6 +264,7 @@ func New(cfg Config) *Client {
 	c.Session = (*Session)(&c.common)
 	c.SmsQueue = (*SmsQueue)(&c.common)
 	c.SmsSenders = (*SmsSenders)(&c.common)
+	c.SpamEvents = (*SpamEvents)(&c.common)
 	c.SrvCloud = (*SrvCloud)(&c.common)
 	c.SrvCloudStat = (*SrvCloudStat)(&c.common)
 	c.SrvIpmNewsAndStatistics = (*SrvIpmNewsAndStatistics)(&c.common)

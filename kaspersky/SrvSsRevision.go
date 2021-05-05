@@ -28,6 +28,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -36,11 +37,7 @@ type SrvSsRevision service
 
 // SsRevisionOpen Open specified version of virtual server settings storage.
 func (ssr *SrvSsRevision) SsRevisionOpen(ctx context.Context, nVServer, nRevision int64, szwType string) ([]byte, error) {
-	postData := []byte(fmt.Sprintf(`{
-		"nVServer": %d, 
-		"nRevision": %d, 
-		"szwType": "%s"
-	}`, nVServer, nRevision, szwType))
+	postData := []byte(fmt.Sprintf(`{"nVServer": %d, "nRevision": %d, "szwType": "%s" }`, nVServer, nRevision, szwType))
 	request, err := http.NewRequest("POST", ssr.client.Server+"/api/v1.0/SrvSsRevision.SsRevision_Open", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
@@ -61,5 +58,25 @@ func (ssr *SrvSsRevision) SsRevisionClose(ctx context.Context, szwType string) (
 	}
 
 	raw, err := ssr.client.Do(ctx, request, nil)
+	return raw, err
+}
+
+func (ssr *SrvSsRevision) SsRevisionGetNames(ctx context.Context, szwId, product, version string) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"szwId": "%s", "product": ""%s", "version": "%s" }`, szwId, product, version))
+	request, err := http.NewRequest("POST", ssr.client.Server+"/api/v1.0/SrvSsRevision.SsRevisionGetNames", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := ssr.client.Do(ctx, request, nil)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if ssr.client.Debug {
+		log.Printf("raw response: %s", string(raw))
+	}
+
 	return raw, err
 }
