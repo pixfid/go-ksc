@@ -55,35 +55,35 @@ type NetworkListParams struct {
 // GetListItemFileInfo Retrieves information about file associated with network list item.
 //
 // Values for listName and itemId see in Network lists which elements are associated with files Network lists which elements are associated with files.
-func (nnla *NagNetworkListApi) GetListItemFileInfo(ctx context.Context, params NetworkListParams) ([]byte, error) {
+func (nnl *NagNetworkListApi) GetListItemFileInfo(ctx context.Context, params NetworkListParams) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, nil
 	}
 
-	request, err := http.NewRequest("POST", nnla.client.Server+"/api/v1.0/NagNetworkListApi.GetListItemFileInfo", bytes.NewBuffer(postData))
+	request, err := http.NewRequest("POST", nnl.client.Server+"/api/v1.0/NagNetworkListApi.GetListItemFileInfo", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := nnla.client.Do(ctx, request, nil)
+	raw, err := nnl.client.Do(ctx, request, nil)
 	return raw, err
 }
 
 // GetListItemFileChunk Retrieves chunk of the file associated with network list item.
 //
 // Values for listName and itemId see in Network lists which elements are associated with files Network lists which elements are associated with files.
-func (nnla *NagNetworkListApi) GetListItemFileChunk(ctx context.Context, params NetworkListParams) ([]byte, error) {
+func (nnl *NagNetworkListApi) GetListItemFileChunk(ctx context.Context, params NetworkListParams) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, nil
 	}
 
-	request, err := http.NewRequest("POST", nnla.client.Server+"/api/v1.0/NagNetworkListApi.GetListItemFileChunk", bytes.NewBuffer(postData))
+	request, err := http.NewRequest("POST", nnl.client.Server+"/api/v1.0/NagNetworkListApi.GetListItemFileChunk", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := nnla.client.Do(ctx, request, nil)
+	raw, err := nnl.client.Do(ctx, request, nil)
 	return raw, err
 }

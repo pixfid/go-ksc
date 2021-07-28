@@ -34,15 +34,15 @@ import (
 // HostTagsApi service allows to acquire and manage tags for hosts. It is additional service for common ListTags.
 type HostTagsApi service
 
-//HostTagsParams using in
+// HostTagsParams using in
 type HostTagsParams struct {
-	//SzwHostID host identifier ( guid )
+	// SzwHostID host identifier ( guid )
 	SzwHostID string `json:"szwHostId"`
-	//PParams reserved.
+	// PParams reserved.
 	PParams Null `json:"pParams"`
 }
 
-//HostTags struct using in HostTagsApi.GetHostTags
+// HostTags struct using in HostTagsApi.GetHostTags
 type HostTags struct {
 	HTags []HTags `json:"PxgRetVal"`
 }

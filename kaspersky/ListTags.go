@@ -31,13 +31,18 @@ import (
 	"net/http"
 )
 
-// ListTags Interface allows to acquire and manage tags to various KSC objects.
+// ListTags Service allows to acquire and manage tags to various KSC objects.
 //
-// To manage tags for the list with name "ListName" it is needed to create this Interface with instance "ListName"
-// Examples of list names: "HostsTags", "InventoryTags", "UmdmDeviceTags"
+// Homogeneous objects, i.e. objects of the same type, can be considered as a list.
+// To work with such list, it is convenient to be able to associate string values called tags with list items.
+// The tags for each list are completely independent of each other.
+//
+// Each instance of the ListTags interface is associated with a specific list.
+// It is needed to specify ListTagID as Instance (see Request Format of the request)
+// The set of possible ListTagIDs is described in The set of lists that support tags
 type ListTags service
 
-// GetAllTags Get all existing tag values. Retrieves all known tag values that can be set for a list item
+// GetAllTags Retrieves all known tag values that can be set for a list item
 func (lt *ListTags) GetAllTags(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -59,7 +64,7 @@ type NewTagParams struct {
 	PParams     Null   `json:"pParams,omitempty"`
 }
 
-// AddTag Add a new tag. Allows to add a new tag value that can be set for a list item
+// AddTag Allows to add a new tag value that can be set for a list item
 func (lt *ListTags) AddTag(ctx context.Context, params NewTagParams) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -75,7 +80,7 @@ func (lt *ListTags) AddTag(ctx context.Context, params NewTagParams) ([]byte, er
 	return raw, err
 }
 
-// DeleteTags2 Delete tags. Allows to delete multiple tag values in one method call
+// DeleteTags2 Allows to delete multiple tag values in one method call
 func (lt *ListTags) DeleteTags2(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -91,7 +96,7 @@ func (lt *ListTags) DeleteTags2(ctx context.Context, params interface{}) ([]byte
 	return raw, err
 }
 
-// GetTags Get tag values for specified list items. Retrieves tag values for specified list items
+// GetTags Retrieves tag values for specified list items
 func (lt *ListTags) GetTags(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -107,7 +112,7 @@ func (lt *ListTags) GetTags(ctx context.Context, params interface{}) ([]byte, er
 	return raw, err
 }
 
-// RenameTag Rename a tag. Allows to rename tag.
+// RenameTag Allows to rename tag.
 // If szwOldTagValue is assigned to some objects then szwNewTagValue will be also assigned to these objects.
 // So RenameTag is not equivalent to deleting szwOldTagValue and adding szwNewTagValue
 func (lt *ListTags) RenameTag(ctx context.Context, params interface{}) ([]byte, error) {
@@ -125,7 +130,7 @@ func (lt *ListTags) RenameTag(ctx context.Context, params interface{}) ([]byte, 
 	return raw, err
 }
 
-// SetTags Set tag values for specified list items. Assign tag values for specified list items
+// SetTags Assign tag values for specified list items
 func (lt *ListTags) SetTags(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

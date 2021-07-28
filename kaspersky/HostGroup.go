@@ -29,6 +29,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -89,8 +90,26 @@ func (hg *HostGroup) AddGroupHostsForSync(ctx context.Context, nGroupId int64, s
 	return wActionGUID, raw, err
 }
 
+type NewHost struct {
+	PInfo struct {
+		Type  string `json:"type"`
+		Value struct {
+			KLHSTWKSDN          string `json:"KLHST_WKS_DN"`
+			KLHSTWKSGROUPID     int    `json:"KLHST_WKS_GROUPID"`
+			KLHSTWKSWINDOMAIN   string `json:"KLHST_WKS_WINDOMAIN"`
+			KLHSTWKSWINHOSTNAME string `json:"KLHST_WKS_WINHOSTNAME"`
+			KLHSTWKSDNSDOMAIN   string `json:"KLHST_WKS_DNSDOMAIN"`
+			KLHSTWKSDNSNAME     string `json:"KLHST_WKS_DNSNAME"`
+			KLHSTWKSIP          struct {
+				Type  string `json:"type"`
+				Value int    `json:"value"`
+			} `json:"KLHST_WKS_IP"`
+		} `json:"value"`
+	} `json:"pInfo"`
+}
+
 // AddHost Create new host record.
-func (hg *HostGroup) AddHost(ctx context.Context, params interface{}) (*PxgValStr, []byte, error) {
+func (hg *HostGroup) AddHost(ctx context.Context, params NewHost) (*PxgValStr, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, nil, err
@@ -651,10 +670,118 @@ type InstanceStatisticsParams struct {
 	VecFilterFields []string `json:"vecFilterFields"`
 }
 
+type ServerInstanceStatistics struct {
+	PxgRetVal struct {
+		KLASYNCACTCOUNTERS struct {
+			Type  string `json:"type"`
+			Value struct {
+				KLASYNCACTACTIONCOUNT              int `json:"KLASYNCACT_ACTION_COUNT"`
+				KLASYNCACTCHECKLIMITVIOLATIONCOUNT int `json:"KLASYNCACT_CHECK_LIMIT_VIOLATION_COUNT"`
+				KLASYNCACTCONNECTIONCOUNT          int `json:"KLASYNCACT_CONNECTION_COUNT"`
+				KLASYNCACTDURATIONMSEC             struct {
+					Type  string `json:"type"`
+					Value int    `json:"value"`
+				} `json:"KLASYNCACT_DURATION_MSEC"`
+				KLASYNCACTFINALIZEDACTIONCOUNT          int `json:"KLASYNCACT_FINALIZED_ACTION_COUNT"`
+				KLASYNCACTFINALIZEDACTIONVIOLATIONCOUNT int `json:"KLASYNCACT_FINALIZED_ACTION_VIOLATION_COUNT"`
+			} `json:"value"`
+		} `json:"KLASYNCACT_COUNTERS"`
+		KLFTSSTGETCHUNKREQUESTSREJECTED struct {
+			Type  string `json:"type"`
+			Value int    `json:"value"`
+		} `json:"KLFTS_ST_GET_CHUNK_REQUESTS_REJECTED"`
+		KLFTSSTGETCHUNKREQUESTSTOTAL struct {
+			Type  string `json:"type"`
+			Value int    `json:"value"`
+		} `json:"KLFTS_ST_GET_CHUNK_REQUESTS_TOTAL"`
+		KLFTSSTTRANSMITTEDSIZE struct {
+			Type  string `json:"type"`
+			Value int    `json:"value"`
+		} `json:"KLFTS_ST_TRANSMITTED_SIZE"`
+		KLSRVSTADSCANPERCENT int `json:"KLSRV_ST_AD_SCAN_PERCENT"`
+		KLSRVSTALLCONSCNT    int `json:"KLSRV_ST_ALL_CONS_CNT"`
+		KLSRVSTCONEVENTS     struct {
+			Type  string `json:"type"`
+			Value struct {
+				KLSRVSTCONEVLOSTEVENTSCOUNT  int `json:"KLSRV_ST_CON_EV_LOST_EVENTS_COUNT"`
+				KLSRVSTCONEVSESSIONCOUNT     int `json:"KLSRV_ST_CON_EV_SESSION_COUNT"`
+				KLSRVSTCONEVSUBSCOUNT        int `json:"KLSRV_ST_CON_EV_SUBS_COUNT"`
+				KLSRVSTCONEVUNAVAILRETRCOUNT int `json:"KLSRV_ST_CON_EV_UNAVAIL_RETR_COUNT"`
+				KLSRVSTCONEVUNSUBSRETRCOUNT  int `json:"KLSRV_ST_CON_EV_UNSUBS_RETR_COUNT"`
+			} `json:"value"`
+		} `json:"KLSRV_ST_CON_EVENTS"`
+		KLSRVSTCPUKERNEL struct {
+			Type  string  `json:"type"`
+			Value float64 `json:"value"`
+		} `json:"KLSRV_ST_CPU_KERNEL"`
+		KLSRVSTCPUUSER struct {
+			Type  string  `json:"type"`
+			Value float64 `json:"value"`
+		} `json:"KLSRV_ST_CPU_USER"`
+		KLSRVSTCTLNGTCONSCNT         int `json:"KLSRV_ST_CTLNGT_CONS_CNT"`
+		KLSRVSTDPNSSCANPERCENT       int `json:"KLSRV_ST_DPNS_SCAN_PERCENT"`
+		KLSRVSTEVENTBULKSCNT         int `json:"KLSRV_ST_EVENTBULKS_CNT"`
+		KLSRVSTEVENTBULKSERRORCNT    int `json:"KLSRV_ST_EVENTBULKS_ERROR_CNT"`
+		KLSRVSTEVENTBULKSJNCNT       int `json:"KLSRV_ST_EVENTBULKS_JN_CNT"`
+		KLSRVSTEVENTBULKSREJECTEDCNT int `json:"KLSRV_ST_EVENTBULKS_REJECTED_CNT"`
+		KLSRVSTEVENTSCNT             int `json:"KLSRV_ST_EVENTS_CNT"`
+		KLSRVSTEVENTSERRORCNT        int `json:"KLSRV_ST_EVENTS_ERROR_CNT"`
+		KLSRVSTEVENTSJNCNT           int `json:"KLSRV_ST_EVENTS_JN_CNT"`
+		KLSRVSTEVENTSREJECTEDCNT     int `json:"KLSRV_ST_EVENTS_REJECTED_CNT"`
+		KLSRVSTFULLSCANPERCENT       int `json:"KLSRV_ST_FULL_SCAN_PERCENT"`
+		KLSRVSTGUICALLSCNT           int `json:"KLSRV_ST_GUI_CALLS_CNT"`
+		KLSRVSTLASTADSCANTIME        struct {
+			Type  string `json:"type"`
+			Value string `json:"value"`
+		} `json:"KLSRV_ST_LAST_ADSCAN_TIME"`
+		KLSRVSTLASTDPNSSCANTIME struct {
+			Type  string `json:"type"`
+			Value string `json:"value"`
+		} `json:"KLSRV_ST_LAST_DPNSSCAN_TIME"`
+		KLSRVSTLASTFASTNETSCANTIME struct {
+			Type  string `json:"type"`
+			Value string `json:"value"`
+		} `json:"KLSRV_ST_LAST_FASTNETSCAN_TIME"`
+		KLSRVSTLASTFULLNETSCANTIME struct {
+			Type  string `json:"type"`
+			Value string `json:"value"`
+		} `json:"KLSRV_ST_LAST_FULLNETSCAN_TIME"`
+		KLSRVSTNAGCONSCNT           int    `json:"KLSRV_ST_NAG_CONS_CNT"`
+		KLSRVSTNETWORKDOMAINSCANNED string `json:"KLSRV_ST_NETWORK_DOMAIN_SCANNED"`
+		KLSRVSTNETWORKSCANNED       bool   `json:"KLSRV_ST_NETWORK_SCANNED"`
+		KLSRVSTNETWORKSCANPERCENT   int    `json:"KLSRV_ST_NETWORK_SCAN_PERCENT"`
+		KLSRVSTPINGCNT              int    `json:"KLSRV_ST_PING_CNT"`
+		KLSRVSTPINGERRORCNT         int    `json:"KLSRV_ST_PING_ERROR_CNT"`
+		KLSRVSTPINGJNCNT            int    `json:"KLSRV_ST_PING_JN_CNT"`
+		KLSRVSTPINGREJECTEDCNT      int    `json:"KLSRV_ST_PING_REJECTED_CNT"`
+		KLSRVSTSYNCCNT              int    `json:"KLSRV_ST_SYNC_CNT"`
+		KLSRVSTSYNCJNCNT            int    `json:"KLSRV_ST_SYNC_JN_CNT"`
+		KLSRVSTSYNCQUEUESIZE        int    `json:"KLSRV_ST_SYNC_QUEUE_SIZE"`
+		KLSRVSTSYNCREALCNT          int    `json:"KLSRV_ST_SYNC_REAL_CNT"`
+		KLSRVSTSYNCSUCCNT           int    `json:"KLSRV_ST_SYNC_SUC_CNT"`
+		KLTRSTACCEPTSFAILED         struct {
+			Type  string `json:"type"`
+			Value int    `json:"value"`
+		} `json:"KLTR_ST_ACCEPTS_FAILED"`
+		KLTRSTACCEPTSTOTAL struct {
+			Type  string `json:"type"`
+			Value int    `json:"value"`
+		} `json:"KLTR_ST_ACCEPTS_TOTAL"`
+		KLTRSTRECEIVEDBYTES struct {
+			Type  string `json:"type"`
+			Value int    `json:"value"`
+		} `json:"KLTR_ST_RECEIVED_BYTES"`
+		KLTRSTSENTBYTES struct {
+			Type  string `json:"type"`
+			Value int    `json:"value"`
+		} `json:"KLTR_ST_SENT_BYTES"`
+	} `json:"PxgRetVal"`
+}
+
 // GetInstanceStatistics Acquire Server statistics info.
 //
 // Remark: not working on KSC 10
-func (hg *HostGroup) GetInstanceStatistics(ctx context.Context, params InstanceStatisticsParams) ([]byte, error) {
+func (hg *HostGroup) GetInstanceStatistics(ctx context.Context, params InstanceStatisticsParams) (*ServerInstanceStatistics, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
@@ -665,8 +792,14 @@ func (hg *HostGroup) GetInstanceStatistics(ctx context.Context, params InstanceS
 		return nil, err
 	}
 
-	raw, err := hg.client.Do(ctx, request, nil)
-	return raw, err
+	result := new(ServerInstanceStatistics)
+	raw, err := hg.client.Do(ctx, request, &result)
+
+	if hg.client.Debug {
+		log.Printf("raw response: %s", string(raw))
+	}
+
+	return result, err
 }
 
 // StaticInfoParams struct
@@ -690,8 +823,40 @@ func (hg *HostGroup) GetRunTimeInfo(ctx context.Context, params StaticInfoParams
 	return raw, err
 }
 
+type ServerStaticInfo struct {
+	PxgRetVal struct {
+		KLADMSRVB2BCLOUDMODE bool `json:"KLADMSRV_B2B_CLOUD_MODE"`
+		KLADMSRVEVEVSIZE     struct {
+			Type  string  `json:"type"`
+			Value float64 `json:"value"`
+		} `json:"KLADMSRV_EV_EV_SIZE"`
+		KLADMSRVFORCESYNCSUPPORTED   bool   `json:"KLADMSRV_FORCE_SYNC_SUPPORTED"`
+		KLADMSRVGRPROOT              int    `json:"KLADMSRV_GRP_ROOT"`
+		KLADMSRVGRPSUPER             int    `json:"KLADMSRV_GRP_SUPER"`
+		KLADMSRVGRPUNASSIGNED        int    `json:"KLADMSRV_GRP_UNASSIGNED"`
+		KLADMSRVHOSTEDTYPE           int    `json:"KLADMSRV_HOSTED_TYPE"`
+		KLADMSRVISVIRTUAL            bool   `json:"KLADMSRV_IS_VIRTUAL"`
+		KLADMSRVKSCMODE              int    `json:"KLADMSRV_KSC_MODE"`
+		KLADMSRVLINUXEDITION         bool   `json:"KLADMSRV_LINUX_EDITION"`
+		KLADMSRVMAINTENANCESUPPORTED bool   `json:"KLADMSRV_MAINTENANCE_SUPPORTED"`
+		KLADMSRVNAGENTRUNNING        bool   `json:"KLADMSRV_NAGENT_RUNNING"`
+		KLADMSRVNEEDUNCPATH          bool   `json:"KLADMSRV_NEED_UNC_PATH"`
+		KLADMSRVPCLOUDMODE           bool   `json:"KLADMSRV_PCLOUD_MODE"`
+		KLADMSRVPRODUCTFULLVERSION   string `json:"KLADMSRV_PRODUCT_FULL_VERSION"`
+		KLADMSRVPRODUCTNAME          string `json:"KLADMSRV_PRODUCT_NAME"`
+		KLADMSRVPRODUCTVERSION       string `json:"KLADMSRV_PRODUCT_VERSION"`
+		KLADMSRVSERVERHOSTNAME       string `json:"KLADMSRV_SERVER_HOSTNAME"`
+		KLADMSRVSERVERVERSIONID      int    `json:"KLADMSRV_SERVER_VERSION_ID"`
+		KLADMSRVSPLPPCENABLED        bool   `json:"KLADMSRV_SPL_PPC_ENABLED"`
+		KLADMSRVUSERID               int    `json:"KLADMSRV_USERID"`
+		KLADMSRVVSID                 int    `json:"KLADMSRV_VSID"`
+		KLADMSRVVSUID                string `json:"KLADMSRV_VSUID"`
+		KLSRVNETSIZE                 int    `json:"KLSRV_NETSIZE"`
+	} `json:"PxgRetVal"`
+}
+
 // GetStaticInfo Return server static info.
-func (hg *HostGroup) GetStaticInfo(ctx context.Context, params StaticInfoParams) ([]byte, error) {
+func (hg *HostGroup) GetStaticInfo(ctx context.Context, params StaticInfoParams) (*ServerStaticInfo, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
@@ -702,8 +867,14 @@ func (hg *HostGroup) GetStaticInfo(ctx context.Context, params StaticInfoParams)
 		return nil, err
 	}
 
-	raw, err := hg.client.Do(ctx, request, nil)
-	return raw, err
+	result := new(ServerStaticInfo)
+	raw, err := hg.client.Do(ctx, request, &result)
+
+	if hg.client.Debug {
+		log.Printf("raw response: %s", string(raw))
+	}
+
+	return result, err
 }
 
 // SubGroups struct
