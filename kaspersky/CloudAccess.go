@@ -85,7 +85,7 @@ func (ca *CloudAccess) VerifyCredentials(ctx context.Context, params Credentials
 	}
 
 	pxgValBool := new(PxgValBool)
-	raw, err := ca.client.Do(ctx, request, &pxgValBool)
+	raw, err := ca.client.Request(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
 }
 
@@ -111,6 +111,6 @@ func (ca *CloudAccess) AcquireAccessForKeyPair(ctx context.Context, params Crede
 	}
 
 	keyPairAccess := new(KeyPairAccess)
-	raw, err := ca.client.Do(ctx, request, &keyPairAccess)
+	raw, err := ca.client.Request(ctx, request, &keyPairAccess)
 	return keyPairAccess, raw, err
 }

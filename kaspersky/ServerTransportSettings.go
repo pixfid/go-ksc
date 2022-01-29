@@ -45,7 +45,7 @@ func (sts *ServerTransportSettings) GetNumberOfManagedDevicesAgentless(ctx conte
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := sts.client.Do(ctx, request, &pxgValInt)
+	raw, err := sts.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -59,7 +59,7 @@ func (sts *ServerTransportSettings) GetNumberOfManagedDevicesKSM(ctx context.Con
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := sts.client.Do(ctx, request, &pxgValInt)
+	raw, err := sts.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -72,7 +72,7 @@ func (sts *ServerTransportSettings) IsFeatureActive(ctx context.Context, szwCert
 	}
 
 	pxgValBool := new(PxgValBool)
-	raw, err := sts.client.Do(ctx, request, &pxgValBool)
+	raw, err := sts.client.Request(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
 }
 
@@ -85,7 +85,7 @@ func (sts *ServerTransportSettings) SetFeatureActive(ctx context.Context, szwCer
 	}
 
 	pxgValBool := new(PxgValBool)
-	raw, err := sts.client.Do(ctx, request, &pxgValBool)
+	raw, err := sts.client.Request(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
 }
 
@@ -98,7 +98,7 @@ func (sts *ServerTransportSettings) CheckDefaultCertificateExists(ctx context.Co
 	}
 
 	pxgValBool := new(PxgValBool)
-	raw, err := sts.client.Do(ctx, request, &pxgValBool)
+	raw, err := sts.client.Request(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
 }
 
@@ -140,7 +140,7 @@ func (sts *ServerTransportSettings) GetCurrentConnectionSettings(ctx context.Con
 	}
 
 	cCSettings := new(CurrentConnectionSettings)
-	raw, err := sts.client.Do(ctx, request, &cCSettings)
+	raw, err := sts.client.Request(ctx, request, &cCSettings)
 	return cCSettings, raw, err
 }
 
@@ -152,7 +152,7 @@ func (sts *ServerTransportSettings) GetCustomSrvCertificateInfo(ctx context.Cont
 		return nil, err
 	}
 
-	raw, err := sts.client.Do(ctx, request, nil)
+	raw, err := sts.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -165,7 +165,7 @@ func (sts *ServerTransportSettings) GetDefaultConnectionSettings(ctx context.Con
 	}
 
 	cCSettings := new(CurrentConnectionSettings)
-	raw, err := sts.client.Do(ctx, request, &cCSettings)
+	raw, err := sts.client.Request(ctx, request, &cCSettings)
 	return cCSettings, raw, err
 }
 
@@ -177,7 +177,7 @@ func (sts *ServerTransportSettings) ResetCstmReserveCertificate(ctx context.Cont
 		return nil, err
 	}
 
-	raw, err := sts.client.Do(ctx, request, nil)
+	raw, err := sts.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -189,7 +189,7 @@ func (sts *ServerTransportSettings) ResetDefaultReserveCertificate(ctx context.C
 		return nil, err
 	}
 
-	raw, err := sts.client.Do(ctx, request, nil)
+	raw, err := sts.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -206,7 +206,7 @@ func (sts *ServerTransportSettings) SetOrCreateDefaultCertificate(ctx context.Co
 		return nil, err
 	}
 
-	raw, err := sts.client.Do(ctx, request, nil)
+	raw, err := sts.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -223,6 +223,6 @@ func (sts *ServerTransportSettings) SetCustomSrvCertificate(ctx context.Context,
 		return nil, err
 	}
 
-	raw, err := sts.client.Do(ctx, request, nil)
+	raw, err := sts.client.Request(ctx, request, nil)
 	return raw, err
 }

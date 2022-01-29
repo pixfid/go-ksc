@@ -55,7 +55,7 @@ func (tr *TotpRegistration) GenerateSecret(ctx context.Context) (*TotpSecretData
 	}
 
 	totpSecretData := new(TotpSecretData)
-	raw, err := tr.client.Do(ctx, request, &totpSecretData)
+	raw, err := tr.client.Request(ctx, request, &totpSecretData)
 
 	if tr.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -72,7 +72,7 @@ func (tr *TotpRegistration) IfCurrentUserMayClearSecret(ctx context.Context) (*P
 	}
 
 	result := new(PxgValBool)
-	raw, err := tr.client.Do(ctx, request, &result)
+	raw, err := tr.client.Request(ctx, request, &result)
 
 	if tr.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -95,7 +95,7 @@ func (tr *TotpRegistration) SaveSecretForCurrentUser(ctx context.Context, wstrSe
 		return err
 	}
 
-	raw, err := tr.client.Do(ctx, request, nil)
+	raw, err := tr.client.Request(ctx, request, nil)
 
 	if tr.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -115,7 +115,7 @@ func (tr *TotpRegistration) DeleteSecret(ctx context.Context, wstrSecretId strin
 		return err
 	}
 
-	raw, err := tr.client.Do(ctx, request, nil)
+	raw, err := tr.client.Request(ctx, request, nil)
 
 	if tr.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -134,7 +134,7 @@ func (tr *TotpRegistration) ClearSecretForCurrentUser(ctx context.Context) (*Pxg
 	}
 
 	result := new(PxgValBool)
-	raw, err := tr.client.Do(ctx, request, &result)
+	raw, err := tr.client.Request(ctx, request, &result)
 
 	if tr.client.Debug {
 		log.Printf("raw response: %s", string(raw))

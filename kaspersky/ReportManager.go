@@ -46,7 +46,7 @@ func (rm *ReportManager) EnumReportTypes(ctx context.Context) ([]byte, error) {
 		return nil, err
 	}
 
-	raw, err := rm.client.Do(ctx, request, nil)
+	raw, err := rm.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -59,7 +59,7 @@ func (rm *ReportManager) EnumReports(ctx context.Context) ([]byte, error) {
 		return nil, err
 	}
 
-	raw, err := rm.client.Do(ctx, request, nil)
+	raw, err := rm.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -71,7 +71,7 @@ func (rm *ReportManager) GetAvailableDashboards(ctx context.Context) (*PxgValArr
 	}
 
 	reportsArray := new(PxgValArrayOfInt)
-	raw, err := rm.client.Do(ctx, request, &reportsArray)
+	raw, err := rm.client.Request(ctx, request, &reportsArray)
 	return reportsArray, raw, err
 }
 
@@ -87,7 +87,7 @@ func (rm *ReportManager) GetConstantOutputForReportType(ctx context.Context, lRe
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := rm.client.Do(ctx, request, &pxgValStr)
+	raw, err := rm.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -101,7 +101,7 @@ func (rm *ReportManager) GetDefaultReportInfo(ctx context.Context, lReportType i
 		return nil, err
 	}
 
-	raw, err := rm.client.Do(ctx, request, nil)
+	raw, err := rm.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -113,7 +113,7 @@ func (rm *ReportManager) GetFilterSettings(ctx context.Context, lReportType int6
 		return nil, err
 	}
 
-	raw, err := rm.client.Do(ctx, request, nil)
+	raw, err := rm.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -127,7 +127,7 @@ func (rm *ReportManager) GetReportCommonData(ctx context.Context, lReportId int6
 		return nil, err
 	}
 
-	raw, err := rm.client.Do(ctx, request, nil)
+	raw, err := rm.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -141,7 +141,7 @@ func (rm *ReportManager) GetReportIds(ctx context.Context) (*PxgValArrayOfInt, [
 	}
 
 	reportsIdsArray := new(PxgValArrayOfInt)
-	raw, err := rm.client.Do(ctx, request, &reportsIdsArray)
+	raw, err := rm.client.Request(ctx, request, &reportsIdsArray)
 	return reportsIdsArray, raw, err
 }
 
@@ -155,7 +155,7 @@ func (rm *ReportManager) GetReportInfo(ctx context.Context, lReportId int64) ([]
 		return nil, err
 	}
 
-	raw, err := rm.client.Do(ctx, request, nil)
+	raw, err := rm.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -169,7 +169,7 @@ func (rm *ReportManager) GetReportTypeDetailedInfo(ctx context.Context, lReportT
 		return nil, err
 	}
 
-	raw, err := rm.client.Do(ctx, request, nil)
+	raw, err := rm.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -182,7 +182,7 @@ func (rm *ReportManager) GetStatisticsData(ctx context.Context, strRequestId str
 		return nil, err
 	}
 
-	raw, err := rm.client.Do(ctx, request, nil)
+	raw, err := rm.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -194,7 +194,7 @@ func (rm *ReportManager) RemoveReport(ctx context.Context, lReportId int64) ([]b
 		return nil, err
 	}
 
-	raw, err := rm.client.Do(ctx, request, nil)
+	raw, err := rm.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -213,7 +213,7 @@ func (rm *ReportManager) RequestStatisticsData(ctx context.Context, params inter
 	}
 
 	requestID := new(RequestID)
-	raw, err := rm.client.Do(ctx, request, &requestID)
+	raw, err := rm.client.Request(ctx, request, &requestID)
 	return requestID, raw, err
 }
 
@@ -328,7 +328,7 @@ func (rm *ReportManager) ExecuteReportAsync(ctx context.Context, params ExecuteR
 	}
 
 	requestID := new(RequestID)
-	raw, err := rm.client.Do(ctx, request, &requestID)
+	raw, err := rm.client.Request(ctx, request, &requestID)
 	return requestID, raw, err
 }
 
@@ -340,7 +340,7 @@ func (rm *ReportManager) CancelStatisticsRequest(ctx context.Context, strRequest
 		return nil, err
 	}
 
-	raw, err := rm.client.Do(ctx, request, nil)
+	raw, err := rm.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -352,7 +352,7 @@ func (rm *ReportManager) ExecuteReportAsyncCancel(ctx context.Context, strReques
 		return nil, err
 	}
 
-	raw, err := rm.client.Do(ctx, request, nil)
+	raw, err := rm.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -394,7 +394,7 @@ func (rm *ReportManager) ExecuteReportAsyncGetData(ctx context.Context, strReque
 	}
 
 	reportData := new(ReportData)
-	raw, err := rm.client.Do(ctx, request, &reportData)
+	raw, err := rm.client.Request(ctx, request, &reportData)
 	return reportData, raw, err
 }
 
@@ -411,7 +411,7 @@ func (rm *ReportManager) ExecuteReportAsyncCancelWaitingForSlaves(ctx context.Co
 		return nil, err
 	}
 
-	raw, err := rm.client.Do(ctx, request, nil)
+	raw, err := rm.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -440,7 +440,7 @@ func (rm *ReportManager) CreateChartPNG(ctx context.Context, params ChartDataPar
 	}
 
 	pPngData := new(PPngData)
-	raw, err := rm.client.Do(ctx, request, &pPngData)
+	raw, err := rm.client.Request(ctx, request, &pPngData)
 	return pPngData, raw, err
 }
 
@@ -460,7 +460,7 @@ func (rm *ReportManager) ResetStatisticsData(ctx context.Context, params interfa
 	}
 
 	requestID := new(RequestID)
-	raw, err := rm.client.Do(ctx, request, &requestID)
+	raw, err := rm.client.Request(ctx, request, &requestID)
 	return requestID, raw, err
 }
 
@@ -477,7 +477,7 @@ func (rm *ReportManager) AddReport(ctx context.Context, params interface{}) (*Px
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := rm.client.Do(ctx, request, &pxgValInt)
+	raw, err := rm.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -493,6 +493,6 @@ func (rm *ReportManager) UpdateReport(ctx context.Context, params interface{}) (
 		return nil, err
 	}
 
-	raw, err := rm.client.Do(ctx, request, nil)
+	raw, err := rm.client.Request(ctx, request, nil)
 	return raw, err
 }

@@ -50,7 +50,7 @@ func (qs *QueriesStorage) AddQuery(ctx context.Context, params interface{}) ([]b
 		return nil, err
 	}
 
-	raw, err := qs.client.Do(ctx, request, nil)
+	raw, err := qs.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -64,7 +64,7 @@ func (qs *QueriesStorage) DeleteQuery(ctx context.Context, nId int64) ([]byte, e
 		return nil, err
 	}
 
-	raw, err := qs.client.Do(ctx, request, nil)
+	raw, err := qs.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -79,7 +79,7 @@ func (qs *QueriesStorage) GetQueries(ctx context.Context, eType int64) ([]byte, 
 		return nil, err
 	}
 
-	raw, err := qs.client.Do(ctx, request, nil)
+	raw, err := qs.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -130,7 +130,7 @@ func (qs *QueriesStorage) GetQuery(ctx context.Context, nId int64) (*QueryParams
 	}
 
 	queryParams := new(QueryParams)
-	raw, err := qs.client.Do(ctx, request, &queryParams)
+	raw, err := qs.client.Request(ctx, request, &queryParams)
 	return queryParams, raw, err
 }
 
@@ -144,7 +144,7 @@ func (qs *QueriesStorage) GetQueryIds(ctx context.Context, eType int64) ([]byte,
 		return nil, err
 	}
 
-	raw, err := qs.client.Do(ctx, request, nil)
+	raw, err := qs.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -163,6 +163,6 @@ func (qs *QueriesStorage) UpdateQuery(ctx context.Context, params interface{}) (
 		return nil, err
 	}
 
-	raw, err := qs.client.Do(ctx, request, nil)
+	raw, err := qs.client.Request(ctx, request, nil)
 	return raw, err
 }

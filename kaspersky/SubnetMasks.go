@@ -89,7 +89,7 @@ func (sm *SubnetMasks) CreateSubnet(ctx context.Context, params PSubnetSettings)
 		return nil, err
 	}
 
-	raw, err := sm.client.Do(ctx, request, nil)
+	raw, err := sm.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -102,7 +102,7 @@ func (sm *SubnetMasks) DeleteSubnet(ctx context.Context, nIpAddress, nMask int64
 		log.Fatal(err.Error())
 	}
 
-	raw, err := sm.client.Do(ctx, request, nil)
+	raw, err := sm.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -118,6 +118,6 @@ func (sm *SubnetMasks) ModifySubnet(ctx context.Context, params PSubnetUpdateSet
 		return nil, err
 	}
 
-	raw, err := sm.client.Do(ctx, request, nil)
+	raw, err := sm.client.Request(ctx, request, nil)
 	return raw, err
 }

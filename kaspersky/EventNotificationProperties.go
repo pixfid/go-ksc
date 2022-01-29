@@ -175,7 +175,7 @@ func (enp *EventNotificationProperties) GetDefaultSettings(ctx context.Context) 
 	}
 
 	defaultSettings := new(DefaultSettings)
-	raw, err := enp.client.Do(ctx, request, &defaultSettings)
+	raw, err := enp.client.Request(ctx, request, &defaultSettings)
 	return defaultSettings, raw, err
 }
 
@@ -209,7 +209,7 @@ func (enp *EventNotificationProperties) GetNotificationLimits(ctx context.Contex
 	}
 
 	enLimits := new(ENLimits)
-	raw, err := enp.client.Do(ctx, request, &enLimits)
+	raw, err := enp.client.Request(ctx, request, &enLimits)
 	return enLimits, raw, err
 }
 
@@ -223,7 +223,7 @@ func (enp *EventNotificationProperties) TestNotification(ctx context.Context, eT
 		return nil, err
 	}
 
-	raw, err := enp.client.Do(ctx, request, nil)
+	raw, err := enp.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -239,7 +239,7 @@ func (enp *EventNotificationProperties) SetNotificationLimits(ctx context.Contex
 		return nil, err
 	}
 
-	raw, err := enp.client.Do(ctx, request, nil)
+	raw, err := enp.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -256,6 +256,6 @@ func (enp *EventNotificationProperties) SetDefaultSettings(ctx context.Context, 
 		return nil, err
 	}
 
-	raw, err := enp.client.Do(ctx, request, nil)
+	raw, err := enp.client.Request(ctx, request, nil)
 	return raw, err
 }

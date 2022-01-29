@@ -44,7 +44,7 @@ func (sd *KsnInternal) CheckKsnConnection(ctx context.Context) (*PxgValBool, []b
 	}
 
 	pxgValBool := new(PxgValBool)
-	raw, err := sd.client.Do(ctx, request, &pxgValBool)
+	raw, err := sd.client.Request(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
 }
 
@@ -55,7 +55,7 @@ func (sd *KsnInternal) GetNKsnEulas(ctx context.Context) ([]byte, error) {
 		return nil, err
 	}
 
-	raw, err := sd.client.Do(ctx, request, nil)
+	raw, err := sd.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -81,7 +81,7 @@ func (sd *KsnInternal) GetSettings(ctx context.Context) (*KsnSettings, []byte, e
 	}
 
 	ksnSettings := new(KsnSettings)
-	raw, err := sd.client.Do(ctx, request, &ksnSettings)
+	raw, err := sd.client.Request(ctx, request, &ksnSettings)
 	return ksnSettings, raw, err
 }
 
@@ -93,7 +93,7 @@ func (sd *KsnInternal) NeedToSendStatistics(ctx context.Context) (*PxgValBool, [
 	}
 
 	pxgValBool := new(PxgValBool)
-	raw, err := sd.client.Do(ctx, request, &pxgValBool)
+	raw, err := sd.client.Request(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
 }
 
@@ -105,6 +105,6 @@ func (sd *KsnInternal) GetNKsnEula(ctx context.Context, wstrNKsnLoc string) ([]b
 		return nil, err
 	}
 
-	raw, err := sd.client.Do(ctx, request, nil)
+	raw, err := sd.client.Request(ctx, request, nil)
 	return raw, err
 }

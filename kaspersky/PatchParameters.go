@@ -43,7 +43,7 @@ func (pp *PatchParameters) GetTemplate(ctx context.Context, patchID, locID int64
 		return nil, err
 	}
 
-	raw, err := pp.client.Do(ctx, request, nil)
+	raw, err := pp.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -55,7 +55,7 @@ func (pp *PatchParameters) GetValues(ctx context.Context, patchID, locID int64) 
 		return nil, err
 	}
 
-	raw, err := pp.client.Do(ctx, request, nil)
+	raw, err := pp.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -67,7 +67,7 @@ func (pp *PatchParameters) GetValuesByPkg(ctx context.Context, packageId int64) 
 		return nil, err
 	}
 
-	raw, err := pp.client.Do(ctx, request, nil)
+	raw, err := pp.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -79,7 +79,7 @@ func (pp *PatchParameters) SetValues(ctx context.Context, params interface{}) ([
 		return nil, err
 	}
 
-	raw, err := pp.client.Do(ctx, request, nil)
+	raw, err := pp.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -91,6 +91,6 @@ func (pp *PatchParameters) SetValuesByPkg(ctx context.Context, params interface{
 		return nil, err
 	}
 
-	raw, err := pp.client.Do(ctx, request, nil)
+	raw, err := pp.client.Request(ctx, request, nil)
 	return raw, err
 }

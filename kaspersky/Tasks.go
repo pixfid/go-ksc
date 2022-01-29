@@ -46,7 +46,7 @@ func (ts *Tasks) GetAllTasksOfHost(ctx context.Context, strDomainName, strHostNa
 	}
 
 	pxgValArrayOfString := new(PxgValArrayOfString)
-	raw, err := ts.client.Do(ctx, request, &pxgValArrayOfString)
+	raw, err := ts.client.Request(ctx, request, &pxgValArrayOfString)
 	return pxgValArrayOfString, raw, err
 }
 
@@ -80,7 +80,7 @@ func (ts *Tasks) GetTask(ctx context.Context, strTask string) (*TaskData, []byte
 	}
 
 	taskData := new(TaskData)
-	raw, err := ts.client.Do(ctx, request, &taskData)
+	raw, err := ts.client.Request(ctx, request, &taskData)
 	return taskData, raw, err
 }
 
@@ -95,7 +95,7 @@ func (ts *Tasks) GetTaskData(ctx context.Context, strTask string, tsk interface{
 		return nil, err
 	}
 
-	raw, err := ts.client.Do(ctx, request, &tsk)
+	raw, err := ts.client.Request(ctx, request, &tsk)
 	return raw, err
 }
 
@@ -108,7 +108,7 @@ func (ts *Tasks) GetTaskGroup(ctx context.Context, strTaskId string) (*PxgValInt
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := ts.client.Do(ctx, request, &pxgValInt)
+	raw, err := ts.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -139,7 +139,7 @@ func (ts *Tasks) GetTaskStatistics(ctx context.Context, strTask string) (*TaskSt
 	}
 
 	taskStatistics := new(TaskStatistics)
-	raw, err := ts.client.Do(ctx, request, &taskStatistics)
+	raw, err := ts.client.Request(ctx, request, &taskStatistics)
 	return taskStatistics, raw, err
 }
 
@@ -151,7 +151,7 @@ func (ts *Tasks) SuspendTask(ctx context.Context, strTask string) ([]byte, error
 		return nil, err
 	}
 
-	raw, err := ts.client.Do(ctx, request, nil)
+	raw, err := ts.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -163,7 +163,7 @@ func (ts *Tasks) ResumeTask(ctx context.Context, strTask string) ([]byte, error)
 		return nil, err
 	}
 
-	raw, err := ts.client.Do(ctx, request, nil)
+	raw, err := ts.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -175,7 +175,7 @@ func (ts *Tasks) RunTask(ctx context.Context, strTask string) ([]byte, error) {
 		return nil, err
 	}
 
-	raw, err := ts.client.Do(ctx, request, nil)
+	raw, err := ts.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -187,7 +187,7 @@ func (ts *Tasks) DeleteTask(ctx context.Context, strTask string) ([]byte, error)
 		return nil, err
 	}
 
-	raw, err := ts.client.Do(ctx, request, nil)
+	raw, err := ts.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -199,7 +199,7 @@ func (ts *Tasks) CancelTask(ctx context.Context, strTask string) ([]byte, error)
 		return nil, err
 	}
 
-	raw, err := ts.client.Do(ctx, request, nil)
+	raw, err := ts.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -248,7 +248,7 @@ func (ts *Tasks) GetTaskHistory(ctx context.Context, params interface{}) (*StrIt
 	}
 
 	strIteratorID := new(StrIteratorId)
-	raw, err := ts.client.Do(ctx, request, &strIteratorID)
+	raw, err := ts.client.Request(ctx, request, &strIteratorID)
 	return strIteratorID, raw, err
 }
 
@@ -260,7 +260,7 @@ func (ts *Tasks) GetTaskStartEvent(ctx context.Context, strTask string) ([]byte,
 		return nil, err
 	}
 
-	raw, err := ts.client.Do(ctx, request, nil)
+	raw, err := ts.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -272,7 +272,7 @@ func (ts *Tasks) ProtectPassword(ctx context.Context, strPassword string) ([]byt
 		return nil, err
 	}
 
-	raw, err := ts.client.Do(ctx, request, nil)
+	raw, err := ts.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -301,7 +301,7 @@ func (ts *Tasks) ResetTasksIterator(ctx context.Context, params TasksIteratorPar
 		return nil, err
 	}
 
-	raw, err := ts.client.Do(ctx, request, nil)
+	raw, err := ts.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -313,7 +313,7 @@ func (ts *Tasks) ReleaseTasksIterator(ctx context.Context, strTaskIteratorId str
 		return nil, err
 	}
 
-	raw, err := ts.client.Do(ctx, request, nil)
+	raw, err := ts.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -325,7 +325,7 @@ func (ts *Tasks) ReleaseHostStatusIterator(ctx context.Context, strHostIteratorI
 		return nil, err
 	}
 
-	raw, err := ts.client.Do(ctx, request, nil)
+	raw, err := ts.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -350,7 +350,7 @@ func (ts *Tasks) ResetHostIteratorForTaskStatus(ctx context.Context, params Host
 		return nil, err
 	}
 
-	raw, err := ts.client.Do(ctx, request, nil)
+	raw, err := ts.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -388,7 +388,7 @@ func (ts *Tasks) ResetHostIteratorForTaskStatusEx(ctx context.Context, params Ho
 	}
 
 	strHostIteratorId := new(StrHostIteratorId)
-	raw, err := ts.client.Do(ctx, request, &strHostIteratorId)
+	raw, err := ts.client.Request(ctx, request, &strHostIteratorId)
 	return strHostIteratorId, raw, err
 }
 
@@ -401,7 +401,7 @@ func (ts *Tasks) GetHostStatusRecordsCount(ctx context.Context, strHostIteratorI
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := ts.client.Do(ctx, request, &pxgValInt)
+	raw, err := ts.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -441,7 +441,7 @@ func (ts *Tasks) GetHostStatusRecordRange(ctx context.Context, strHostIteratorId
 		return nil, err
 	}
 
-	raw, err := ts.client.Do(ctx, request, nil)
+	raw, err := ts.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -453,7 +453,7 @@ func (ts *Tasks) ResolveTaskId(ctx context.Context, strPrtsTaskId string) ([]byt
 		return nil, err
 	}
 
-	raw, err := ts.client.Do(ctx, request, nil)
+	raw, err := ts.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -465,7 +465,7 @@ func (ts *Tasks) GetNextTask(ctx context.Context, strTaskIteratorId string) ([]b
 		return nil, err
 	}
 
-	raw, err := ts.client.Do(ctx, request, nil)
+	raw, err := ts.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -477,7 +477,7 @@ func (ts *Tasks) GetNextHostStatus(ctx context.Context, strTaskIteratorId string
 		return nil, err
 	}
 
-	raw, err := ts.client.Do(ctx, request, nil)
+	raw, err := ts.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -490,6 +490,6 @@ func (ts *Tasks) AddTask(ctx context.Context, params interface{}) (*PxgValInt, [
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := ts.client.Do(ctx, request, &pxgValInt)
+	raw, err := ts.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }

@@ -63,7 +63,7 @@ func (uc *UpdComps) AsyncUpdate(ctx context.Context, params UpdateParams) (*PxgV
 	}
 
 	pxgValStr := new(PxgValStr)
-	_, err = uc.client.Do(ctx, request, &pxgValStr)
+	_, err = uc.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, err
 }
 
@@ -75,7 +75,7 @@ func (uc *UpdComps) Stop(ctx context.Context, wsRequestId string, bWait bool) er
 		return err
 	}
 
-	_, err = uc.client.Do(ctx, request, nil)
+	_, err = uc.client.Request(ctx, request, nil)
 	return err
 }
 
@@ -91,6 +91,6 @@ func (uc *UpdComps) UpdateAsync(ctx context.Context, params UpdateParams) error 
 		return err
 	}
 
-	_, err = uc.client.Do(ctx, request, nil)
+	_, err = uc.client.Request(ctx, request, nil)
 	return err
 }

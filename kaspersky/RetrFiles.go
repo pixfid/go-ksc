@@ -85,6 +85,6 @@ func (rf *RetrFiles) GetInfo(ctx context.Context, params FilesRequest) (*Retrans
 	}
 
 	retranslates := new(Retranslates)
-	_, err = rf.client.Do(ctx, request, &retranslates)
+	_, err = rf.client.Request(ctx, request, &retranslates)
 	return retranslates, err
 }

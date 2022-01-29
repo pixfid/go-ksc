@@ -44,7 +44,7 @@ func (hw *HWInvStorage) AddDynColumn(ctx context.Context, wstrColName string) (*
 	}
 
 	pxgValStr := new(PxgValStr)
-	_, err = hw.client.Do(ctx, request, &pxgValStr)
+	_, err = hw.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, err
 }
 
@@ -106,7 +106,7 @@ func (hw *HWInvStorage) AddHWInvObject(ctx context.Context, params PpObj) (*PxgV
 	}
 
 	pxgValInt := new(PxgValInt)
-	_, err = hw.client.Do(ctx, request, &pxgValInt)
+	_, err = hw.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, err
 }
 
@@ -118,7 +118,7 @@ func (hw *HWInvStorage) DelDynColumn(ctx context.Context, wstrColId string) erro
 		return err
 	}
 
-	_, err = hw.client.Do(ctx, request, nil)
+	_, err = hw.client.Request(ctx, request, nil)
 	return err
 }
 
@@ -130,7 +130,7 @@ func (hw *HWInvStorage) DelHWInvObject(ctx context.Context, nObjId int64) error 
 		return err
 	}
 
-	_, err = hw.client.Do(ctx, request, nil)
+	_, err = hw.client.Request(ctx, request, nil)
 	return err
 }
 
@@ -142,7 +142,7 @@ func (hw *HWInvStorage) DelHWInvObject2(ctx context.Context, arrObjId []int64) e
 		return err
 	}
 
-	_, err = hw.client.Do(ctx, request, nil)
+	_, err = hw.client.Request(ctx, request, nil)
 	return err
 }
 
@@ -155,7 +155,7 @@ func (hw *HWInvStorage) ExportHWInvStorage2(ctx context.Context, eExportType int
 	}
 
 	pxgValStr := new(PxgValStr)
-	_, err = hw.client.Do(ctx, request, &pxgValStr)
+	_, err = hw.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, err
 }
 
@@ -167,7 +167,7 @@ func (hw *HWInvStorage) ExportHWInvStorageCancel(ctx context.Context, wstrAsyncI
 		return err
 	}
 
-	_, err = hw.client.Do(ctx, request, nil)
+	_, err = hw.client.Request(ctx, request, nil)
 	return err
 }
 
@@ -180,7 +180,7 @@ func (hw *HWInvStorage) ImportHWInvStorage2(ctx context.Context, eImportType int
 	}
 
 	pxgValStr := new(PxgValStr)
-	_, err = hw.client.Do(ctx, request, &pxgValStr)
+	_, err = hw.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, err
 }
 
@@ -197,7 +197,7 @@ func (hw *HWInvStorage) ImportHWInvStorageCancel(ctx context.Context, params Asy
 	}
 
 	pxgValStr := new(PxgValStr)
-	_, err = hw.client.Do(ctx, request, &pxgValStr)
+	_, err = hw.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, err
 }
 
@@ -221,7 +221,7 @@ func (hw *HWInvStorage) ImportHWInvStorageSetData(ctx context.Context, params St
 		return err
 	}
 
-	_, err = hw.client.Do(ctx, request, nil)
+	_, err = hw.client.Request(ctx, request, nil)
 	return err
 }
 
@@ -254,7 +254,7 @@ func (hw *HWInvStorage) EnumDynColumns(ctx context.Context) (*DynamicColumns, er
 	}
 
 	dynamicColumns := new(DynamicColumns)
-	_, err = hw.client.Do(ctx, request, &dynamicColumns)
+	_, err = hw.client.Request(ctx, request, &dynamicColumns)
 	return dynamicColumns, err
 }
 
@@ -277,7 +277,7 @@ func (hw *HWInvStorage) GetProcessingRules(ctx context.Context) (*ProcessingRule
 	}
 
 	processingRules := new(ProcessingRules)
-	_, err = hw.client.Do(ctx, request, &processingRules)
+	_, err = hw.client.Request(ctx, request, &processingRules)
 	return processingRules, err
 }
 
@@ -293,7 +293,7 @@ func (hw *HWInvStorage) SetProcessingRules(ctx context.Context, params Processin
 		return err
 	}
 
-	_, err = hw.client.Do(ctx, request, nil)
+	_, err = hw.client.Request(ctx, request, nil)
 	return err
 }
 
@@ -305,7 +305,7 @@ func (hw *HWInvStorage) GetHWInvObject(ctx context.Context, nObjId int64) ([]byt
 		return nil, err
 	}
 
-	raw, err := hw.client.Do(ctx, request, nil)
+	raw, err := hw.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -332,7 +332,7 @@ func (hw *HWInvStorage) ExportHWInvStorageGetData(ctx context.Context, wstrAsync
 	}
 
 	hwInvStorageResponse := new(HWInvStorageResponse)
-	raw, err := hw.client.Do(ctx, request, &hwInvStorageResponse)
+	raw, err := hw.client.Request(ctx, request, &hwInvStorageResponse)
 	return hwInvStorageResponse, raw, err
 }
 
@@ -357,7 +357,7 @@ func (hw *HWInvStorage) SetCorpFlag2(ctx context.Context, params CorpFlagParams)
 		return err
 	}
 
-	_, err = hw.client.Do(ctx, request, nil)
+	_, err = hw.client.Request(ctx, request, nil)
 	return err
 }
 
@@ -379,7 +379,7 @@ func (hw *HWInvStorage) SetHWInvObject(ctx context.Context, params HWInvObjectPa
 		return err
 	}
 
-	_, err = hw.client.Do(ctx, request, nil)
+	_, err = hw.client.Request(ctx, request, nil)
 	return err
 }
 
@@ -391,7 +391,7 @@ func (hw *HWInvStorage) SetWriteOffFlag(ctx context.Context, nObjId int64, bFlag
 		return err
 	}
 
-	_, err = hw.client.Do(ctx, request, nil)
+	_, err = hw.client.Request(ctx, request, nil)
 	return err
 }
 
@@ -409,6 +409,6 @@ func (hw *HWInvStorage) SetWriteOffFlag2(ctx context.Context, params WriteOffFla
 		return err
 	}
 
-	_, err = hw.client.Do(ctx, request, nil)
+	_, err = hw.client.Request(ctx, request, nil)
 	return err
 }

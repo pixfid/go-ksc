@@ -55,7 +55,7 @@ func (gtca *GroupTaskControlApi) CommitImportedTask(ctx context.Context, wstrId 
 	}
 
 	taskDescribe := new(TaskDescribe)
-	raw, err := gtca.client.Do(ctx, request, &taskDescribe)
+	raw, err := gtca.client.Request(ctx, request, &taskDescribe)
 	return taskDescribe, raw, err
 }
 
@@ -77,7 +77,7 @@ func (gtca *GroupTaskControlApi) RequestStatistics(ctx context.Context, params T
 		return nil, err
 	}
 
-	raw, err := gtca.client.Do(ctx, request, nil)
+	raw, err := gtca.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -92,7 +92,7 @@ func (gtca *GroupTaskControlApi) ExportTask(ctx context.Context, wstrTaskId stri
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := gtca.client.Do(ctx, request, &pxgValStr)
+	raw, err := gtca.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -222,7 +222,7 @@ func (gtca *GroupTaskControlApi) GetTaskByRevision(ctx context.Context, nObjId, 
 	}
 
 	taskDescribe := new(TaskDescribe)
-	raw, err := gtca.client.Do(ctx, request, &taskDescribe)
+	raw, err := gtca.client.Request(ctx, request, &taskDescribe)
 	return taskDescribe, raw, err
 }
 
@@ -237,7 +237,7 @@ func (gtca *GroupTaskControlApi) RestoreTaskFromRevision(ctx context.Context, nO
 	}
 
 	taskDescribe := new(TaskDescribe)
-	raw, err := gtca.client.Do(ctx, request, &taskDescribe)
+	raw, err := gtca.client.Request(ctx, request, &taskDescribe)
 	return taskDescribe, raw, err
 }
 
@@ -261,7 +261,7 @@ func (gtca *GroupTaskControlApi) ImportTask(ctx context.Context, params interfac
 		return nil, err
 	}
 
-	raw, err := gtca.client.Do(ctx, request, nil)
+	raw, err := gtca.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -287,6 +287,6 @@ func (gtca *GroupTaskControlApi) ResetTasksIteratorForCluster(ctx context.Contex
 		return nil, err
 	}
 
-	raw, err := gtca.client.Do(ctx, request, nil)
+	raw, err := gtca.client.Request(ctx, request, nil)
 	return raw, err
 }

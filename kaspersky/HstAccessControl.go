@@ -47,7 +47,7 @@ func (hac *HstAccessControl) AccessCheckToAdmGroup(ctx context.Context,
 	}
 
 	pxgValBool := new(PxgValBool)
-	raw, err := hac.client.Do(ctx, request, &pxgValBool)
+	raw, err := hac.client.Request(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
 }
 
@@ -63,7 +63,7 @@ func (hac *HstAccessControl) AddRole(ctx context.Context, params interface{}) ([
 		return nil, err
 	}
 
-	raw, err := hac.client.Do(ctx, request, nil)
+	raw, err := hac.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -76,7 +76,7 @@ func (hac *HstAccessControl) DeleteRole(ctx context.Context, nId int64, bProtect
 		return nil, err
 	}
 
-	raw, err := hac.client.Do(ctx, request, nil)
+	raw, err := hac.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -89,7 +89,7 @@ func (hac *HstAccessControl) DeleteScObjectAcl(ctx context.Context, nObjId, nObj
 		return nil, err
 	}
 
-	raw, err := hac.client.Do(ctx, request, nil)
+	raw, err := hac.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -102,7 +102,7 @@ func (hac *HstAccessControl) DeleteScVServerAcl(ctx context.Context, nId int64) 
 		return nil, err
 	}
 
-	raw, err := hac.client.Do(ctx, request, nil)
+	raw, err := hac.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -146,7 +146,7 @@ func (hac *HstAccessControl) FindRoles(ctx context.Context, params PFindParams) 
 	}
 
 	accessor := new(Accessor)
-	raw, err := hac.client.Do(ctx, request, &accessor)
+	raw, err := hac.client.Request(ctx, request, &accessor)
 	return accessor, raw, err
 }
 
@@ -192,7 +192,7 @@ func (hac *HstAccessControl) FindTrustees(ctx context.Context, params PFindParam
 	}
 
 	accessor := new(Accessor)
-	raw, err := hac.client.Do(ctx, request, &accessor)
+	raw, err := hac.client.Request(ctx, request, &accessor)
 	return accessor, raw, err
 }
 
@@ -217,7 +217,7 @@ func (hac *HstAccessControl) GetAccessibleFuncAreas(ctx context.Context, lGroupI
 		return nil, err
 	}
 
-	raw, err := hac.client.Do(ctx, request, nil)
+	raw, err := hac.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -231,7 +231,7 @@ func (hac *HstAccessControl) GetMappingFuncAreaToPolicies(ctx context.Context, s
 		return nil, err
 	}
 
-	raw, err := hac.client.Do(ctx, request, nil)
+	raw, err := hac.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -245,7 +245,7 @@ func (hac *HstAccessControl) GetMappingFuncAreaToReports(ctx context.Context, sz
 		return nil, err
 	}
 
-	raw, err := hac.client.Do(ctx, request, nil)
+	raw, err := hac.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -259,7 +259,7 @@ func (hac *HstAccessControl) GetMappingFuncAreaToSettings(ctx context.Context, s
 		return nil, err
 	}
 
-	raw, err := hac.client.Do(ctx, request, nil)
+	raw, err := hac.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -273,7 +273,7 @@ func (hac *HstAccessControl) GetMappingFuncAreaToTasks(ctx context.Context, szwP
 		return nil, err
 	}
 
-	raw, err := hac.client.Do(ctx, request, nil)
+	raw, err := hac.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -290,7 +290,7 @@ func (hac *HstAccessControl) GetPolicyReadonlyNodes(ctx context.Context, params 
 		return nil, err
 	}
 
-	raw, err := hac.client.Do(ctx, request, nil)
+	raw, err := hac.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -307,7 +307,7 @@ func (hac *HstAccessControl) GetRole(ctx context.Context, params TRParams) (*Tru
 	}
 
 	trustee := new(Trustee)
-	raw, err := hac.client.Do(ctx, request, &trustee)
+	raw, err := hac.client.Request(ctx, request, &trustee)
 	return trustee, raw, err
 }
 
@@ -320,7 +320,7 @@ func (hac *HstAccessControl) GetScObjectAcl(ctx context.Context, nObjId, nObjTyp
 		return nil, err
 	}
 
-	raw, err := hac.client.Do(ctx, request, nil)
+	raw, err := hac.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -333,7 +333,7 @@ func (hac *HstAccessControl) GetScVServerAcl(ctx context.Context, nId int64) ([]
 		return nil, err
 	}
 
-	raw, err := hac.client.Do(ctx, request, nil)
+	raw, err := hac.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -349,7 +349,7 @@ func (hac *HstAccessControl) GetSettingsReadonlyNodes(ctx context.Context, param
 		return nil, err
 	}
 
-	raw, err := hac.client.Do(ctx, request, nil)
+	raw, err := hac.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -380,7 +380,7 @@ func (hac *HstAccessControl) GetTrustee(ctx context.Context, params TRParams) (*
 	}
 
 	trustee := new(Trustee)
-	raw, err := hac.client.Do(ctx, request, &trustee)
+	raw, err := hac.client.Request(ctx, request, &trustee)
 	return trustee, raw, err
 }
 
@@ -394,7 +394,7 @@ func (hac *HstAccessControl) GetVisualViewForAccessRights(ctx context.Context, w
 		return nil, err
 	}
 
-	raw, err := hac.client.Do(ctx, request, nil)
+	raw, err := hac.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -412,7 +412,7 @@ func (hac *HstAccessControl) IsTaskTypeReadonly(ctx context.Context, lGroupId in
 	}
 
 	pxgValBool := new(PxgValBool)
-	raw, err := hac.client.Do(ctx, request, &pxgValBool)
+	raw, err := hac.client.Request(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
 }
 
@@ -429,7 +429,7 @@ func (hac *HstAccessControl) ModifyScObjectAcl(ctx context.Context, params inter
 		return nil, err
 	}
 
-	raw, err := hac.client.Do(ctx, request, nil)
+	raw, err := hac.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -445,7 +445,7 @@ func (hac *HstAccessControl) SetScObjectAcl(ctx context.Context, params interfac
 		return nil, err
 	}
 
-	raw, err := hac.client.Do(ctx, request, nil)
+	raw, err := hac.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -461,7 +461,7 @@ func (hac *HstAccessControl) SetScVServerAcl(ctx context.Context, params interfa
 		return nil, err
 	}
 
-	raw, err := hac.client.Do(ctx, request, nil)
+	raw, err := hac.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -477,6 +477,6 @@ func (hac *HstAccessControl) UpdateRole(ctx context.Context, params interface{})
 		return nil, err
 	}
 
-	raw, err := hac.client.Do(ctx, request, nil)
+	raw, err := hac.client.Request(ctx, request, nil)
 	return raw, err
 }

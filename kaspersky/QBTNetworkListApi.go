@@ -64,7 +64,7 @@ func (nc *QBTNetworkListApi) GetListItemInfo(ctx context.Context, itemId int64) 
 	}
 
 	networkListFileInfo := new(NetworkListFileInfo)
-	raw, err := nc.client.Do(ctx, request, &networkListFileInfo)
+	raw, err := nc.client.Request(ctx, request, &networkListFileInfo)
 	return networkListFileInfo, raw, err
 }
 
@@ -105,7 +105,7 @@ func (nc *QBTNetworkListApi) AddListItemTask(ctx context.Context, params QBTPara
 		return nil, err
 	}
 
-	raw, err := nc.client.Do(ctx, request, nil)
+	raw, err := nc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -144,6 +144,6 @@ func (nc *QBTNetworkListApi) AddListItemsTask(ctx context.Context, params QBTsPa
 		return nil, err
 	}
 
-	raw, err := nc.client.Do(ctx, request, nil)
+	raw, err := nc.client.Request(ctx, request, nil)
 	return raw, err
 }

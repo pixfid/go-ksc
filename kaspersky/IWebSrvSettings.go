@@ -46,7 +46,7 @@ func (iws *IWebSrvSettings) GetCertificateInfo(ctx context.Context) (*PxgValCIFI
 	}
 
 	pxgValCIFIL := new(PxgValCIFIL)
-	raw, err := iws.client.Do(ctx, request, &pxgValCIFIL)
+	raw, err := iws.client.Request(ctx, request, &pxgValCIFIL)
 	return pxgValCIFIL, raw, err
 }
 
@@ -58,7 +58,7 @@ func (iws *IWebSrvSettings) GetCustomPkgHttpFqdn(ctx context.Context) (*PxgValSt
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := iws.client.Do(ctx, request, &pxgValStr)
+	raw, err := iws.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -70,7 +70,7 @@ func (iws *IWebSrvSettings) SetCustomPkgHttpFqdn(ctx context.Context, wsFqdn str
 		return nil, err
 	}
 
-	raw, err := iws.client.Do(ctx, request, nil)
+	raw, err := iws.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -88,6 +88,6 @@ func (iws *IWebSrvSettings) SetCustomCertificate(ctx context.Context, params int
 		return nil, err
 	}
 
-	raw, err := iws.client.Do(ctx, request, nil)
+	raw, err := iws.client.Request(ctx, request, nil)
 	return raw, err
 }

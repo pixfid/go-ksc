@@ -45,7 +45,7 @@ func (di *FilesAcceptor) CancelFileUpload(ctx context.Context, wstrFileId string
 		return err
 	}
 
-	_, err = di.client.Do(ctx, request, nil)
+	_, err = di.client.Request(ctx, request, nil)
 	return err
 }
 
@@ -84,6 +84,6 @@ func (di *FilesAcceptor) InitiateFileUpload(ctx context.Context, bIsArchive bool
 	}
 
 	fileUploadData := new(FileUploadData)
-	_, err = di.client.Do(ctx, request, &fileUploadData)
+	_, err = di.client.Request(ctx, request, &fileUploadData)
 	return fileUploadData, err
 }

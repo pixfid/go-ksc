@@ -42,7 +42,7 @@ func (di *DatabaseInfo) GetDBSize(ctx context.Context) (*PxgValInt, []byte, erro
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := di.client.Do(ctx, request, &pxgValInt)
+	raw, err := di.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -54,7 +54,7 @@ func (di *DatabaseInfo) GetDBDataSize(ctx context.Context) (*PxgValInt, []byte, 
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := di.client.Do(ctx, request, &pxgValInt)
+	raw, err := di.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -66,7 +66,7 @@ func (di *DatabaseInfo) GetDBEventsCount(ctx context.Context) (*PxgValInt, []byt
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := di.client.Do(ctx, request, &pxgValInt)
+	raw, err := di.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -79,7 +79,7 @@ func (di *DatabaseInfo) IsCloudSQL(ctx context.Context, nCloudType int64) (*PxgV
 	}
 
 	pxgValBool := new(PxgValBool)
-	raw, err := di.client.Do(ctx, request, &pxgValBool)
+	raw, err := di.client.Request(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
 }
 
@@ -92,7 +92,7 @@ func (di *DatabaseInfo) CheckBackupPath(ctx context.Context, szwPath string) (*P
 	}
 
 	pxgValBool := new(PxgValBool)
-	raw, err := di.client.Do(ctx, request, &pxgValBool)
+	raw, err := di.client.Request(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
 }
 
@@ -105,7 +105,7 @@ func (di *DatabaseInfo) CheckBackupPath2(ctx context.Context, szwWinPath, szwLin
 	}
 
 	pxgValBool := new(PxgValBool)
-	raw, err := di.client.Do(ctx, request, &pxgValBool)
+	raw, err := di.client.Request(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
 }
 
@@ -117,6 +117,6 @@ func (di *DatabaseInfo) IsLinuxSQL(ctx context.Context) (*PxgValBool, []byte, er
 	}
 
 	pxgValBool := new(PxgValBool)
-	raw, err := di.client.Do(ctx, request, &pxgValBool)
+	raw, err := di.client.Request(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
 }

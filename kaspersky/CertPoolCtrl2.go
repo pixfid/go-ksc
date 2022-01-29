@@ -43,6 +43,6 @@ func (cp *CertPoolCtrl2) GetCertificateInfoDetails(ctx context.Context, nVServer
 		return nil, err
 	}
 
-	raw, err := cp.client.Do(ctx, request, nil)
+	raw, err := cp.client.Request(ctx, request, nil)
 	return raw, err
 }

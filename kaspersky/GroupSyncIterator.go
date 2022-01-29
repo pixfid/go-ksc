@@ -45,7 +45,7 @@ func (ca *GroupSyncIterator) ReleaseIterator(ctx context.Context, szwIterator st
 		return err
 	}
 
-	_, err = ca.client.Do(ctx, request, nil)
+	_, err = ca.client.Request(ctx, request, nil)
 	if err != nil {
 		return err
 	}
@@ -63,6 +63,6 @@ func (ca *GroupSyncIterator) GetNextItems(ctx context.Context, szwIterator strin
 		return nil, err
 	}
 
-	raw, err := ca.client.Do(ctx, request, &out)
+	raw, err := ca.client.Request(ctx, request, &out)
 	return raw, err
 }

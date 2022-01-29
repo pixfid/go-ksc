@@ -71,7 +71,7 @@ func (htra *HostTagsRulesApi) GetRules(ctx context.Context, params HostTagsRules
 		return nil, err
 	}
 
-	raw, err := htra.client.Do(ctx, request, nil)
+	raw, err := htra.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -83,7 +83,7 @@ func (htra *HostTagsRulesApi) GetRule(ctx context.Context, szwTagValue string) (
 		return nil, err
 	}
 
-	raw, err := htra.client.Do(ctx, request, nil)
+	raw, err := htra.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -102,7 +102,7 @@ func (htra *HostTagsRulesApi) ExecuteRule(ctx context.Context, szwTagValue strin
 	}
 
 	wActionGUID := new(WActionGUID)
-	raw, err := htra.client.Do(ctx, request, &wActionGUID)
+	raw, err := htra.client.Request(ctx, request, &wActionGUID)
 	return wActionGUID, raw, err
 }
 
@@ -117,7 +117,7 @@ func (htra *HostTagsRulesApi) CancelAsyncAction(ctx context.Context, wstrActionG
 		return nil, err
 	}
 
-	raw, err := htra.client.Do(ctx, request, nil)
+	raw, err := htra.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -129,7 +129,7 @@ func (htra *HostTagsRulesApi) DeleteRule(ctx context.Context, szwTagValue string
 		return nil, err
 	}
 
-	raw, err := htra.client.Do(ctx, request, nil)
+	raw, err := htra.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -207,6 +207,6 @@ func (htra *HostTagsRulesApi) UpdateRule(ctx context.Context, params UpdateRuleP
 		return nil, err
 	}
 
-	raw, err := htra.client.Do(ctx, request, nil)
+	raw, err := htra.client.Request(ctx, request, nil)
 	return raw, err
 }

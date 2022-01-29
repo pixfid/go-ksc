@@ -52,7 +52,7 @@ func (pa *PackagesApi) AcceptEulas(ctx context.Context, params EULAIDParams) ([]
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -71,7 +71,7 @@ func (pa *PackagesApi) AddExtendedSign(ctx context.Context, params interface{}) 
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -87,7 +87,7 @@ func (pa *PackagesApi) AddExtendedSignAsync(ctx context.Context, params interfac
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -100,7 +100,7 @@ func (pa *PackagesApi) AllowSharedPrerequisitesInstallation(ctx context.Context,
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -113,7 +113,7 @@ func (pa *PackagesApi) CancelCreateExecutablePkg(ctx context.Context, wstrReques
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -126,7 +126,7 @@ func (pa *PackagesApi) CancelGetExecutablePkgFile(ctx context.Context, wstrReque
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -139,7 +139,7 @@ func (pa *PackagesApi) CancelRecordNewPackage(ctx context.Context, wstrRequestId
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -152,7 +152,7 @@ func (pa *PackagesApi) CancelUpdateBasesInPackages(ctx context.Context, wstrRequ
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -172,7 +172,7 @@ func (pa *PackagesApi) CreateExecutablePkgAsync(ctx context.Context, params inte
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -185,7 +185,7 @@ func (pa *PackagesApi) DeleteExecutablePkg(ctx context.Context, nPackageId int64
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -203,7 +203,7 @@ func (pa *PackagesApi) GetEulaText(ctx context.Context, nEulaId int64) (*EULA, [
 	}
 
 	eula := new(EULA)
-	raw, err := pa.client.Do(ctx, request, &eula)
+	raw, err := pa.client.Request(ctx, request, &eula)
 	return eula, raw, err
 }
 
@@ -216,7 +216,7 @@ func (pa *PackagesApi) GetExecutablePackages(ctx context.Context, nPackageId int
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -240,7 +240,7 @@ func (pa *PackagesApi) GetExecutablePkgFileAsync(ctx context.Context, params int
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -253,7 +253,7 @@ func (pa *PackagesApi) GetIncompatibleAppsInfo(ctx context.Context, nPackageId i
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -268,7 +268,7 @@ func (pa *PackagesApi) GetIntranetFolderForNewPackage(ctx context.Context, wstrP
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := pa.client.Do(ctx, request, &pxgValStr)
+	raw, err := pa.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -281,7 +281,7 @@ func (pa *PackagesApi) GetIntranetFolderForPackage(ctx context.Context, nPackage
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -297,7 +297,7 @@ func (pa *PackagesApi) GetKpdProfileString(ctx context.Context, params interface
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -310,7 +310,7 @@ func (pa *PackagesApi) GetLicenseKey(ctx context.Context, nPackageId int64) ([]b
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -323,7 +323,7 @@ func (pa *PackagesApi) GetLoginScript(ctx context.Context, nPackageId int64, wst
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -336,7 +336,7 @@ func (pa *PackagesApi) GetMoveRuleInfo(ctx context.Context, nRuleId int64) ([]by
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -349,7 +349,7 @@ func (pa *PackagesApi) GetPackageInfo(ctx context.Context, nPackageId int64) ([]
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -362,7 +362,7 @@ func (pa *PackagesApi) GetPackageInfo2(ctx context.Context, nPackageId int64) ([
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -382,7 +382,7 @@ func (pa *PackagesApi) GetPackageInfoFromArchive(ctx context.Context, params int
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -395,7 +395,7 @@ func (pa *PackagesApi) GetPackagePlugin(ctx context.Context, nPackageId int64) (
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -464,7 +464,7 @@ func (pa *PackagesApi) GetPackages(ctx context.Context) (*Packages, []byte, erro
 	}
 
 	packages := new(Packages)
-	raw, err := pa.client.Do(ctx, request, packages)
+	raw, err := pa.client.Request(ctx, request, packages)
 	return packages, raw, err
 }
 
@@ -476,7 +476,7 @@ func (pa *PackagesApi) GetPackages2(ctx context.Context) (*Packages, []byte, err
 	}
 
 	packages := new(Packages)
-	raw, err := pa.client.Do(ctx, request, packages)
+	raw, err := pa.client.Request(ctx, request, packages)
 	return packages, raw, err
 }
 
@@ -501,7 +501,7 @@ func (pa *PackagesApi) GetRebootOptionsEx(ctx context.Context, nPackageId int64)
 	}
 
 	rebootOptionsEx := new(RebootOptionsEx)
-	raw, err := pa.client.Do(ctx, request, &rebootOptionsEx)
+	raw, err := pa.client.Request(ctx, request, &rebootOptionsEx)
 	return rebootOptionsEx, raw, err
 }
 
@@ -537,7 +537,7 @@ func (pa *PackagesApi) GetUserAgreements(ctx context.Context) (*UserEULAS, []byt
 	}
 
 	userEULAS := new(UserEULAS)
-	raw, err := pa.client.Do(ctx, request, &userEULAS)
+	raw, err := pa.client.Request(ctx, request, &userEULAS)
 	return userEULAS, raw, err
 }
 
@@ -551,7 +551,7 @@ func (pa *PackagesApi) IsPackagePublished(ctx context.Context, nPkgExecId int64)
 	}
 
 	pxgValBool := new(PxgValBool)
-	raw, err := pa.client.Do(ctx, request, &pxgValBool)
+	raw, err := pa.client.Request(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
 }
 
@@ -567,7 +567,7 @@ func (pa *PackagesApi) PrePublishMobilePackage(ctx context.Context, params inter
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -583,7 +583,7 @@ func (pa *PackagesApi) PublishMobileManifest(ctx context.Context, params interfa
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -599,7 +599,7 @@ func (pa *PackagesApi) PublishMobilePackage(ctx context.Context, params interfac
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -618,7 +618,7 @@ func (pa *PackagesApi) PublishStandalonePackage(ctx context.Context, params inte
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -632,7 +632,7 @@ func (pa *PackagesApi) ReadKpdFile(ctx context.Context, nPackageId int64) (*PxgV
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := pa.client.Do(ctx, request, &pxgValStr)
+	raw, err := pa.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -647,7 +647,7 @@ func (pa *PackagesApi) ReadPkgCfgFile(ctx context.Context, nPackageId int64, wst
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := pa.client.Do(ctx, request, &pxgValStr)
+	raw, err := pa.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -677,7 +677,7 @@ func (pa *PackagesApi) RecordNewPackage(ctx context.Context, params NewPackage) 
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := pa.client.Do(ctx, request, &pxgValStr)
+	raw, err := pa.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -695,7 +695,7 @@ func (pa *PackagesApi) RecordNewPackage2(ctx context.Context, params *NewPackage
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := pa.client.Do(ctx, request, &pxgValStr)
+	raw, err := pa.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -719,7 +719,7 @@ func (pa *PackagesApi) RecordNewPackage3(ctx context.Context, params interface{}
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -745,7 +745,7 @@ func (pa *PackagesApi) RecordNewPackage3Async(ctx context.Context, params interf
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -771,7 +771,7 @@ func (pa *PackagesApi) RecordNewPackageAsync(ctx context.Context, params interfa
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -796,7 +796,7 @@ func (pa *PackagesApi) RecordVapmPackageAsync(ctx context.Context, params interf
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -809,7 +809,7 @@ func (pa *PackagesApi) RemovePackage(ctx context.Context, nPackageId int64) ([]b
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -829,7 +829,7 @@ func (pa *PackagesApi) RemovePackage2(ctx context.Context, nPackageId int64) (*R
 	}
 
 	removePackageResult := new(RemovePackageResult)
-	raw, err := pa.client.Do(ctx, request, &removePackageResult)
+	raw, err := pa.client.Request(ctx, request, &removePackageResult)
 	return removePackageResult, raw, err
 }
 
@@ -842,7 +842,7 @@ func (pa *PackagesApi) RenamePackage(ctx context.Context, nPackageId int64, wstr
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -856,7 +856,7 @@ func (pa *PackagesApi) ResetDefaultServerSpecificSettings(ctx context.Context, n
 	}
 
 	pxgValBool := new(PxgValBool)
-	raw, err := pa.client.Do(ctx, request, &pxgValBool)
+	raw, err := pa.client.Request(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
 }
 
@@ -869,7 +869,7 @@ func (pa *PackagesApi) ResolvePackageLcid(ctx context.Context, nPackageId, nLcid
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -891,7 +891,7 @@ func (pa *PackagesApi) RetranslateToVServerAsync(ctx context.Context, params int
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -907,7 +907,7 @@ func (pa *PackagesApi) SetLicenseKey(ctx context.Context, params interface{}) ([
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -921,7 +921,7 @@ func (pa *PackagesApi) SetRemoveIncompatibleApps(ctx context.Context, nPackageId
 	}
 
 	pxgValBool := new(PxgValBool)
-	raw, err := pa.client.Do(ctx, request, &pxgValBool)
+	raw, err := pa.client.Request(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
 }
 
@@ -937,7 +937,7 @@ func (pa *PackagesApi) SSGetNames(ctx context.Context, params interface{}) ([]by
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -953,7 +953,7 @@ func (pa *PackagesApi) SSRead(ctx context.Context, params interface{}) ([]byte, 
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -969,7 +969,7 @@ func (pa *PackagesApi) SSSectionOperation(ctx context.Context, params interface{
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -985,7 +985,7 @@ func (pa *PackagesApi) SSWrite(ctx context.Context, params interface{}) ([]byte,
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -998,7 +998,7 @@ func (pa *PackagesApi) UnpublishMobilePackage(ctx context.Context, wstrProfileId
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -1021,7 +1021,7 @@ func (pa *PackagesApi) UpdateBasesInPackagesAsync(ctx context.Context, params in
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -1036,7 +1036,7 @@ func (pa *PackagesApi) WriteKpdProfileString(ctx context.Context, nPackageId int
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -1060,6 +1060,6 @@ func (pa *PackagesApi) WritePkgCfgFile(ctx context.Context, params PkgCFGFilePar
 		return nil, err
 	}
 
-	raw, err := pa.client.Do(ctx, request, nil)
+	raw, err := pa.client.Request(ctx, request, nil)
 	return raw, err
 }

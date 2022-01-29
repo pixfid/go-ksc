@@ -66,7 +66,7 @@ func (nnl *NagNetworkListApi) GetListItemFileInfo(ctx context.Context, params Ne
 		return nil, err
 	}
 
-	raw, err := nnl.client.Do(ctx, request, nil)
+	raw, err := nnl.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -84,6 +84,6 @@ func (nnl *NagNetworkListApi) GetListItemFileChunk(ctx context.Context, params N
 		return nil, err
 	}
 
-	raw, err := nnl.client.Do(ctx, request, nil)
+	raw, err := nnl.client.Request(ctx, request, nil)
 	return raw, err
 }

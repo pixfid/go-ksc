@@ -66,7 +66,7 @@ func (ilp *InvLicenseProducts) GetLicenseProducts(ctx context.Context) (*License
 	}
 
 	licenseKeysResponse := new(LicenseKeysResponse)
-	_, err = ilp.client.Do(ctx, request, &licenseKeysResponse)
+	_, err = ilp.client.Request(ctx, request, &licenseKeysResponse)
 	return licenseKeysResponse, err
 }
 
@@ -79,7 +79,7 @@ func (ilp *InvLicenseProducts) DeleteLicenseKey(ctx context.Context, nLicKeyId i
 	}
 
 	pxgRetError := new(PxgRetError)
-	_, err = ilp.client.Do(ctx, request, &pxgRetError)
+	_, err = ilp.client.Request(ctx, request, &pxgRetError)
 	return pxgRetError, err
 }
 
@@ -92,7 +92,7 @@ func (ilp *InvLicenseProducts) DeleteLicenseProduct(ctx context.Context, nLicPro
 	}
 
 	pxgRetError := new(PxgRetError)
-	_, err = ilp.client.Do(ctx, request, &pxgRetError)
+	_, err = ilp.client.Request(ctx, request, &pxgRetError)
 	return pxgRetError, err
 }
 
@@ -137,7 +137,7 @@ func (ilp *InvLicenseProducts) AddLicenseKey(ctx context.Context, params License
 	}
 
 	pxgValInt := new(PxgValInt)
-	_, err = ilp.client.Do(ctx, request, &pxgValInt)
+	_, err = ilp.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, err
 }
 
@@ -180,7 +180,7 @@ func (ilp *InvLicenseProducts) AddLicenseProduct(ctx context.Context, params Lic
 	}
 
 	pxgValInt := new(PxgValInt)
-	_, err = ilp.client.Do(ctx, request, &pxgValInt)
+	_, err = ilp.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, err
 }
 
@@ -205,7 +205,7 @@ func (ilp *InvLicenseProducts) UpdateLicenseKey(ctx context.Context, params Upda
 		return err
 	}
 
-	_, err = ilp.client.Do(ctx, request, nil)
+	_, err = ilp.client.Request(ctx, request, nil)
 	return err
 }
 
@@ -230,6 +230,6 @@ func (ilp *InvLicenseProducts) UpdateLicenseProduct(ctx context.Context, params 
 		return err
 	}
 
-	_, err = ilp.client.Do(ctx, request, nil)
+	_, err = ilp.client.Request(ctx, request, nil)
 	return err
 }

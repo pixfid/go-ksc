@@ -78,7 +78,7 @@ func (sp *SecurityPolicy) AddUser(ctx context.Context, params PUserData) (*PxgVa
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := sp.client.Do(ctx, request, &pxgValInt)
+	raw, err := sp.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -95,7 +95,7 @@ func (sp *SecurityPolicy) UpdateUser(ctx context.Context, lUserId int, params PU
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := sp.client.Do(ctx, request, &pxgValInt)
+	raw, err := sp.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -122,7 +122,7 @@ func (sp *SecurityPolicy) GetCurrentUserId(ctx context.Context) (*UserInfo, []by
 	}
 
 	user := new(UserInfo)
-	raw, err := sp.client.Do(ctx, request, &user)
+	raw, err := sp.client.Request(ctx, request, &user)
 	return user, raw, err
 }
 
@@ -139,7 +139,7 @@ func (sp *SecurityPolicy) GetCurrentUserId2(ctx context.Context) (*UserInfoEx, [
 	}
 
 	userEx := new(UserInfoEx)
-	raw, err := sp.client.Do(ctx, request, &userEx)
+	raw, err := sp.client.Request(ctx, request, &userEx)
 	return userEx, raw, err
 }
 
@@ -193,7 +193,7 @@ func (sp *SecurityPolicy) GetUsers(ctx context.Context, lUserId, lVsId int64) (*
 	}
 
 	userInf := new(UsersInfo)
-	raw, err := sp.client.Do(ctx, request, &userInf)
+	raw, err := sp.client.Request(ctx, request, &userInf)
 	return userInf, raw, err
 }
 
@@ -205,7 +205,7 @@ func (sp *SecurityPolicy) LoadPerUserData(ctx context.Context) ([]byte, error) {
 		return nil, err
 	}
 
-	raw, err := sp.client.Do(ctx, request, nil)
+	raw, err := sp.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -218,7 +218,7 @@ func (sp *SecurityPolicy) SavePerUserData(ctx context.Context, params interface{
 		return nil, err
 	}
 
-	raw, err := sp.client.Do(ctx, request, nil)
+	raw, err := sp.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -271,6 +271,6 @@ func (sp *SecurityPolicy) UpdateTrustee(ctx context.Context, params TrusteeParam
 		return nil, err
 	}
 
-	raw, err := sp.client.Do(ctx, request, nil)
+	raw, err := sp.client.Request(ctx, request, nil)
 	return raw, err
 }

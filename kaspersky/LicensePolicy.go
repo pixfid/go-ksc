@@ -46,7 +46,7 @@ func (lp *LicensePolicy) GetFreeLicenseCount(ctx context.Context, nFunctionality
 		return nil, err
 	}
 
-	raw, err := lp.client.Do(ctx, request, nil)
+	raw, err := lp.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -59,7 +59,7 @@ func (lp *LicensePolicy) GetTotalLicenseCount(ctx context.Context, nFunctionalit
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := lp.client.Do(ctx, request, &pxgValInt)
+	raw, err := lp.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -72,7 +72,7 @@ func (lp *LicensePolicy) IsLimitedMode(ctx context.Context, nFunctionality int64
 	}
 
 	pxgValBool := new(PxgValBool)
-	raw, err := lp.client.Do(ctx, request, &pxgValBool)
+	raw, err := lp.client.Request(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
 }
 
@@ -84,7 +84,7 @@ func (lp *LicensePolicy) SetLimitedModeTest(ctx context.Context, bLimited bool, 
 		return nil, err
 	}
 
-	raw, err := lp.client.Do(ctx, request, nil)
+	raw, err := lp.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -97,7 +97,7 @@ func (lp *LicensePolicy) SetTotalLicenseCountTest(ctx context.Context, eFunction
 		return nil, err
 	}
 
-	raw, err := lp.client.Do(ctx, request, nil)
+	raw, err := lp.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -109,6 +109,6 @@ func (lp *LicensePolicy) SetUsedLicenseCountTest(ctx context.Context, eFunctiona
 		return nil, err
 	}
 
-	raw, err := lp.client.Do(ctx, request, nil)
+	raw, err := lp.client.Request(ctx, request, nil)
 	return raw, err
 }

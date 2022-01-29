@@ -40,7 +40,7 @@ func (se *SpamEvents) GetSpamList(ctx context.Context) error {
 		return err
 	}
 
-	raw, err := se.client.Do(ctx, request, nil)
+	raw, err := se.client.Request(ctx, request, nil)
 
 	if err != nil {
 		return err

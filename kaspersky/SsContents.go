@@ -72,7 +72,7 @@ func (sc *SsContents) SsAdd(ctx context.Context, params SsContent) ([]byte, erro
 		return nil, err
 	}
 
-	raw, err := sc.client.Do(ctx, request, nil)
+	raw, err := sc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -85,7 +85,7 @@ func (sc *SsContents) SsApply(ctx context.Context, wstrID string) ([]byte, error
 		return nil, err
 	}
 
-	raw, err := sc.client.Do(ctx, request, nil)
+	raw, err := sc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -106,7 +106,7 @@ func (sc *SsContents) SsClear(ctx context.Context, params SsContent) ([]byte, er
 		return nil, err
 	}
 
-	raw, err := sc.client.Do(ctx, request, nil)
+	raw, err := sc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -126,7 +126,7 @@ func (sc *SsContents) SsCreateSection(ctx context.Context, params SsContentD) ([
 		return nil, err
 	}
 
-	raw, err := sc.client.Do(ctx, request, nil)
+	raw, err := sc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -167,7 +167,7 @@ func (sc *SsContents) SsDelete(ctx context.Context, params SsContentD) ([]byte, 
 		return nil, err
 	}
 
-	raw, err := sc.client.Do(ctx, request, nil)
+	raw, err := sc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -187,7 +187,7 @@ func (sc *SsContents) SsDeleteSection(ctx context.Context, params SsContentD) ([
 		return nil, err
 	}
 
-	raw, err := sc.client.Do(ctx, request, nil)
+	raw, err := sc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -206,7 +206,7 @@ func (sc *SsContents) SSGetNames(ctx context.Context, params SsContentD) (*PxgVa
 	}
 
 	pxgValArrayOfString := new(PxgValArrayOfString)
-	raw, err := sc.client.Do(ctx, request, &pxgValArrayOfString)
+	raw, err := sc.client.Request(ctx, request, &pxgValArrayOfString)
 	return pxgValArrayOfString, raw, err
 }
 
@@ -223,7 +223,7 @@ func (sc *SsContents) SsRead(ctx context.Context, params SsContentD, v interface
 		return nil, err
 	}
 
-	raw, err := sc.client.Do(ctx, request, &v)
+	raw, err := sc.client.Request(ctx, request, &v)
 	return raw, err
 }
 
@@ -238,7 +238,7 @@ func (sc *SsContents) SsRelease(ctx context.Context, wstrID string) ([]byte, err
 		return nil, err
 	}
 
-	raw, err := sc.client.Do(ctx, request, nil)
+	raw, err := sc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -258,7 +258,7 @@ func (sc *SsContents) SsReplace(ctx context.Context, params SsContent) ([]byte, 
 		return nil, err
 	}
 
-	raw, err := sc.client.Do(ctx, request, nil)
+	raw, err := sc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -276,6 +276,6 @@ func (sc *SsContents) SsUpdate(ctx context.Context, params SsContent) ([]byte, e
 		return nil, err
 	}
 
-	raw, err := sc.client.Do(ctx, request, nil)
+	raw, err := sc.client.Request(ctx, request, nil)
 	return raw, err
 }

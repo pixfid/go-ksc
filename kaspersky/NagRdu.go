@@ -45,7 +45,7 @@ func (nr *NagRdu) ChangeTraceParams(ctx context.Context, szwProductID string, nT
 	}
 
 	currentHostState := new(CurrentHostState)
-	raw, err := nr.client.Do(ctx, request, &currentHostState)
+	raw, err := nr.client.Request(ctx, request, &currentHostState)
 	return currentHostState, raw, err
 }
 
@@ -60,7 +60,7 @@ func (nr *NagRdu) ChangeTraceRotatedParams(ctx context.Context, szwProductID str
 	}
 
 	currentHostState := new(CurrentHostState)
-	raw, err := nr.client.Do(ctx, request, &currentHostState)
+	raw, err := nr.client.Request(ctx, request, &currentHostState)
 	return currentHostState, raw, err
 }
 
@@ -78,7 +78,7 @@ func (nr *NagRdu) ChangeXperfBaseParams(ctx context.Context, szwProductID string
 	}
 
 	currentHostState := new(CurrentHostState)
-	raw, err := nr.client.Do(ctx, request, &currentHostState)
+	raw, err := nr.client.Request(ctx, request, &currentHostState)
 	return currentHostState, raw, err
 }
 
@@ -94,7 +94,7 @@ func (nr *NagRdu) ChangeXperfRotatedParams(ctx context.Context, szwProductID str
 	}
 
 	currentHostState := new(CurrentHostState)
-	raw, err := nr.client.Do(ctx, request, &currentHostState)
+	raw, err := nr.client.Request(ctx, request, &currentHostState)
 	return currentHostState, raw, err
 }
 
@@ -175,7 +175,7 @@ func (nr *NagRdu) CreateAndDownloadDumpAsync(ctx context.Context, szwProcessName
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := nr.client.Do(ctx, request, &pxgValStr)
+	raw, err := nr.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -188,7 +188,7 @@ func (nr *NagRdu) DeleteFile(ctx context.Context, szwRemoteFile string) (*Curren
 	}
 
 	currentHostState := new(CurrentHostState)
-	raw, err := nr.client.Do(ctx, request, &currentHostState)
+	raw, err := nr.client.Request(ctx, request, &currentHostState)
 	return currentHostState, raw, err
 }
 
@@ -209,7 +209,7 @@ func (nr *NagRdu) DeleteFiles(ctx context.Context, params RemoteFilesParams) (*C
 	}
 
 	currentHostState := new(CurrentHostState)
-	raw, err := nr.client.Do(ctx, request, &currentHostState)
+	raw, err := nr.client.Request(ctx, request, &currentHostState)
 	return currentHostState, raw, err
 }
 
@@ -226,7 +226,7 @@ func (nr *NagRdu) DownloadCommonDataAsync(ctx context.Context) (*PxgValStr, []by
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := nr.client.Do(ctx, request, &pxgValStr)
+	raw, err := nr.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -244,7 +244,7 @@ func (nr *NagRdu) DownloadEventlogAsync(ctx context.Context, szwEventLog string)
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := nr.client.Do(ctx, request, &pxgValStr)
+	raw, err := nr.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -258,7 +258,7 @@ func (nr *NagRdu) ExecuteFileAsync(ctx context.Context, szwURL, szwShortExecName
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := nr.client.Do(ctx, request, &pxgValStr)
+	raw, err := nr.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -275,7 +275,7 @@ func (nr *NagRdu) ExecuteGsiAsync(ctx context.Context) (*PxgValStr, []byte, erro
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := nr.client.Do(ctx, request, &pxgValStr)
+	raw, err := nr.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -287,7 +287,7 @@ func (nr *NagRdu) GetCurrentHostState(ctx context.Context) (*CurrentHostState, [
 	}
 
 	currentHostState := new(CurrentHostState)
-	raw, err := nr.client.Do(ctx, request, &currentHostState)
+	raw, err := nr.client.Request(ctx, request, &currentHostState)
 	return currentHostState, raw, err
 }
 
@@ -300,7 +300,7 @@ func (nr *NagRdu) GetUrlToDownloadFileFromHost(ctx context.Context, szwRemoteFil
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := nr.client.Do(ctx, request, &pxgValStr)
+	raw, err := nr.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -312,7 +312,7 @@ func (nr *NagRdu) GetUrlToUploadFileToHost(ctx context.Context) (*PxgValStr, []b
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := nr.client.Do(ctx, request, &pxgValStr)
+	raw, err := nr.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -330,7 +330,7 @@ func (nr *NagRdu) RunKlnagchkAsync(ctx context.Context, szwProductID string) (*P
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := nr.client.Do(ctx, request, &pxgValStr)
+	raw, err := nr.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -349,6 +349,6 @@ func (nr *NagRdu) SetProductStateAsync(ctx context.Context, szwProductID string,
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := nr.client.Do(ctx, request, &pxgValStr)
+	raw, err := nr.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }

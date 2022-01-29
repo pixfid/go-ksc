@@ -52,7 +52,7 @@ func (sq *SmsQueue) Enqueue(ctx context.Context, params SQParams) ([]byte, error
 		return nil, err
 	}
 
-	raw, err := sq.client.Do(ctx, request, nil)
+	raw, err := sq.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -63,7 +63,7 @@ func (sq *SmsQueue) Clear(ctx context.Context) ([]byte, error) {
 		return nil, err
 	}
 
-	raw, err := sq.client.Do(ctx, request, nil)
+	raw, err := sq.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -85,6 +85,6 @@ func (sq *SmsQueue) Cancel(ctx context.Context, params SQCParams) ([]byte, error
 		return nil, err
 	}
 
-	raw, err := sq.client.Do(ctx, request, nil)
+	raw, err := sq.client.Request(ctx, request, nil)
 	return raw, err
 }

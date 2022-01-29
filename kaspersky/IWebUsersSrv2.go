@@ -47,6 +47,6 @@ func (iwus2 *IWebUsersSrv2) SendEmailAsync(ctx context.Context, params interface
 		return nil, err
 	}
 
-	raw, err := iwus2.client.Do(ctx, request, nil)
+	raw, err := iwus2.client.Request(ctx, request, nil)
 	return raw, err
 }

@@ -53,7 +53,7 @@ func (suta *SeamlessUpdatesTestApi) GetRequiredPlugins(ctx context.Context) (*Re
 	}
 
 	result := new(RequiredPlugins)
-	raw, err := suta.client.Do(ctx, request, &result)
+	raw, err := suta.client.Request(ctx, request, &result)
 
 	if suta.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -82,7 +82,7 @@ func (suta *SeamlessUpdatesTestApi) GetVapmKlUpdatesToApprove(ctx context.Contex
 	}
 
 	result := new(VapmKlUpdatesToApprove)
-	raw, err := suta.client.Do(ctx, request, &result)
+	raw, err := suta.client.Request(ctx, request, &result)
 
 	if suta.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -98,7 +98,7 @@ func (suta *SeamlessUpdatesTestApi) CleanupSeamlessUpdates(ctx context.Context) 
 	}
 
 	result := new(LoggedInUsing2FA)
-	raw, err := suta.client.Do(ctx, request, &result)
+	raw, err := suta.client.Request(ctx, request, &result)
 
 	if suta.client.Debug {
 		log.Printf("raw response: %s", string(raw))

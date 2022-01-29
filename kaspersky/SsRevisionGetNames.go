@@ -64,7 +64,7 @@ func (srn *SsRevisionGetNames) SetIntegrationToken(ctx context.Context, params I
 		return nil, err
 	}
 
-	raw, err := srn.client.Do(ctx, request, nil)
+	raw, err := srn.client.Request(ctx, request, nil)
 
 	if srn.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -85,7 +85,7 @@ func (srn *SsRevisionGetNames) DeleteIntegrationToken(ctx context.Context, wstrP
 		return err
 	}
 
-	raw, err := srn.client.Do(ctx, request, nil)
+	raw, err := srn.client.Request(ctx, request, nil)
 
 	if srn.client.Debug {
 		log.Printf("raw response: %s", string(raw))

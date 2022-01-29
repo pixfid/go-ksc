@@ -62,7 +62,7 @@ func (gc *GatewayConnection) PrepareGatewayConnection(ctx context.Context, param
 	}
 
 	authKey := new(AuthKey)
-	raw, err := gc.client.Do(ctx, request, &authKey)
+	raw, err := gc.client.Request(ctx, request, &authKey)
 	return authKey, raw, err
 }
 
@@ -79,6 +79,6 @@ func (gc *GatewayConnection) PrepareTunnelConnection(ctx context.Context, params
 	}
 
 	authKey := new(AuthKey)
-	raw, err := gc.client.Do(ctx, request, &authKey)
+	raw, err := gc.client.Request(ctx, request, &authKey)
 	return authKey, raw, err
 }

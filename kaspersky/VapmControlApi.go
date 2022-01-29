@@ -54,7 +54,7 @@ func (vca *VapmControlApi) AcceptEulas(ctx context.Context, params PEulaIDParams
 		return nil, err
 	}
 
-	raw, err := vca.client.Do(ctx, request, nil)
+	raw, err := vca.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -68,7 +68,7 @@ func (vca *VapmControlApi) CancelDeleteFilesForUpdates(ctx context.Context, wstr
 		return nil, err
 	}
 
-	raw, err := vca.client.Do(ctx, request, nil)
+	raw, err := vca.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -81,7 +81,7 @@ func (vca *VapmControlApi) CancelDownloadPatch(ctx context.Context, wstrRequestI
 		return nil, err
 	}
 
-	raw, err := vca.client.Do(ctx, request, nil)
+	raw, err := vca.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -113,7 +113,7 @@ func (vca *VapmControlApi) ChangeApproval(ctx context.Context, params EulasIDSFo
 		return nil, err
 	}
 
-	raw, err := vca.client.Do(ctx, request, nil)
+	raw, err := vca.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -127,7 +127,7 @@ func (vca *VapmControlApi) ChangeVulnerabilityIgnorance(ctx context.Context, wst
 		return nil, err
 	}
 
-	raw, err := vca.client.Do(ctx, request, nil)
+	raw, err := vca.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -145,7 +145,7 @@ func (vca *VapmControlApi) DeclineEulas(ctx context.Context, params PEulaIDParam
 		return nil, err
 	}
 
-	raw, err := vca.client.Do(ctx, request, nil)
+	raw, err := vca.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -177,7 +177,7 @@ func (vca *VapmControlApi) DeleteFilesForUpdates(ctx context.Context, params Del
 		return nil, err
 	}
 
-	raw, err := vca.client.Do(ctx, request, nil)
+	raw, err := vca.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -191,7 +191,7 @@ func (vca *VapmControlApi) DownloadPatchAsync(ctx context.Context, llPatchGlbId,
 		return nil, err
 	}
 
-	raw, err := vca.client.Do(ctx, request, nil)
+	raw, err := vca.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -204,7 +204,7 @@ func (vca *VapmControlApi) GetAttributesSetVersionNum(ctx context.Context) (*Pxg
 	}
 
 	pxgValInt := new(PxgValInt)
-	_, err = vca.client.Do(ctx, request, &pxgValInt)
+	_, err = vca.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, err
 }
 
@@ -218,7 +218,7 @@ func (vca *VapmControlApi) GetDownloadPatchDataChunk(ctx context.Context, wstrRe
 		return nil, err
 	}
 
-	raw, err := vca.client.Do(ctx, request, nil)
+	raw, err := vca.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -232,7 +232,7 @@ func (vca *VapmControlApi) GetDownloadPatchResult(ctx context.Context, wstrReque
 		return nil, err
 	}
 
-	raw, err := vca.client.Do(ctx, request, nil)
+	raw, err := vca.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -256,7 +256,7 @@ func (vca *VapmControlApi) GetEulaParams(ctx context.Context, nEulaId int64) (*P
 	}
 
 	pEulaParams := new(PEULAParams)
-	_, err = vca.client.Do(ctx, request, &pEulaParams)
+	_, err = vca.client.Request(ctx, request, &pEulaParams)
 	return pEulaParams, err
 }
 
@@ -287,7 +287,7 @@ func (vca *VapmControlApi) GetEulasIdsForPatchPrerequisites(ctx context.Context,
 	}
 
 	eulasIDSForPatchPrerequisites := new(EulasIDS)
-	_, err = vca.client.Do(ctx, request, &eulasIDSForPatchPrerequisites)
+	_, err = vca.client.Request(ctx, request, &eulasIDSForPatchPrerequisites)
 	return eulasIDSForPatchPrerequisites, err
 }
 
@@ -324,7 +324,7 @@ func (vca *VapmControlApi) GetEulasIdsForUpdates(ctx context.Context, params Eul
 		return nil, err
 	}
 	eulasID := new(EulasID)
-	_, err = vca.client.Do(ctx, request, &eulasID)
+	_, err = vca.client.Request(ctx, request, &eulasID)
 	return eulasID, err
 }
 
@@ -346,7 +346,7 @@ func (vca *VapmControlApi) GetEulasIdsForVulnerabilitiesPatches(ctx context.Cont
 		return nil, err
 	}
 
-	raw, err := vca.client.Do(ctx, request, nil)
+	raw, err := vca.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -407,7 +407,7 @@ func (vca *VapmControlApi) GetEulasInfo(ctx context.Context, params PUpdates) (*
 	}
 
 	pEulasInfo := new(PEulasInfo)
-	_, err = vca.client.Do(ctx, request, &pEulasInfo)
+	_, err = vca.client.Request(ctx, request, &pEulasInfo)
 	return pEulasInfo, err
 }
 
@@ -425,7 +425,7 @@ func (vca *VapmControlApi) GetPendingRulesTasks(ctx context.Context) (*PendingRu
 	}
 
 	pendingRulesTasks := new(PendingRulesTasks)
-	_, err = vca.client.Do(ctx, request, &pendingRulesTasks)
+	_, err = vca.client.Request(ctx, request, &pendingRulesTasks)
 	return pendingRulesTasks, err
 }
 
@@ -445,7 +445,7 @@ func (vca *VapmControlApi) GetSupportedLcidsForPatchPrerequisites(ctx context.Co
 	}
 
 	supportedLcids := new(SupportedLcids)
-	_, err = vca.client.Do(ctx, request, *supportedLcids)
+	_, err = vca.client.Request(ctx, request, *supportedLcids)
 	return supportedLcids, err
 }
 
@@ -465,7 +465,7 @@ func (vca *VapmControlApi) GetUpdateSupportedLanguagesFilter(ctx context.Context
 	}
 
 	pSupportedLanguages := new(PSupportedLanguages)
-	_, err = vca.client.Do(ctx, request, &pSupportedLanguages)
+	_, err = vca.client.Request(ctx, request, &pSupportedLanguages)
 	return pSupportedLanguages, err
 }
 
@@ -477,7 +477,7 @@ func (vca *VapmControlApi) InitiateDownload(ctx context.Context) ([]byte, error)
 		return nil, err
 	}
 
-	raw, err := vca.client.Do(ctx, request, nil)
+	raw, err := vca.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -493,6 +493,6 @@ func (vca *VapmControlApi) SetPackagesToFixVulnerability(ctx context.Context, pa
 		return nil, err
 	}
 
-	raw, err := vca.client.Do(ctx, request, nil)
+	raw, err := vca.client.Request(ctx, request, nil)
 	return raw, err
 }

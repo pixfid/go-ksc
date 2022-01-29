@@ -46,7 +46,7 @@ func (nh *NagHstCtl) GetHostRuntimeInfo(ctx context.Context, params interface{})
 		return nil, err
 	}
 
-	raw, err := nh.client.Do(ctx, request, nil)
+	raw, err := nh.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -61,7 +61,7 @@ func (nh *NagHstCtl) SendTaskAction(ctx context.Context, szwProduct, szwVersion,
 		return nil, err
 	}
 
-	raw, err := nh.client.Do(ctx, request, nil)
+	raw, err := nh.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -74,6 +74,6 @@ func (nh *NagHstCtl) SendProductAction(ctx context.Context, szwProduct, szwVersi
 		return nil, err
 	}
 
-	raw, err := nh.client.Do(ctx, request, nil)
+	raw, err := nh.client.Request(ctx, request, nil)
 	return raw, err
 }

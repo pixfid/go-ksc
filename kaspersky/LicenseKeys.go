@@ -44,7 +44,7 @@ func (lk *LicenseKeys) InstallKey(ctx context.Context, pKeyInfo interface{}) boo
 		return false
 	}
 
-	raw, err := lk.client.Do(ctx, request, nil)
+	raw, err := lk.client.Request(ctx, request, nil)
 	if raw != nil {
 		return true
 	}
@@ -63,7 +63,7 @@ func (lk *LicenseKeys) DownloadKeyFiles(ctx context.Context, wstrActivationCode 
 		return false
 	}
 
-	raw, err := lk.client.Do(ctx, request, nil)
+	raw, err := lk.client.Request(ctx, request, nil)
 	if raw != nil {
 		return true
 	}
@@ -102,7 +102,7 @@ func (lk *LicenseKeys) AcquireKeyHosts(ctx context.Context, params AcquireKeyHos
 	}
 
 	hostsKeyIterator := new(HostsKeyIterator)
-	raw, err := lk.client.Do(ctx, request, &hostsKeyIterator)
+	raw, err := lk.client.Request(ctx, request, &hostsKeyIterator)
 	return hostsKeyIterator, raw, err
 }
 
@@ -125,7 +125,7 @@ func (lk *LicenseKeys) EnumKeys(ctx context.Context, params EnumKeysParams) ([]b
 		return nil, err
 	}
 
-	raw, err := lk.client.Do(ctx, request, nil)
+	raw, err := lk.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -166,7 +166,7 @@ func (lk *LicenseKeys) GetKeyData(ctx context.Context, params KeyDataParams) ([]
 		return nil, err
 	}
 
-	raw, err := lk.client.Do(ctx, request, nil)
+	raw, err := lk.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -179,7 +179,7 @@ func (lk *LicenseKeys) SaasTryToUninstall(ctx context.Context, bCurrent bool) ([
 		return nil, err
 	}
 
-	raw, err := lk.client.Do(ctx, request, nil)
+	raw, err := lk.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -213,7 +213,7 @@ func (lk *LicenseKeys) AdjustKey(ctx context.Context, params AdjustKeyParams) ([
 		return nil, err
 	}
 
-	raw, err := lk.client.Do(ctx, request, nil)
+	raw, err := lk.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -246,7 +246,7 @@ func (lk *LicenseKeys) SaasTryToInstall(ctx context.Context, params SaasKeyParam
 		return nil, err
 	}
 
-	raw, err := lk.client.Do(ctx, request, nil)
+	raw, err := lk.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -264,7 +264,7 @@ func (lk *LicenseKeys) CheckIfSaasLicenseIsValid(ctx context.Context, params Saa
 		return nil, err
 	}
 
-	raw, err := lk.client.Do(ctx, request, nil)
+	raw, err := lk.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -277,6 +277,6 @@ func (lk *LicenseKeys) UninstallKey(ctx context.Context, bCurrent bool) ([]byte,
 		return nil, err
 	}
 
-	raw, err := lk.client.Do(ctx, request, nil)
+	raw, err := lk.client.Request(ctx, request, nil)
 	return raw, err
 }

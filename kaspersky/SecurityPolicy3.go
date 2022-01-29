@@ -78,7 +78,7 @@ func (sp *SecurityPolicy3) AddSecurityGroup(ctx context.Context, params Security
 	}
 
 	pxgValInt := new(PxgValInt)
-	_, err = sp.client.Do(ctx, request, &pxgValInt)
+	_, err = sp.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, err
 }
 
@@ -98,7 +98,7 @@ func (sp *SecurityPolicy3) AddUserIntoSecurityGroup(ctx context.Context, lUserId
 		return err
 	}
 
-	_, err = sp.client.Do(ctx, request, nil)
+	_, err = sp.client.Request(ctx, request, nil)
 	return err
 }
 
@@ -110,7 +110,7 @@ func (sp *SecurityPolicy3) CloseUserConnections(ctx context.Context, lUserId int
 		return err
 	}
 
-	_, err = sp.client.Do(ctx, request, nil)
+	_, err = sp.client.Request(ctx, request, nil)
 	return err
 }
 
@@ -124,7 +124,7 @@ func (sp *SecurityPolicy3) DeleteSecurityGroup(ctx context.Context, lGrpId int64
 		return err
 	}
 
-	_, err = sp.client.Do(ctx, request, nil)
+	_, err = sp.client.Request(ctx, request, nil)
 	return err
 }
 
@@ -138,7 +138,7 @@ func (sp *SecurityPolicy3) DeleteUserFromSecurityGroup(ctx context.Context, lUse
 		return err
 	}
 
-	_, err = sp.client.Do(ctx, request, nil)
+	_, err = sp.client.Request(ctx, request, nil)
 	return err
 }
 
@@ -150,7 +150,7 @@ func (sp *SecurityPolicy3) MoveUserIntoOtherSecurityGroup(ctx context.Context, l
 		return err
 	}
 
-	_, err = sp.client.Do(ctx, request, nil)
+	_, err = sp.client.Request(ctx, request, nil)
 	return err
 }
 
@@ -176,6 +176,6 @@ func (sp *SecurityPolicy3) UpdateSecurityGroup(ctx context.Context, params Updat
 		return err
 	}
 
-	_, err = sp.client.Do(ctx, request, nil)
+	_, err = sp.client.Request(ctx, request, nil)
 	return err
 }

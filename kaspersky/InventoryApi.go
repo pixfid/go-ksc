@@ -84,7 +84,7 @@ func (ia *InventoryAPI) GetHostInvProducts(ctx context.Context, szwHostID string
 	}
 
 	result := new(HostProducts)
-	raw, err := ia.client.Do(ctx, request, &result)
+	raw, err := ia.client.Request(ctx, request, &result)
 
 	if ia.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -102,7 +102,7 @@ func (ia *InventoryAPI) GetHostInvPatches(ctx context.Context, szwHostID string)
 	}
 
 	result := new(InvPatches)
-	raw, err := ia.client.Do(ctx, request, &result)
+	raw, err := ia.client.Request(ctx, request, &result)
 
 	if ia.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -148,7 +148,7 @@ func (ia *InventoryAPI) GetInvPatchesList(ctx context.Context, params Null) (*In
 	}
 
 	result := new(InvPatches)
-	raw, err := ia.client.Do(ctx, request, &result)
+	raw, err := ia.client.Request(ctx, request, &result)
 
 	if ia.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -200,7 +200,7 @@ func (ia *InventoryAPI) GetInvProductsList(ctx context.Context, params Null) (*I
 	}
 
 	result := new(InvProducts)
-	raw, err := ia.client.Do(ctx, request, &result)
+	raw, err := ia.client.Request(ctx, request, &result)
 
 	if ia.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -216,7 +216,7 @@ func (ia *InventoryAPI) DeleteUninstalledApps(ctx context.Context) error {
 		return err
 	}
 
-	raw, err := ia.client.Do(ctx, request, nil)
+	raw, err := ia.client.Request(ctx, request, nil)
 
 	if ia.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -236,7 +236,7 @@ func (ia *InventoryAPI) GetSrvCompetitorIniFileInfoList(ctx context.Context, wst
 	}
 
 	result := new(PxgValCIFIL)
-	raw, err := ia.client.Do(ctx, request, &result)
+	raw, err := ia.client.Request(ctx, request, &result)
 
 	if ia.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -257,7 +257,7 @@ func (ia *InventoryAPI) GetObservedApps(ctx context.Context, params Null) (*PxgV
 	}
 
 	result := new(PxgValArrayOfString)
-	raw, err := ia.client.Do(ctx, request, &result)
+	raw, err := ia.client.Request(ctx, request, &result)
 
 	if ia.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -285,7 +285,7 @@ func (ia *InventoryAPI) SetObservedApps(ctx context.Context, params ObservedApps
 		return nil, err
 	}
 
-	raw, err := ia.client.Do(ctx, request, nil)
+	raw, err := ia.client.Request(ctx, request, nil)
 
 	if ia.client.Debug {
 		log.Printf("raw response: %s", string(raw))

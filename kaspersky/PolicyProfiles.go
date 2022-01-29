@@ -58,7 +58,7 @@ func (pp *PolicyProfiles) AddProfile(ctx context.Context, params interface{}) ([
 		return nil, err
 	}
 
-	raw, err := pp.client.Do(ctx, request, nil)
+	raw, err := pp.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -70,7 +70,7 @@ func (pp *PolicyProfiles) DeleteProfile(ctx context.Context, nPolicy int64, szwN
 		return nil, err
 	}
 
-	raw, err := pp.client.Do(ctx, request, nil)
+	raw, err := pp.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -84,7 +84,7 @@ func (pp *PolicyProfiles) EnumProfiles(ctx context.Context, nPolicy, nRevision i
 		return nil, err
 	}
 
-	raw, err := pp.client.Do(ctx, request, nil)
+	raw, err := pp.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -96,7 +96,7 @@ func (pp *PolicyProfiles) ExportProfile(ctx context.Context, lPolicy int64, szwN
 		return nil, err
 	}
 
-	raw, err := pp.client.Do(ctx, request, nil)
+	raw, err := pp.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -114,7 +114,7 @@ func (pp *PolicyProfiles) GetEffectivePolicyContents(ctx context.Context, nPolic
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := pp.client.Do(ctx, request, &pxgValStr)
+	raw, err := pp.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -128,7 +128,7 @@ func (pp *PolicyProfiles) GetPriorities(ctx context.Context, nPolicy, nRevision 
 		return nil, err
 	}
 
-	raw, err := pp.client.Do(ctx, request, nil)
+	raw, err := pp.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -142,7 +142,7 @@ func (pp *PolicyProfiles) GetProfile(ctx context.Context, nPolicy, nRevision int
 		return nil, err
 	}
 
-	raw, err := pp.client.Do(ctx, request, nil)
+	raw, err := pp.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -161,7 +161,7 @@ func (pp *PolicyProfiles) GetProfileSettings(ctx context.Context, nPolicy, nLife
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := pp.client.Do(ctx, request, &pxgValStr)
+	raw, err := pp.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -173,7 +173,7 @@ func (pp *PolicyProfiles) ImportProfile(ctx context.Context, lPolicy int64, pDat
 		return nil, err
 	}
 
-	raw, err := pp.client.Do(ctx, request, nil)
+	raw, err := pp.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -193,7 +193,7 @@ func (pp *PolicyProfiles) PutPriorities(ctx context.Context, params ProfilesPrio
 		return nil, err
 	}
 
-	raw, err := pp.client.Do(ctx, request, nil)
+	raw, err := pp.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -206,7 +206,7 @@ func (pp *PolicyProfiles) RenameProfile(ctx context.Context, nPolicy int64, szwE
 		return nil, err
 	}
 
-	raw, err := pp.client.Do(ctx, request, nil)
+	raw, err := pp.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -218,6 +218,6 @@ func (pp *PolicyProfiles) UpdateProfile(ctx context.Context, params interface{})
 		return nil, err
 	}
 
-	raw, err := pp.client.Do(ctx, request, nil)
+	raw, err := pp.client.Request(ctx, request, nil)
 	return raw, err
 }

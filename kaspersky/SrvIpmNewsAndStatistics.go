@@ -64,7 +64,7 @@ func (sins *SrvIpmNewsAndStatistics) GetTrackingData(ctx context.Context, params
 	}
 
 	trackingData := new(TrackingData)
-	raw, err := sins.client.Do(ctx, request, &trackingData)
+	raw, err := sins.client.Request(ctx, request, &trackingData)
 
 	if sins.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -83,7 +83,7 @@ func (sins *SrvIpmNewsAndStatistics) SendStatistics(ctx context.Context, params 
 		return err
 	}
 
-	raw, err := sins.client.Do(ctx, request, nil)
+	raw, err := sins.client.Request(ctx, request, nil)
 
 	if sins.client.Debug {
 		log.Printf("raw response: %s", string(raw))

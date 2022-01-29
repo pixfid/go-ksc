@@ -46,7 +46,7 @@ func (pda *PLCDevApi) DeletePLC(ctx context.Context, params interface{}) ([]byte
 		return nil, err
 	}
 
-	raw, err := pda.client.Do(ctx, request, nil)
+	raw, err := pda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -58,7 +58,7 @@ func (pda *PLCDevApi) GetPLC(ctx context.Context, params interface{}) ([]byte, e
 		return nil, err
 	}
 
-	raw, err := pda.client.Do(ctx, request, nil)
+	raw, err := pda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -70,6 +70,6 @@ func (pda *PLCDevApi) UpdatePLC(ctx context.Context, params interface{}) ([]byte
 		return nil, err
 	}
 
-	raw, err := pda.client.Do(ctx, request, nil)
+	raw, err := pda.client.Request(ctx, request, nil)
 	return raw, err
 }

@@ -96,8 +96,21 @@ type Error struct {
 	Code    *int64  `json:"code,omitempty"`
 	File    *string `json:"file,omitempty"`
 	Line    *int64  `json:"line,omitempty"`
+	Locdata Locdata `json:"locdata"`
 	Message *string `json:"message,omitempty"`
 	Module  *string `json:"module,omitempty"`
+	Subcode int64   `json:"subcode"`
+}
+
+type Locdata struct {
+	Type  string `json:"type"`
+	Value Value1 `json:"value"`
+}
+
+type Value1 struct {
+	Format    string `json:"format"`
+	FormatID  int64  `json:"format-id"`
+	Locmodule string `json:"locmodule"`
 }
 
 func (e Error) Error() string {

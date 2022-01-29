@@ -44,7 +44,7 @@ func (ep *EventProcessing) GetRecordCount(ctx context.Context, strIteratorId str
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := ep.client.Do(ctx, request, &pxgValInt)
+	raw, err := ep.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -58,7 +58,7 @@ func (ep *EventProcessing) GetRecordRange(ctx context.Context, strIteratorId str
 		return nil, err
 	}
 
-	raw, err := ep.client.Do(ctx, request, nil)
+	raw, err := ep.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -71,7 +71,7 @@ func (ep *EventProcessing) ReleaseIterator(ctx context.Context, strIteratorId st
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := ep.client.Do(ctx, request, &pxgValInt)
+	raw, err := ep.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -88,7 +88,7 @@ func (ep *EventProcessing) InitiateDelete(ctx context.Context, params interface{
 		return nil, err
 	}
 
-	raw, err := ep.client.Do(ctx, request, nil)
+	raw, err := ep.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -105,6 +105,6 @@ func (ep *EventProcessing) CancelDelete(ctx context.Context, params interface{})
 		return nil, err
 	}
 
-	raw, err := ep.client.Do(ctx, request, nil)
+	raw, err := ep.client.Request(ctx, request, nil)
 	return raw, err
 }

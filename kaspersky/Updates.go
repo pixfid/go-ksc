@@ -88,7 +88,7 @@ func (upd *Updates) GetAvailableUpdatesInfo(ctx context.Context, strLocalization
 	}
 
 	availableUpdates := new(AvailableUpdates)
-	_, err = upd.client.Do(ctx, request, &availableUpdates)
+	_, err = upd.client.Request(ctx, request, &availableUpdates)
 	return availableUpdates, err
 }
 
@@ -139,7 +139,7 @@ func (upd *Updates) GetUpdatesInfo(ctx context.Context, params UpdatesInfoParams
 	}
 
 	updatesInfos := new(UpdatesInfos)
-	_, err = upd.client.Do(ctx, request, &updatesInfos)
+	_, err = upd.client.Request(ctx, request, &updatesInfos)
 	return updatesInfos, err
 }
 
@@ -151,7 +151,7 @@ func (upd *Updates) RemoveUpdates(ctx context.Context) (*PxgValStr, error) {
 	}
 
 	pxgValStr := new(PxgValStr)
-	_, err = upd.client.Do(ctx, request, &pxgValStr)
+	_, err = upd.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, err
 }
 
@@ -163,6 +163,6 @@ func (upd *Updates) RemoveUpdatesCancel(ctx context.Context, strRequestId string
 		return err
 	}
 
-	_, err = upd.client.Do(ctx, request, nil)
+	_, err = upd.client.Request(ctx, request, nil)
 	return err
 }

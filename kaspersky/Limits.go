@@ -46,6 +46,6 @@ func (ls *Limits) GetLimits(ctx context.Context, param int64) (*PxgValInt, error
 	}
 
 	pxgValInt := new(PxgValInt)
-	_, err = ls.client.Do(ctx, request, &pxgValInt)
+	_, err = ls.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, err
 }

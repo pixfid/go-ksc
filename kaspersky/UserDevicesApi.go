@@ -46,7 +46,7 @@ func (uda *UserDevicesApi) DeleteCommand(ctx context.Context, c_wstrCommandGuid 
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -60,7 +60,7 @@ func (uda *UserDevicesApi) DeleteDevice(ctx context.Context, lDeviceId int64) ([
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -74,7 +74,7 @@ func (uda *UserDevicesApi) DeleteEnrollmentPackage(ctx context.Context, lEnrPkgI
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -88,7 +88,7 @@ func (uda *UserDevicesApi) GenerateQRCode(ctx context.Context, strInputData stri
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -102,7 +102,7 @@ func (uda *UserDevicesApi) GetCommands(ctx context.Context, lDeviceId int64) ([]
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -136,7 +136,7 @@ func (uda *UserDevicesApi) GetCommandsLibrary(ctx context.Context) (*CommandsLib
 	}
 
 	commandsLibrary := new(CommandsLibrary)
-	_, err = uda.client.Do(ctx, request, &commandsLibrary)
+	_, err = uda.client.Request(ctx, request, &commandsLibrary)
 	return commandsLibrary, err
 }
 
@@ -154,7 +154,7 @@ func (uda *UserDevicesApi) GetDecipheredCommandList(ctx context.Context, params 
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -168,7 +168,7 @@ func (uda *UserDevicesApi) GetDevice(ctx context.Context, lDeviceId int64) ([]by
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -190,7 +190,7 @@ func (uda *UserDevicesApi) GetDevices(ctx context.Context, params UserID) ([]byt
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -207,7 +207,7 @@ func (uda *UserDevicesApi) GetDevicesExtraData(ctx context.Context, params inter
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -221,7 +221,7 @@ func (uda *UserDevicesApi) GetEnrollmentPackage(ctx context.Context, llEnrPkgId 
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -242,7 +242,7 @@ func (uda *UserDevicesApi) GetEnrollmentPackageFileData(ctx context.Context, c_w
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -256,7 +256,7 @@ func (uda *UserDevicesApi) GetEnrollmentPackageFileInfo(ctx context.Context, c_w
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -273,7 +273,7 @@ func (uda *UserDevicesApi) GetEnrollmentPackages(ctx context.Context, params int
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -287,7 +287,7 @@ func (uda *UserDevicesApi) GetJournalCommandResult(ctx context.Context, llJrnlId
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -301,7 +301,7 @@ func (uda *UserDevicesApi) GetJournalRecords(ctx context.Context, lDeviceId int6
 	if err != nil {
 		return nil, err
 	}
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -316,7 +316,7 @@ func (uda *UserDevicesApi) GetJournalRecords2(ctx context.Context, lDeviceId int
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -330,7 +330,7 @@ func (uda *UserDevicesApi) GetLatestDeviceActivityDate(ctx context.Context, lDev
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -344,7 +344,7 @@ func (uda *UserDevicesApi) GetMobileAgentSettingStorageData(ctx context.Context,
 	if err != nil {
 		return nil, err
 	}
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -359,7 +359,7 @@ func (uda *UserDevicesApi) GetMultitenancyServerSettings(ctx context.Context, c_
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -374,7 +374,7 @@ func (uda *UserDevicesApi) GetMultitenancyServersInfo(ctx context.Context, nProt
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -389,7 +389,7 @@ func (uda *UserDevicesApi) GetSafeBrowserAutoinstallFlag(ctx context.Context) (*
 	}
 
 	pxgValBool := new(PxgValBool)
-	raw, err := uda.client.Do(ctx, request, &pxgValBool)
+	raw, err := uda.client.Request(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
 }
 
@@ -406,7 +406,7 @@ func (uda *UserDevicesApi) GetSyncInfo(ctx context.Context, params interface{}) 
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -423,7 +423,7 @@ func (uda *UserDevicesApi) GlueDevices(ctx context.Context, lDevice1Id, lDevice2
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -441,7 +441,7 @@ func (uda *UserDevicesApi) PostCommand(ctx context.Context, params interface{}) 
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -456,7 +456,7 @@ func (uda *UserDevicesApi) RecallCommand(ctx context.Context, c_wstrCommandGuid 
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -473,7 +473,7 @@ func (uda *UserDevicesApi) SetMultitenancyServerSettings(ctx context.Context, pa
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -488,7 +488,7 @@ func (uda *UserDevicesApi) SetSafeBrowserAutoinstallFlag(ctx context.Context, bI
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -502,7 +502,7 @@ func (uda *UserDevicesApi) SspLoginAllowed(ctx context.Context) ([]byte,
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -519,6 +519,6 @@ func (uda *UserDevicesApi) UpdateDevice(ctx context.Context, params interface{})
 		return nil, err
 	}
 
-	raw, err := uda.client.Do(ctx, request, nil)
+	raw, err := uda.client.Request(ctx, request, nil)
 	return raw, err
 }

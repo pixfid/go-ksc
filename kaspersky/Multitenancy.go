@@ -44,7 +44,7 @@ func (m *Multitenancy) GetTenantId(ctx context.Context) (*PxgValStr, []byte, err
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := m.client.Do(ctx, request, &pxgValStr)
+	raw, err := m.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -56,7 +56,7 @@ func (m *Multitenancy) GetProducts(ctx context.Context, strProdName, strProdVers
 		return nil, err
 	}
 
-	raw, err := m.client.Do(ctx, request, nil)
+	raw, err := m.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -68,7 +68,7 @@ func (m *Multitenancy) GetAuthToken(ctx context.Context) (*PxgValStr, []byte, er
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := m.client.Do(ctx, request, &pxgValStr)
+	raw, err := m.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -94,6 +94,6 @@ func (m *Multitenancy) CheckAuthToken(ctx context.Context, params VerifyTokenPar
 		return nil, err
 	}
 
-	raw, err := m.client.Do(ctx, request, nil)
+	raw, err := m.client.Request(ctx, request, nil)
 	return raw, err
 }

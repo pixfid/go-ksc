@@ -28,6 +28,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -35,13 +36,14 @@ import (
 type AdfsSso service
 
 // GetSettings Returns a ADFS SSO settings.
-func (as *AdfsSso) GetSettings(ctx context.Context) ([]byte, error) {
-	request, err := http.NewRequest("POST", as.client.Server+"/api/v1.0/AdfsSso.GetSettings", nil)
+func (as *AdfsSso) GetSettings(ctx context.Context, bExtenedSettings bool) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"bExtenedSettings": %v}`, bExtenedSettings))
+	request, err := http.NewRequest("POST", as.client.Server+"/api/v1.0/AdfsSso.GetSettings", bytes.NewBuffer(postData))
 	if err != nil {
 		return nil, err
 	}
 
-	raw, err := as.client.Do(ctx, request, nil)
+	raw, err := as.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -53,6 +55,40 @@ func (as *AdfsSso) SetSettings(ctx context.Context, params interface{}) ([]byte,
 		return nil, err
 	}
 
-	raw, err := as.client.Do(ctx, request, nil)
+	raw, err := as.client.Request(ctx, request, nil)
+	return raw, err
+}
+
+// GetAdfsEnabled Get a ADFS SSO enabled/disabled.
+func (as *AdfsSso) GetAdfsEnabled(ctx context.Context) ([]byte, error) {
+	request, err := http.NewRequest("POST", as.client.Server+"/api/v1.0/AdfsSso.GetAdfsEnabled", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := as.client.Request(ctx, request, nil)
+	return raw, err
+}
+
+// GetJwks Returns a ADFS JWKS.
+func (as *AdfsSso) GetJwks(ctx context.Context) ([]byte, error) {
+	request, err := http.NewRequest("POST", as.client.Server+"/api/v1.0/AdfsSso.GetJwks", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := as.client.Request(ctx, request, nil)
+	return raw, err
+}
+
+// SetAdfsEnabled Set a ADFS SSO enabled/disabled.
+func (as *AdfsSso) SetAdfsEnabled(ctx context.Context, bEnabled bool) ([]byte, error) {
+	postData := []byte(fmt.Sprintf(`{"bEnabled": %v}`, bEnabled))
+	request, err := http.NewRequest("POST", as.client.Server+"/api/v1.0/AdfsSso.SetAdfsEnabled", bytes.NewBuffer(postData))
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := as.client.Request(ctx, request, nil)
 	return raw, err
 }

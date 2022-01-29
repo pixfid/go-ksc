@@ -45,6 +45,6 @@ func (nc *NagCgwHelper) GetProductComponentLocation(ctx context.Context, szwProd
 		return nil, err
 	}
 
-	raw, err := nc.client.Do(ctx, request, nil)
+	raw, err := nc.client.Request(ctx, request, nil)
 	return raw, err
 }

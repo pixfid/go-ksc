@@ -45,7 +45,7 @@ func (tgs *TotpUserSettings) ClearUserSecret(ctx context.Context, llTrusteeID in
 		return err
 	}
 
-	raw, err := tgs.client.Do(ctx, request, nil)
+	raw, err := tgs.client.Request(ctx, request, nil)
 
 	if tgs.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -66,7 +66,7 @@ func (tgs *TotpUserSettings) AddUserToTotpRequrementExceptions(ctx context.Conte
 		return err
 	}
 
-	raw, err := tgs.client.Do(ctx, request, nil)
+	raw, err := tgs.client.Request(ctx, request, nil)
 
 	if tgs.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -86,7 +86,7 @@ func (tgs *TotpUserSettings) IfCanClearUser2FaSecret(ctx context.Context, llTrus
 	}
 
 	result := new(LoggedInUsing2FA)
-	raw, err := tgs.client.Do(ctx, request, &result)
+	raw, err := tgs.client.Request(ctx, request, &result)
 
 	if tgs.client.Debug {
 		log.Printf("raw response: %s", string(raw))

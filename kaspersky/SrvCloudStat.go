@@ -42,7 +42,7 @@ func (scs *SrvCloudStat) CloudWizardStarted(ctx context.Context) error {
 		return err
 	}
 
-	raw, err := scs.client.Do(ctx, request, nil)
+	raw, err := scs.client.Request(ctx, request, nil)
 
 	if scs.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -61,7 +61,7 @@ func (scs *SrvCloudStat) CloudWizardCompleted(ctx context.Context, bErrorHappen 
 		return err
 	}
 
-	raw, err := scs.client.Do(ctx, request, nil)
+	raw, err := scs.client.Request(ctx, request, nil)
 
 	if scs.client.Debug {
 		log.Printf("raw response: %s", string(raw))

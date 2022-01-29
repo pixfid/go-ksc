@@ -46,7 +46,7 @@ func (srn *ServiceNwcCommandProvider) GetCommandPayload(ctx context.Context, wst
 	}
 
 	//TODO check response
-	raw, err := srn.client.Do(ctx, request, nil)
+	raw, err := srn.client.Request(ctx, request, nil)
 
 	if srn.client.Debug {
 		log.Printf("raw response: %s", string(raw))

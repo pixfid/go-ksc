@@ -43,7 +43,7 @@ func (ssr *SrvSsRevision) SsRevisionOpen(ctx context.Context, nVServer, nRevisio
 		return nil, err
 	}
 
-	raw, err := ssr.client.Do(ctx, request, nil)
+	raw, err := ssr.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -57,7 +57,7 @@ func (ssr *SrvSsRevision) SsRevisionClose(ctx context.Context, szwType string) (
 		return nil, err
 	}
 
-	raw, err := ssr.client.Do(ctx, request, nil)
+	raw, err := ssr.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -68,7 +68,7 @@ func (ssr *SrvSsRevision) SsRevisionGetNames(ctx context.Context, szwId, product
 		return nil, err
 	}
 
-	raw, err := ssr.client.Do(ctx, request, nil)
+	raw, err := ssr.client.Request(ctx, request, nil)
 
 	if err != nil {
 		return nil, err

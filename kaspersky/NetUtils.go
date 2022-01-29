@@ -40,7 +40,7 @@ func (ac *NetUtils) DownloadFile(ctx context.Context, prefix string) ([]byte, er
 		return nil, err
 	}
 
-	raw, err := ac.client.Do(ctx, request, nil)
+	raw, err := ac.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -53,6 +53,6 @@ func (ac *NetUtils) UploadFile(ctx context.Context, prefix string, data io.Reade
 		return nil, err
 	}
 
-	raw, err := ac.client.Do(ctx, request, nil)
+	raw, err := ac.client.Request(ctx, request, nil)
 	return raw, err
 }

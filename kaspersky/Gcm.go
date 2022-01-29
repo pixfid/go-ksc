@@ -45,7 +45,7 @@ func (gm *Gcm) CheckIfGcmServerSettingsPresent(ctx context.Context) (*PxgValBool
 
 	result := new(PxgValBool)
 
-	raw, err := gm.client.Do(ctx, request, &result)
+	raw, err := gm.client.Request(ctx, request, &result)
 	if gm.client.Debug {
 		log.Printf("raw response: %s", string(raw))
 	}
@@ -62,7 +62,7 @@ func (gm *Gcm) CheckIfGcmServerSettingsShouldBeSet(ctx context.Context) (*PxgVal
 	}
 
 	result := new(PxgValBool)
-	raw, err := gm.client.Do(ctx, request, &result)
+	raw, err := gm.client.Request(ctx, request, &result)
 
 	if gm.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -79,7 +79,7 @@ func (gm *Gcm) DeleteGcmServerSettings(ctx context.Context) (*PxgValBool, error)
 	}
 
 	result := new(PxgValBool)
-	raw, err := gm.client.Do(ctx, request, &result)
+	raw, err := gm.client.Request(ctx, request, &result)
 
 	if gm.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -101,7 +101,7 @@ func (gm *Gcm) GetGcmPropagation2VS(ctx context.Context) (*PropagationState, err
 	}
 
 	propagationState := new(PropagationState)
-	raw, err := gm.client.Do(ctx, request, &propagationState)
+	raw, err := gm.client.Request(ctx, request, &propagationState)
 
 	if gm.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -124,7 +124,7 @@ func (gm *Gcm) SetGcmPropagation2VS(ctx context.Context, params PropagationState
 		return nil, err
 	}
 
-	raw, err := gm.client.Do(ctx, request, nil)
+	raw, err := gm.client.Request(ctx, request, nil)
 
 	if gm.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -156,7 +156,7 @@ func (gm *Gcm) UpdateGcmServerSettings(ctx context.Context, params GCM) (*PxgVal
 	}
 
 	result := new(PxgValBool)
-	raw, err := gm.client.Do(ctx, request, &result)
+	raw, err := gm.client.Request(ctx, request, &result)
 
 	if gm.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -173,7 +173,7 @@ func (gm *Gcm) GetGcmServerSettings(ctx context.Context) (*GCM, error) {
 	}
 
 	gcm := new(GCM)
-	raw, err := gm.client.Do(ctx, request, &gcm)
+	raw, err := gm.client.Request(ctx, request, &gcm)
 
 	if gm.client.Debug {
 		log.Printf("raw response: %s", string(raw))

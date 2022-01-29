@@ -50,7 +50,7 @@ func (snd *ServiceNwcDeployment) CreateServiceAccount(ctx context.Context) (*Ser
 	}
 
 	result := new(ServiceAccount)
-	raw, err := snd.client.Do(ctx, request, &result)
+	raw, err := snd.client.Request(ctx, request, &result)
 
 	if snd.client.Debug {
 		log.Printf("raw response: %s", string(raw))

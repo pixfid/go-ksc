@@ -43,7 +43,7 @@ func (cp *CgwHelper) GetSlaveServerLocation(ctx context.Context, nSlaveServerId 
 		return nil, err
 	}
 
-	raw, err := cp.client.Do(ctx, request, nil)
+	raw, err := cp.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -71,6 +71,6 @@ func (cp *CgwHelper) GetNagentLocation(ctx context.Context, wsHostName string) (
 	}
 
 	nagentLocation := new(NagentLocation)
-	raw, err := cp.client.Do(ctx, request, &nagentLocation)
+	raw, err := cp.client.Request(ctx, request, &nagentLocation)
 	return nagentLocation, raw, err
 }

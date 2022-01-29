@@ -62,7 +62,7 @@ func (nrs *NagRemoteScreen) GetExistingSessions(ctx context.Context, nType int64
 	}
 
 	existingSessions := new(ExistingSessions)
-	raw, err := nrs.client.Do(ctx, request, &existingSessions)
+	raw, err := nrs.client.Request(ctx, request, &existingSessions)
 	return existingSessions, raw, err
 }
 
@@ -90,7 +90,7 @@ func (nrs *NagRemoteScreen) OpenSession(ctx context.Context, nType int64, szwID 
 	}
 
 	sessionHandle := new(SessionHandle)
-	raw, err := nrs.client.Do(ctx, request, &sessionHandle)
+	raw, err := nrs.client.Request(ctx, request, &sessionHandle)
 	return sessionHandle, raw, err
 }
 
@@ -113,7 +113,7 @@ func (nrs *NagRemoteScreen) CloseSession(ctx context.Context, params SharingHand
 		return nil, err
 	}
 
-	raw, err := nrs.client.Do(ctx, request, nil)
+	raw, err := nrs.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -140,7 +140,7 @@ func (nrs *NagRemoteScreen) GetDataForTunnel(ctx context.Context, params Sharing
 	}
 
 	tunnelData := new(TunnelData)
-	raw, err := nrs.client.Do(ctx, request, &tunnelData)
+	raw, err := nrs.client.Request(ctx, request, &tunnelData)
 	return tunnelData, raw, err
 }
 
@@ -163,6 +163,6 @@ func (nrs *NagRemoteScreen) GetWdsData(ctx context.Context, params WdsDataParams
 		return nil, err
 	}
 
-	raw, err := nrs.client.Do(ctx, request, nil)
+	raw, err := nrs.client.Request(ctx, request, nil)
 	return raw, err
 }

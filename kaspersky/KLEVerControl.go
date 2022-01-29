@@ -43,7 +43,7 @@ func (kvc *KLEVerControl) CancelDownloadDistributive(ctx context.Context, wstrRe
 		return nil, err
 	}
 
-	raw, err := kvc.client.Do(ctx, request, nil)
+	raw, err := kvc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -55,7 +55,7 @@ func (kvc *KLEVerControl) GetDownloadDistributiveResult(ctx context.Context, wst
 		return nil, err
 	}
 
-	raw, err := kvc.client.Do(ctx, request, nil)
+	raw, err := kvc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -72,7 +72,7 @@ func (kvc *KLEVerControl) ChangeCreatePackage(ctx context.Context, params interf
 		return nil, err
 	}
 
-	raw, err := kvc.client.Do(ctx, request, nil)
+	raw, err := kvc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -89,6 +89,6 @@ func (kvc *KLEVerControl) DownloadDistributiveAsync(ctx context.Context, params 
 		return nil, err
 	}
 
-	raw, err := kvc.client.Do(ctx, request, nil)
+	raw, err := kvc.client.Request(ctx, request, nil)
 	return raw, err
 }

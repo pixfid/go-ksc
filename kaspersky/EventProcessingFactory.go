@@ -53,7 +53,7 @@ func (epf *EventProcessingFactory) CreateEventProcessing(ctx context.Context, pa
 	}
 
 	strIteratorId := new(StrIteratorId)
-	raw, err := epf.client.Do(ctx, request, &strIteratorId)
+	raw, err := epf.client.Request(ctx, request, &strIteratorId)
 	return strIteratorId, raw, err
 }
 
@@ -68,7 +68,7 @@ func (epf *EventProcessingFactory) CreateEventProcessing2(ctx context.Context, p
 	}
 
 	strIteratorId := new(StrIteratorId)
-	raw, err := epf.client.Do(ctx, request, &strIteratorId)
+	raw, err := epf.client.Request(ctx, request, &strIteratorId)
 	return strIteratorId, raw, err
 }
 
@@ -95,7 +95,7 @@ func (epf *EventProcessingFactory) CreateEventProcessingForHost(ctx context.Cont
 	}
 
 	strIteratorId := new(StrIteratorId)
-	raw, err := epf.client.Do(ctx, request, &strIteratorId)
+	raw, err := epf.client.Request(ctx, request, &strIteratorId)
 	return strIteratorId, raw, err
 }
 
@@ -110,6 +110,6 @@ func (epf *EventProcessingFactory) CreateEventProcessingForHost2(ctx context.Con
 	}
 
 	strIteratorId := new(StrIteratorId)
-	raw, err := epf.client.Do(ctx, request, &strIteratorId)
+	raw, err := epf.client.Request(ctx, request, &strIteratorId)
 	return strIteratorId, raw, err
 }

@@ -44,7 +44,7 @@ func (lis *LicenseInfoSync) AcquireKeysForProductOnHost(ctx context.Context, szw
 		return nil, err
 	}
 
-	raw, err := lis.client.Do(ctx, request, nil)
+	raw, err := lis.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -58,7 +58,7 @@ func (lis *LicenseInfoSync) GetKeyDataForHost(ctx context.Context, szwSerial, sz
 		return nil, err
 	}
 
-	raw, err := lis.client.Do(ctx, request, nil)
+	raw, err := lis.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -85,7 +85,7 @@ func (lis *LicenseInfoSync) IsLicForSaasValid2(ctx context.Context, params SaasK
 		return nil, err
 	}
 
-	raw, err := lis.client.Do(ctx, request, nil)
+	raw, err := lis.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -98,7 +98,7 @@ func (lis *LicenseInfoSync) IsPCloudKey(ctx context.Context, nProductId int64) (
 		return nil, err
 	}
 
-	raw, err := lis.client.Do(ctx, request, nil)
+	raw, err := lis.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -111,7 +111,7 @@ func (lis *LicenseInfoSync) SynchronizeLicInfo2(ctx context.Context) (*PxgValStr
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := lis.client.Do(ctx, request, &pxgValStr)
+	raw, err := lis.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -124,7 +124,7 @@ func (lis *LicenseInfoSync) TryToInstallLicForSaas2(ctx context.Context, params 
 		return nil, err
 	}
 
-	raw, err := lis.client.Do(ctx, request, nil)
+	raw, err := lis.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -137,6 +137,6 @@ func (lis *LicenseInfoSync) TryToUnistallLicense(ctx context.Context, bCurrent b
 		return nil, err
 	}
 
-	raw, err := lis.client.Do(ctx, request, nil)
+	raw, err := lis.client.Request(ctx, request, nil)
 	return raw, err
 }

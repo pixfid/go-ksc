@@ -57,7 +57,7 @@ func (ea *ExtAud) GetRevision(ctx context.Context, nObjId, nObjType, nObjRevisio
 		return nil, err
 	}
 
-	raw, err := ea.client.Do(ctx, request, &out)
+	raw, err := ea.client.Request(ctx, request, &out)
 	return raw, err
 }
 
@@ -86,7 +86,7 @@ func (ea *ExtAud) UpdateRevisionDesc(ctx context.Context, nObjId, nObjType, nObj
 		return nil, err
 	}
 
-	raw, err := ea.client.Do(ctx, request, nil)
+	raw, err := ea.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -112,6 +112,6 @@ func (ea *ExtAud) FinalDelete(ctx context.Context, params FinalDeleteParams) ([]
 		return nil, err
 	}
 
-	raw, err := ea.client.Do(ctx, request, nil)
+	raw, err := ea.client.Request(ctx, request, nil)
 	return raw, err
 }

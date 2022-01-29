@@ -44,7 +44,7 @@ func (hg *HostGroup) AddDomain(ctx context.Context, strDomain string, nType int6
 		return nil, err
 	}
 
-	raw, err := hg.client.Do(ctx, request, nil)
+	raw, err := hg.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -72,7 +72,7 @@ func (hg *HostGroup) AddGroup(ctx context.Context, params AddGroupParams) (*PxgV
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := hg.client.Do(ctx, request, &pxgValInt)
+	raw, err := hg.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -86,7 +86,7 @@ func (hg *HostGroup) AddGroupHostsForSync(ctx context.Context, nGroupId int64, s
 	}
 
 	wActionGUID := new(WActionGUID)
-	raw, err := hg.client.Do(ctx, request, &wActionGUID)
+	raw, err := hg.client.Request(ctx, request, &wActionGUID)
 	return wActionGUID, raw, err
 }
 
@@ -121,7 +121,7 @@ func (hg *HostGroup) AddHost(ctx context.Context, params NewHost) (*PxgValStr, [
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := hg.client.Do(ctx, request, &pxgValStr)
+	raw, err := hg.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -147,7 +147,7 @@ func (hg *HostGroup) AddHostsForSync(ctx context.Context, params HostsForSyncPar
 	}
 
 	wActionGUID := new(WActionGUID)
-	raw, err := hg.client.Do(ctx, request, &wActionGUID)
+	raw, err := hg.client.Request(ctx, request, &wActionGUID)
 	return wActionGUID, raw, err
 }
 
@@ -178,7 +178,7 @@ func (hg *HostGroup) AddIncident(ctx context.Context, params AddIncidentsParams)
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := hg.client.Do(ctx, request, &pxgValStr)
+	raw, err := hg.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -190,7 +190,7 @@ func (hg *HostGroup) DelDomain(ctx context.Context, strDomain string) ([]byte, e
 		return nil, err
 	}
 
-	raw, err := hg.client.Do(ctx, request, nil)
+	raw, err := hg.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -202,7 +202,7 @@ func (hg *HostGroup) DeleteIncident(ctx context.Context, nId int64) ([]byte, err
 		return nil, err
 	}
 
-	raw, err := hg.client.Do(ctx, request, nil)
+	raw, err := hg.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -233,7 +233,7 @@ func (hg *HostGroup) FindGroups(ctx context.Context, params HGParams) (*Accessor
 	}
 
 	accessor := new(Accessor)
-	raw, err := hg.client.Do(ctx, request, &accessor)
+	raw, err := hg.client.Request(ctx, request, &accessor)
 	return accessor, raw, err
 }
 
@@ -251,7 +251,7 @@ func (hg *HostGroup) FindHosts(ctx context.Context, params HGParams) (*Accessor,
 	}
 
 	accessor := new(Accessor)
-	raw, err := hg.client.Do(ctx, request, &accessor)
+	raw, err := hg.client.Request(ctx, request, &accessor)
 	return accessor, raw, err
 }
 
@@ -273,7 +273,7 @@ func (hg *HostGroup) FindHostsAsync(ctx context.Context, params HGParams) (*Requ
 	}
 
 	requestID := new(RequestID)
-	raw, err := hg.client.Do(ctx, request, &requestID)
+	raw, err := hg.client.Request(ctx, request, &requestID)
 	return requestID, raw, err
 }
 
@@ -285,7 +285,7 @@ func (hg *HostGroup) FindHostsAsyncCancel(ctx context.Context, strRequestId stri
 		return err
 	}
 
-	_, err = hg.client.Do(ctx, request, nil)
+	_, err = hg.client.Request(ctx, request, nil)
 	if err != nil {
 		return err
 	}
@@ -303,7 +303,7 @@ func (hg *HostGroup) FindHostsAsyncGetAccessor(ctx context.Context, strRequestId
 	}
 
 	asyncAccessor := new(AsyncAccessor)
-	raw, err := hg.client.Do(ctx, request, &asyncAccessor)
+	raw, err := hg.client.Request(ctx, request, &asyncAccessor)
 	return asyncAccessor, raw, err
 }
 
@@ -328,7 +328,7 @@ func (hg *HostGroup) FindIncidents(ctx context.Context, params FindIncidentsPara
 	}
 
 	accessor := new(Accessor)
-	raw, err := hg.client.Do(ctx, request, &accessor)
+	raw, err := hg.client.Request(ctx, request, &accessor)
 	return accessor, raw, err
 }
 
@@ -345,7 +345,7 @@ func (hg *HostGroup) FindUsers(ctx context.Context, params PFindParams) (*Access
 	}
 
 	accessor := new(Accessor)
-	raw, err := hg.client.Do(ctx, request, &accessor)
+	raw, err := hg.client.Request(ctx, request, &accessor)
 	return accessor, raw, err
 }
 
@@ -389,7 +389,7 @@ func (hg *HostGroup) GetAllHostFixes(ctx context.Context) (*HostFixes, error) {
 		return nil, err
 	}
 	hostFixes := new(HostFixes)
-	_, err = hg.client.Do(ctx, request, &hostFixes)
+	_, err = hg.client.Request(ctx, request, &hostFixes)
 	return hostFixes, err
 }
 
@@ -431,7 +431,7 @@ func (hg *HostGroup) GetComponentsForProductOnHost(ctx context.Context, strHostN
 	}
 
 	var productComponents *ProductComponents
-	raw, err := hg.client.Do(ctx, request, &productComponents)
+	raw, err := hg.client.Request(ctx, request, &productComponents)
 	return productComponents, raw, err
 }
 
@@ -448,7 +448,7 @@ func (hg *HostGroup) GetDomainHosts(ctx context.Context, domain string) ([]byte,
 		return nil, err
 	}
 
-	raw, err := hg.client.Do(ctx, request, nil)
+	raw, err := hg.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -475,7 +475,7 @@ func (hg *HostGroup) GetDomains(ctx context.Context) (*Domains, error) {
 	}
 
 	domains := new(Domains)
-	_, err = hg.client.Do(ctx, request, &domains)
+	_, err = hg.client.Request(ctx, request, &domains)
 	return domains, err
 }
 
@@ -488,7 +488,7 @@ func (hg *HostGroup) GetGroupId(ctx context.Context, nParent int64, strName stri
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := hg.client.Do(ctx, request, &pxgValInt)
+	raw, err := hg.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -561,7 +561,7 @@ func (hg *HostGroup) GetGroupInfo(ctx context.Context, nGroupId int64) (*GroupIn
 	}
 
 	groupInfo := new(GroupInfo)
-	_, err = hg.client.Do(ctx, request, &groupInfo)
+	_, err = hg.client.Request(ctx, request, &groupInfo)
 	return groupInfo, err
 }
 
@@ -589,7 +589,7 @@ func (hg *HostGroup) GetGroupInfoEx(ctx context.Context, params GroupInfoExParam
 	}
 
 	groupInfo := new(GroupInfo)
-	raw, err := hg.client.Do(ctx, request, &groupInfo)
+	raw, err := hg.client.Request(ctx, request, &groupInfo)
 	return groupInfo, raw, err
 }
 
@@ -618,7 +618,7 @@ func (hg *HostGroup) GetHostfixesForProductOnHost(ctx context.Context, strHostNa
 	}
 
 	productFixes := new(ProductFixes)
-	raw, err := hg.client.Do(ctx, request, &productFixes)
+	raw, err := hg.client.Request(ctx, request, &productFixes)
 	return productFixes, raw, err
 }
 
@@ -634,7 +634,7 @@ func (hg *HostGroup) GetHostInfo(ctx context.Context, params interface{}) ([]byt
 		return nil, err
 	}
 
-	raw, err := hg.client.Do(ctx, request, nil)
+	raw, err := hg.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -646,7 +646,7 @@ func (hg *HostGroup) GetHostProducts(ctx context.Context, strHostName string) ([
 		return nil, err
 	}
 
-	raw, err := hg.client.Do(ctx, request, nil)
+	raw, err := hg.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -659,7 +659,7 @@ func (hg *HostGroup) GetHostTasks(ctx context.Context, hostId string) (*PxgValSt
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := hg.client.Do(ctx, request, &pxgValStr)
+	raw, err := hg.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -793,7 +793,7 @@ func (hg *HostGroup) GetInstanceStatistics(ctx context.Context, params InstanceS
 	}
 
 	result := new(ServerInstanceStatistics)
-	raw, err := hg.client.Do(ctx, request, &result)
+	raw, err := hg.client.Request(ctx, request, &result)
 
 	if hg.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -819,7 +819,7 @@ func (hg *HostGroup) GetRunTimeInfo(ctx context.Context, params StaticInfoParams
 		return nil, err
 	}
 
-	raw, err := hg.client.Do(ctx, request, nil)
+	raw, err := hg.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -868,7 +868,7 @@ func (hg *HostGroup) GetStaticInfo(ctx context.Context, params StaticInfoParams)
 	}
 
 	result := new(ServerStaticInfo)
-	raw, err := hg.client.Do(ctx, request, &result)
+	raw, err := hg.client.Request(ctx, request, &result)
 
 	if hg.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -902,7 +902,7 @@ func (hg *HostGroup) GetSubgroups(ctx context.Context, nGroupId int64, nDepth in
 	}
 
 	subGroups := new(SubGroups)
-	_, err = hg.client.Do(ctx, request, &subGroups)
+	_, err = hg.client.Request(ctx, request, &subGroups)
 	return subGroups, err
 }
 
@@ -914,7 +914,7 @@ func (hg *HostGroup) GroupIdGroups(ctx context.Context) (*PxgValInt, []byte, err
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := hg.client.Do(ctx, request, &pxgValInt)
+	raw, err := hg.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -926,7 +926,7 @@ func (hg *HostGroup) GroupIdSuper(ctx context.Context) (*PxgValInt, []byte, erro
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := hg.client.Do(ctx, request, &pxgValInt)
+	raw, err := hg.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -938,7 +938,7 @@ func (hg *HostGroup) GroupIdUnassigned(ctx context.Context) (*PxgValInt, []byte,
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := hg.client.Do(ctx, request, &pxgValInt)
+	raw, err := hg.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -952,7 +952,7 @@ func (hg *HostGroup) MoveHostsFromGroupToGroup(ctx context.Context, nSrcGroupId 
 	}
 
 	wActionGUID := new(WActionGUID)
-	raw, err := hg.client.Do(ctx, request, &wActionGUID)
+	raw, err := hg.client.Request(ctx, request, &wActionGUID)
 	return wActionGUID, raw, err
 }
 
@@ -975,7 +975,7 @@ func (hg *HostGroup) MoveHostsToGroup(ctx context.Context, params HostsToGroupPa
 		return nil, err
 	}
 
-	raw, err := hg.client.Do(ctx, request, nil)
+	raw, err := hg.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -988,7 +988,7 @@ func (hg *HostGroup) RemoveGroup(ctx context.Context, nGroup, nFlags int64) (*WA
 	}
 
 	wActionGUID := new(WActionGUID)
-	raw, err := hg.client.Do(ctx, request, &wActionGUID)
+	raw, err := hg.client.Request(ctx, request, &wActionGUID)
 	return wActionGUID, raw, err
 }
 
@@ -1000,7 +1000,7 @@ func (hg *HostGroup) RemoveHost(ctx context.Context, strHostName string) error {
 		return err
 	}
 
-	_, err = hg.client.Do(ctx, request, nil)
+	_, err = hg.client.Request(ctx, request, nil)
 	if err != nil {
 		return err
 	}
@@ -1034,7 +1034,7 @@ func (hg *HostGroup) RemoveHosts(ctx context.Context, params RemoveHostsParams) 
 		return nil, err
 	}
 
-	raw, err := hg.client.Do(ctx, request, nil)
+	raw, err := hg.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -1081,7 +1081,7 @@ func (hg *HostGroup) ResolveAndMoveToGroup(ctx context.Context, params PInfoRaM)
 	}
 
 	klhstWksResults := new(KlhstWksResults)
-	raw, err := hg.client.Do(ctx, request, &klhstWksResults)
+	raw, err := hg.client.Request(ctx, request, &klhstWksResults)
 	return klhstWksResults, raw, err
 }
 
@@ -1094,7 +1094,7 @@ func (hg *HostGroup) RestartNetworkScanning(ctx context.Context, nType int64) (*
 	}
 
 	pxgRetError := new(PxgRetError)
-	raw, err := hg.client.Do(ctx, request, &pxgRetError)
+	raw, err := hg.client.Request(ctx, request, &pxgRetError)
 	return pxgRetError, raw, err
 }
 
@@ -1110,7 +1110,7 @@ func (hg *HostGroup) SetLocInfo(ctx context.Context, params interface{}) ([]byte
 		return nil, err
 	}
 
-	raw, err := hg.client.Do(ctx, request, nil)
+	raw, err := hg.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -1153,7 +1153,7 @@ func (hg *HostGroup) SSCreateSection(ctx context.Context, params SectionParams) 
 		return nil, err
 	}
 
-	raw, err := hg.client.Do(ctx, request, nil)
+	raw, err := hg.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -1169,7 +1169,7 @@ func (hg *HostGroup) SSWrite(ctx context.Context, params SectionParams) ([]byte,
 		return nil, err
 	}
 
-	raw, err := hg.client.Do(ctx, request, nil)
+	raw, err := hg.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -1190,7 +1190,7 @@ func (hg *HostGroup) SSGetNames(ctx context.Context, params SectionParams) (*Pxg
 	}
 
 	pxgValArrayOfString := new(PxgValArrayOfString)
-	raw, err := hg.client.Do(ctx, request, &pxgValArrayOfString)
+	raw, err := hg.client.Request(ctx, request, &pxgValArrayOfString)
 	return pxgValArrayOfString, raw, err
 }
 
@@ -1206,7 +1206,7 @@ func (hg *HostGroup) SSRead(ctx context.Context, params SectionParams) ([]byte, 
 		return nil, err
 	}
 
-	raw, err := hg.client.Do(ctx, request, nil)
+	raw, err := hg.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -1242,7 +1242,7 @@ func (hg *HostGroup) UpdateGroup(ctx context.Context, params UpdateGroupParam) (
 		return nil, err
 	}
 
-	raw, err := hg.client.Do(ctx, request, nil)
+	raw, err := hg.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -1258,7 +1258,7 @@ func (hg *HostGroup) UpdateHost(ctx context.Context, params interface{}) ([]byte
 		return nil, err
 	}
 
-	raw, err := hg.client.Do(ctx, request, nil)
+	raw, err := hg.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -1274,7 +1274,7 @@ func (hg *HostGroup) UpdateHostsMultiple(ctx context.Context, params interface{}
 		return nil, err
 	}
 
-	raw, err := hg.client.Do(ctx, request, nil)
+	raw, err := hg.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -1308,7 +1308,7 @@ func (hg *HostGroup) UpdateIncident(ctx context.Context, params UpdateIncidentPa
 		return nil, err
 	}
 
-	raw, err := hg.client.Do(ctx, request, nil)
+	raw, err := hg.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -1321,7 +1321,7 @@ func (hg *HostGroup) ZeroVirusCountForGroup(ctx context.Context, nParent int64) 
 	}
 
 	wActionGUID := new(WActionGUID)
-	raw, err := hg.client.Do(ctx, request, &wActionGUID)
+	raw, err := hg.client.Request(ctx, request, &wActionGUID)
 	return wActionGUID, raw, err
 }
 
@@ -1334,6 +1334,6 @@ func (hg *HostGroup) ZeroVirusCountForHosts(ctx context.Context, params interfac
 	}
 
 	wActionGUID := new(WActionGUID)
-	raw, err := hg.client.Do(ctx, request, &wActionGUID)
+	raw, err := hg.client.Request(ctx, request, &wActionGUID)
 	return wActionGUID, raw, err
 }

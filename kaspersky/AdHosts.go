@@ -62,7 +62,7 @@ func (ah *AdHosts) FindAdGroups(ctx context.Context, params FindAdGroupsParams) 
 	}
 
 	aDHostIterator := new(ADHostIterator)
-	raw, err := ah.client.Do(ctx, request, &aDHostIterator)
+	raw, err := ah.client.Request(ctx, request, &aDHostIterator)
 	return aDHostIterator, raw, err
 }
 
@@ -102,7 +102,7 @@ func (ah *AdHosts) GetChildComputer(ctx context.Context, params ChildComputerPar
 	}
 
 	adHstIdParent := new(AdHstIDParent)
-	raw, err := ah.client.Do(ctx, request, &adHstIdParent)
+	raw, err := ah.client.Request(ctx, request, &adHstIdParent)
 	return adHstIdParent, raw, err
 }
 
@@ -115,7 +115,7 @@ func (ah *AdHosts) GetChildComputers(ctx context.Context, params ChildComputersP
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := ah.client.Do(ctx, request, &pxgValStr)
+	raw, err := ah.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -140,7 +140,7 @@ func (ah *AdHosts) GetChildOUs(ctx context.Context, params ChildOUParams) (*PxgV
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := ah.client.Do(ctx, request, &pxgValStr)
+	raw, err := ah.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -179,7 +179,7 @@ func (ah *AdHosts) GetOU(ctx context.Context, params OUAttributesParams) (*OUAtt
 	}
 
 	oUAttributes := new(OUAttributes)
-	raw, err := ah.client.Do(ctx, request, &oUAttributes)
+	raw, err := ah.client.Request(ctx, request, &oUAttributes)
 	return oUAttributes, raw, err
 }
 
@@ -210,6 +210,6 @@ func (ah *AdHosts) UpdateOU(ctx context.Context, params UpdateOUParams) ([]byte,
 		return nil, err
 	}
 
-	raw, err := ah.client.Do(ctx, request, nil)
+	raw, err := ah.client.Request(ctx, request, nil)
 	return raw, err
 }

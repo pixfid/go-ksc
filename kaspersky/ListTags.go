@@ -54,7 +54,7 @@ func (lt *ListTags) GetAllTags(ctx context.Context, params interface{}) ([]byte,
 		return nil, err
 	}
 
-	raw, err := lt.client.Do(ctx, request, nil)
+	raw, err := lt.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -76,7 +76,7 @@ func (lt *ListTags) AddTag(ctx context.Context, params NewTagParams) ([]byte, er
 		return nil, err
 	}
 
-	raw, err := lt.client.Do(ctx, request, nil)
+	raw, err := lt.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -92,7 +92,7 @@ func (lt *ListTags) DeleteTags2(ctx context.Context, params interface{}) ([]byte
 		return nil, err
 	}
 
-	raw, err := lt.client.Do(ctx, request, nil)
+	raw, err := lt.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -108,7 +108,7 @@ func (lt *ListTags) GetTags(ctx context.Context, params interface{}) ([]byte, er
 		return nil, err
 	}
 
-	raw, err := lt.client.Do(ctx, request, nil)
+	raw, err := lt.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -126,7 +126,7 @@ func (lt *ListTags) RenameTag(ctx context.Context, params interface{}) ([]byte, 
 		return nil, err
 	}
 
-	raw, err := lt.client.Do(ctx, request, nil)
+	raw, err := lt.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -142,6 +142,6 @@ func (lt *ListTags) SetTags(ctx context.Context, params interface{}) ([]byte, er
 		return nil, err
 	}
 
-	raw, err := lt.client.Do(ctx, request, nil)
+	raw, err := lt.client.Request(ctx, request, nil)
 	return raw, err
 }

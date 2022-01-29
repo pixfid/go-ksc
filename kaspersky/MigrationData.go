@@ -64,7 +64,7 @@ func (md *MigrationData) AcquireKnownProducts(ctx context.Context) (*KnownProduc
 	}
 
 	knownProducts := new(KnownProducts)
-	raw, err := md.client.Do(ctx, request, &knownProducts)
+	raw, err := md.client.Request(ctx, request, &knownProducts)
 	return knownProducts, raw, err
 }
 
@@ -78,7 +78,7 @@ func (md *MigrationData) CancelExport(ctx context.Context, wstrActionGuid string
 		return nil, err
 	}
 
-	raw, err := md.client.Do(ctx, request, nil)
+	raw, err := md.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -145,7 +145,7 @@ func (md *MigrationData) Export(ctx context.Context, params MDExportParams) (*Px
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := md.client.Do(ctx, request, &pxgValStr)
+	raw, err := md.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -171,7 +171,7 @@ func (md *MigrationData) InitFileUpload(ctx context.Context) (*PxgValStr, []byte
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := md.client.Do(ctx, request, &pxgValStr)
+	raw, err := md.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -211,6 +211,6 @@ func (md *MigrationData) Import(ctx context.Context, params ImportMDParams) (*Px
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := md.client.Do(ctx, request, &pxgValStr)
+	raw, err := md.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }

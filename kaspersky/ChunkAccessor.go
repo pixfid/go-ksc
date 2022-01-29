@@ -43,7 +43,7 @@ func (ca *ChunkAccessor) Release(ctx context.Context, accessor string) bool {
 		return false
 	}
 
-	raw, err := ca.client.Do(ctx, request, nil)
+	raw, err := ca.client.Request(ctx, request, nil)
 	if raw != nil {
 		return true
 	}
@@ -59,7 +59,7 @@ func (ca *ChunkAccessor) GetItemsCount(ctx context.Context, accessor string) (*P
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := ca.client.Do(ctx, request, &pxgValInt)
+	raw, err := ca.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -83,6 +83,6 @@ func (ca *ChunkAccessor) GetItemsChunk(ctx context.Context, params ItemsChunkPar
 		return nil, err
 	}
 
-	raw, err := ca.client.Do(ctx, request, &result)
+	raw, err := ca.client.Request(ctx, request, &result)
 	return raw, err
 }

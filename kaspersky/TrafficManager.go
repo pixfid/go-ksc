@@ -87,7 +87,7 @@ func (tm *TrafficManager) AddRestriction(ctx context.Context, params TrafficRest
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := tm.client.Do(ctx, request, &pxgValInt)
+	raw, err := tm.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -99,7 +99,7 @@ func (tm *TrafficManager) DeleteRestriction(ctx context.Context, nRestrictionId 
 		return nil, err
 	}
 
-	raw, err := tm.client.Do(ctx, request, nil)
+	raw, err := tm.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -110,7 +110,7 @@ func (tm *TrafficManager) GetRestrictions(ctx context.Context) ([]byte, error) {
 		return nil, err
 	}
 
-	raw, err := tm.client.Do(ctx, request, nil)
+	raw, err := tm.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -122,6 +122,6 @@ func (tm *TrafficManager) UpdateRestriction(ctx context.Context, params interfac
 		return nil, err
 	}
 
-	raw, err := tm.client.Do(ctx, request, nil)
+	raw, err := tm.client.Request(ctx, request, nil)
 	return raw, err
 }

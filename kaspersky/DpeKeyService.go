@@ -43,6 +43,6 @@ func (di *DpeKeyService) GetDeviceKeys3(ctx context.Context, wstrDeviceId string
 		return nil, err
 	}
 
-	raw, err := di.client.Do(ctx, request, nil)
+	raw, err := di.client.Request(ctx, request, nil)
 	return raw, err
 }

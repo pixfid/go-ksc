@@ -54,7 +54,7 @@ func (srn *ProductUserTokenIssuer) IssueUserToken(ctx context.Context, wstrProdu
 	}
 
 	//TODO check response
-	raw, err := srn.client.Do(ctx, request, nil)
+	raw, err := srn.client.Request(ctx, request, nil)
 
 	if srn.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -78,7 +78,7 @@ func (srn *ProductUserTokenIssuer) RevokeUserToken(ctx context.Context, wstrProd
 	}
 
 	//TODO check response
-	raw, err := srn.client.Do(ctx, request, nil)
+	raw, err := srn.client.Request(ctx, request, nil)
 
 	if srn.client.Debug {
 		log.Printf("raw response: %s", string(raw))

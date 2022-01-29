@@ -40,7 +40,7 @@ func (mci *MfaCacheInner) GetMfaRequiredForAll(ctx context.Context) ([]byte, err
 		return nil, err
 	}
 
-	raw, err := mci.client.Do(ctx, request, nil)
+	raw, err := mci.client.Request(ctx, request, nil)
 
 	if mci.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -55,7 +55,7 @@ func (mci *MfaCacheInner) GetMfaKeyIssuer(ctx context.Context) ([]byte, error) {
 		return nil, err
 	}
 
-	raw, err := mci.client.Do(ctx, request, nil)
+	raw, err := mci.client.Request(ctx, request, nil)
 
 	if mci.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -70,7 +70,7 @@ func (mci *MfaCacheInner) GetTotpSecretKeySettings(ctx context.Context) ([]byte,
 		return nil, err
 	}
 
-	raw, err := mci.client.Do(ctx, request, nil)
+	raw, err := mci.client.Request(ctx, request, nil)
 
 	if mci.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -85,7 +85,7 @@ func (mci *MfaCacheInner) GetTotpVerifySettings(ctx context.Context) ([]byte, er
 		return nil, err
 	}
 
-	raw, err := mci.client.Do(ctx, request, nil)
+	raw, err := mci.client.Request(ctx, request, nil)
 
 	if mci.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -100,7 +100,7 @@ func (mci *MfaCacheInner) IsCurrentUserExcludesMfa(ctx context.Context) ([]byte,
 		return nil, err
 	}
 
-	raw, err := mci.client.Do(ctx, request, nil)
+	raw, err := mci.client.Request(ctx, request, nil)
 
 	if mci.client.Debug {
 		log.Printf("raw response: %s", string(raw))

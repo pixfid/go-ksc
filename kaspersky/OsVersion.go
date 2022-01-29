@@ -72,7 +72,7 @@ func (ov *OsVersion) GetAttributesByOs(ctx context.Context, params OSIndices) (*
 	}
 
 	oSAttributes := new(OSAttributes)
-	raw, err := ov.client.Do(ctx, request, &oSAttributes)
+	raw, err := ov.client.Request(ctx, request, &oSAttributes)
 	return oSAttributes, raw, err
 }
 
@@ -122,6 +122,6 @@ func (ov *OsVersion) GetOsByAttributes(ctx context.Context, params interface{}) 
 	}
 
 	oSRetValS := new(OSRetValS)
-	raw, err := ov.client.Do(ctx, request, &oSRetValS)
+	raw, err := ov.client.Request(ctx, request, &oSRetValS)
 	return oSRetValS, raw, err
 }

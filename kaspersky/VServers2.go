@@ -101,6 +101,6 @@ func (vs *VServers2) GetVServerStatistic(ctx context.Context, lVsId int) (*VServ
 	}
 
 	vServerStatistic := new(VServerStatistic)
-	_, err = vs.client.Do(ctx, request, &vServerStatistic)
+	_, err = vs.client.Request(ctx, request, &vServerStatistic)
 	return vServerStatistic, err
 }

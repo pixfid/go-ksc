@@ -57,6 +57,6 @@ func (ac *AppCtrlApi) GetExeFileInfo(ctx context.Context, params ExeFileInfoPara
 		return nil, err
 	}
 
-	raw, err := ac.client.Do(ctx, request, nil)
+	raw, err := ac.client.Request(ctx, request, nil)
 	return raw, err
 }

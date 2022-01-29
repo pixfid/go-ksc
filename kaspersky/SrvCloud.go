@@ -45,7 +45,7 @@ func (sc *SrvCloud) GetCloudsInfo(ctx context.Context, params Null) ([]byte, err
 		return nil, err
 	}
 
-	raw, err := sc.client.Do(ctx, request, nil)
+	raw, err := sc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -73,6 +73,6 @@ func (sc *SrvCloud) GetCloudHostInfo(ctx context.Context, params CloudHostInfoPa
 		return nil, err
 	}
 
-	raw, err := sc.client.Do(ctx, request, nil)
+	raw, err := sc.client.Request(ctx, request, nil)
 	return raw, err
 }

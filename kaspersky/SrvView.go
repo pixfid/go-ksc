@@ -99,7 +99,7 @@ func (sv *SrvView) ResetIterator(ctx context.Context, params *SrvViewParams) (*W
 	}
 
 	srvViewIter := new(WstrIteratorID)
-	raw, err := sv.client.Do(ctx, request, &srvViewIter)
+	raw, err := sv.client.Request(ctx, request, &srvViewIter)
 	return srvViewIter, raw, err
 }
 
@@ -114,7 +114,7 @@ func (sv *SrvView) GetRecordCount(ctx context.Context, wstrIteratorId string) (*
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := sv.client.Do(ctx, request, &pxgValInt)
+	raw, err := sv.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -126,7 +126,7 @@ func (sv *SrvView) ReleaseIterator(ctx context.Context, wstrIteratorId string) (
 		return nil, err
 	}
 
-	raw, err := sv.client.Do(ctx, request, nil)
+	raw, err := sv.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -151,6 +151,6 @@ func (sv *SrvView) GetRecordRange(ctx context.Context, params *RecordRangeParams
 		return nil, err
 	}
 
-	raw, err := sv.client.Do(ctx, request, &out)
+	raw, err := sv.client.Request(ctx, request, &out)
 	return raw, err
 }

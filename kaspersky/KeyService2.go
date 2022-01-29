@@ -42,7 +42,7 @@ func (ks2 *KeyService2) ImportDpeKeys(ctx context.Context, pProtectedPass string
 		return nil, err
 	}
 
-	raw, err := ks2.client.Do(ctx, request, nil)
+	raw, err := ks2.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -54,6 +54,6 @@ func (ks2 *KeyService2) ExportDpeKeys(ctx context.Context, pProtectedPass string
 		return nil, err
 	}
 
-	raw, err := ks2.client.Do(ctx, request, nil)
+	raw, err := ks2.client.Request(ctx, request, nil)
 	return raw, err
 }

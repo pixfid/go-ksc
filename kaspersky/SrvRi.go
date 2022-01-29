@@ -49,7 +49,7 @@ func (sr *SrvRi) ShouldForceReboot(ctx context.Context, wstrHostID, wstrTaskID s
 	}
 
 	result := new(PxgValBool)
-	raw, err := sr.client.Do(ctx, request, &result)
+	raw, err := sr.client.Request(ctx, request, &result)
 
 	if sr.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -86,7 +86,7 @@ func (sr *SrvRi) SetRiTaskResults(ctx context.Context, params RiTask) (*Propagat
 		return nil, err
 	}
 
-	raw, err := sr.client.Do(ctx, request, nil)
+	raw, err := sr.client.Request(ctx, request, nil)
 
 	if sr.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -105,7 +105,7 @@ func (sr *SrvRi) SetRebootConfirmedHosts(ctx context.Context, wstrHostID, wstrTa
 	}
 
 	result := new(PxgValBool)
-	raw, err := sr.client.Do(ctx, request, &result)
+	raw, err := sr.client.Request(ctx, request, &result)
 
 	if sr.client.Debug {
 		log.Printf("raw response: %s", string(raw))

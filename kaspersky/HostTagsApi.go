@@ -76,6 +76,6 @@ func (kc *HostTagsApi) GetHostTags(ctx context.Context, params HostTagsParams) (
 	}
 
 	hostTags := new(HostTags)
-	raw, err := kc.client.Do(ctx, request, &hostTags)
+	raw, err := kc.client.Request(ctx, request, &hostTags)
 	return hostTags, raw, err
 }

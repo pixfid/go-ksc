@@ -42,7 +42,7 @@ func (sd *ScanDiapasons) NotifyDpnsTask(ctx context.Context) ([]byte, error) {
 		return nil, err
 	}
 
-	raw, err := sd.client.Do(ctx, request, nil)
+	raw, err := sd.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -68,7 +68,7 @@ func (sd *ScanDiapasons) GetDiapasons(ctx context.Context, params DiapasonsParam
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := sd.client.Do(ctx, request, &pxgValStr)
+	raw, err := sd.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -138,7 +138,7 @@ func (sd *ScanDiapasons) GetDiapason(ctx context.Context, params DiapasonParams)
 	}
 
 	diapasonAttributes := new(DiapasonAttributes)
-	raw, err := sd.client.Do(ctx, request, &diapasonAttributes)
+	raw, err := sd.client.Request(ctx, request, &diapasonAttributes)
 	return diapasonAttributes, raw, err
 }
 
@@ -150,7 +150,7 @@ func (sd *ScanDiapasons) RemoveDiapason(ctx context.Context, idDiapason int64) (
 		return nil, err
 	}
 
-	raw, err := sd.client.Do(ctx, request, nil)
+	raw, err := sd.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -201,7 +201,7 @@ func (sd *ScanDiapasons) UpdateDiapason(ctx context.Context, params UpdateDiapas
 	}
 
 	updateDiapasonRespond := new(UpdateDiapasonRespond)
-	raw, err := sd.client.Do(ctx, request, &updateDiapasonRespond)
+	raw, err := sd.client.Request(ctx, request, &updateDiapasonRespond)
 	return updateDiapasonRespond, raw, err
 }
 
@@ -218,6 +218,6 @@ func (sd *ScanDiapasons) AddDiapason(ctx context.Context, params interface{}) ([
 		return nil, err
 	}
 
-	raw, err := sd.client.Do(ctx, request, nil)
+	raw, err := sd.client.Request(ctx, request, nil)
 	return raw, err
 }

@@ -49,7 +49,7 @@ func (mic *ModulesIntegrityCheck) GetIntegrityCheckInfo(ctx context.Context) (*I
 	}
 
 	integrityCheckInfo := new(IntegrityCheckInfo)
-	raw, err := mic.client.Do(ctx, request, &integrityCheckInfo)
+	raw, err := mic.client.Request(ctx, request, &integrityCheckInfo)
 
 	if mic.client.Debug {
 		log.Printf("raw response: %s", string(raw))

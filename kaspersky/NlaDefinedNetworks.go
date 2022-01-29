@@ -49,7 +49,7 @@ func (ndn *NlaDefinedNetworks) AddNetwork(ctx context.Context, wstrNetworkName s
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := ndn.client.Do(ctx, request, &pxgValInt)
+	raw, err := ndn.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -62,7 +62,7 @@ func (ndn *NlaDefinedNetworks) DeleteNetwork(ctx context.Context, nNetworkId int
 		return nil, err
 	}
 
-	raw, err := ndn.client.Do(ctx, request, nil)
+	raw, err := ndn.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -93,7 +93,7 @@ func (ndn *NlaDefinedNetworks) GetNetworkInfo(ctx context.Context, nNetworkId in
 	}
 
 	pNetworkInfo := new(PNetworkInfo)
-	raw, err := ndn.client.Do(ctx, request, &pNetworkInfo)
+	raw, err := ndn.client.Request(ctx, request, &pNetworkInfo)
 	return pNetworkInfo, raw, err
 }
 
@@ -117,7 +117,7 @@ func (ndn *NlaDefinedNetworks) GetNetworksList(ctx context.Context) (*PNetworkLi
 	}
 
 	pNetworkList := new(PNetworkList)
-	raw, err := ndn.client.Do(ctx, request, &pNetworkList)
+	raw, err := ndn.client.Request(ctx, request, &pNetworkList)
 	return pNetworkList, raw, err
 }
 
@@ -133,6 +133,6 @@ func (ndn *NlaDefinedNetworks) SetNetworkInfo(ctx context.Context, params interf
 		return nil, err
 	}
 
-	raw, err := ndn.client.Do(ctx, request, nil)
+	raw, err := ndn.client.Request(ctx, request, nil)
 	return raw, err
 }

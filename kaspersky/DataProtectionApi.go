@@ -61,7 +61,7 @@ func (dpa *DataProtectionApi) CheckPasswordSplPpc(ctx context.Context, szwPasswo
 	}
 
 	pxgValBool := new(PxgValBool)
-	raw, err := dpa.client.Do(ctx, request, &pxgValBool)
+	raw, err := dpa.client.Request(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
 }
 
@@ -78,7 +78,7 @@ func (dpa *DataProtectionApi) ProtectDataForHost(ctx context.Context, szwHostId,
 		return nil, err
 	}
 	protectedData := new(ProtectedData)
-	_, err = dpa.client.Do(ctx, request, &protectedData)
+	_, err = dpa.client.Request(ctx, request, &protectedData)
 	return protectedData, err
 }
 
@@ -91,7 +91,7 @@ func (dpa *DataProtectionApi) ProtectDataGlobally(ctx context.Context, pData str
 	}
 
 	protectedData := new(ProtectedData)
-	_, err = dpa.client.Do(ctx, request, &protectedData)
+	_, err = dpa.client.Request(ctx, request, &protectedData)
 	return protectedData, err
 }
 
@@ -106,7 +106,7 @@ func (dpa *DataProtectionApi) ProtectUtf16StringForHost(ctx context.Context, szw
 	}
 
 	pxgValStr := new(PxgValStr)
-	_, err = dpa.client.Do(ctx, request, &pxgValStr)
+	_, err = dpa.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, err
 }
 
@@ -120,7 +120,7 @@ func (dpa *DataProtectionApi) ProtectUtf16StringGlobally(ctx context.Context, sz
 	}
 
 	pxgValStr := new(PxgValStr)
-	_, err = dpa.client.Do(ctx, request, &pxgValStr)
+	_, err = dpa.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, err
 }
 
@@ -134,7 +134,7 @@ func (dpa *DataProtectionApi) ProtectUtf8StringForHost(ctx context.Context, szwH
 	}
 
 	pxgValStr := new(PxgValStr)
-	_, err = dpa.client.Do(ctx, request, &pxgValStr)
+	_, err = dpa.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, err
 }
 
@@ -148,6 +148,6 @@ func (dpa *DataProtectionApi) ProtectUtf8StringGlobally(ctx context.Context, szw
 	}
 
 	pxgValStr := new(PxgValStr)
-	_, err = dpa.client.Do(ctx, request, &pxgValStr)
+	_, err = dpa.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, err
 }

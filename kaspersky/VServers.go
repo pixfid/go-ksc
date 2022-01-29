@@ -54,7 +54,7 @@ func (vs *VServers) GetVServers(ctx context.Context, lParentGroup int64) (*VServ
 	}
 
 	vServersInfos := new(VServersInfos)
-	_, err = vs.client.Do(ctx, request, &vServersInfos)
+	_, err = vs.client.Request(ctx, request, &vServersInfos)
 	return vServersInfos, err
 }
 
@@ -115,7 +115,7 @@ func (vs *VServers) AddVServerInfo(ctx context.Context, strDisplayName string, l
 	}
 
 	vServerInfo := new(VServerInfo)
-	raw, err := vs.client.Do(ctx, request, &vServerInfo)
+	raw, err := vs.client.Request(ctx, request, &vServerInfo)
 	return vServerInfo, raw, err
 }
 
@@ -128,7 +128,7 @@ func (vs *VServers) DelVServer(ctx context.Context, lVServer int64) (*WActionGUI
 	}
 
 	wActionGUID := new(WActionGUID)
-	_, err = vs.client.Do(ctx, request, &wActionGUID)
+	_, err = vs.client.Request(ctx, request, &wActionGUID)
 	return wActionGUID, err
 }
 
@@ -146,7 +146,7 @@ func (vs *VServers) GetPermissions(ctx context.Context, lVServer int64) (*VServe
 	}
 
 	vServerPermissions := new(VServerPermissions)
-	_, err = vs.client.Do(ctx, request, &vServerPermissions)
+	_, err = vs.client.Request(ctx, request, &vServerPermissions)
 	return vServerPermissions, err
 }
 
@@ -172,7 +172,7 @@ func (vs *VServers) GetVServerInfo(ctx context.Context, params VServerInfoParams
 	}
 
 	vServerInfo := new(VServerInfo)
-	_, err = vs.client.Do(ctx, request, &vServerInfo)
+	_, err = vs.client.Request(ctx, request, &vServerInfo)
 	return vServerInfo, err
 }
 
@@ -185,7 +185,7 @@ func (vs *VServers) MoveVServer(ctx context.Context, lVServer int64, lNewParentG
 	}
 
 	wActionGUID := new(WActionGUID)
-	_, err = vs.client.Do(ctx, request, &wActionGUID)
+	_, err = vs.client.Request(ctx, request, &wActionGUID)
 	return wActionGUID, err
 }
 
@@ -198,7 +198,7 @@ func (vs *VServers) RecallCertAndCloseConnections(ctx context.Context, lVServer 
 		return err
 	}
 
-	_, err = vs.client.Do(ctx, request, nil)
+	_, err = vs.client.Request(ctx, request, nil)
 	return err
 }
 
@@ -249,7 +249,7 @@ func (vs *VServers) UpdateVServerInfo(ctx context.Context, params UpdateVServerI
 		return err
 	}
 
-	_, err = vs.client.Do(ctx, request, nil)
+	_, err = vs.client.Request(ctx, request, nil)
 	return err
 }
 
@@ -321,6 +321,6 @@ func (vs *VServers) SetPermissions(ctx context.Context, params ACLParams) ([]byt
 		return nil, err
 	}
 
-	raw, err := vs.client.Do(ctx, request, nil)
+	raw, err := vs.client.Request(ctx, request, nil)
 	return raw, err
 }

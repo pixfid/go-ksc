@@ -50,8 +50,8 @@ type Config struct {
 	Debug              bool
 }
 
-// Client -------------Client------------------
-type Client struct {
+// KscClient -------------Client------------------
+type KscClient struct {
 	AdfsSso                                                           *AdfsSso
 	AdHosts                                                           *AdHosts
 	AdmServerSettings                                                 *AdmServerSettings
@@ -61,6 +61,7 @@ type Client struct {
 	AsyncActionStateChecker                                           *AsyncActionStateChecker
 	CertPoolCtrl                                                      *CertPoolCtrl
 	CertPoolCtrl2                                                     *CertPoolCtrl2
+	CertUtils                                                         *CertUtils
 	CgwHelper                                                         *CgwHelper
 	ChunkAccessor                                                     *ChunkAccessor
 	CloudAccess                                                       *CloudAccess
@@ -87,6 +88,7 @@ type Client struct {
 	HWInvStorage                                                      *HWInvStorage
 	GroupSyncIterator                                                 *GroupSyncIterator
 	GroupTaskControlAPI                                               *GroupTaskControlApi
+	GuiContext                                                        *GuiContext
 	InventoryAPI                                                      *InventoryAPI
 	InvLicenseProducts                                                *InvLicenseProducts
 	IWebSrvSettings                                                   *IWebSrvSettings
@@ -134,6 +136,7 @@ type Client struct {
 	ServiceNwcCommandProvider                                         *ServiceNwcCommandProvider
 	ServiceNwcDeployment                                              *ServiceNwcDeployment
 	Session                                                           *Session
+	SiemExport                                                        *SiemExport
 	SmsQueue                                                          *SmsQueue
 	SmsSenders                                                        *SmsSenders
 	SpamEvents                                                        *SpamEvents
@@ -167,17 +170,17 @@ type Client struct {
 }
 
 type service struct {
-	client *Client
+	client *KscClient
 }
 
-func New(cfg Config) *Client {
+func NewKscClient(cfg Config) *KscClient {
 	httpClient := &http.Client{
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{InsecureSkipVerify: cfg.InsecureSkipVerify},
 		},
 	}
 
-	c := &Client{
+	ksc := &KscClient{
 		client:       httpClient,
 		Server:       cfg.Server,
 		UserName:     cfg.UserName,
@@ -189,214 +192,217 @@ func New(cfg Config) *Client {
 		Debug:        cfg.Debug,
 	}
 
-	c.common.client = c
-	c.AdfsSso = (*AdfsSso)(&c.common)
-	c.DatabaseInfo = (*DatabaseInfo)(&c.common)
-	c.AdHosts = (*AdHosts)(&c.common)
-	c.AdmServerSettings = (*AdmServerSettings)(&c.common)
-	c.AdSecManager = (*AdSecManager)(&c.common)
-	c.AKPatches = (*AKPatches)(&c.common)
-	c.AppCtrlAPI = (*AppCtrlApi)(&c.common)
-	c.AsyncActionStateChecker = (*AsyncActionStateChecker)(&c.common)
-	c.CertPoolCtrl = (*CertPoolCtrl)(&c.common)
-	c.CertPoolCtrl2 = (*CertPoolCtrl2)(&c.common)
-	c.CgwHelper = (*CgwHelper)(&c.common)
-	c.ChunkAccessor = (*ChunkAccessor)(&c.common)
-	c.CloudAccess = (*CloudAccess)(&c.common)
-	c.ConEvents = (*ConEvents)(&c.common)
-	c.DatabaseInfo = (*DatabaseInfo)(&c.common)
-	c.DataProtectionAPI = (*DataProtectionApi)(&c.common)
-	c.DpeKeyService = (*DpeKeyService)(&c.common)
-	c.EventNotificationProperties = (*EventNotificationProperties)(&c.common)
-	c.EventNotificationsAPI = (*EventNotificationsApi)(&c.common)
-	c.EventProcessing = (*EventProcessing)(&c.common)
-	c.EventProcessingFactory = (*EventProcessingFactory)(&c.common)
-	c.ExtAud = (*ExtAud)(&c.common)
-	c.FileCategorizer2 = (*FileCategorizer2)(&c.common)
-	c.FilesAcceptor = (*FilesAcceptor)(&c.common)
-	c.GatewayConnection = (*GatewayConnection)(&c.common)
-	c.Gcm = (*Gcm)(&c.common)
-	c.GroupSync = (*GroupSync)(&c.common)
-	c.HostGroup = (*HostGroup)(&c.common)
-	c.HostMoveRules = (*HostMoveRules)(&c.common)
-	c.HostTagsAPI = (*HostTagsApi)(&c.common)
-	c.HostTagsRulesAPI = (*HostTagsRulesApi)(&c.common)
-	c.HostTasks = (*HostTasks)(&c.common)
-	c.HstAccessControl = (*HstAccessControl)(&c.common)
-	c.HWInvStorage = (*HWInvStorage)(&c.common)
-	c.GroupSyncIterator = (*GroupSyncIterator)(&c.common)
-	c.GroupTaskControlAPI = (*GroupTaskControlApi)(&c.common)
-	c.InventoryAPI = (*InventoryAPI)(&c.common)
-	c.InvLicenseProducts = (*InvLicenseProducts)(&c.common)
-	c.IWebSrvSettings = (*IWebSrvSettings)(&c.common)
-	c.IWebUsersSrv = (*IWebUsersSrv)(&c.common)
-	c.IWebUsersSrv2 = (*IWebUsersSrv2)(&c.common)
-	c.KeyService = (*KeyService)(&c.common)
-	c.KeyService2 = (*KeyService2)(&c.common)
-	c.KillChain = (*KillChain)(&c.common)
-	c.KLEVerControl = (*KLEVerControl)(&c.common)
-	c.KsnInternal = (*KsnInternal)(&c.common)
-	c.LicenseInfoSync = (*LicenseInfoSync)(&c.common)
-	c.LicenseKeys = (*LicenseKeys)(&c.common)
-	c.LicensePolicy = (*LicensePolicy)(&c.common)
-	c.Limits = (*Limits)(&c.common)
-	c.ListTags = (*ListTags)(&c.common)
-	c.MfaCacheInner = (*MfaCacheInner)(&c.common)
-	c.MigrationData = (*MigrationData)(&c.common)
-	c.ModulesIntegrityCheck = (*ModulesIntegrityCheck)(&c.common)
-	c.Multitenancy = (*Multitenancy)(&c.common)
-	c.NagCgwHelper = (*NagCgwHelper)(&c.common)
-	c.NagGuiCalls = (*NagGuiCalls)(&c.common)
-	c.NagHstCtl = (*NagHstCtl)(&c.common)
-	c.NagNetworkListAPI = (*NagNetworkListApi)(&c.common)
-	c.NagRdu = (*NagRdu)(&c.common)
-	c.NagRemoteScreen = (*NagRemoteScreen)(&c.common)
-	c.NetUtils = (*NetUtils)(&c.common)
-	c.NlaDefinedNetworks = (*NlaDefinedNetworks)(&c.common)
-	c.OsVersion = (*OsVersion)(&c.common)
-	c.PackagesAPI = (*PackagesApi)(&c.common)
-	c.PatchParameters = (*PatchParameters)(&c.common)
-	c.PLCDevAPI = (*PLCDevApi)(&c.common)
-	c.Policy = (*Policy)(&c.common)
-	c.PolicyProfiles = (*PolicyProfiles)(&c.common)
-	c.ProductUserTokenIssuer = (*ProductUserTokenIssuer)(&c.common)
-	c.QueriesStorage = (*QueriesStorage)(&c.common)
-	c.QBTNetworkListAPI = (*QBTNetworkListApi)(&c.common)
-	c.ReportManager = (*ReportManager)(&c.common)
-	c.RetrFiles = (*RetrFiles)(&c.common)
-	c.ScanDiapasons = (*ScanDiapasons)(&c.common)
-	c.SeamlessUpdatesTestAPI = (*SeamlessUpdatesTestApi)(&c.common)
-	c.SecurityPolicy = (*SecurityPolicy)(&c.common)
-	c.SecurityPolicy3 = (*SecurityPolicy3)(&c.common)
-	c.ServerHierarchy = (*ServerHierarchy)(&c.common)
-	c.ServerTransportSettings = (*ServerTransportSettings)(&c.common)
-	c.ServiceNwcCommandProvider = (*ServiceNwcCommandProvider)(&c.common)
-	c.ServiceNwcDeployment = (*ServiceNwcDeployment)(&c.common)
-	c.Session = (*Session)(&c.common)
-	c.SmsQueue = (*SmsQueue)(&c.common)
-	c.SmsSenders = (*SmsSenders)(&c.common)
-	c.SpamEvents = (*SpamEvents)(&c.common)
-	c.SrvCloud = (*SrvCloud)(&c.common)
-	c.SrvCloudStat = (*SrvCloudStat)(&c.common)
-	c.SrvIpmNewsAndStatistics = (*SrvIpmNewsAndStatistics)(&c.common)
-	c.SrvRi = (*SrvRi)(&c.common)
-	c.SrvSsRevision = (*SrvSsRevision)(&c.common)
-	c.SrvView = (*SrvView)(&c.common)
-	c.SsContents = (*SsContents)(&c.common)
-	c.SsRevisionGetNames = (*SsRevisionGetNames)(&c.common)
-	c.SubnetMasks = (*SubnetMasks)(&c.common)
-	c.Tasks = (*Tasks)(&c.common)
-	c.TotpGlobalSettings = (*TotpGlobalSettings)(&c.common)
-	c.TotpRegistration = (*TotpRegistration)(&c.common)
-	c.TotpUserSettings = (*TotpUserSettings)(&c.common)
-	c.TrafficManager = (*TrafficManager)(&c.common)
-	c.UaControl = (*UaControl)(&c.common)
-	c.Updates = (*Updates)(&c.common)
-	c.UpdComps = (*UpdComps)(&c.common)
-	c.UserDevicesAPI = (*UserDevicesApi)(&c.common)
-	c.VapmControlAPI = (*VapmControlApi)(&c.common)
-	c.VServers = (*VServers)(&c.common)
-	c.VServers2 = (*VServers2)(&c.common)
-	c.WolSender = (*WolSender)(&c.common)
-	return c
+	ksc.common.client = ksc
+	ksc.AdfsSso = (*AdfsSso)(&ksc.common)
+	ksc.DatabaseInfo = (*DatabaseInfo)(&ksc.common)
+	ksc.AdHosts = (*AdHosts)(&ksc.common)
+	ksc.AdmServerSettings = (*AdmServerSettings)(&ksc.common)
+	ksc.AdSecManager = (*AdSecManager)(&ksc.common)
+	ksc.AKPatches = (*AKPatches)(&ksc.common)
+	ksc.AppCtrlAPI = (*AppCtrlApi)(&ksc.common)
+	ksc.AsyncActionStateChecker = (*AsyncActionStateChecker)(&ksc.common)
+	ksc.CertPoolCtrl = (*CertPoolCtrl)(&ksc.common)
+	ksc.CertPoolCtrl2 = (*CertPoolCtrl2)(&ksc.common)
+	ksc.CertUtils = (*CertUtils)(&ksc.common)
+	ksc.CgwHelper = (*CgwHelper)(&ksc.common)
+	ksc.ChunkAccessor = (*ChunkAccessor)(&ksc.common)
+	ksc.CloudAccess = (*CloudAccess)(&ksc.common)
+	ksc.ConEvents = (*ConEvents)(&ksc.common)
+	ksc.DatabaseInfo = (*DatabaseInfo)(&ksc.common)
+	ksc.DataProtectionAPI = (*DataProtectionApi)(&ksc.common)
+	ksc.DpeKeyService = (*DpeKeyService)(&ksc.common)
+	ksc.EventNotificationProperties = (*EventNotificationProperties)(&ksc.common)
+	ksc.EventNotificationsAPI = (*EventNotificationsApi)(&ksc.common)
+	ksc.EventProcessing = (*EventProcessing)(&ksc.common)
+	ksc.EventProcessingFactory = (*EventProcessingFactory)(&ksc.common)
+	ksc.ExtAud = (*ExtAud)(&ksc.common)
+	ksc.FileCategorizer2 = (*FileCategorizer2)(&ksc.common)
+	ksc.FilesAcceptor = (*FilesAcceptor)(&ksc.common)
+	ksc.GatewayConnection = (*GatewayConnection)(&ksc.common)
+	ksc.Gcm = (*Gcm)(&ksc.common)
+	ksc.GroupSync = (*GroupSync)(&ksc.common)
+	ksc.HostGroup = (*HostGroup)(&ksc.common)
+	ksc.HostMoveRules = (*HostMoveRules)(&ksc.common)
+	ksc.HostTagsAPI = (*HostTagsApi)(&ksc.common)
+	ksc.HostTagsRulesAPI = (*HostTagsRulesApi)(&ksc.common)
+	ksc.HostTasks = (*HostTasks)(&ksc.common)
+	ksc.HstAccessControl = (*HstAccessControl)(&ksc.common)
+	ksc.HWInvStorage = (*HWInvStorage)(&ksc.common)
+	ksc.GroupSyncIterator = (*GroupSyncIterator)(&ksc.common)
+	ksc.GroupTaskControlAPI = (*GroupTaskControlApi)(&ksc.common)
+	ksc.GuiContext = (*GuiContext)(&ksc.common)
+	ksc.InventoryAPI = (*InventoryAPI)(&ksc.common)
+	ksc.InvLicenseProducts = (*InvLicenseProducts)(&ksc.common)
+	ksc.IWebSrvSettings = (*IWebSrvSettings)(&ksc.common)
+	ksc.IWebUsersSrv = (*IWebUsersSrv)(&ksc.common)
+	ksc.IWebUsersSrv2 = (*IWebUsersSrv2)(&ksc.common)
+	ksc.KeyService = (*KeyService)(&ksc.common)
+	ksc.KeyService2 = (*KeyService2)(&ksc.common)
+	ksc.KillChain = (*KillChain)(&ksc.common)
+	ksc.KLEVerControl = (*KLEVerControl)(&ksc.common)
+	ksc.KsnInternal = (*KsnInternal)(&ksc.common)
+	ksc.LicenseInfoSync = (*LicenseInfoSync)(&ksc.common)
+	ksc.LicenseKeys = (*LicenseKeys)(&ksc.common)
+	ksc.LicensePolicy = (*LicensePolicy)(&ksc.common)
+	ksc.Limits = (*Limits)(&ksc.common)
+	ksc.ListTags = (*ListTags)(&ksc.common)
+	ksc.MfaCacheInner = (*MfaCacheInner)(&ksc.common)
+	ksc.MigrationData = (*MigrationData)(&ksc.common)
+	ksc.ModulesIntegrityCheck = (*ModulesIntegrityCheck)(&ksc.common)
+	ksc.Multitenancy = (*Multitenancy)(&ksc.common)
+	ksc.NagCgwHelper = (*NagCgwHelper)(&ksc.common)
+	ksc.NagGuiCalls = (*NagGuiCalls)(&ksc.common)
+	ksc.NagHstCtl = (*NagHstCtl)(&ksc.common)
+	ksc.NagNetworkListAPI = (*NagNetworkListApi)(&ksc.common)
+	ksc.NagRdu = (*NagRdu)(&ksc.common)
+	ksc.NagRemoteScreen = (*NagRemoteScreen)(&ksc.common)
+	ksc.NetUtils = (*NetUtils)(&ksc.common)
+	ksc.NlaDefinedNetworks = (*NlaDefinedNetworks)(&ksc.common)
+	ksc.OsVersion = (*OsVersion)(&ksc.common)
+	ksc.PackagesAPI = (*PackagesApi)(&ksc.common)
+	ksc.PatchParameters = (*PatchParameters)(&ksc.common)
+	ksc.PLCDevAPI = (*PLCDevApi)(&ksc.common)
+	ksc.Policy = (*Policy)(&ksc.common)
+	ksc.PolicyProfiles = (*PolicyProfiles)(&ksc.common)
+	ksc.ProductUserTokenIssuer = (*ProductUserTokenIssuer)(&ksc.common)
+	ksc.QueriesStorage = (*QueriesStorage)(&ksc.common)
+	ksc.QBTNetworkListAPI = (*QBTNetworkListApi)(&ksc.common)
+	ksc.ReportManager = (*ReportManager)(&ksc.common)
+	ksc.RetrFiles = (*RetrFiles)(&ksc.common)
+	ksc.ScanDiapasons = (*ScanDiapasons)(&ksc.common)
+	ksc.SeamlessUpdatesTestAPI = (*SeamlessUpdatesTestApi)(&ksc.common)
+	ksc.SecurityPolicy = (*SecurityPolicy)(&ksc.common)
+	ksc.SecurityPolicy3 = (*SecurityPolicy3)(&ksc.common)
+	ksc.ServerHierarchy = (*ServerHierarchy)(&ksc.common)
+	ksc.ServerTransportSettings = (*ServerTransportSettings)(&ksc.common)
+	ksc.ServiceNwcCommandProvider = (*ServiceNwcCommandProvider)(&ksc.common)
+	ksc.ServiceNwcDeployment = (*ServiceNwcDeployment)(&ksc.common)
+	ksc.Session = (*Session)(&ksc.common)
+	ksc.SiemExport = (*SiemExport)(&ksc.common)
+	ksc.SmsQueue = (*SmsQueue)(&ksc.common)
+	ksc.SmsSenders = (*SmsSenders)(&ksc.common)
+	ksc.SpamEvents = (*SpamEvents)(&ksc.common)
+	ksc.SrvCloud = (*SrvCloud)(&ksc.common)
+	ksc.SrvCloudStat = (*SrvCloudStat)(&ksc.common)
+	ksc.SrvIpmNewsAndStatistics = (*SrvIpmNewsAndStatistics)(&ksc.common)
+	ksc.SrvRi = (*SrvRi)(&ksc.common)
+	ksc.SrvSsRevision = (*SrvSsRevision)(&ksc.common)
+	ksc.SrvView = (*SrvView)(&ksc.common)
+	ksc.SsContents = (*SsContents)(&ksc.common)
+	ksc.SsRevisionGetNames = (*SsRevisionGetNames)(&ksc.common)
+	ksc.SubnetMasks = (*SubnetMasks)(&ksc.common)
+	ksc.Tasks = (*Tasks)(&ksc.common)
+	ksc.TotpGlobalSettings = (*TotpGlobalSettings)(&ksc.common)
+	ksc.TotpRegistration = (*TotpRegistration)(&ksc.common)
+	ksc.TotpUserSettings = (*TotpUserSettings)(&ksc.common)
+	ksc.TrafficManager = (*TrafficManager)(&ksc.common)
+	ksc.UaControl = (*UaControl)(&ksc.common)
+	ksc.Updates = (*Updates)(&ksc.common)
+	ksc.UpdComps = (*UpdComps)(&ksc.common)
+	ksc.UserDevicesAPI = (*UserDevicesApi)(&ksc.common)
+	ksc.VapmControlAPI = (*VapmControlApi)(&ksc.common)
+	ksc.VServers = (*VServers)(&ksc.common)
+	ksc.VServers2 = (*VServers2)(&ksc.common)
+	ksc.WolSender = (*WolSender)(&ksc.common)
+	return ksc
 }
 
-func (c *Client) kscAuth(ctx context.Context) error {
-	request, err := http.NewRequest("POST", c.Server+"/api/v1.0/login", nil)
+func (ksc *KscClient) kscAuth(ctx context.Context) error {
+	request, err := http.NewRequest("POST", ksc.Server+"/api/v1.0/login", nil)
 	if err != nil {
 		return err
 	}
 
 	authorization := fmt.Sprintf(`KSCBasic user="%s", pass="%s", domain="%s", internal=%v`,
-		c.UserName, c.Password, c.Domain, c.InternalUser)
+		ksc.UserName, ksc.Password, ksc.Domain, ksc.InternalUser)
 	request.Header.Set("Authorization", authorization)
-	request.Header.Set("X-KSC-VServer", c.VServerName)
+	request.Header.Set("X-KSC-VServer", ksc.VServerName)
 
-	_, err = c.Do(ctx, request, nil)
+	_, err = ksc.Request(ctx, request, nil)
 	return err
 }
 
-func (c *Client) xkscSession(ctx context.Context) error {
-	s, _, e := c.Session.StartSession(ctx)
+func (ksc *KscClient) xkscSession(ctx context.Context) error {
+	s, _, e := ksc.Session.StartSession(ctx)
 
 	if s != nil {
-		c.XKscSessionToken = s.Str
+		ksc.XKscSessionToken = s.Str
 	}
 
 	return e
 }
 
-func (c *Client) basicAuth(ctx context.Context) error {
-	c.UserName = base64.StdEncoding.EncodeToString([]byte(c.UserName))
-	c.Password = base64.StdEncoding.EncodeToString([]byte(c.Password))
+func (ksc *KscClient) basicAuth(ctx context.Context) error {
+	ksc.UserName = base64.StdEncoding.EncodeToString([]byte(ksc.UserName))
+	ksc.Password = base64.StdEncoding.EncodeToString([]byte(ksc.Password))
 
-	if len(c.VServerName) != 0 {
-		c.VServerName = base64.StdEncoding.EncodeToString([]byte(c.VServerName))
+	if len(ksc.VServerName) != 0 {
+		ksc.VServerName = base64.StdEncoding.EncodeToString([]byte(ksc.VServerName))
 	} else {
-		c.VServerName = "x"
+		ksc.VServerName = "x"
 	}
 
-	if c.XKscSession {
-		return c.xkscSession(ctx)
+	if ksc.XKscSession {
+		return ksc.xkscSession(ctx)
 	} else {
-		return c.kscAuth(ctx)
+		return ksc.kscAuth(ctx)
 	}
 }
 
-func (c *Client) kscGwAuth(ctx context.Context, token string) error {
-	request, err := http.NewRequest("POST", c.Server+"/api/v1.0/login", nil)
+func (ksc *KscClient) kscGwAuth(ctx context.Context, token string) error {
+	request, err := http.NewRequest("POST", ksc.Server+"/api/v1.0/login", nil)
 	if err != nil {
 		return err
 	}
 
 	request.Header.Set("Authorization", "KSCGW "+token)
 
-	_, err = c.Do(ctx, request, nil)
+	_, err = ksc.Request(ctx, request, nil)
 	return err
 }
 
-func (c *Client) kscWTAuth(ctx context.Context, kscwt string) error {
-	request, err := http.NewRequest("POST", c.Server+"/api/v1.0/login", nil)
+func (ksc *KscClient) kscWTAuth(ctx context.Context, kscwt string) error {
+	request, err := http.NewRequest("POST", ksc.Server+"/api/v1.0/login", nil)
 	if err != nil {
 		return err
 	}
 
 	request.Header.Set("Authorization", "KSCWT "+kscwt)
 
-	_, err = c.Do(ctx, request, nil)
+	_, err = ksc.Request(ctx, request, nil)
 	return err
 }
 
-func (c *Client) kscTAuth(ctx context.Context, token string) error {
-	request, err := http.NewRequest("POST", c.Server+"/api/v1.0/login", nil)
+func (ksc *KscClient) kscTAuth(ctx context.Context, token string) error {
+	request, err := http.NewRequest("POST", ksc.Server+"/api/v1.0/login", nil)
 	if err != nil {
 		return err
 	}
 
 	request.Header.Set("Authorization", "KSCT "+token)
 
-	_, err = c.Do(ctx, request, nil)
+	_, err = ksc.Request(ctx, request, nil)
 	return err
 }
 
-func (c *Client) Do(ctx context.Context, req *http.Request, out interface{}) (dt []byte, err error) {
+func (ksc *KscClient) Request(ctx context.Context, request *http.Request, out interface{}) (dt []byte, err error) {
 	if ctx == nil {
 		return nil, errors.New("context must be non-nil")
 	}
 
-	req = withContext(ctx, req)
+	request = withContext(ctx, request)
 
-	var resp *http.Response
+	var response *http.Response
 
-	if c.XKscSession && c.XKscSessionToken != "" {
-		req.Header.Set("X-KSC-Session", c.XKscSessionToken)
+	if ksc.XKscSession && ksc.XKscSessionToken != "" {
+		request.Header.Set("X-KSC-Session", ksc.XKscSessionToken)
 	}
 
-	req.Header.Set("User-Agent", "go-ksc")
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Accept-Encoding", "gzip")
+	request.Header.Set("User-Agent", "go-ksc")
+	request.Header.Set("Content-Type", "application/json")
+	request.Header.Set("Accept-Encoding", "gzip")
 
-	resp, err = c.client.Do(req)
+	response, err = ksc.client.Do(request)
 
 	if err != nil {
 		select {
@@ -408,15 +414,15 @@ func (c *Client) Do(ctx context.Context, req *http.Request, out interface{}) (dt
 		return nil, err
 	}
 
-	defer resp.Body.Close()
+	defer response.Body.Close()
 
 	var reader io.ReadCloser
 
-	switch resp.Header.Get("Content-Encoding") {
+	switch response.Header.Get("Content-Encoding") {
 	case "gzip":
-		reader, err = gzip.NewReader(resp.Body)
+		reader, err = gzip.NewReader(response.Body)
 	default:
-		reader = resp.Body
+		reader = response.Body
 	}
 
 	body, err := ioutil.ReadAll(reader)
@@ -453,18 +459,18 @@ const (
 	GatewayAuth  AuthType = 3
 )
 
-func (c *Client) Login(ctx context.Context, authType AuthType, token string) error {
+func (ksc *KscClient) Login(ctx context.Context, authType AuthType, token string) error {
 	switch authType {
 	case BasicAuth:
-		return c.basicAuth(ctx)
+		return ksc.basicAuth(ctx)
 	case TokenAuth:
-		return c.kscTAuth(ctx, token)
+		return ksc.kscTAuth(ctx, token)
 	case WebTokenAuth:
-		return c.kscWTAuth(ctx, token)
+		return ksc.kscWTAuth(ctx, token)
 	case GatewayAuth:
-		return c.kscGwAuth(ctx, token)
+		return ksc.kscGwAuth(ctx, token)
 	default:
-		return c.basicAuth(ctx)
+		return ksc.basicAuth(ctx)
 	}
 }
 

@@ -47,7 +47,7 @@ func (sh *ServerHierarchy) DelServer(ctx context.Context, lServer int64) ([]byte
 		return nil, err
 	}
 
-	raw, _ := sh.client.Do(ctx, request, nil)
+	raw, _ := sh.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -97,7 +97,7 @@ func (sh *ServerHierarchy) GetServerInfo(ctx context.Context, params ServerHiera
 		return nil, err
 	}
 
-	raw, err := sh.client.Do(ctx, request, nil)
+	raw, err := sh.client.Request(ctx, request, nil)
 	return raw, nil
 }
 
@@ -109,7 +109,7 @@ func (sh *ServerHierarchy) GetChildServers(ctx context.Context, nGroupId int64) 
 		return nil, err
 	}
 
-	raw, err := sh.client.Do(ctx, request, nil)
+	raw, err := sh.client.Request(ctx, request, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -128,7 +128,7 @@ func (sh *ServerHierarchy) FindSlaveServers(ctx context.Context, params PFindPar
 		return nil, err
 	}
 
-	raw, err := sh.client.Do(ctx, request, nil)
+	raw, err := sh.client.Request(ctx, request, nil)
 	if err != nil {
 		return nil, err
 	}

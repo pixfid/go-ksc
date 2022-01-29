@@ -45,6 +45,6 @@ func (ws *WolSender) SendWolSignal(ctx context.Context, szwHostId string) error 
 		return err
 	}
 
-	_, err = ws.client.Do(ctx, request, nil)
+	_, err = ws.client.Request(ctx, request, nil)
 	return err
 }

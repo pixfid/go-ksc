@@ -68,7 +68,7 @@ func (gs *GroupSync) GetSyncHostsInfo(ctx context.Context, params NSyncInfoParam
 	}
 
 	pxgValStr := new(PxgValStr)
-	_, err = gs.client.Do(ctx, request, &pxgValStr)
+	_, err = gs.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, err
 }
 
@@ -107,7 +107,7 @@ func (gs *GroupSync) GetSyncInfo(ctx context.Context, params GroupSyncInfoParams
 	}
 
 	groupSyncInfo := new(GroupSyncInfo)
-	_, err = gs.client.Do(ctx, request, &groupSyncInfo)
+	_, err = gs.client.Request(ctx, request, &groupSyncInfo)
 	return groupSyncInfo, err
 }
 
@@ -123,6 +123,6 @@ func (gs *GroupSync) GetSyncDeliveryTime(ctx context.Context, nSync int64, szwHo
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := gs.client.Do(ctx, request, &pxgValInt)
+	raw, err := gs.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }

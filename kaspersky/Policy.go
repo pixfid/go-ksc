@@ -90,7 +90,7 @@ func (pl *Policy) AddPolicy(ctx context.Context, params NewPolicy) (*PxgValInt, 
 	}
 
 	pxgValInt := new(PxgValInt)
-	_, err = pl.client.Do(ctx, request, &pxgValInt)
+	_, err = pl.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, err
 }
 
@@ -126,7 +126,7 @@ func (pl *Policy) CopyOrMovePolicy(ctx context.Context, params MovePolicyParams)
 	}
 
 	pxgValInt := new(PxgValInt)
-	_, err = pl.client.Do(ctx, request, &pxgValInt)
+	_, err = pl.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, err
 }
 
@@ -139,7 +139,7 @@ func (pl *Policy) DeletePolicy(ctx context.Context, nPolicy int64) error {
 		return err
 	}
 
-	_, err = pl.client.Do(ctx, request, nil)
+	_, err = pl.client.Request(ctx, request, nil)
 	return err
 }
 
@@ -184,7 +184,7 @@ func (pl *Policy) GetEffectivePoliciesForGroup(ctx context.Context, nGroupId int
 	}
 
 	policyList := new(PolicyList)
-	_, err = pl.client.Do(ctx, request, &policyList)
+	_, err = pl.client.Request(ctx, request, &policyList)
 	return policyList, err
 }
 
@@ -201,7 +201,7 @@ func (pl *Policy) GetOutbreakPolicies(ctx context.Context) (*OutbreakPolicies, e
 	}
 
 	outbreakPolicies := new(OutbreakPolicies)
-	_, err = pl.client.Do(ctx, request, &outbreakPolicies)
+	_, err = pl.client.Request(ctx, request, &outbreakPolicies)
 	return outbreakPolicies, err
 }
 
@@ -215,7 +215,7 @@ func (pl *Policy) GetPoliciesForGroup(ctx context.Context, nGroupId int64) (*Pol
 	}
 
 	policyList := new(PolicyList)
-	_, err = pl.client.Do(ctx, request, &policyList)
+	_, err = pl.client.Request(ctx, request, &policyList)
 	return policyList, err
 }
 
@@ -231,7 +231,7 @@ func (pl *Policy) GetPolicyContents(ctx context.Context, nPolicy, nRevisionId, n
 	}
 
 	pxgValStr := new(PxgValStr)
-	_, err = pl.client.Do(ctx, request, &pxgValStr)
+	_, err = pl.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, err
 }
 
@@ -245,7 +245,7 @@ func (pl *Policy) GetPolicyData(ctx context.Context, nPolicy int64) (*PxgValPoli
 	}
 
 	pxgValPolicy := new(PxgValPolicy)
-	_, err = pl.client.Do(ctx, request, &pxgValPolicy)
+	_, err = pl.client.Request(ctx, request, &pxgValPolicy)
 	return pxgValPolicy, err
 }
 
@@ -258,7 +258,7 @@ func (pl *Policy) MakePolicyActive(ctx context.Context, nPolicy int64, bActive b
 	}
 
 	pxgValBool := new(PxgValBool)
-	_, err = pl.client.Do(ctx, request, &pxgValBool)
+	_, err = pl.client.Request(ctx, request, &pxgValBool)
 	return pxgValBool, err
 }
 
@@ -271,7 +271,7 @@ func (pl *Policy) MakePolicyRoaming(ctx context.Context, nPolicy int64) (*PxgVal
 	}
 
 	pxgValBool := new(PxgValBool)
-	_, err = pl.client.Do(ctx, request, &pxgValBool)
+	_, err = pl.client.Request(ctx, request, &pxgValBool)
 	return pxgValBool, err
 }
 
@@ -284,7 +284,7 @@ func (pl *Policy) RevertPolicyToRevision(ctx context.Context, nPolicy, nRevision
 		return err
 	}
 
-	_, err = pl.client.Do(ctx, request, nil)
+	_, err = pl.client.Request(ctx, request, nil)
 	return err
 }
 
@@ -320,7 +320,7 @@ func (pl *Policy) SetOutbreakPolicies(ctx context.Context, params OutbreakPolici
 		return err
 	}
 
-	_, err = pl.client.Do(ctx, request, nil)
+	_, err = pl.client.Request(ctx, request, nil)
 	return err
 }
 
@@ -345,7 +345,7 @@ func (pl *Policy) UpdatePolicyData(ctx context.Context, params PolicyDataUpdateP
 		return nil, err
 	}
 
-	raw, err := pl.client.Do(ctx, request, nil)
+	raw, err := pl.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -358,7 +358,7 @@ func (pl *Policy) ExportPolicy(ctx context.Context, lPolicy int64) (*PxgValStr, 
 	}
 
 	pxgValStr := new(PxgValStr)
-	_, err = pl.client.Do(ctx, request, &pxgValStr)
+	_, err = pl.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, err
 }
 
@@ -382,6 +382,6 @@ func (pl *Policy) ImportPolicy(ctx context.Context, params PolicyBlob) (*PxgValS
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := pl.client.Do(ctx, request, &pxgValStr)
+	raw, err := pl.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }

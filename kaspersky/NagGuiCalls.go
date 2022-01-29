@@ -44,6 +44,6 @@ func (ngc *NagGuiCalls) CallConnectorAsync(ctx context.Context, params interface
 		return nil, err
 	}
 
-	raw, err := ngc.client.Do(ctx, request, nil)
+	raw, err := ngc.client.Request(ctx, request, nil)
 	return raw, err
 }

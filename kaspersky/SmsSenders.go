@@ -43,7 +43,7 @@ func (ss *SmsSenders) HasAllowedSenders(ctx context.Context) (*PxgValBool, []byt
 	}
 
 	pxgValBool := new(PxgValBool)
-	raw, err := ss.client.Do(ctx, request, &pxgValBool)
+	raw, err := ss.client.Request(ctx, request, &pxgValBool)
 	return pxgValBool, raw, err
 }
 
@@ -77,6 +77,6 @@ func (ss *SmsSenders) AllowSenders(ctx context.Context, params PNewStatuses) ([]
 		return nil, err
 	}
 
-	raw, err := ss.client.Do(ctx, request, nil)
+	raw, err := ss.client.Request(ctx, request, nil)
 	return raw, err
 }

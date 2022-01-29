@@ -44,7 +44,7 @@ func (cpc *CertPoolCtrl) GetCertificateInfo(ctx context.Context, nVServerId, nFu
 		return nil, err
 	}
 
-	raw, err := cpc.client.Do(ctx, request, nil)
+	raw, err := cpc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -60,6 +60,6 @@ func (cpc *CertPoolCtrl) SetCertificate(ctx context.Context, params interface{})
 		return nil, err
 	}
 
-	raw, err := cpc.client.Do(ctx, request, nil)
+	raw, err := cpc.client.Request(ctx, request, nil)
 	return raw, err
 }

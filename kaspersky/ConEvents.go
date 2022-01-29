@@ -51,7 +51,7 @@ func (ce *ConEvents) Retrieve(ctx context.Context) (*EventRetrieve, error) {
 	}
 
 	eventRetrieve := new(EventRetrieve)
-	raw, err := ce.client.Do(ctx, request, &eventRetrieve)
+	raw, err := ce.client.Request(ctx, request, &eventRetrieve)
 
 	if ce.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -96,7 +96,7 @@ func (ce *ConEvents) Subscribe(ctx context.Context, params EventSubscribeParams)
 	}
 
 	subscribeEventResponse := new(SubscribeEventResponse)
-	raw, err := ce.client.Do(ctx, request, &subscribeEventResponse)
+	raw, err := ce.client.Request(ctx, request, &subscribeEventResponse)
 
 	if ce.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -114,7 +114,7 @@ func (ce *ConEvents) UnSubscribe(ctx context.Context, nSubsId int64) error {
 		return err
 	}
 
-	raw, err := ce.client.Do(ctx, request, nil)
+	raw, err := ce.client.Request(ctx, request, nil)
 
 	if ce.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -132,7 +132,7 @@ func (ce *ConEvents) IsAnyServiceConsoleAvailable(ctx context.Context) (*PxgValB
 	}
 
 	result := new(PxgValBool)
-	raw, err := ce.client.Do(ctx, request, &result)
+	raw, err := ce.client.Request(ctx, request, &result)
 
 	if ce.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -154,7 +154,7 @@ func (ce *ConEvents) IsServiceConsoleAvailable(ctx context.Context, wstrProdName
 		return err
 	}
 
-	raw, err := ce.client.Do(ctx, request, nil)
+	raw, err := ce.client.Request(ctx, request, nil)
 
 	if ce.client.Debug {
 		log.Printf("raw response: %s", string(raw))

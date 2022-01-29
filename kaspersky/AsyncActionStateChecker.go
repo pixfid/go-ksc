@@ -81,7 +81,7 @@ type PStateData struct {
 // Postcondition:
 //
 // if returns bFinalized==true then this action has been removed, and wstrActionGuid is not valid any more.
-// Otherwise in lNextCheckDelay it should be returned delay in msec to Do next call of the CheckActionState
+// Otherwise in lNextCheckDelay it should be returned delay in msec to Request next call of the CheckActionState
 func (ac *AsyncActionStateChecker) CheckActionState(ctx context.Context, wstrActionGuid string) (*ActionStateResult, []byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrActionGuid": "%s"}`, wstrActionGuid))
 	request, err := http.NewRequest("POST", ac.client.Server+"/api/v1.0/AsyncActionStateChecker.CheckActionState", bytes.NewBuffer(postData))
@@ -90,6 +90,6 @@ func (ac *AsyncActionStateChecker) CheckActionState(ctx context.Context, wstrAct
 	}
 
 	aSResult := new(ActionStateResult)
-	raw, err := ac.client.Do(ctx, request, &aSResult)
+	raw, err := ac.client.Request(ctx, request, &aSResult)
 	return aSResult, raw, err
 }

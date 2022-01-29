@@ -44,7 +44,7 @@ func (uc *UaControl) GetAssignUasAutomatically(ctx context.Context) (*PxgValBool
 	}
 
 	pxgValBool := new(PxgValBool)
-	_, err = uc.client.Do(ctx, request, &pxgValBool)
+	_, err = uc.client.Request(ctx, request, &pxgValBool)
 	return pxgValBool, err
 }
 
@@ -88,7 +88,7 @@ func (uc *UaControl) GetDefaultUpdateAgentRegistrationInfo(ctx context.Context) 
 	}
 
 	agentRegistrationInfo := new(AgentRegistrationInfo)
-	_, err = uc.client.Do(ctx, request, &agentRegistrationInfo)
+	_, err = uc.client.Request(ctx, request, &agentRegistrationInfo)
 	return agentRegistrationInfo, err
 }
 
@@ -132,7 +132,7 @@ func (uc *UaControl) GetUpdateAgentInfo(ctx context.Context, wstrUaHostId string
 	}
 
 	updateAgentInfo := new(UpdateAgentInfo)
-	_, err = uc.client.Do(ctx, request, &updateAgentInfo)
+	_, err = uc.client.Request(ctx, request, &updateAgentInfo)
 	return updateAgentInfo, err
 }
 
@@ -154,7 +154,7 @@ func (uc *UaControl) GetUpdateAgentsDisplayInfoForHost(ctx context.Context, wstr
 		return nil, err
 	}
 	updateAgentsDisplayInfoForHost := new(UpdateAgentsDisplayInfoForHost)
-	_, err = uc.client.Do(ctx, request, &updateAgentsDisplayInfoForHost)
+	_, err = uc.client.Request(ctx, request, &updateAgentsDisplayInfoForHost)
 	return updateAgentsDisplayInfoForHost, err
 }
 
@@ -182,7 +182,7 @@ func (uc *UaControl) GetUpdateAgentsList(ctx context.Context) (*UpdateAgentsList
 	}
 
 	updateAgentsList := new(UpdateAgentsList)
-	_, err = uc.client.Do(ctx, request, &updateAgentsList)
+	_, err = uc.client.Request(ctx, request, &updateAgentsList)
 	return updateAgentsList, err
 }
 
@@ -199,7 +199,7 @@ func (uc *UaControl) ModifyUpdateAgent(ctx context.Context, params AgentRegistra
 		return err
 	}
 
-	_, err = uc.client.Do(ctx, request, nil)
+	_, err = uc.client.Request(ctx, request, nil)
 	return err
 }
 
@@ -226,7 +226,7 @@ func (uc *UaControl) RegisterDmzGateway(ctx context.Context, params interface{})
 		return nil, err
 	}
 
-	raw, err := uc.client.Do(ctx, request, nil)
+	raw, err := uc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -248,7 +248,7 @@ func (uc *UaControl) RegisterUpdateAgent(ctx context.Context, params AgentRegist
 		return err
 	}
 
-	_, err = uc.client.Do(ctx, request, nil)
+	_, err = uc.client.Request(ctx, request, nil)
 	return err
 }
 
@@ -261,7 +261,7 @@ func (uc *UaControl) SetAssignUasAutomatically(ctx context.Context, bEnabled boo
 		return err
 	}
 
-	_, err = uc.client.Do(ctx, request, nil)
+	_, err = uc.client.Request(ctx, request, nil)
 	return err
 }
 
@@ -275,6 +275,6 @@ func (uc *UaControl) UnregisterUpdateAgent(ctx context.Context, wstrUaHostId str
 		return err
 	}
 
-	_, err = uc.client.Do(ctx, request, nil)
+	_, err = uc.client.Request(ctx, request, nil)
 	return err
 }

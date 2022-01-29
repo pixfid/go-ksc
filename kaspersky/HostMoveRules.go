@@ -50,7 +50,7 @@ func (hmr *HostMoveRules) AddRule(ctx context.Context, params interface{}) ([]by
 		return nil, err
 	}
 
-	raw, err := hmr.client.Do(ctx, request, nil)
+	raw, err := hmr.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -62,7 +62,7 @@ func (hmr *HostMoveRules) DeleteRule(ctx context.Context, nRule int64) ([]byte, 
 		return nil, err
 	}
 
-	raw, err := hmr.client.Do(ctx, request, nil)
+	raw, err := hmr.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -92,7 +92,7 @@ func (hmr *HostMoveRules) ExecuteRulesNow(ctx context.Context, params ExecuteRul
 		return nil, err
 	}
 
-	raw, err := hmr.client.Do(ctx, request, nil)
+	raw, err := hmr.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -175,7 +175,7 @@ func (hmr *HostMoveRules) GetRule(ctx context.Context, nRule int64) (*HMoveRule,
 	}
 
 	hMoveRule := new(HMoveRule)
-	raw, err := hmr.client.Do(ctx, request, &hMoveRule)
+	raw, err := hmr.client.Request(ctx, request, &hMoveRule)
 	return hMoveRule, raw, err
 }
 
@@ -197,7 +197,7 @@ func (hmr *HostMoveRules) GetRules(ctx context.Context, params Rules) (*HMoveRul
 	}
 
 	hMoveRules := new(HMoveRules)
-	raw, err := hmr.client.Do(ctx, request, &hMoveRules)
+	raw, err := hmr.client.Request(ctx, request, &hMoveRules)
 	return hMoveRules, raw, err
 }
 
@@ -220,7 +220,7 @@ func (hmr *HostMoveRules) SetRulesOrder(ctx context.Context, params RulesOrderPa
 	}
 
 	hMoveRules := new(HMoveRules)
-	raw, err := hmr.client.Do(ctx, request, &hMoveRules)
+	raw, err := hmr.client.Request(ctx, request, &hMoveRules)
 	return hMoveRules, raw, err
 }
 
@@ -236,6 +236,6 @@ func (hmr *HostMoveRules) UpdateRule(ctx context.Context, params interface{}) ([
 		return nil, err
 	}
 
-	raw, err := hmr.client.Do(ctx, request, nil)
+	raw, err := hmr.client.Request(ctx, request, nil)
 	return raw, err
 }

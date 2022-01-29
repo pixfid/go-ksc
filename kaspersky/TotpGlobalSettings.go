@@ -43,7 +43,7 @@ func (tgs *TotpGlobalSettings) Get2FaRequiredForAll(ctx context.Context) (*PxgVa
 	}
 
 	result := new(PxgValBool)
-	raw, err := tgs.client.Do(ctx, request, &result)
+	raw, err := tgs.client.Request(ctx, request, &result)
 
 	if tgs.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -66,7 +66,7 @@ func (tgs *TotpGlobalSettings) GetTotpGlobalSettings(ctx context.Context) (*TOTP
 	}
 
 	result := new(TOTPSettings)
-	raw, err := tgs.client.Do(ctx, request, &result)
+	raw, err := tgs.client.Request(ctx, request, &result)
 
 	if tgs.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -90,7 +90,7 @@ func (tgs *TotpGlobalSettings) IfCanConfigure2FaSettings(ctx context.Context) (*
 	}
 
 	result := new(LoggedInUsing2FA)
-	raw, err := tgs.client.Do(ctx, request, &result)
+	raw, err := tgs.client.Request(ctx, request, &result)
 
 	if tgs.client.Debug {
 		log.Printf("raw response: %s", string(raw))
@@ -111,7 +111,7 @@ func (tgs *TotpGlobalSettings) Set2FaRequiredForAll(ctx context.Context, bRequir
 		return err
 	}
 
-	raw, err := tgs.client.Do(ctx, request, nil)
+	raw, err := tgs.client.Request(ctx, request, nil)
 
 	if tgs.client.Debug {
 		log.Printf("raw response: %s", string(raw))

@@ -69,7 +69,7 @@ func (asm *AdSecManager) ApproveDetect(ctx context.Context, params DetectParams)
 		return nil, err
 	}
 
-	raw, err := asm.client.Do(ctx, request, nil)
+	raw, err := asm.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -85,6 +85,6 @@ func (asm *AdSecManager) DisproveDetect(ctx context.Context, params DetectParams
 		return nil, err
 	}
 
-	raw, err := asm.client.Do(ctx, request, nil)
+	raw, err := asm.client.Request(ctx, request, nil)
 	return raw, err
 }

@@ -46,7 +46,7 @@ func (s *Session) CreateToken(ctx context.Context) (*PxgValStr, []byte, error) {
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := s.client.Do(ctx, request, &pxgValStr)
+	raw, err := s.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -58,7 +58,7 @@ func (s *Session) Ping(ctx context.Context) ([]byte, error) {
 		return nil, err
 	}
 
-	raw, err := s.client.Do(ctx, request, nil)
+	raw, err := s.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -73,7 +73,7 @@ func (s *Session) EndSession(ctx context.Context) ([]byte, error) {
 		return nil, err
 	}
 
-	raw, err := s.client.Do(ctx, request, nil)
+	raw, err := s.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -90,7 +90,7 @@ func (s *Session) StartSession(ctx context.Context) (*PxgValStr, []byte, error) 
 	request.Header.Set("X-KSC-VServer", s.client.VServerName)
 
 	pxgValStr := new(PxgValStr)
-	raw, err := s.client.Do(ctx, request, &pxgValStr)
+	raw, err := s.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -108,6 +108,6 @@ func (s *Session) CreateBlob(ctx context.Context, params interface{}) ([]byte, e
 		return nil, err
 	}
 
-	raw, err := s.client.Do(ctx, request, nil)
+	raw, err := s.client.Request(ctx, request, nil)
 	return raw, err
 }

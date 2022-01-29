@@ -57,6 +57,6 @@ func (ts *EventNotificationsApi) PublishEvent(ctx context.Context, params EventN
 		return nil, err
 	}
 
-	raw, err := ts.client.Do(ctx, request, nil)
+	raw, err := ts.client.Request(ctx, request, nil)
 	return raw, err
 }

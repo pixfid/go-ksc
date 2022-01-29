@@ -42,6 +42,6 @@ func (kc *KillChain) GetByIDs(ctx context.Context, wstrHostID, wstrElementID str
 		return nil, err
 	}
 
-	raw, err := kc.client.Do(ctx, request, nil)
+	raw, err := kc.client.Request(ctx, request, nil)
 	return raw, err
 }

@@ -64,7 +64,7 @@ func (akp *AKPatches) ApprovePatch(ctx context.Context, params interface{}) ([]b
 		return nil, err
 	}
 
-	raw, err := akp.client.Do(ctx, request, nil)
+	raw, err := akp.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -83,6 +83,6 @@ func (akp *AKPatches) ForbidPatch(ctx context.Context, params interface{}) ([]by
 		return nil, err
 	}
 
-	raw, err := akp.client.Do(ctx, request, nil)
+	raw, err := akp.client.Request(ctx, request, nil)
 	return raw, err
 }

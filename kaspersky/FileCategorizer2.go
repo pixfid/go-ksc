@@ -56,7 +56,7 @@ func (fc *FileCategorizer2) AddExpressions(ctx context.Context, params interface
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := fc.client.Do(ctx, request, &pxgValStr)
+	raw, err := fc.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -70,7 +70,7 @@ func (fc *FileCategorizer2) CancelFileMetadataOperations(ctx context.Context) (*
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := fc.client.Do(ctx, request, &pxgValInt)
+	raw, err := fc.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -85,7 +85,7 @@ func (fc *FileCategorizer2) CancelFileUpload(ctx context.Context) (*PxgValInt, [
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := fc.client.Do(ctx, request, &pxgValInt)
+	raw, err := fc.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -157,7 +157,7 @@ func (fc *FileCategorizer2) CreateCategory(ctx context.Context, params CategoryP
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := fc.client.Do(ctx, request, &pxgValStr)
+	raw, err := fc.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -170,7 +170,7 @@ func (fc *FileCategorizer2) DeleteCategory(ctx context.Context, nCategoryId int6
 		return nil, err
 	}
 
-	raw, err := fc.client.Do(ctx, request, nil)
+	raw, err := fc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -194,7 +194,7 @@ func (fc *FileCategorizer2) DeleteExpression(ctx context.Context, params Express
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := fc.client.Do(ctx, request, &pxgValStr)
+	raw, err := fc.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -209,7 +209,7 @@ func (fc *FileCategorizer2) DoStaticAnalysisAsync(ctx context.Context, wstrReque
 		return nil, err
 	}
 
-	raw, err := fc.client.Do(ctx, request, nil)
+	raw, err := fc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -223,7 +223,7 @@ func (fc *FileCategorizer2) DoStaticAnalysisAsync2(ctx context.Context, nPolicyI
 	}
 
 	asyncID := new(AsyncID)
-	raw, err := fc.client.Do(ctx, request, &asyncID)
+	raw, err := fc.client.Request(ctx, request, &asyncID)
 	return asyncID, raw, err
 }
 
@@ -241,7 +241,7 @@ func (fc *FileCategorizer2) DoTestStaticAnalysisAsync(ctx context.Context, param
 		return nil, err
 	}
 
-	raw, err := fc.client.Do(ctx, request, nil)
+	raw, err := fc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -258,7 +258,7 @@ func (fc *FileCategorizer2) DoTestStaticAnalysisAsync2(ctx context.Context, para
 	}
 
 	wActionGUID := new(WActionGUID)
-	raw, err := fc.client.Do(ctx, request, &wActionGUID)
+	raw, err := fc.client.Request(ctx, request, &wActionGUID)
 	return wActionGUID, raw, err
 }
 
@@ -269,7 +269,7 @@ func (fc *FileCategorizer2) FinishStaticAnalysis(ctx context.Context) ([]byte, e
 		return nil, err
 	}
 
-	raw, err := fc.client.Do(ctx, request, nil)
+	raw, err := fc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -282,7 +282,7 @@ func (fc *FileCategorizer2) ForceCategoryUpdate(ctx context.Context, nCategoryId
 		return nil, err
 	}
 
-	raw, err := fc.client.Do(ctx, request, nil)
+	raw, err := fc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -294,7 +294,7 @@ func (fc *FileCategorizer2) GetCategoriesModificationCounter(ctx context.Context
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := fc.client.Do(ctx, request, &pxgValInt)
+	raw, err := fc.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -307,7 +307,7 @@ func (fc *FileCategorizer2) GetCategory(ctx context.Context, nCategoryId int64) 
 		return nil, err
 	}
 
-	raw, err := fc.client.Do(ctx, request, nil)
+	raw, err := fc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -320,7 +320,7 @@ func (fc *FileCategorizer2) GetCategoryByUUID(ctx context.Context, pCategoryUUID
 		return nil, err
 	}
 
-	raw, err := fc.client.Do(ctx, request, nil)
+	raw, err := fc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -337,7 +337,7 @@ func (fc *FileCategorizer2) GetFileMetadata(ctx context.Context, ulFlag int64) (
 		return nil, err
 	}
 
-	raw, err := fc.client.Do(ctx, request, nil)
+	raw, err := fc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -358,7 +358,7 @@ func (fc *FileCategorizer2) GetFilesMetadata(ctx context.Context, ulFlag int64) 
 		return nil, err
 	}
 
-	raw, err := fc.client.Do(ctx, request, nil)
+	raw, err := fc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -371,7 +371,7 @@ func (fc *FileCategorizer2) GetFilesMetadataFromMSI(ctx context.Context, ulFlag 
 		return nil, err
 	}
 
-	raw, err := fc.client.Do(ctx, request, nil)
+	raw, err := fc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -409,7 +409,7 @@ func (fc *FileCategorizer2) GetRefPolicies(ctx context.Context, nCatId int64) (*
 	}
 
 	refPolicies := new(RefPolicies)
-	raw, err := fc.client.Do(ctx, request, &refPolicies)
+	raw, err := fc.client.Request(ctx, request, &refPolicies)
 	return refPolicies, raw, err
 }
 
@@ -424,7 +424,7 @@ func (fc *FileCategorizer2) GetSerializedCategoryBody(ctx context.Context, nCate
 		return nil, err
 	}
 
-	raw, err := fc.client.Do(ctx, request, nil)
+	raw, err := fc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -437,7 +437,7 @@ func (fc *FileCategorizer2) GetSerializedCategoryBody2(ctx context.Context, nCat
 		return nil, err
 	}
 
-	raw, err := fc.client.Do(ctx, request, nil)
+	raw, err := fc.client.Request(ctx, request, nil)
 	return raw, err
 }
 
@@ -449,7 +449,7 @@ func (fc *FileCategorizer2) GetSyncId(ctx context.Context) (*PxgValInt, []byte, 
 	}
 
 	pxgValInt := new(PxgValInt)
-	raw, err := fc.client.Do(ctx, request, &pxgValInt)
+	raw, err := fc.client.Request(ctx, request, &pxgValInt)
 	return pxgValInt, raw, err
 }
 
@@ -467,7 +467,7 @@ func (fc *FileCategorizer2) InitFileUpload(ctx context.Context) (*UploadParams, 
 	}
 
 	uploadParams := new(UploadParams)
-	raw, err := fc.client.Do(ctx, request, &uploadParams)
+	raw, err := fc.client.Request(ctx, request, &uploadParams)
 	return uploadParams, raw, err
 }
 
@@ -484,7 +484,7 @@ func (fc *FileCategorizer2) UpdateCategory(ctx context.Context, params interface
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := fc.client.Do(ctx, request, &pxgValStr)
+	raw, err := fc.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }
 
@@ -501,6 +501,6 @@ func (fc *FileCategorizer2) UpdateExpressions(ctx context.Context, params interf
 	}
 
 	pxgValStr := new(PxgValStr)
-	raw, err := fc.client.Do(ctx, request, &pxgValStr)
+	raw, err := fc.client.Request(ctx, request, &pxgValStr)
 	return pxgValStr, raw, err
 }

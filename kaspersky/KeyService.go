@@ -48,7 +48,7 @@ func (ks *KeyService) EncryptData(ctx context.Context, pData string) (*PEncrypte
 	}
 
 	pEncryptedData := new(PEncryptedData)
-	raw, err := ks.client.Do(ctx, request, &pEncryptedData)
+	raw, err := ks.client.Request(ctx, request, &pEncryptedData)
 	return pEncryptedData, raw, err
 }
 
@@ -68,7 +68,7 @@ func (ks *KeyService) DecryptData(ctx context.Context, pEncryptedData, wstrProdN
 	}
 
 	pDecryptedData := new(PDecryptedData)
-	raw, err := ks.client.Do(ctx, request, &pDecryptedData)
+	raw, err := ks.client.Request(ctx, request, &pDecryptedData)
 	return pDecryptedData, raw, err
 }
 
@@ -82,7 +82,7 @@ func (ks *KeyService) EncryptDataForHost(ctx context.Context, wstrHostId, pData 
 	}
 
 	pEncryptedData := new(PEncryptedData)
-	raw, err := ks.client.Do(ctx, request, &pEncryptedData)
+	raw, err := ks.client.Request(ctx, request, &pEncryptedData)
 	return pEncryptedData, raw, err
 }
 
@@ -107,6 +107,6 @@ func (ks *KeyService) GenerateTransportCertificate(ctx context.Context, wstrComm
 	}
 
 	transportCertificate := new(TransportCertificate)
-	raw, err := ks.client.Do(ctx, request, &transportCertificate)
+	raw, err := ks.client.Request(ctx, request, &transportCertificate)
 	return transportCertificate, raw, err
 }
