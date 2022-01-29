@@ -30,6 +30,8 @@ import (
 	"net/http"
 )
 
+// Deprecated: Obsolete, removed ???
+// SeamlessUpdatesTestApi ... ????
 type SeamlessUpdatesTestApi service
 
 type RequiredPlugins struct {

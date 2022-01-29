@@ -74,6 +74,7 @@ type KscClient struct {
 	EventProcessing                                                   *EventProcessing
 	EventProcessingFactory                                            *EventProcessingFactory
 	ExtAud                                                            *ExtAud
+	ExtTenant                                                         *ExtTenant
 	FileCategorizer2                                                  *FileCategorizer2
 	FilesAcceptor                                                     *FilesAcceptor
 	GatewayConnection                                                 *GatewayConnection
@@ -104,7 +105,10 @@ type KscClient struct {
 	LicensePolicy                                                     *LicensePolicy
 	Limits                                                            *Limits
 	ListTags                                                          *ListTags
+	MfaCache                                                          *MfaCache
+	MdmCertCtrlApi                                                    *MdmCertCtrlApi
 	MfaCacheInner                                                     *MfaCacheInner
+	MfaCacheInnerTest                                                 *MfaCacheInnerTest
 	MigrationData                                                     *MigrationData
 	ModulesIntegrityCheck                                             *ModulesIntegrityCheck
 	Multitenancy                                                      *Multitenancy
@@ -116,12 +120,16 @@ type KscClient struct {
 	NagRemoteScreen                                                   *NagRemoteScreen
 	NetUtils                                                          *NetUtils
 	NlaDefinedNetworks                                                *NlaDefinedNetworks
+	OAuth2                                                            *OAuth2
 	OsVersion                                                         *OsVersion
 	PackagesAPI                                                       *PackagesApi
 	PatchParameters                                                   *PatchParameters
 	PLCDevAPI                                                         *PLCDevApi
+	PluginData                                                        *PluginData
+	PluginDataStorage                                                 *PluginDataStorage
 	Policy                                                            *Policy
 	PolicyProfiles                                                    *PolicyProfiles
+	ProductBackendIntegration                                         *ProductBackendIntegration
 	ProductUserTokenIssuer                                            *ProductUserTokenIssuer
 	QueriesStorage                                                    *QueriesStorage
 	QBTNetworkListAPI                                                 *QBTNetworkListApi
@@ -216,6 +224,7 @@ func NewKscClient(cfg Config) *KscClient {
 	ksc.EventProcessing = (*EventProcessing)(&ksc.common)
 	ksc.EventProcessingFactory = (*EventProcessingFactory)(&ksc.common)
 	ksc.ExtAud = (*ExtAud)(&ksc.common)
+	ksc.ExtTenant = (*ExtTenant)(&ksc.common)
 	ksc.FileCategorizer2 = (*FileCategorizer2)(&ksc.common)
 	ksc.FilesAcceptor = (*FilesAcceptor)(&ksc.common)
 	ksc.GatewayConnection = (*GatewayConnection)(&ksc.common)
@@ -246,7 +255,10 @@ func NewKscClient(cfg Config) *KscClient {
 	ksc.LicensePolicy = (*LicensePolicy)(&ksc.common)
 	ksc.Limits = (*Limits)(&ksc.common)
 	ksc.ListTags = (*ListTags)(&ksc.common)
+	ksc.MfaCache = (*MfaCache)(&ksc.common)
+	ksc.MdmCertCtrlApi = (*MdmCertCtrlApi)(&ksc.common)
 	ksc.MfaCacheInner = (*MfaCacheInner)(&ksc.common)
+	ksc.MfaCacheInnerTest = (*MfaCacheInnerTest)(&ksc.common)
 	ksc.MigrationData = (*MigrationData)(&ksc.common)
 	ksc.ModulesIntegrityCheck = (*ModulesIntegrityCheck)(&ksc.common)
 	ksc.Multitenancy = (*Multitenancy)(&ksc.common)
@@ -258,12 +270,16 @@ func NewKscClient(cfg Config) *KscClient {
 	ksc.NagRemoteScreen = (*NagRemoteScreen)(&ksc.common)
 	ksc.NetUtils = (*NetUtils)(&ksc.common)
 	ksc.NlaDefinedNetworks = (*NlaDefinedNetworks)(&ksc.common)
+	ksc.OAuth2 = (*OAuth2)(&ksc.common)
 	ksc.OsVersion = (*OsVersion)(&ksc.common)
 	ksc.PackagesAPI = (*PackagesApi)(&ksc.common)
 	ksc.PatchParameters = (*PatchParameters)(&ksc.common)
 	ksc.PLCDevAPI = (*PLCDevApi)(&ksc.common)
+	ksc.PluginData = (*PluginData)(&ksc.common)
+	ksc.PluginDataStorage = (*PluginDataStorage)(&ksc.common)
 	ksc.Policy = (*Policy)(&ksc.common)
 	ksc.PolicyProfiles = (*PolicyProfiles)(&ksc.common)
+	ksc.ProductBackendIntegration = (*ProductBackendIntegration)(&ksc.common)
 	ksc.ProductUserTokenIssuer = (*ProductUserTokenIssuer)(&ksc.common)
 	ksc.QueriesStorage = (*QueriesStorage)(&ksc.common)
 	ksc.QBTNetworkListAPI = (*QBTNetworkListApi)(&ksc.common)

@@ -57,10 +57,8 @@ type SsContent struct {
 	PNewData interface{} `json:"pNewData"`
 }
 
-// SsAdd Add new data to settings storage.
-// Adds new variables to the specified section.
-//
-// Changes are not saved until method SsApply is called. Unsaved data is not available by methods SsRead and SSGetNames.
+// SsAdd Add new data to settings storage. Adds new variables to the specified section.
+//	Changes are not saved until method SsApply is called. Unsaved data is not available by methods SsRead and SSGetNames.
 func (sc *SsContents) SsAdd(ctx context.Context, params SsContent) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -76,8 +74,7 @@ func (sc *SsContents) SsAdd(ctx context.Context, params SsContent) ([]byte, erro
 	return raw, err
 }
 
-// SsApply
-// Saves changes made by methods: SsUpdate, SsAdd, SsReplace, SsClear, SsDelete, SsCreateSection, SsDeleteSection
+// SsApply	Saves changes made by methods: SsUpdate, SsAdd, SsReplace, SsClear, SsDelete, SsCreateSection, SsDeleteSection
 func (sc *SsContents) SsApply(ctx context.Context, wstrID string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`	{ "wstrID": "%s"}`, wstrID))
 	request, err := http.NewRequest("POST", sc.client.Server+"/api/v1.0/SsContents.Ss_Apply", bytes.NewBuffer(postData))
@@ -90,11 +87,9 @@ func (sc *SsContents) SsApply(ctx context.Context, wstrID string) ([]byte, error
 }
 
 // SsClear Clear and write data in settings storage.
-//
-// Replaces existing section contents with pData, i.e. existing section contents will deleted and variables
-// from pData will be written to the section.
-//
-//Changes are not saved until method SsApply is called. Unsaved data is not available by methods SsRead and SSGetNames.
+//	Replaces existing section contents with pData, i.e. existing section contents will deleted and variables
+//	from pData will be written to the section.
+//	Changes are not saved until method SsApply is called. Unsaved data is not available by methods SsRead and SSGetNames.
 func (sc *SsContents) SsClear(ctx context.Context, params SsContent) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -111,10 +106,8 @@ func (sc *SsContents) SsClear(ctx context.Context, params SsContent) ([]byte, er
 }
 
 // SsCreateSection Create section in settings storage.
-//
-// Creates empty section in settings storage
-//
-// Changes are not saved until method SsApply is called. Unsaved data is not available by methods SsRead and SSGetNames.
+//	Creates empty section in settings storage
+//	Changes are not saved until method SsApply is called. Unsaved data is not available by methods SsRead and SSGetNames.
 func (sc *SsContents) SsCreateSection(ctx context.Context, params SsContentD) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -152,10 +145,8 @@ type SsContentD struct {
 }
 
 // SsDelete Delete data from settings storage.
-//
-// Deletes variables specified in pData from the specified section.
-//
-// Changes are not saved until method SsApply is called. Unsaved data is not available by methods SsRead and SSGetNames.
+//	Deletes variables specified in pData from the specified section.
+//	Changes are not saved until method SsApply is called. Unsaved data is not available by methods SsRead and SSGetNames.
 func (sc *SsContents) SsDelete(ctx context.Context, params SsContentD) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -172,10 +163,9 @@ func (sc *SsContents) SsDelete(ctx context.Context, params SsContentD) ([]byte, 
 }
 
 // SsDeleteSection Delete section from settings storage.
-//
-// Deletes section with all contents from settings storage.
-//
-// Changes are not saved until method SsApply is called. Unsaved data is not available by methods SsRead and SSGetNames.
+//	Deletes section with all contents from settings storage.
+//	Changes are not saved until method SsApply is called.
+//	Unsaved data is not available by methods SsRead and SSGetNames.
 func (sc *SsContents) SsDeleteSection(ctx context.Context, params SsContentD) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -192,8 +182,7 @@ func (sc *SsContents) SsDeleteSection(ctx context.Context, params SsContentD) ([
 }
 
 // SSGetNames Enumerate contents of settings storage
-//
-// Retrieves list of sections.
+//	Retrieves list of sections.
 func (sc *SsContents) SSGetNames(ctx context.Context, params SsContentD) (*PxgValArrayOfString, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -210,9 +199,7 @@ func (sc *SsContents) SSGetNames(ctx context.Context, params SsContentD) (*PxgVa
 	return pxgValArrayOfString, raw, err
 }
 
-// SsRead Read data from settings storage.
-//
-// Reads saved data from the specified section of settings storage.
+// SsRead Reads saved data from the specified section of settings storage.
 func (sc *SsContents) SsRead(ctx context.Context, params SsContentD, v interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -227,10 +214,8 @@ func (sc *SsContents) SsRead(ctx context.Context, params SsContentD, v interface
 	return raw, err
 }
 
-// SsRelease Close opened SsContents
-//
-// Closes opened SsContents and releases associated server resources.
-// After calling this method wstrID is not longer valid.
+// SsRelease Closes opened SsContents and releases associated server resources.
+//	After calling this method wstrID is not longer valid.
 func (sc *SsContents) SsRelease(ctx context.Context, wstrID string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"wstrID": "%s"}`, wstrID))
 	request, err := http.NewRequest("POST", sc.client.Server+"/api/v1.0/SsContents.Ss_Release", bytes.NewBuffer(postData))
@@ -242,11 +227,9 @@ func (sc *SsContents) SsRelease(ctx context.Context, wstrID string) ([]byte, err
 	return raw, err
 }
 
-// SsReplace Replace data in settings storage.
-//
-// Replaces variables in the specified section. If a variable already exists it will be updated, if a variable does not exist it will be added.
-//
-// Changes are not saved until method Ss_Apply is called. Unsaved data is not available by methods SsRead and SSGetNames.
+// SsReplace Replaces variables in the specified section.
+//	If a variable already exists it will be updated, if a variable does not exist it will be added.
+//	Changes are not saved until method Ss_Apply is called. Unsaved data is not available by methods SsRead and SSGetNames.
 func (sc *SsContents) SsReplace(ctx context.Context, params SsContent) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -262,9 +245,8 @@ func (sc *SsContents) SsReplace(ctx context.Context, params SsContent) ([]byte, 
 	return raw, err
 }
 
-// Ss_Update Updates existing variables in the specified section.
-//
-// Changes are not saved until method SsApply is called. Unsaved data is not available by methods SsRead and SSGetNames.
+// SsUpdate Updates existing variables in the specified section.
+//	Changes are not saved until method SsApply is called. Unsaved data is not available by methods SsRead and SSGetNames.
 func (sc *SsContents) SsUpdate(ctx context.Context, params SsContent) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

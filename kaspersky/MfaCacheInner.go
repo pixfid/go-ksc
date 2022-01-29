@@ -49,6 +49,7 @@ func (mci *MfaCacheInner) GetMfaRequiredForAll(ctx context.Context) ([]byte, err
 	return raw, err
 }
 
+// GetMfaKeyIssuer Get 2FA key Issuer
 func (mci *MfaCacheInner) GetMfaKeyIssuer(ctx context.Context) ([]byte, error) {
 	request, err := http.NewRequest("POST", mci.client.Server+"/api/v1.0/MfaCacheInner.GetMfaKeyIssuer", nil)
 	if err != nil {
