@@ -158,8 +158,8 @@ func (uda *UserDevicesApi) GetDecipheredCommandList(ctx context.Context, params 
 	return raw, err
 }
 
-// GetDevice
-// Acquire properties of the specified user device.
+// GetDevice Acquire properties of the specified user device.
+//	Deprecated: Previously used for the SSP. Now, use the SrvView UmdmDevices instead.
 func (uda *UserDevicesApi) GetDevice(ctx context.Context, lDeviceId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lDeviceId": %d }`, lDeviceId))
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GetDevice",
@@ -177,8 +177,8 @@ type UserID struct {
 	PUserID string `json:"pUserId,omitempty"`
 }
 
-// GetDevices
-// Acquire properties of all registered devices owned by specified user.
+// GetDevices Acquire properties of all registered devices owned by specified user.
+//	Deprecated: Previously used for the SSP. Now, use the SrvView UmdmDevices instead.
 func (uda *UserDevicesApi) GetDevices(ctx context.Context, params UserID) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -211,8 +211,7 @@ func (uda *UserDevicesApi) GetDevicesExtraData(ctx context.Context, params inter
 	return raw, err
 }
 
-// GetEnrollmentPackage
-// Get the info of enrollment package created for the device.
+// GetEnrollmentPackage Get the info of enrollment package created for the device.
 func (uda *UserDevicesApi) GetEnrollmentPackage(ctx context.Context, llEnrPkgId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"llEnrPkgId": %d }`, llEnrPkgId))
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GetEnrollmentPackage",
@@ -320,8 +319,8 @@ func (uda *UserDevicesApi) GetJournalRecords2(ctx context.Context, lDeviceId int
 	return raw, err
 }
 
-// GetLatestDeviceActivityDate
-// Acquire latest device activity date.
+// GetLatestDeviceActivityDate Acquire latest device activity date.
+//	Deprecated: Previously used for the SSP. Now, use the SrvView UmdmDevices instead.
 func (uda *UserDevicesApi) GetLatestDeviceActivityDate(ctx context.Context, lDeviceId int64) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lDeviceId": %d }`, lDeviceId))
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.GetLatestDeviceActivityDate",
@@ -334,8 +333,7 @@ func (uda *UserDevicesApi) GetLatestDeviceActivityDate(ctx context.Context, lDev
 	return raw, err
 }
 
-// GetMobileAgentSettingStorageData
-// Get mobile agent setting storage data.
+// GetMobileAgentSettingStorageData Get mobile agent setting storage data.
 func (uda *UserDevicesApi) GetMobileAgentSettingStorageData(ctx context.Context, lDeviceId int64,
 	c_wstrSectionName string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"lDeviceId": %d, "c_wstrSectionName" : "%s" }`, lDeviceId, c_wstrSectionName))
@@ -410,10 +408,8 @@ func (uda *UserDevicesApi) GetSyncInfo(ctx context.Context, params interface{}) 
 	return raw, err
 }
 
-// GlueDevices
-// Glue information on a device got from different sources
-//
-// Deprecated:
+// GlueDevices Glue information on a device got from different sources
+//	Deprecated: Not used.
 func (uda *UserDevicesApi) GlueDevices(ctx context.Context, lDevice1Id, lDevice2Id int64) ([]byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"lDevice1Id": %d, "lDevice2Id" : %d }`, lDevice1Id, lDevice2Id))
@@ -445,8 +441,7 @@ func (uda *UserDevicesApi) PostCommand(ctx context.Context, params interface{}) 
 	return raw, err
 }
 
-// RecallCommand
-// Recall command previously posted to the specified device.
+// RecallCommand previously posted to the specified device.
 func (uda *UserDevicesApi) RecallCommand(ctx context.Context, c_wstrCommandGuid string) ([]byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"c_wstrCommandGuid": "%s"}`, c_wstrCommandGuid))
@@ -477,8 +472,8 @@ func (uda *UserDevicesApi) SetMultitenancyServerSettings(ctx context.Context, pa
 	return raw, err
 }
 
-// SetSafeBrowserAutoinstallFlag
-// Set flag which means install or don't install SafeBrowser automatically when device connects first time.
+// SetSafeBrowserAutoinstallFlag Set flag which means install or don't install SafeBrowser automatically when device connects first time.
+//	Deprecated: The SafeBrowser is not supported now
 func (uda *UserDevicesApi) SetSafeBrowserAutoinstallFlag(ctx context.Context, bInstall bool) ([]byte,
 	error) {
 	postData := []byte(fmt.Sprintf(`{"bInstall": %v}`, bInstall))
@@ -492,8 +487,8 @@ func (uda *UserDevicesApi) SetSafeBrowserAutoinstallFlag(ctx context.Context, bI
 	return raw, err
 }
 
-// SspLoginAllowed
-// Check user permission to login to SSP.
+// SspLoginAllowed Check user permission to login to SSP.
+//	Deprecated: The SSP is not supported now
 func (uda *UserDevicesApi) SspLoginAllowed(ctx context.Context) ([]byte,
 	error) {
 	request, err := http.NewRequest("POST", uda.client.Server+"/api/v1.0/UserDevicesApi.SspLoginAllowed",
@@ -506,8 +501,8 @@ func (uda *UserDevicesApi) SspLoginAllowed(ctx context.Context) ([]byte,
 	return raw, err
 }
 
-// UpdateDevice
-// Modify properties of the specified user device.
+// UpdateDevice Modify properties of the specified user device.
+//	Deprecated: Previously used for the SSP
 func (uda *UserDevicesApi) UpdateDevice(ctx context.Context, params interface{}) ([]byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {

@@ -75,6 +75,18 @@ func (rm *ReportManager) GetAvailableDashboards(ctx context.Context) (*PxgValArr
 	return reportsArray, raw, err
 }
 
+// CollectStatisticsAsync TODO params ???
+func (rm *ReportManager) CollectStatisticsAsync(ctx context.Context) (*PxgValArrayOfInt, []byte, error) {
+	request, err := http.NewRequest("POST", rm.client.Server+"/api/v1.0/ReportManager.CollectStatisticsAsync", nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	reportsArray := new(PxgValArrayOfInt)
+	raw, err := rm.client.Request(ctx, request, &reportsArray)
+	return reportsArray, raw, err
+}
+
 // GetConstantOutputForReportType Return XSLT transform for report type.
 //
 // Returns XSLT transform as a string for specified report type.
@@ -175,6 +187,7 @@ func (rm *ReportManager) GetReportTypeDetailedInfo(ctx context.Context, lReportT
 
 // GetStatisticsData Gets result of asynchronous operation ReportManager.RequestStatisticsData,
 // such as statistics, general statuses and dashboards data.
+//	Deprecated: Since SC12 patch B
 func (rm *ReportManager) GetStatisticsData(ctx context.Context, strRequestId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strRequestId": "%s"}`, strRequestId))
 	request, err := http.NewRequest("POST", rm.client.Server+"/api/v1.0/ReportManager.GetStatisticsData", bytes.NewBuffer(postData))
@@ -199,8 +212,8 @@ func (rm *ReportManager) RemoveReport(ctx context.Context, lReportId int64) ([]b
 }
 
 // RequestStatisticsData Request statistics, general statuses and dashboards.
-//
 // Asynchronously requests statistics, general statuses and dashboards data.
+//	Deprecated: Since SC12 patch B, see ReportManager.CollectStatisticsAsync
 func (rm *ReportManager) RequestStatisticsData(ctx context.Context, params interface{}) (*RequestID, []byte, error) {
 	postData, err := json.Marshal(params)
 	if err != nil {
@@ -333,6 +346,7 @@ func (rm *ReportManager) ExecuteReportAsync(ctx context.Context, params ExecuteR
 }
 
 // CancelStatisticsRequest Cancels asynchronous operation ReportManager.RequestStatisticsData.
+//	Deprecated: Since SC12 patch B
 func (rm *ReportManager) CancelStatisticsRequest(ctx context.Context, strRequestId string) ([]byte, error) {
 	postData := []byte(fmt.Sprintf(`{"strRequestId": "%s"}`, strRequestId))
 	request, err := http.NewRequest("POST", rm.client.Server+"/api/v1.0/ReportManager.CancelStatisticsRequest", bytes.NewBuffer(postData))
@@ -381,9 +395,8 @@ type Value struct {
 }
 
 // ExecuteReportAsyncGetData Get result of ReportManager.ExecuteReportAsync operation.
-//
-// Gets result of asynchronous operation ReportManager::ExecuteReportAsync.
-// If result is not ready pXmlData will be empty.
+// Gets result of asynchronous operation ReportManager.ExecuteReportAsync. If result is not ready pXmlData will be empty.
+//	Deprecated: Use HTTP GET request instead, see ReportManager.ExecuteReportAsync
 func (rm *ReportManager) ExecuteReportAsyncGetData(ctx context.Context, strRequestId string,
 	nChunkSize int64) (*ReportData, []byte,
 	error) {

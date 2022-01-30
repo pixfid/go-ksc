@@ -551,8 +551,7 @@ type KlsrvHststatValue struct {
 }
 
 // GetGroupInfo Acquire administration group attributes.
-//
-// Deprecated: Use HostGroup.GetGroupInfoEx instead
+//	Deprecated: Use HostGroup.GetGroupInfoEx instead
 func (hg *HostGroup) GetGroupInfo(ctx context.Context, nGroupId int64) (*GroupInfo, error) {
 	postData := []byte(fmt.Sprintf(`{"nGroupId": %d}`, nGroupId))
 	request, err := http.NewRequest("POST", hg.client.Server+"/api/v1.0/HostGroup.GetGroupInfo", bytes.NewBuffer(postData))
